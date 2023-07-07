@@ -1,33 +1,29 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\aengine-cs.csproj": {}
+    "/Users/lukamalovic/Documents/GitHub/aengine-cs/aengine-cs.csproj": {}
   },
   "projects": {
-    "C:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\aengine-cs.csproj": {
+    "/Users/lukamalovic/Documents/GitHub/aengine-cs/aengine-cs.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\aengine-cs.csproj",
+        "projectUniqueName": "/Users/lukamalovic/Documents/GitHub/aengine-cs/aengine-cs.csproj",
         "projectName": "aengine-cs",
-        "projectPath": "C:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\aengine-cs.csproj",
-        "packagesPath": "C:\\Users\\lukaa\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\obj\\",
+        "projectPath": "/Users/lukamalovic/Documents/GitHub/aengine-cs/aengine-cs.csproj",
+        "packagesPath": "/Users/lukamalovic/.nuget/packages/",
+        "outputPath": "/Users/lukamalovic/Documents/GitHub/aengine-cs/obj/",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Users\\lukaa\\AppData\\Roaming\\Godot\\mono\\GodotNuGetFallbackFolder",
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "/Users/lukamalovic/Library/Application Support/Godot/mono/GodotNuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\lukaa\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Users\\lukaa\\AppData\\Roaming\\NuGet\\config\\Godot.Offline.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/Users/lukamalovic/.nuget/NuGet/NuGet.Config",
+          "/Users/lukamalovic/.nuget/NuGet/config/Godot.Offline.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -69,16 +65,31 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[6.0.11, 6.0.11]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.osx-x64",
+              "version": "[6.0.11, 6.0.11]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[6.0.11, 6.0.11]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.102\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.100/RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -108,8 +108,7 @@ namespace Sandbox
 
                 if (Input.IsKeyDown(Keys.Left))
                 {
-                    //rb2.applyImpulse(new System.Numerics.Vector3(1, 0, 0));
-                    rb2.setX(rb2.body.Position.X + 500 * getDeltaTime());
+                    rb2.applyImpulse(new System.Numerics.Vector3(1, 0, 0));
                 }
                 if (Input.IsKeyDown(Keys.Right))
                 {
