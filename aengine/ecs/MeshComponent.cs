@@ -49,16 +49,16 @@ namespace aengine.ecs
             switch (this.shape)
             {
                 case ShapeType.BOX:
-                    aengine.core.aengine.DrawCubeTexturePro(this.texture, new Vector3(this.transform.position.X, this.transform.position.Y, this.transform.position.Z), this.transform.scale.X, this.transform.scale.Y, this.transform.scale.Z, this.transform.rotation, this.color);
+                    // aengine.graphics.Rendering.drawTexturedCube(this.texture, new Vector3(this.transform.position.X, this.transform.position.Y, this.transform.position.Z), this.transform.scale.X, this.transform.scale.Y, this.transform.scale.Z, this.transform.rotation, this.color);
                     break;
                 case ShapeType.SPHERE:
-                    aengine.core.aengine.DrawSphere(this.transform.position, this.transform.scale.X, this.color);
+                    // aengine.core.aengine.DrawSphere(this.transform.position, this.transform.scale.X, this.color);
                     break;
                 case ShapeType.CYLINDER:
                     DrawCylinder(this.transform.position, this.transform.scale.X, this.transform.scale.Z, this.transform.scale.Y, 50, this.color);
                     break;
                 default:
-                    aengine.core.aengine.DrawCubeTexturePro(this.texture, new Vector3(this.transform.position.X, this.transform.position.Y, this.transform.position.Z), this.transform.scale.X, this.transform.scale.Y, this.transform.scale.Z, this.transform.rotation, this.color);
+                    // aengine.core.aengine.DrawCubeTexturePro(this.texture, new Vector3(this.transform.position.X, this.transform.position.Y, this.transform.position.Z), this.transform.scale.X, this.transform.scale.Y, this.transform.scale.Z, this.transform.rotation, this.color);
                     break;
             }
 

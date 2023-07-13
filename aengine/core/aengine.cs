@@ -40,11 +40,38 @@ namespace aengine.core
                 return new Vector3(roll, pitch, yaw);
         }
 
-        public static void drawDebugAxies(float length = 3)
+        public static OpenTK.Mathematics.Matrix4 MatrixRotateZYX(OpenTK.Mathematics.Vector3 rotationAngles)
         {
-            DrawLine3D(new Vector3(0, 0, 0), new Vector3(length, 0, 0), BLUE);
-            DrawLine3D(new Vector3(0, 0, 0), new Vector3(0, length, 0), MAROON);
-            DrawLine3D(new Vector3(0, 0, 0), new Vector3(0, 0, length), GREEN);
+            float cosZ = MathF.Cos(rotationAngles.Z);
+            float sinZ = MathF.Sin(rotationAngles.Z);
+            float cosY = MathF.Cos(rotationAngles.Y);
+            float sinY = MathF.Sin(rotationAngles.Y);
+            float cosX = MathF.Cos(rotationAngles.X);
+            float sinX = MathF.Sin(rotationAngles.X);
+
+            OpenTK.Mathematics.Matrix4 matrix = new OpenTK.Mathematics.Matrix4();
+
+            matrix.M11 = cosZ * cosY;
+            matrix.M12 = sinZ * cosY;
+            matrix.M13 = -sinY;
+            matrix.M14 = 0.0f;
+
+            matrix.M21 = cosZ * sinY * sinX - sinZ * cosX;
+            matrix.M22 = sinZ * sinY * sinX + cosZ * cosX;
+            matrix.M23 = cosY * sinX;
+            matrix.M24 = 0.0f;
+
+            matrix.M31 = cosZ * sinY * cosX + sinZ * sinX;
+            matrix.M32 = sinZ * sinY * cosX - cosZ * sinX;
+            matrix.M33 = cosY * cosX;
+            matrix.M34 = 0.0f;
+
+            matrix.M41 = 0.0f;
+            matrix.M42 = 0.0f;
+            matrix.M43 = 0.0f;
+            matrix.M44 = 1.0f;
+
+            return matrix;
         }
 
         public static bool CheckCollisionAABB(AABB one, AABB two)
@@ -70,149 +97,6 @@ namespace aengine.core
             }
 
             return false;  
-        }
-
-        public static void DrawCubeTexturePro(Texture texture, Vector3 position, float width, float height, float length, Vector3 rotation, Color color)
-        {
-            float x = position.X;
-            float y = position.Y;
-            float z = position.Z;
-
-            // Set desired texture to be enabled while drawing following vertex data
-            rlSetTexture(texture.id);
-
-            // Vertex data transformation can be defined with the commented lines,
-            // but in this example we calculate the transformed vertex data directly when calling rlVertex3f()
-            rlPushMatrix();
-                // NOTE: Transformation is applied in inverse order (scale -> rotate -> translate)
-                rlTranslatef(x, y, z);
-                rlRotatef(rotation.X, rotation.Y, rotation.Z, 0);
-                rlTranslatef(-x, -y, -z);
-
-                rlBegin(RL_QUADS);
-                    rlColor4ub(color.r, color.g, color.b, color.a);
-                    // Front Face
-                    rlNormal3f(0.0f, 0.0f, 1.0f);       // Normal Pointing Towards Viewer
-                    rlTexCoord2f(0.0f, 1.0f); rlVertex3f(x - width/2, y - height/2, z + length/2);  // Bottom Left Of The Texture and Quad
-                    rlTexCoord2f(1.0f, 1.0f); rlVertex3f(x + width/2, y - height/2, z + length/2);  // Bottom Right Of The Texture and Quad
-                    rlTexCoord2f(1.0f, 0.0f); rlVertex3f(x + width/2, y + height/2, z + length/2);  // Top Right Of The Texture and Quad
-                    rlTexCoord2f(0.0f, 0.0f); rlVertex3f(x - width/2, y + height/2, z + length/2);  // Top Left Of The Texture and Quad
-                    // Back Face
-                    rlNormal3f(0.0f, 0.0f, - 1.0f);     // Normal Pointing Away From Viewer
-                    rlTexCoord2f(1.0f, 1.0f); rlVertex3f(x - width/2, y - height/2, z - length/2);  // Bottom Right Of The Texture and Quad
-                    rlTexCoord2f(1.0f, 0.0f); rlVertex3f(x - width/2, y + height/2, z - length/2);  // Top Right Of The Texture and Quad
-                    rlTexCoord2f(0.0f, 0.0f); rlVertex3f(x + width/2, y + height/2, z - length/2);  // Top Left Of The Texture and Quad
-                    rlTexCoord2f(0.0f, 1.0f); rlVertex3f(x + width/2, y - height/2, z - length/2);  // Bottom Left Of The Texture and Quad
-                    // Top Face
-                    rlNormal3f(0.0f, 1.0f, 0.0f);       // Normal Pointing Up
-                    rlTexCoord2f(0.0f, 1.0f); rlVertex3f(x - width/2, y + height/2, z - length/2);  // Top Left Of The Texture and Quad
-                    rlTexCoord2f(0.0f, 0.0f); rlVertex3f(x - width/2, y + height/2, z + length/2);  // Bottom Left Of The Texture and Quad
-                    rlTexCoord2f(1.0f, 0.0f); rlVertex3f(x + width/2, y + height/2, z + length/2);  // Bottom Right Of The Texture and Quad
-                    rlTexCoord2f(1.0f, 1.0f); rlVertex3f(x + width/2, y + height/2, z - length/2);  // Top Right Of The Texture and Quad
-                    // Bottom Face
-                    rlNormal3f(0.0f, - 1.0f, 0.0f);     // Normal Pointing Down
-                    rlTexCoord2f(1.0f, 0.0f); rlVertex3f(x - width/2, y - height/2, z - length/2);  // Top Right Of The Texture and Quad
-                    rlTexCoord2f(0.0f, 0.0f); rlVertex3f(x + width/2, y - height/2, z - length/2);  // Top Left Of The Texture and Quad
-                    rlTexCoord2f(0.0f, 1.0f); rlVertex3f(x + width/2, y - height/2, z + length/2);  // Bottom Left Of The Texture and Quad
-                    rlTexCoord2f(1.0f, 1.0f); rlVertex3f(x - width/2, y - height/2, z + length/2);  // Bottom Right Of The Texture and Quad
-                    // Right face
-                    rlNormal3f(1.0f, 0.0f, 0.0f);       // Normal Pointing Right
-                    rlTexCoord2f(1.0f, 1.0f); rlVertex3f(x + width/2, y - height/2, z - length/2);  // Bottom Right Of The Texture and Quad
-                    rlTexCoord2f(1.0f, 0.0f); rlVertex3f(x + width/2, y + height/2, z - length/2);  // Top Right Of The Texture and Quad
-                    rlTexCoord2f(0.0f, 0.0f); rlVertex3f(x + width/2, y + height/2, z + length/2);  // Top Left Of The Texture and Quad
-                    rlTexCoord2f(0.0f, 1.0f); rlVertex3f(x + width/2, y - height/2, z + length/2);  // Bottom Left Of The Texture and Quad
-                    // Left Face
-                    rlNormal3f( - 1.0f, 0.0f, 0.0f);    // Normal Pointing Left
-                    rlTexCoord2f(0.0f, 1.0f); rlVertex3f(x - width/2, y - height/2, z - length/2);  // Bottom Left Of The Texture and Quad
-                    rlTexCoord2f(1.0f, 1.0f); rlVertex3f(x - width/2, y - height/2, z + length/2);  // Bottom Right Of The Texture and Quad
-                    rlTexCoord2f(1.0f, 0.0f); rlVertex3f(x - width/2, y + height/2, z + length/2);  // Top Right Of The Texture and Quad
-                    rlTexCoord2f(0.0f, 0.0f); rlVertex3f(x - width/2, y + height/2, z - length/2);  // Top Left Of The Texture and Quad
-                rlEnd();
-            rlPopMatrix();
-
-            rlSetTexture(0);
-        }
-
-        public static void DrawSphere(Vector3 position, float radius, Color color)
-        {
-            float x = position.X;
-            float y = position.Y;
-            float z = position.Z;
-
-            rlPushMatrix();
-            rlTranslatef(x, y, z);
-
-            int rings = 32;
-            int sectors = 32;
-
-            float ringAngleStep = (float)Math.PI / rings;
-            float sectorAngleStep = 2.0f * (float)Math.PI / sectors;
-
-            rlBegin(RL_TRIANGLES);
-            for (int ring = 0; ring < rings; ring++)
-            {
-                float theta0 = ring * ringAngleStep;
-                float theta1 = (ring + 1) * ringAngleStep;
-
-                for (int sector = 0; sector < sectors; sector++)
-                {
-                    float phi0 = sector * sectorAngleStep;
-                    float phi1 = (sector + 1) * sectorAngleStep;
-
-                    // Vertices
-                    Vector3 v0 = new Vector3(
-                        radius * (float)(Math.Sin(theta0) * Math.Cos(phi0)),
-                        radius * (float)Math.Cos(theta0),
-                        radius * (float)(Math.Sin(theta0) * Math.Sin(phi0))
-                    );
-
-                    Vector3 v1 = new Vector3(
-                        radius * (float)(Math.Sin(theta0) * Math.Cos(phi1)),
-                        radius * (float)Math.Cos(theta0),
-                        radius * (float)(Math.Sin(theta0) * Math.Sin(phi1))
-                    );
-
-                    Vector3 v2 = new Vector3(
-                        radius * (float)(Math.Sin(theta1) * Math.Cos(phi0)),
-                        radius * (float)Math.Cos(theta1),
-                        radius * (float)(Math.Sin(theta1) * Math.Sin(phi0))
-                    );
-
-                    Vector3 v3 = new Vector3(
-                        radius * (float)(Math.Sin(theta1) * Math.Cos(phi1)),
-                        radius * (float)Math.Cos(theta1),
-                        radius * (float)(Math.Sin(theta1) * Math.Sin(phi1))
-                    );
-
-                    // Draw the triangles
-                    rlNormal3f(v0.X, v0.Y, v0.Z);
-                    rlColor4ub(color.r, color.g, color.b, color.a);
-                    rlVertex3f(v0.X, v0.Y, v0.Z);
-
-                    rlNormal3f(v2.X, v2.Y, v2.Z);
-                    rlColor4ub(color.r, color.g, color.b, color.a);
-                    rlVertex3f(v2.X, v2.Y, v2.Z);
-
-                    rlNormal3f(v1.X, v1.Y, v1.Z);
-                    rlColor4ub(color.r, color.g, color.b, color.a);
-                    rlVertex3f(v1.X, v1.Y, v1.Z);
-
-                    rlNormal3f(v1.X, v1.Y, v1.Z);
-                    rlColor4ub(color.r, color.g, color.b, color.a);
-                    rlVertex3f(v1.X, v1.Y, v1.Z);
-
-                    rlNormal3f(v2.X, v2.Y, v2.Z);
-                    rlColor4ub(color.r, color.g, color.b, color.a);
-                    rlVertex3f(v2.X, v2.Y, v2.Z);
-
-                    rlNormal3f(v3.X, v3.Y, v3.Z);
-                    rlColor4ub(color.r, color.g, color.b, color.a);
-                    rlVertex3f(v3.X, v3.Y, v3.Z);
-                }
-            }
-            rlEnd();
-
-            rlPopMatrix();
         }
 
     }

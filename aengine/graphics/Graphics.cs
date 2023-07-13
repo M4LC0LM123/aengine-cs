@@ -4,7 +4,6 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common; 
 using OpenTK.Windowing.Desktop;
-using StbImageSharp;
 
 namespace aengine.graphics
 {
@@ -15,6 +14,7 @@ namespace aengine.graphics
         private static double prevFPStime;
         private static float dt;
         private static int frameCount;
+        private static int currFPS;
 
         // initialize GLFW window
         public static unsafe void init(int width, int height, string title)
@@ -66,6 +66,7 @@ namespace aengine.graphics
 
             if (currFPStime - prevFPStime >= 1.0f)
             {
+                currFPS = frameCount;
                 frameCount = 0;
                 prevFPStime = currFPStime;
             }
@@ -80,7 +81,13 @@ namespace aengine.graphics
         // get current fps
         public static int getFPS()
         {
-            return frameCount;
+            return currFPS;
+        }
+
+        // set the window title 
+        public static void setTitle(string title)
+        {
+            GLFW.SetWindowTitle(window, title);
         }
 
         // gets screen size (width and height)
