@@ -5,6 +5,10 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common; 
 using OpenTK.Windowing.Desktop;
 using StbImageSharp;
+using aengine;
+using static aengine.core.aengine;
+using static aengine.graphics.Graphics;
+using aengine.ecs;
 
 namespace Sandbox
 {
@@ -141,9 +145,6 @@ namespace Sandbox
                     prevFPStime = currFPStime;
                 }
 
-                // Poll for events
-                GLFW.PollEvents();
-
                 if (GLFW.GetKey(window, Keys.Right) == InputAction.Press)
                 {
                     rotationSpeed += 100 * deltaTime;
@@ -161,6 +162,9 @@ namespace Sandbox
                         rotationSpeed += 100 * deltaTime;
                 }
 
+                // Poll for events
+                GLFW.PollEvents();
+
                 // Update cube rotation
                 float rotationAngle = rotationSpeed * deltaTime;
                 modelMatrix = Matrix4.CreateFromAxisAngle(Vector3.UnitY, MathHelper.DegreesToRadians(rotationAngle)) * modelMatrix;
@@ -168,6 +172,7 @@ namespace Sandbox
                 // Render your graphics here...
                 // Clear the color and depth buffers
                 GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+                GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
                 // Set the projection matrix
                 GL.MatrixMode(MatrixMode.Projection);
@@ -178,7 +183,6 @@ namespace Sandbox
                 GL.LoadMatrix(ref viewMatrix);
 
                 // set texture
-                // GL.Enable(EnableCap.Texture2D);
 
                 GL.Enable(EnableCap.Texture2D);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
