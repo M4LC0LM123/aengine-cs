@@ -1,0 +1,381 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "aengine-cs/1.0.0": {
+        "dependencies": {
+          "BepuPhysics": "2.4.0",
+          "OpenTK": "4.7.7",
+          "Raylib-CsLo": "4.2.0.9",
+          "StbImageSharp": "2.27.13"
+        },
+        "runtime": {
+          "aengine-cs.dll": {}
+        }
+      },
+      "BepuPhysics/2.4.0": {
+        "dependencies": {
+          "BepuUtilities": "2.4.0"
+        },
+        "runtime": {
+          "lib/net6.0/BepuPhysics.dll": {
+            "assemblyVersion": "2.4.0.0",
+            "fileVersion": "2.4.0.0"
+          }
+        }
+      },
+      "BepuUtilities/2.4.0": {
+        "runtime": {
+          "lib/net6.0/BepuUtilities.dll": {
+            "assemblyVersion": "2.4.0.0",
+            "fileVersion": "2.4.0.0"
+          }
+        }
+      },
+      "Microsoft.Toolkit.HighPerformance/7.1.2": {
+        "runtime": {
+          "lib/net5.0/Microsoft.Toolkit.HighPerformance.dll": {
+            "assemblyVersion": "7.1.0.0",
+            "fileVersion": "7.1.2.1"
+          }
+        }
+      },
+      "OpenTK/4.7.7": {
+        "dependencies": {
+          "OpenTK.Compute": "4.7.7",
+          "OpenTK.Core": "4.7.7",
+          "OpenTK.Graphics": "4.7.7",
+          "OpenTK.Input": "4.7.7",
+          "OpenTK.Mathematics": "4.7.7",
+          "OpenTK.OpenAL": "4.7.7",
+          "OpenTK.Windowing.Common": "4.7.7",
+          "OpenTK.Windowing.Desktop": "4.7.7",
+          "OpenTK.Windowing.GraphicsLibraryFramework": "4.7.7"
+        }
+      },
+      "OpenTK.Compute/4.7.7": {
+        "runtime": {
+          "lib/netcoreapp3.1/OpenTK.Compute.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.0.0"
+          }
+        }
+      },
+      "OpenTK.Core/4.7.7": {
+        "runtime": {
+          "lib/netstandard2.1/OpenTK.Core.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.0.0"
+          }
+        }
+      },
+      "OpenTK.Graphics/4.7.7": {
+        "dependencies": {
+          "OpenTK.Core": "4.7.7",
+          "OpenTK.Mathematics": "4.7.7"
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/OpenTK.Graphics.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.0.0"
+          }
+        }
+      },
+      "OpenTK.Input/4.7.7": {
+        "runtime": {
+          "lib/netstandard2.0/OpenTK.Input.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.0.0"
+          }
+        }
+      },
+      "OpenTK.Mathematics/4.7.7": {
+        "dependencies": {
+          "System.Runtime.CompilerServices.Unsafe": "5.0.0"
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/OpenTK.Mathematics.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.0.0"
+          }
+        }
+      },
+      "OpenTK.OpenAL/4.7.7": {
+        "dependencies": {
+          "OpenTK.Core": "4.7.7",
+          "OpenTK.Mathematics": "4.7.7"
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/OpenTK.OpenAL.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.0.0"
+          }
+        }
+      },
+      "OpenTK.redist.glfw/3.3.8.30": {
+        "runtimeTargets": {
+          "runtimes/linux-x64/native/libglfw.so.3.3": {
+            "rid": "linux-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/osx-arm64/native/libglfw.3.dylib": {
+            "rid": "osx-arm64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/osx-x64/native/libglfw.3.dylib": {
+            "rid": "osx-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/glfw3.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x86/native/glfw3.dll": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "OpenTK.Windowing.Common/4.7.7": {
+        "dependencies": {
+          "OpenTK.Core": "4.7.7",
+          "OpenTK.Mathematics": "4.7.7"
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/OpenTK.Windowing.Common.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.0.0"
+          }
+        }
+      },
+      "OpenTK.Windowing.Desktop/4.7.7": {
+        "dependencies": {
+          "OpenTK.Core": "4.7.7",
+          "OpenTK.Mathematics": "4.7.7",
+          "OpenTK.Windowing.Common": "4.7.7",
+          "OpenTK.Windowing.GraphicsLibraryFramework": "4.7.7"
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/OpenTK.Windowing.Desktop.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.0.0"
+          }
+        }
+      },
+      "OpenTK.Windowing.GraphicsLibraryFramework/4.7.7": {
+        "dependencies": {
+          "OpenTK.Core": "4.7.7",
+          "OpenTK.redist.glfw": "3.3.8.30"
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/OpenTK.Windowing.GraphicsLibraryFramework.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.0.0"
+          }
+        }
+      },
+      "Raylib-CsLo/4.2.0.9": {
+        "dependencies": {
+          "Microsoft.Toolkit.HighPerformance": "7.1.2"
+        },
+        "runtime": {
+          "lib/netstandard2.1/Raylib-CsLo.dll": {
+            "assemblyVersion": "0.0.0.20128",
+            "fileVersion": "0.0.0.0"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/linux-x64/native/libraylib.so": {
+            "rid": "linux-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/linux-x64/native/readme.md": {
+            "rid": "linux-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/osx-arm64/native/libraylib.dylib": {
+            "rid": "osx-arm64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/osx-arm64/native/readme.md": {
+            "rid": "osx-arm64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/osx-x64/native/libraylib.dylib": {
+            "rid": "osx-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/osx-x64/native/readme.md": {
+            "rid": "osx-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/raylib.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/raylib.pdb": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x86/native/needs-pr.txt": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "StbImageSharp/2.27.13": {
+        "runtime": {
+          "lib/netstandard2.0/StbImageSharp.dll": {
+            "assemblyVersion": "2.27.13.0",
+            "fileVersion": "2.27.13.0"
+          }
+        }
+      },
+      "System.Runtime.CompilerServices.Unsafe/5.0.0": {}
+    }
+  },
+  "libraries": {
+    "aengine-cs/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "BepuPhysics/2.4.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Ck/BJgSQrBqYrj0T9jGljDdHNILBP5kTPTylc7N/hCzR1XJJc7p6ORzwtjTfjgoYkkdajvLHxEQv6BRC8kaysQ==",
+      "path": "bepuphysics/2.4.0",
+      "hashPath": "bepuphysics.2.4.0.nupkg.sha512"
+    },
+    "BepuUtilities/2.4.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-KNMxkzKLHAvV7jRtErxs3rPv71fHToqo/WN96HlT6iomWuwL97tohEbt0B1WA8A6sO5t6PP+qF08d4T9A8k2uA==",
+      "path": "bepuutilities/2.4.0",
+      "hashPath": "bepuutilities.2.4.0.nupkg.sha512"
+    },
+    "Microsoft.Toolkit.HighPerformance/7.1.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-cezzRky0BUJyYmSrcQUcX8qAv90JfUwCqWEbqfWZLHyeANo9/LWgW6y50pqbyc8r8SPXVsu2GNH98fB3VxrnvA==",
+      "path": "microsoft.toolkit.highperformance/7.1.2",
+      "hashPath": "microsoft.toolkit.highperformance.7.1.2.nupkg.sha512"
+    },
+    "OpenTK/4.7.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-T5SV1uSNgB5dpipFsfMkTnK3IIGzUnl1J2foYu3tqmYwlqLnQfQHFZ6ILiNQMPhXdBhrjnxHIU7ZeWJdNW60sw==",
+      "path": "opentk/4.7.7",
+      "hashPath": "opentk.4.7.7.nupkg.sha512"
+    },
+    "OpenTK.Compute/4.7.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-DvqLgGubdqbb7svXCxDLyYUGcZoIrB4jRN0su1YOOOjdNZnOpC1qUqspFx0NjWGBMq3TipoSSwW1JfN0hbK36A==",
+      "path": "opentk.compute/4.7.7",
+      "hashPath": "opentk.compute.4.7.7.nupkg.sha512"
+    },
+    "OpenTK.Core/4.7.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-YlBGXGelHbXKabe2u6EOXkooK8rkFxh97VJlK3M4D0vzrZJltL5aHnB15I+W1adUJVI2P3e16qXJaGd7VsLfgA==",
+      "path": "opentk.core/4.7.7",
+      "hashPath": "opentk.core.4.7.7.nupkg.sha512"
+    },
+    "OpenTK.Graphics/4.7.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-LcSkqJFlSJ4jr/tgBMmqAsLkIrDMgpKmnC8WHzQ9/KMRWbryLawez/Uj52Y7EMwRvSpm3nhs0wZb/ZepbiNhVw==",
+      "path": "opentk.graphics/4.7.7",
+      "hashPath": "opentk.graphics.4.7.7.nupkg.sha512"
+    },
+    "OpenTK.Input/4.7.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Ayy88Ia5RoMsAxGMXWT7QzMii5Ch7yBQLVqQWbJAHTRlqBtX05tI8CtCbFuxRPf20790i6wpILpF069av5eN3A==",
+      "path": "opentk.input/4.7.7",
+      "hashPath": "opentk.input.4.7.7.nupkg.sha512"
+    },
+    "OpenTK.Mathematics/4.7.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-tx6/xM8sdj7OQQp1Q8+xH25jSceU/muvlVircBPvPSPe5OdEtxgOk1OHZrSPu2c4u7u1id5lGf3dWKn8IQdU3g==",
+      "path": "opentk.mathematics/4.7.7",
+      "hashPath": "opentk.mathematics.4.7.7.nupkg.sha512"
+    },
+    "OpenTK.OpenAL/4.7.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-5OQhnGgg3tEi+RSw3BWwQkGoews1axpYFvT9q34lr1nBUplSVS6h9IIsnOpBHBqY+dt0Ff3DXTj8YVXTAt9XMQ==",
+      "path": "opentk.openal/4.7.7",
+      "hashPath": "opentk.openal.4.7.7.nupkg.sha512"
+    },
+    "OpenTK.redist.glfw/3.3.8.30": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-dYk7CJ+eOKHVn5IPKCBzmRDHcDy6+oy0fxPntTcl48+NTmOf15e2vKtF9BM7vQFWA8UFmT09Zk05mNHYa3zYWA==",
+      "path": "opentk.redist.glfw/3.3.8.30",
+      "hashPath": "opentk.redist.glfw.3.3.8.30.nupkg.sha512"
+    },
+    "OpenTK.Windowing.Common/4.7.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-g1277SMVCaHPob+7ZYQ9Of6nm34yWuJ2OTaz/6o9P0B26/rvxGiKm4MalWZzvix4l6FU2tevgpgPi4VecK27FA==",
+      "path": "opentk.windowing.common/4.7.7",
+      "hashPath": "opentk.windowing.common.4.7.7.nupkg.sha512"
+    },
+    "OpenTK.Windowing.Desktop/4.7.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Kd0UzgSA49meQvW9sfnmtH02rlfwFIox2+fF+5Y4EhIQ8+VwEiiSszs8WkNM9QIhUTHovK4ww384AQkAmpUxIw==",
+      "path": "opentk.windowing.desktop/4.7.7",
+      "hashPath": "opentk.windowing.desktop.4.7.7.nupkg.sha512"
+    },
+    "OpenTK.Windowing.GraphicsLibraryFramework/4.7.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-TZXZOcnfyPU7zosW+ZPtfemqp4oSBYmQlRQRR7qtEezOBrzotO5ZmlWl0hNti3qjFmJThSxhBn+o/bF7aoBLrA==",
+      "path": "opentk.windowing.graphicslibraryframework/4.7.7",
+      "hashPath": "opentk.windowing.graphicslibraryframework.4.7.7.nupkg.sha512"
+    },
+    "Raylib-CsLo/4.2.0.9": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-s0KLEXCfylhCgMfc0elHJyC7I2ZdqylQzSA1GhHwp7pPJmoQx80kZh5OkTbiirOuHSIeQ87JojEA439MarGhWQ==",
+      "path": "raylib-cslo/4.2.0.9",
+      "hashPath": "raylib-cslo.4.2.0.9.nupkg.sha512"
+    },
+    "StbImageSharp/2.27.13": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-tHnP2RHgFzWbOS96UqvRO/LYU1WmpMT1bKiig45we+rpaXacBr11Fq2IBF+MqlgyLyNXxRz18E66qr4R9YlSbg==",
+      "path": "stbimagesharp/2.27.13",
+      "hashPath": "stbimagesharp.2.27.13.nupkg.sha512"
+    },
+    "System.Runtime.CompilerServices.Unsafe/5.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ZD9TMpsmYJLrxbbmdvhwt9YEgG5WntEnZ/d1eH8JBX9LBp+Ju8BSBhUGbZMNVHHomWo2KVImJhTDl2hIgw/6MA==",
+      "path": "system.runtime.compilerservices.unsafe/5.0.0",
+      "hashPath": "system.runtime.compilerservices.unsafe.5.0.0.nupkg.sha512"
+    }
+  }
+}

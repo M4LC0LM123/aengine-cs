@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "dgSpecHash": "8P44YmJ+p14nBzrDwSns26nRUW9c0nJwi5r9cIr6+nbaLCkk4o/go75IDVTk29jUDVfCVSBM6rKCaUGagOAV/A==",
+  "success": true,
+  "projectFilePath": "/home/lukamalovic/Documents/GitHub/aengine-cs/aengine-cs.csproj",
+  "expectedPackageFiles": [
+    "/home/lukamalovic/.nuget/packages/bepuphysics/2.4.0/bepuphysics.2.4.0.nupkg.sha512",
+    "/home/lukamalovic/.nuget/packages/bepuutilities/2.4.0/bepuutilities.2.4.0.nupkg.sha512",
+    "/home/lukamalovic/.nuget/packages/microsoft.toolkit.highperformance/7.1.2/microsoft.toolkit.highperformance.7.1.2.nupkg.sha512",
+    "/home/lukamalovic/.nuget/packages/opentk/4.7.7/opentk.4.7.7.nupkg.sha512",
+    "/home/lukamalovic/.nuget/packages/opentk.compute/4.7.7/opentk.compute.4.7.7.nupkg.sha512",
+    "/home/lukamalovic/.nuget/packages/opentk.core/4.7.7/opentk.core.4.7.7.nupkg.sha512",
+    "/home/lukamalovic/.nuget/packages/opentk.graphics/4.7.7/opentk.graphics.4.7.7.nupkg.sha512",
+    "/home/lukamalovic/.nuget/packages/opentk.input/4.7.7/opentk.input.4.7.7.nupkg.sha512",
+    "/home/lukamalovic/.nuget/packages/opentk.mathematics/4.7.7/opentk.mathematics.4.7.7.nupkg.sha512",
+    "/home/lukamalovic/.nuget/packages/opentk.openal/4.7.7/opentk.openal.4.7.7.nupkg.sha512",
+    "/home/lukamalovic/.nuget/packages/opentk.redist.glfw/3.3.8.30/opentk.redist.glfw.3.3.8.30.nupkg.sha512",
+    "/home/lukamalovic/.nuget/packages/opentk.windowing.common/4.7.7/opentk.windowing.common.4.7.7.nupkg.sha512",
+    "/home/lukamalovic/.nuget/packages/opentk.windowing.desktop/4.7.7/opentk.windowing.desktop.4.7.7.nupkg.sha512",
+    "/home/lukamalovic/.nuget/packages/opentk.windowing.graphicslibraryframework/4.7.7/opentk.windowing.graphicslibraryframework.4.7.7.nupkg.sha512",
+    "/home/lukamalovic/.nuget/packages/raylib-cslo/4.2.0.9/raylib-cslo.4.2.0.9.nupkg.sha512",
+    "/home/lukamalovic/.nuget/packages/stbimagesharp/2.27.13/stbimagesharp.2.27.13.nupkg.sha512",
+    "/home/lukamalovic/.nuget/packages/system.runtime.compilerservices.unsafe/5.0.0/system.runtime.compilerservices.unsafe.5.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
