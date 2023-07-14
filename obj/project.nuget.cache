@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "8P44YmJ+p14nBzrDwSns26nRUW9c0nJwi5r9cIr6+nbaLCkk4o/go75IDVTk29jUDVfCVSBM6rKCaUGagOAV/A==",
+  "dgSpecHash": "8jmdNi/aV6rntg5yjZepH3Lnqy6IZUcIPtbFfk4chBGvEU8/oJ4VjlKcp76Lid1eVvqsfCbIrfODMr6vcCiD/Q==",
   "success": true,
   "projectFilePath": "/home/lukamalovic/Documents/GitHub/aengine-cs/aengine-cs.csproj",
   "expectedPackageFiles": [
     "/home/lukamalovic/.nuget/packages/bepuphysics/2.4.0/bepuphysics.2.4.0.nupkg.sha512",
     "/home/lukamalovic/.nuget/packages/bepuutilities/2.4.0/bepuutilities.2.4.0.nupkg.sha512",
+    "/home/lukamalovic/.nuget/packages/imgui.net/1.89.7.1/imgui.net.1.89.7.1.nupkg.sha512",
     "/home/lukamalovic/.nuget/packages/microsoft.toolkit.highperformance/7.1.2/microsoft.toolkit.highperformance.7.1.2.nupkg.sha512",
     "/home/lukamalovic/.nuget/packages/opentk/4.7.7/opentk.4.7.7.nupkg.sha512",
     "/home/lukamalovic/.nuget/packages/opentk.compute/4.7.7/opentk.compute.4.7.7.nupkg.sha512",
@@ -20,6 +21,8 @@
     "/home/lukamalovic/.nuget/packages/opentk.windowing.graphicslibraryframework/4.7.7/opentk.windowing.graphicslibraryframework.4.7.7.nupkg.sha512",
     "/home/lukamalovic/.nuget/packages/raylib-cslo/4.2.0.9/raylib-cslo.4.2.0.9.nupkg.sha512",
     "/home/lukamalovic/.nuget/packages/stbimagesharp/2.27.13/stbimagesharp.2.27.13.nupkg.sha512",
+    "/home/lukamalovic/.nuget/packages/system.buffers/4.4.0/system.buffers.4.4.0.nupkg.sha512",
+    "/home/lukamalovic/.nuget/packages/system.numerics.vectors/4.4.0/system.numerics.vectors.4.4.0.nupkg.sha512",
     "/home/lukamalovic/.nuget/packages/system.runtime.compilerservices.unsafe/5.0.0/system.runtime.compilerservices.unsafe.5.0.0.nupkg.sha512"
   ],
   "logs": []

@@ -5,6 +5,7 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common; 
 using OpenTK.Windowing.Desktop;
 using StbImageSharp;
+using ImGuiNET;
 using aengine;
 using static aengine.core.aengine;
 using static aengine.graphics.Graphics;
@@ -21,6 +22,8 @@ namespace Sandbox
         {
             init(800, 600, "HEHE GLFW GO BRRR");
 
+            ImGui.
+
             Camera camera = new Camera(new System.Numerics.Vector3(2, 2, 2), 90);
             bool isMouseLocked = false;
 
@@ -28,7 +31,7 @@ namespace Sandbox
             float rotationZ = 0;
 
             Texture albedo = new Texture("assets/albedo.png");
-            Model model = new Model("assets/models/einstein.obj", "assets/models/einstein.mtl");
+            Model model = new Model("assets/models/einstein.obj", "assets/models/einstein.mtl", albedo);
 
             // Main loop
             while (!WindowShouldClose())
@@ -55,11 +58,11 @@ namespace Sandbox
 
                 Rendering.drawDebugAxies();
 
-                drawTexturedCube(albedo, new System.Numerics.Vector3(2, 1, 1), new System.Numerics.Vector3(1, 2, 3), new System.Numerics.Vector3(rotationX, 0, rotationZ), Colors.LIME);
+                drawTexturedCube(albedo, new System.Numerics.Vector3(4, 2, 2), new System.Numerics.Vector3(1, 2, 3), new System.Numerics.Vector3(rotationX, 0, rotationZ), Colors.LIME);
 
-                drawTexturedSphere(albedo, new System.Numerics.Vector3(-2, 3, 4), new System.Numerics.Vector3(1, 2, 3), new System.Numerics.Vector3(rotationX, 0, rotationZ), Colors.MAGENTA);
+                drawTexturedSphere(albedo, new System.Numerics.Vector3(-4, 6, 8), new System.Numerics.Vector3(1, 2, 3), new System.Numerics.Vector3(rotationX, 0, rotationZ), Colors.MAGENTA);
 
-                model.render();
+                model.render(new System.Numerics.Vector3(8, 4, 6), new System.Numerics.Vector3(1, 1, 1), new System.Numerics.Vector3(0, 180, 0), Colors.WHITE);
 
                 end();
             }

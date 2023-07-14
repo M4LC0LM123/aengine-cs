@@ -21,7 +21,7 @@ namespace aengine.graphics
             width = 0;
             height = 0;
             data = new byte[]{};
-            using (var imageStream = File.OpenRead(path))
+            using (var imageStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 var imageResult = ImageResult.FromStream(imageStream, ColorComponents.RedGreenBlueAlpha);
                 if (imageResult == null)

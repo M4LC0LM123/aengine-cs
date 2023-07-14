@@ -10,18 +10,18 @@ namespace aengine.graphics
     {
         private List<Mesh> meshes = new List<Mesh>();
 
-        public Model(string path, string mtlpath)
+        public Model(string path, string mtlpath, Texture texture)
         {
-            load(path, mtlpath);
+            load(path, mtlpath, texture);
         }
 
-        public void render()
+        public void render(System.Numerics.Vector3 position, System.Numerics.Vector3 scale, System.Numerics.Vector3 rotation, Color tint)
         {
             foreach (var mesh in meshes)
-                mesh.Render();
+                mesh.render(position, scale, rotation, tint);
         }
 
-        private void load(string path, string mtlpath)
+        private void load(string path, string mtlpath, Texture texture)
         {
             OBJLoader loader = new OBJLoader();
             loader.LoadModel(path);
@@ -74,7 +74,7 @@ namespace aengine.graphics
                 }
 
                 // Create a mesh using the loaded data
-                Mesh mesh = new Mesh(meshVertices, meshTexCoords, meshNormals, meshIndices);
+                Mesh mesh = new Mesh(meshVertices, meshTexCoords, meshNormals, meshIndices, texture);
                 mesh.Material = mtlLoader.GetMaterial(face.MaterialName);
 
                 // Add the mesh to the list of meshes

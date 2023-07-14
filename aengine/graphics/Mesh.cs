@@ -12,6 +12,7 @@ namespace aengine.graphics
         private int vbo;
         private int ebo;
         private int vertexCount;
+        private Texture texture;
 
         public List<Vector3> Vertices { get; }
         public List<Vector2> TexCoords { get; }
@@ -19,8 +20,10 @@ namespace aengine.graphics
         public int[] Indices { get; }
         public Material Material { get; set; }
 
-        public Mesh(float[] vertices, float[] texCoords, float[] normals, int[] indices)
+        public Mesh(float[] vertices, float[] texCoords, float[] normals, int[] indices, Texture texture)
         {
+            this.texture = texture;
+
             vao = GL.GenVertexArray();
             GL.BindVertexArray(vao);
 
@@ -32,8 +35,12 @@ namespace aengine.graphics
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, ebo);
             GL.BufferData(BufferTarget.ElementArrayBuffer, indices.Length * sizeof(int), indices, BufferUsageHint.StaticDraw);
 
-            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
+            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 8 * sizeof(float), 0);
+            GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 8 * sizeof(float), 3 * sizeof(float));
+            GL.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, false, 8 * sizeof(float), 5 * sizeof(float));
             GL.EnableVertexAttribArray(0);
+            GL.EnableVertexAttribArray(1);
+            GL.EnableVertexAttribArray(2);
 
             GL.BindVertexArray(0);
 
@@ -69,11 +76,54 @@ namespace aengine.graphics
             return result;
         }
 
-        public void Render()
+        public void render(Vector3 position, Vector3 scale, Vector3 rotation, Color tint)
         {
-            GL.BindVertexArray(vao);
-            GL.DrawElements(PrimitiveType.Triangles, vertexCount, DrawElementsType.UnsignedInt, 0);
-            GL.BindVertexArray(0);
+            GL.Enable(EnableCap.Texture2D);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            GL.BindTexture(TextureTarget.Texture2D, texture.id);
+
+            GL.PushMatrix();
+
+            GL.Translate(position.X, position.Y, position.Z);
+            GL.Rotate(rotation.X, OpenTK.Mathematics.Vector3.UnitX);
+            GL.Rotate(rotation.Y, OpenTK.Mathematics.Vector3.UnitY);
+            GL.Rotate(rotation.Z, OpenTK.Mathematics.Vector3.UnitZ);
+            GL.Scale(scale.X, scale.Y, scale.Z);
+            GL.Color4(tint.r, tint.g, tint.b, tint.a);
+
+            GL.Begin(BeginMode.Triangles);
+
+            for (int i = 0; i < Indices.Length; i += 3)
+            {
+                int index1 = Indices[i];
+                int index2 = Indices[i + 1];
+                int index3 = Indices[i + 2];
+
+                Vector3 vertex1 = Vertices[index1];
+                Vector3 vertex2 = Vertices[index2];
+                Vector3 vertex3 = Vertices[index3];
+
+                Vector2 texCoord1 = TexCoords[index1];
+                Vector2 texCoord2 = TexCoords[index2];
+                Vector2 texCoord3 = TexCoords[index3];
+
+                GL.TexCoord2(texCoord1.X, texCoord1.Y);
+                GL.Vertex3(vertex1.X, vertex1.Y, vertex1.Z);
+
+                GL.TexCoord2(texCoord2.X, texCoord2.Y);
+                GL.Vertex3(vertex2.X, vertex2.Y, vertex2.Z);
+
+                GL.TexCoord2(texCoord3.X, texCoord3.Y);
+                GL.Vertex3(vertex3.X, vertex3.Y, vertex3.Z);
+            }
+
+            GL.End();
+
+            GL.PopMatrix();
+
+            GL.Disable(EnableCap.Texture2D);
+            GL.BindTexture(TextureTarget.Texture2D, 0);
         }
     }
 }
