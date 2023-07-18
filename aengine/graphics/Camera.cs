@@ -32,7 +32,7 @@ namespace aengine.graphics
             aspectRatio = Graphics.getScreenSize().X / Graphics.getScreenSize().Y;
             fieldOfView = MathHelper.DegreesToRadians(fov);
             nearPlane = 0.1f;
-            farPlane = 100.0f;
+            farPlane = 500.0f;
             projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlane, farPlane);
 
             // Set up the view matrix
@@ -90,7 +90,7 @@ namespace aengine.graphics
             up = Vector3.TransformNormal(new Vector3(0, 1, 0), cameraRotation);
         }
 
-        public unsafe void setDefaultFPSControls(int speed, bool isMouseLocked, bool fly)
+        public unsafe void setDefaultFPSControls(float speed, bool isMouseLocked, bool fly)
         {
             if (GLFW.GetKey(Graphics.window, Keys.W) == InputAction.Press && isMouseLocked)
             {

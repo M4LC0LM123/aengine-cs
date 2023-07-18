@@ -4,6 +4,7 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common; 
 using OpenTK.Windowing.Desktop;
+using StbImageSharp;
 
 namespace aengine.graphics
 {
@@ -15,10 +16,13 @@ namespace aengine.graphics
         private static float dt;
         private static int frameCount;
         private static int currFPS;
+        public static System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
 
         // initialize GLFW window
         public static unsafe void init(int width, int height, string title)
         {
+            timer.Start();
+
             if (!GLFW.Init())
             {
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -84,6 +88,13 @@ namespace aengine.graphics
             return currFPS;
         }
 
+        // gets mouse pos in 2d space 
+        public static System.Numerics.Vector2 getMousePos()
+        {
+            GLFW.GetCursorPos(window, out double mx, out double my);
+            return new System.Numerics.Vector2((float)mx, (float)my);
+        }
+
         // set the window title 
         public static void setTitle(string title)
         {
@@ -95,6 +106,15 @@ namespace aengine.graphics
         {
             GLFW.GetWindowSize(window, out int width, out int height);
             return new System.Numerics.Vector2((float)width, (float)height);
+        }
+
+        public static void setIcon(Texture icon)
+        {
+            fixed(byte* bytePtr = icon.data)
+            {
+                Image image = new Image(icon.width, icon.height, bytePtr);
+                GLFW.SetWindowIconRaw(window, 1, &image);
+            }
         }
 
         // begin drawing (polls for window events(resizing, scaling, ...))
@@ -129,6 +149,7 @@ namespace aengine.graphics
         // destroys the window and cleans up GLFW and opengl
         public static void dispose()
         {
+            timer.Stop();
             GLFW.DestroyWindow(window);
             GLFW.Terminate();
         }

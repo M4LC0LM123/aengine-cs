@@ -83,6 +83,10 @@ namespace aengine.graphics
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
             GL.BindTexture(TextureTarget.Texture2D, texture.id);
 
+            // Enable blending for transparency
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+
             GL.PushMatrix();
 
             GL.Translate(position.X, position.Y, position.Z);
@@ -92,7 +96,7 @@ namespace aengine.graphics
             GL.Scale(scale.X, scale.Y, scale.Z);
             GL.Color4(tint.r, tint.g, tint.b, tint.a);
 
-            GL.Begin(BeginMode.Triangles);
+            GL.Begin(PrimitiveType.Triangles);
 
             for (int i = 0; i < Indices.Length; i += 3)
             {
@@ -122,6 +126,7 @@ namespace aengine.graphics
 
             GL.PopMatrix();
 
+            GL.Disable(EnableCap.Blend);
             GL.Disable(EnableCap.Texture2D);
             GL.BindTexture(TextureTarget.Texture2D, 0);
         }

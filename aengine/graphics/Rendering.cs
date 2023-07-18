@@ -1,10 +1,10 @@
-using System;
-using OpenTK.Windowing.GraphicsLibraryFramework;
+using System.Drawing;
+using System.Drawing.Imaging;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
-using OpenTK.Windowing.Common; 
-using OpenTK.Windowing.Desktop;
+using SharpFNT;
 using StbImageSharp;
+using PixelFormat = OpenTK.Graphics.OpenGL.PixelFormat;
 
 namespace aengine.graphics
 {
@@ -56,6 +56,10 @@ namespace aengine.graphics
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
             GL.BindTexture(TextureTarget.Texture2D, texture.id);
 
+            // Enable blending for transparency
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+
             // Render the cube
             GL.PushMatrix();
 
@@ -93,7 +97,7 @@ namespace aengine.graphics
             GL.TexCoord2(0, 1); GL.Vertex3(0.5f, -0.5f, 0.5f);
 
             // Top face
-            GL.TexCoord2(0, 0); GL.Vertex3(-0.5f, 0.5f, -0.5f);
+            GL.TexCoord2(0,  0); GL.Vertex3(-0.5f, 0.5f, -0.5f);
             GL.TexCoord2(1, 0); GL.Vertex3(0.5f, 0.5f, -0.5f);
             GL.TexCoord2(1, 1); GL.Vertex3(0.5f, 0.5f, 0.5f);
             GL.TexCoord2(0, 1); GL.Vertex3(-0.5f, 0.5f, 0.5f);
@@ -108,6 +112,91 @@ namespace aengine.graphics
 
             GL.PopMatrix();
 
+            GL.Disable(EnableCap.Blend);
+            GL.Disable(EnableCap.Texture2D);
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+        }
+
+        public static void drawSkyBox(Texture[] textures, Color tint, int scale = 200)
+        {
+            float fix = 0.5f;
+            drawSprite3D(textures[1], new System.Numerics.Vector3(scale/2-fix, 0, 0), scale, scale, -90, tint);
+            drawSprite3D(textures[0], new System.Numerics.Vector3(-scale/2+fix, 0, 0), scale, scale, 90, tint);
+            drawSprite3D(textures[2], new System.Numerics.Vector3(0, 0, scale/2-fix), scale, scale, 180, tint);
+            drawSprite3D(textures[3], new System.Numerics.Vector3(0, 0, -scale/2+fix), scale, scale, 0, tint);
+            drawPlane(textures[4], new System.Numerics.Vector3(0, scale/2-fix, 0), scale, scale, -90, tint);
+            drawPlane(textures[5], new System.Numerics.Vector3(0, -scale/2+fix, 0), scale, scale, -90, tint);
+        }
+
+        public static void drawPlane(Texture texture, System.Numerics.Vector3 position, float width, float height, float rotation, Color tint)
+        {
+            GL.Enable(EnableCap.Texture2D);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            GL.BindTexture(TextureTarget.Texture2D, texture.id);
+
+            // Enable blending for transparency
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+
+            // Render the cube
+            GL.PushMatrix();
+
+            GL.Translate(position.X, position.Y, position.Z);
+            GL.Rotate(90, Vector3.UnitX);
+            GL.Rotate(rotation, Vector3.UnitZ);
+            GL.Scale(width, height, 0);
+
+            GL.Begin(PrimitiveType.Quads);
+
+            // Front face
+            GL.Color4(tint.r, tint.g, tint.b, tint.a);
+            GL.TexCoord2(0, 1); GL.Vertex3(-0.5f, -0.5f, 0.5f);
+            GL.TexCoord2(1, 1); GL.Vertex3(0.5f, -0.5f, 0.5f);
+            GL.TexCoord2(1, 0); GL.Vertex3(0.5f, 0.5f, 0.5f);
+            GL.TexCoord2(0, 0); GL.Vertex3(-0.5f, 0.5f, 0.5f);
+
+            GL.End();
+
+            GL.PopMatrix();
+
+            GL.Disable(EnableCap.Blend);
+            GL.Disable(EnableCap.Texture2D);
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+        }
+
+        public static void drawSprite3D(Texture texture, System.Numerics.Vector3 position, float width, float height, float rotation, Color tint)
+        {
+            GL.Enable(EnableCap.Texture2D);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            GL.BindTexture(TextureTarget.Texture2D, texture.id);
+
+            // Enable blending for transparency
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+
+            // Render the cube
+            GL.PushMatrix();
+
+            GL.Translate(position.X, position.Y, position.Z);
+            GL.Rotate(rotation, Vector3.UnitY);
+            GL.Scale(width, height, 0);
+
+            GL.Begin(PrimitiveType.Quads);
+
+            // Front face
+            GL.Color4(tint.r, tint.g, tint.b, tint.a);
+            GL.TexCoord2(0, 1); GL.Vertex3(-0.5f, -0.5f, 0.5f);
+            GL.TexCoord2(1, 1); GL.Vertex3(0.5f, -0.5f, 0.5f);
+            GL.TexCoord2(1, 0); GL.Vertex3(0.5f, 0.5f, 0.5f);
+            GL.TexCoord2(0, 0); GL.Vertex3(-0.5f, 0.5f, 0.5f);
+
+            GL.End();
+
+            GL.PopMatrix();
+
+            GL.Disable(EnableCap.Blend);
             GL.Disable(EnableCap.Texture2D);
             GL.BindTexture(TextureTarget.Texture2D, 0);
         }
@@ -120,6 +209,10 @@ namespace aengine.graphics
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
             GL.BindTexture(TextureTarget.Texture2D, texture.id); 
+
+            // Enable blending for transparency
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
             GL.PushMatrix();
             GL.Translate(position.X, position.Y, position.Z);
@@ -165,8 +258,86 @@ namespace aengine.graphics
 
             GL.PopMatrix();
 
+            GL.Disable(EnableCap.Blend);
             GL.Disable(EnableCap.Texture2D);
             GL.BindTexture(TextureTarget.Texture2D, 0);
+        }
+
+        public static void drawText(Font font, string text, float px, float py, float fontSize, Color color)
+        {
+            float cursorX = 0.0f;
+            float cursorY = 0.0f;
+
+            GL.MatrixMode(MatrixMode.Projection);
+            GL.PushMatrix();
+            GL.LoadIdentity();
+            GL.Ortho(0, graphics.Graphics.getScreenSize().X, 0, graphics.Graphics.getScreenSize().Y, -1, 1); // Use an orthographic projection
+
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.PushMatrix();
+            GL.LoadIdentity();
+
+            GL.Enable(EnableCap.Texture2D);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            GL.BindTexture(TextureTarget.Texture2D, font.atlas.id); 
+
+            // Enable blending for transparency
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+
+            GL.PushMatrix();
+            GL.Translate(px, py, 0);
+            GL.Scale(fontSize, fontSize, fontSize);
+
+            foreach (char character in text)
+            {
+                Character glyph = font.bitmap.GetCharacter(character);
+
+                // Calculate vertex positions
+                float x = cursorX + glyph.XOffset;
+                float y = cursorY;
+                float width = glyph.Width;
+                float height = glyph.Height;
+
+                // Calculate texture coordinates
+                float u1 = glyph.X / (float)font.bitmap.Common.ScaleWidth;
+                float v1 = glyph.Y / (float)font.bitmap.Common.ScaleHeight;
+                float u2 = (glyph.X + glyph.Width) / (float)font.bitmap.Common.ScaleWidth;
+                float v2 = (glyph.Y + glyph.Height) / (float)font.bitmap.Common.ScaleHeight;
+
+                // Render the character using immediate mode
+                GL.Begin(PrimitiveType.Quads);
+
+                GL.Color4(color.r, color.g, color.b, color.a);
+                GL.TexCoord2(u1, v1);
+                GL.Vertex2(x, y + height);
+
+                GL.TexCoord2(u1, v2);
+                GL.Vertex2(x, y);
+
+                GL.TexCoord2(u2, v2);
+                GL.Vertex2(x + width, y);
+
+                GL.TexCoord2(u2, v1);
+                GL.Vertex2(x + width, y + height);
+
+                GL.End();
+
+                // Update cursor position for the next character
+                cursorX += glyph.XAdvance;
+            }
+
+            GL.PopMatrix();
+
+            GL.Disable(EnableCap.Blend);
+            GL.Disable(EnableCap.Texture2D);
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+
+            GL.MatrixMode(MatrixMode.Projection);
+            GL.PopMatrix();
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.PopMatrix();
         }
 
     }

@@ -99,6 +99,35 @@ namespace aengine.core
             return false;  
         }
 
+        public static string removeFromEnd(string str, int length)
+        {
+            if (str.Length < length)
+            {
+                return string.Empty;
+            }
+
+            return str[..^length];
+        }
+
+        public static float getRandomFloat(float min, float max)
+        {
+            Random r = new Random();
+            return (float) r.Next((int)min, (int)max);
+        }
+
+        public static int getRandomInt(int min, int max)
+        {
+            Random r = new Random();
+            return r.Next(min, max);
+        }
+
+        public static float sineWave(float frequency = 0.5f, float amplitude = 1.0f)
+        {
+            double timeValue = graphics.Graphics.timer.Elapsed.TotalSeconds;
+            float value = amplitude * (float) Math.Sin(timeValue * frequency) / 2.0f + 0.5f;
+            return value;
+        } 
+
     }
 
 
