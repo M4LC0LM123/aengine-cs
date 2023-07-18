@@ -5059,24 +5059,34 @@
     ]
   },
   "packageFolders": {
-    "/home/lukamalovic/.nuget/packages/": {}
+    "C:\\Users\\lukaa\\.nuget\\packages\\": {},
+    "C:\\Users\\lukaa\\AppData\\Roaming\\Godot\\mono\\GodotNuGetFallbackFolder": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/lukamalovic/Documents/GitHub/aengine-cs/aengine-cs.csproj",
+      "projectUniqueName": "C:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\aengine-cs.csproj",
       "projectName": "aengine-cs",
-      "projectPath": "/home/lukamalovic/Documents/GitHub/aengine-cs/aengine-cs.csproj",
-      "packagesPath": "/home/lukamalovic/.nuget/packages/",
-      "outputPath": "/home/lukamalovic/Documents/GitHub/aengine-cs/obj/",
+      "projectPath": "C:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\aengine-cs.csproj",
+      "packagesPath": "C:\\Users\\lukaa\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Users\\lukaa\\AppData\\Roaming\\Godot\\mono\\GodotNuGetFallbackFolder",
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "/home/lukamalovic/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\lukaa\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\lukaa\\AppData\\Roaming\\NuGet\\config\\Godot.Offline.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -5131,7 +5141,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/6.0.116/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.102\\RuntimeIdentifierGraph.json"
       }
     }
   }

@@ -295,37 +295,40 @@ namespace aengine.graphics
                 Character glyph = font.bitmap.GetCharacter(character);
 
                 // Calculate vertex positions
-                float x = cursorX + glyph.XOffset;
-                float y = cursorY;
-                float width = glyph.Width;
-                float height = glyph.Height;
+                if (glyph != null)
+                {
+                    float x = cursorX + glyph.XOffset;
+                    float y = cursorY;
+                    float width = glyph.Width;
+                    float height = glyph.Height;
 
-                // Calculate texture coordinates
-                float u1 = glyph.X / (float)font.bitmap.Common.ScaleWidth;
-                float v1 = glyph.Y / (float)font.bitmap.Common.ScaleHeight;
-                float u2 = (glyph.X + glyph.Width) / (float)font.bitmap.Common.ScaleWidth;
-                float v2 = (glyph.Y + glyph.Height) / (float)font.bitmap.Common.ScaleHeight;
+                    // Calculate texture coordinates
+                    float u1 = glyph.X / (float)font.bitmap.Common.ScaleWidth;
+                    float v1 = glyph.Y / (float)font.bitmap.Common.ScaleHeight;
+                    float u2 = (glyph.X + glyph.Width) / (float)font.bitmap.Common.ScaleWidth;
+                    float v2 = (glyph.Y + glyph.Height) / (float)font.bitmap.Common.ScaleHeight;
 
-                // Render the character using immediate mode
-                GL.Begin(PrimitiveType.Quads);
+                    // Render the character using immediate mode
+                    GL.Begin(PrimitiveType.Quads);
 
-                GL.Color4(color.r, color.g, color.b, color.a);
-                GL.TexCoord2(u1, v1);
-                GL.Vertex2(x, y + height);
+                    GL.Color4(color.r, color.g, color.b, color.a);
+                    GL.TexCoord2(u1, v1);
+                    GL.Vertex2(x, y + height);
 
-                GL.TexCoord2(u1, v2);
-                GL.Vertex2(x, y);
+                    GL.TexCoord2(u1, v2);
+                    GL.Vertex2(x, y);
 
-                GL.TexCoord2(u2, v2);
-                GL.Vertex2(x + width, y);
+                    GL.TexCoord2(u2, v2);
+                    GL.Vertex2(x + width, y);
 
-                GL.TexCoord2(u2, v1);
-                GL.Vertex2(x + width, y + height);
+                    GL.TexCoord2(u2, v1);
+                    GL.Vertex2(x + width, y + height);
 
-                GL.End();
+                    GL.End();
 
-                // Update cursor position for the next character
-                cursorX += glyph.XAdvance;
+                    // Update cursor position for the next character
+                    cursorX += glyph.XAdvance;
+                }
             }
 
             GL.PopMatrix();

@@ -26,11 +26,6 @@ namespace aengine.graphics
             OBJLoader loader = new OBJLoader();
             loader.LoadModel(path);
 
-            // Retrieve loaded vertices, texture coordinates, and normals
-            List<Vector3> vertices = loader.vertices;
-            List<Vector2> texCoords = loader.texCoords;
-            List<Vector3> normals = loader.normals;
-
             // Load MTL file
             MTLLoader mtlLoader = new MTLLoader();
             mtlLoader.LoadMaterials(mtlpath);

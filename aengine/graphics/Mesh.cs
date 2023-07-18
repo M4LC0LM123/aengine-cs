@@ -81,7 +81,7 @@ namespace aengine.graphics
             GL.Enable(EnableCap.Texture2D);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-            GL.BindTexture(TextureTarget.Texture2D, texture.id);
+            if (texture != null) GL.BindTexture(TextureTarget.Texture2D, texture.id);
 
             // Enable blending for transparency
             GL.Enable(EnableCap.Blend);
@@ -126,7 +126,7 @@ namespace aengine.graphics
 
             GL.PopMatrix();
 
-            GL.Disable(EnableCap.Blend);
+            // GL.Disable(EnableCap.Blend);
             GL.Disable(EnableCap.Texture2D);
             GL.BindTexture(TextureTarget.Texture2D, 0);
         }

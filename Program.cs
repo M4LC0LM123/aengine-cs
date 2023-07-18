@@ -35,7 +35,7 @@ namespace Sandbox
             Texture normal = new Texture("assets/orm.png");
             Texture skybox = new Texture("assets/skybox.jpeg");
             Texture caco = new Texture("assets/cacodemon.png");
-            Model model = new Model("assets/models/einstein.obj", "assets/models/einstein.mtl", albedo);
+            Model model = new Model("assets/models/einstein.obj", "assets/models/einstein.mtl", null);
 
             Texture[] skyboxT = new Texture[]
             {
@@ -52,8 +52,6 @@ namespace Sandbox
             Font font = new Font("assets/fonts/arial.fnt");
 
             Color rclr = new Color(getRandomFloat(-1, 2), getRandomFloat(-1, 2), getRandomFloat(-1, 2), 1f);
-            Stopwatch timer = new Stopwatch();
-            timer.Start();
 
             // Main loop
             while (!WindowShouldClose())
@@ -95,7 +93,7 @@ namespace Sandbox
 
                 drawTexturedSphere(albedo, new System.Numerics.Vector3(-4, 6, 8), new System.Numerics.Vector3(1, 2, 3), new System.Numerics.Vector3(rotationX, 0, rotationZ), Colors.MAGENTA);
 
-                model.render(new System.Numerics.Vector3(8, 4, 6), new System.Numerics.Vector3(1, 1, 1), new System.Numerics.Vector3(0, 180, 0), Colors.WHITE);
+                model.render(new System.Numerics.Vector3(8, 4, 6), new System.Numerics.Vector3(1, 1, 1), new System.Numerics.Vector3(0, 180, 0), Colors.GREEN);
 
                 drawSprite3D(caco, new System.Numerics.Vector3(-5, 2, -3), 3, 3, rotationX, Colors.WHITE);
 
@@ -106,7 +104,6 @@ namespace Sandbox
             }
 
             // Clean up GLFW resources
-            timer.Stop();
             dispose();
         }
 
