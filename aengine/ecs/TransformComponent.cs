@@ -1,5 +1,3 @@
-using Raylib_CsLo;
-using static Raylib_CsLo.Raylib;
 using System.Numerics;
 
 namespace aengine.ecs

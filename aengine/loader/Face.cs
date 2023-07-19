@@ -14,6 +14,7 @@ namespace aengine.loader
             Vertices = new List<Vector3>();
             TexCoords = new List<Vector2>();
             Normals = new List<Vector3>();
+            MaterialName = String.Empty;
         }
     }
 

@@ -9,7 +9,7 @@ namespace aengine.loader
         public void LoadMaterials(string mtlpath)
         {
             string[] lines = File.ReadAllLines(mtlpath);
-            Material currentMaterial = null;
+            Material currentMaterial = new Material();
 
             foreach (string line in lines)
             {

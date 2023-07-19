@@ -1,7 +1,4 @@
 using System.Numerics;
-using Raylib_CsLo;
-using static Raylib_CsLo.Raylib;
-using static Raylib_CsLo.RlGl;
 ﻿using BepuPhysics;
 using BepuPhysics.Collidables;
 using BepuPhysics.CollisionDetection;

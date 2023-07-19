@@ -22,7 +22,7 @@ namespace Sandbox
     {
         static void Main()
         {
-            init(800, 600, "aengine");
+            init(1024, 720, "aengine");
             setIcon(new Texture("assets/logo.png"));
 
             Camera camera = new Camera(new System.Numerics.Vector3(2, 2, 2), 90);
@@ -33,9 +33,8 @@ namespace Sandbox
 
             Texture albedo = new Texture("assets/albedo.png");
             Texture normal = new Texture("assets/orm.png");
-            Texture skybox = new Texture("assets/skybox.jpeg");
             Texture caco = new Texture("assets/cacodemon.png");
-            Model model = new Model("assets/models/einstein.obj", "assets/models/einstein.mtl", null);
+            Model model = new Model("assets/models/einstein.obj", "assets/models/einstein.mtl", albedo);
 
             Texture[] skyboxT = new Texture[]
             {
@@ -51,12 +50,33 @@ namespace Sandbox
 
             Font font = new Font("assets/fonts/arial.fnt");
 
-            Color rclr = new Color(getRandomFloat(-1, 2), getRandomFloat(-1, 2), getRandomFloat(-1, 2), 1f);
+            Color rclr = new Color(getRandomFloat(-1, 2), getRandomFloat(-1, 2), getRandomFloat(-1, 2), 0.5f);
+
+            Entity ground = new Entity();
+            ground.transform.position = new System.Numerics.Vector3(0, -3, 0);
+            ground.transform.scale = new System.Numerics.Vector3(30, 2, 30);
+            MeshComponent mc = new MeshComponent(ground);
+            mc.texture = albedo;
+            ground.addComponent(mc);
+            RigidBodyComponent rb = new RigidBodyComponent(ground);
+            rb.init(ground, 1.0f, BodyType.STATIC, ShapeType.BOX);
+            ground.addComponent(rb);
+
+            Entity body = new Entity();
+            body.transform.position = new System.Numerics.Vector3(0, 6, 0);
+            body.transform.scale = new System.Numerics.Vector3(4, 4, 4);
+            MeshComponent mc2 = new MeshComponent(body);
+            mc2.texture = albedo;
+            body.addComponent(mc2);
+            RigidBodyComponent rb2 = new RigidBodyComponent(body);
+            rb.init(body, 1.0f, BodyType.DYNAMIC, ShapeType.BOX);
+            body.addComponent(rb2);
 
             // Main loop
             while (!WindowShouldClose())
             {
                 update();
+                World.update();
 
                 if (Input.IsKeyDown(Keys.Escape))
                 {
@@ -87,11 +107,17 @@ namespace Sandbox
                 clearBackground(Colors.TEAL);
                 drawSkyBox(skyboxT, Colors.WHITE);
 
+                World.render();
+
                 drawDebugAxies();
 
                 drawTexturedCube(albedo, new System.Numerics.Vector3(4, 2, 2), new System.Numerics.Vector3(1, 2, 3), new System.Numerics.Vector3(rotationX, 0, rotationZ), Colors.LIME);
 
                 drawTexturedSphere(albedo, new System.Numerics.Vector3(-4, 6, 8), new System.Numerics.Vector3(1, 2, 3), new System.Numerics.Vector3(rotationX, 0, rotationZ), Colors.MAGENTA);
+
+                drawTexturedCylinder(albedo, new System.Numerics.Vector3(4, 2, 8), new System.Numerics.Vector3(1, 1, 2), new System.Numerics.Vector3(0, 0, 0), Colors.ORANGE);
+
+                drawTexturedCapsule(albedo, new System.Numerics.Vector3(9, 2, 8), new System.Numerics.Vector3(1, 3, 1), new System.Numerics.Vector3(0, 0, 0), Colors.TEAL);
 
                 model.render(new System.Numerics.Vector3(8, 4, 6), new System.Numerics.Vector3(1, 1, 1), new System.Numerics.Vector3(0, 180, 0), Colors.GREEN);
 

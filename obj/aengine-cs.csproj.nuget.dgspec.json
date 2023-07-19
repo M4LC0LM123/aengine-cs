@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\aengine-cs.csproj": {}
+    "c:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\aengine-cs.csproj": {}
   },
   "projects": {
-    "C:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\aengine-cs.csproj": {
+    "c:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\aengine-cs.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\aengine-cs.csproj",
+        "projectUniqueName": "c:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\aengine-cs.csproj",
         "projectName": "aengine-cs",
-        "projectPath": "C:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\aengine-cs.csproj",
+        "projectPath": "c:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\aengine-cs.csproj",
         "packagesPath": "C:\\Users\\lukaa\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\obj\\",
+        "outputPath": "c:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Users\\lukaa\\AppData\\Roaming\\Godot\\mono\\GodotNuGetFallbackFolder",
@@ -53,10 +53,6 @@
             "OpenTK": {
               "target": "Package",
               "version": "[4.7.7, )"
-            },
-            "Raylib-CsLo": {
-              "target": "Package",
-              "version": "[4.2.0.9, )"
             },
             "SharpFNT": {
               "target": "Package",

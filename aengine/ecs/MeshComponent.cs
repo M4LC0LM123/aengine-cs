@@ -1,7 +1,20 @@
-using Raylib_CsLo;
-using static Raylib_CsLo.Raylib;
-using System.Numerics;
-using aengine.core;
+using System;
+using OpenTK.Windowing.GraphicsLibraryFramework;
+using OpenTK.Graphics;
+using OpenTK.Mathematics;
+using OpenTK.Windowing.Common; 
+using OpenTK.Windowing.Desktop;
+using StbImageSharp;
+using aengine;
+using static aengine.core.aengine;
+using static aengine.graphics.Graphics;
+using static aengine.graphics.Rendering;
+using aengine.ecs;
+using aengine.graphics;
+using aengine.input;
+using SharpFNT;
+using aengine.loader;
+using System.Diagnostics;
 
 namespace aengine.ecs
 {
@@ -9,32 +22,17 @@ namespace aengine.ecs
     {
         private TransformComponent transform;
         public ShapeType shape;
-        public Model model;
-        private Vector3 modelScale;
         public Texture texture;
         public Color color;
-        public Color tint;
         private String m_etag;
 
         public MeshComponent(Entity entity)
         {
-            this.transform = entity.transform;
-            this.model = new Model();
+            if (entity.transform != null) this.transform = entity.transform;
+            else this.transform = new TransformComponent(null);
             this.texture = new Texture();
-            this.color = BLANK;
-            this.tint = BLANK;
+            this.color = Colors.WHITE;
             this.m_etag = entity.tag;
-        }
-
-        public void setModelScale(Vector3 scale)
-        {
-            this.modelScale = scale;
-            this.model.transform = RayMath.MatrixScale(scale.X, scale.Y, scale.Z);
-        }
-
-        public void setModelRotation(Vector3 rotation)
-        {
-            this.model.transform = RayMath.MatrixRotateXYZ(new Vector3(aengine.core.aengine.deg2Rad(rotation.X), aengine.core.aengine.deg2Rad(rotation.Y), aengine.core.aengine.deg2Rad(rotation.Z)));
         }
 
         public override void update(Entity entity)
@@ -49,27 +47,26 @@ namespace aengine.ecs
             switch (this.shape)
             {
                 case ShapeType.BOX:
-                    // aengine.graphics.Rendering.drawTexturedCube(this.texture, new Vector3(this.transform.position.X, this.transform.position.Y, this.transform.position.Z), this.transform.scale.X, this.transform.scale.Y, this.transform.scale.Z, this.transform.rotation, this.color);
+                    drawTexturedCube(this.texture, this.transform.position, this.transform.scale, this.transform.rotation, this.color);
                     break;
                 case ShapeType.SPHERE:
-                    // aengine.core.aengine.DrawSphere(this.transform.position, this.transform.scale.X, this.color);
+                    drawTexturedSphere(this.texture, this.transform.position, this.transform.scale, this.transform.rotation, this.color);
                     break;
                 case ShapeType.CYLINDER:
-                    DrawCylinder(this.transform.position, this.transform.scale.X, this.transform.scale.Z, this.transform.scale.Y, 50, this.color);
+                    drawTexturedCylinder(this.texture, this.transform.position, this.transform.scale, this.transform.rotation, this.color);
                     break;
-                default:
-                    // aengine.core.aengine.DrawCubeTexturePro(this.texture, new Vector3(this.transform.position.X, this.transform.position.Y, this.transform.position.Z), this.transform.scale.X, this.transform.scale.Y, this.transform.scale.Z, this.transform.rotation, this.color);
+                case ShapeType.CAPSULE:
+                    drawTexturedCapsule(this.texture, this.transform.position, this.transform.scale, this.transform.rotation, this.color);
+                    break;
+                case ShapeType.SPRITE3D:
+                    drawSprite3D(this.texture, this.transform.position, this.transform.scale.X, this.transform.scale.Y, this.transform.rotation.X, this.color);
                     break;
             }
-
-            DrawModel(this.model, new Vector3(this.transform.position.X, this.transform.position.Y, this.transform.position.Z), this.modelScale.X, this.tint);
         }
 
         public override void dispose()
         {
             base.dispose();
-            UnloadTexture(this.texture);
-            UnloadModel(this.model);
         }
 
     }

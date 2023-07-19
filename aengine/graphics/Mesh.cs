@@ -11,7 +11,6 @@ namespace aengine.graphics
         private int vao;
         private int vbo;
         private int ebo;
-        private int vertexCount;
         private Texture texture;
 
         public List<Vector3> Vertices { get; }
@@ -44,7 +43,10 @@ namespace aengine.graphics
 
             GL.BindVertexArray(0);
 
-            vertexCount = indices.Length;
+            Vertices = new List<Vector3>();
+            TexCoords = new List<Vector2>();
+            Normals = new List<Vector3>();
+            Material = new Material();
 
             Vertices = ConvertToVector3List(vertices);
             TexCoords = ConvertToVector2List(texCoords);
@@ -52,7 +54,7 @@ namespace aengine.graphics
             Indices = indices;
         }
 
-        private List<Vector3> ConvertToVector3List(float[] array)
+        private static List<Vector3> ConvertToVector3List(float[] array)
         {
             List<Vector3> result = new List<Vector3>();
 
@@ -64,7 +66,7 @@ namespace aengine.graphics
             return result;
         }
 
-        private List<Vector2> ConvertToVector2List(float[] array)
+        private static List<Vector2> ConvertToVector2List(float[] array)
         {
             List<Vector2> result = new List<Vector2>();
 

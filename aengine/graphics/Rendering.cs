@@ -51,6 +51,9 @@ namespace aengine.graphics
 
         public static void drawTexturedCube(Texture texture, System.Numerics.Vector3 position, System.Numerics.Vector3 scale, System.Numerics.Vector3 rotation, Color tint)
         {
+            GL.Enable(EnableCap.DepthTest); // Enable depth testing
+            GL.DepthFunc(DepthFunction.Lequal); // Set depth function
+
             GL.Enable(EnableCap.Texture2D);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
@@ -130,6 +133,9 @@ namespace aengine.graphics
 
         public static void drawPlane(Texture texture, System.Numerics.Vector3 position, float width, float height, float rotation, Color tint)
         {
+            GL.Enable(EnableCap.DepthTest); // Enable depth testing
+            GL.DepthFunc(DepthFunction.Lequal); // Set depth function
+
             GL.Enable(EnableCap.Texture2D);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
@@ -167,6 +173,9 @@ namespace aengine.graphics
 
         public static void drawSprite3D(Texture texture, System.Numerics.Vector3 position, float width, float height, float rotation, Color tint)
         {
+            GL.Enable(EnableCap.DepthTest); // Enable depth testing
+            GL.DepthFunc(DepthFunction.Lequal); // Set depth function
+
             GL.Enable(EnableCap.Texture2D);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
@@ -203,8 +212,11 @@ namespace aengine.graphics
 
         public static void drawTexturedSphere(Texture texture, System.Numerics.Vector3 position, System.Numerics.Vector3 scale, System.Numerics.Vector3 rotation, Color tint)
         {
-            int lats = 50;
-            int longs = 50;
+            GL.Enable(EnableCap.DepthTest); // Enable depth testing
+            GL.DepthFunc(DepthFunction.Lequal); // Set depth function
+
+            int lats = 15;
+            int longs = 15;
             GL.Enable(EnableCap.Texture2D);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
@@ -263,8 +275,218 @@ namespace aengine.graphics
             GL.BindTexture(TextureTarget.Texture2D, 0);
         }
 
+        public static void drawTexturedCylinder(Texture texture, System.Numerics.Vector3 position, System.Numerics.Vector3 scale, System.Numerics.Vector3 rotation, Color tint)
+        {
+            GL.Enable(EnableCap.DepthTest); // Enable depth testing
+            GL.DepthFunc(DepthFunction.Lequal); // Set depth function
+
+            int sides = 15;
+            int stacks = 15;
+            float radius = 2;
+            float height = 2;
+            GL.Enable(EnableCap.Texture2D);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            GL.BindTexture(TextureTarget.Texture2D, texture.id); 
+
+            // Enable blending for transparency
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+
+            GL.PushMatrix();
+            GL.Translate(position.X, position.Y, position.Z);
+            GL.Rotate(rotation.X, Vector3.UnitX);
+            GL.Rotate(rotation.Y, Vector3.UnitY);
+            GL.Rotate(rotation.Z, Vector3.UnitZ);
+            GL.Scale(scale.X, scale.Y, scale.Z);
+
+            float stackHeight = height / stacks;
+            float stackAngle = 2 * MathHelper.Pi / sides;
+
+            for (int i = 0; i < stacks; i++)
+            {
+                float stackTop = i * stackHeight;
+                float stackBottom = stackTop + stackHeight;
+
+                for (int j = 0; j < sides; j++)
+                {
+                    float theta = j * stackAngle;
+                    float nextTheta = (j + 1) * stackAngle;
+
+                    // Calculate the coordinates of the vertices
+                    float x1 = radius * (float)Math.Cos(theta);
+                    float y1 = radius * (float)Math.Sin(theta);
+                    float x2 = radius * (float)Math.Cos(nextTheta);
+                    float y2 = radius * (float)Math.Sin(nextTheta);
+
+                    // Calculate the texture coordinates
+                    float s1 = (float)j / sides;
+                    float t1 = (float)i / stacks;
+                    float s2 = (float)(j + 1) / sides;
+                    float t2 = (float)(i + 1) / stacks;
+
+                    // Render the quad
+                    GL.Begin(PrimitiveType.Quads);
+
+                    GL.Color4(tint.r, tint.g, tint.b, tint.a); 
+                    GL.TexCoord2(s1, t1);
+                    GL.Vertex3(x1, y1, stackTop);
+
+                    GL.TexCoord2(s1, t2);
+                    GL.Vertex3(x1, y1, stackBottom);
+
+                    GL.TexCoord2(s2, t2);
+                    GL.Vertex3(x2, y2, stackBottom);
+
+                    GL.TexCoord2(s2, t1);
+                    GL.Vertex3(x2, y2, stackTop);
+
+                    GL.End();
+                }
+            }
+
+            // Render the top cap
+            GL.Begin(PrimitiveType.TriangleFan);
+            GL.Normal3(0, 0, 1); // Normal vector pointing up
+
+            GL.Color4(tint.r, tint.g, tint.b, tint.a); 
+            GL.TexCoord2(0.5f, 0.5f);
+            GL.Vertex3(0, 0, height); // Center vertex
+
+            for (int i = 0; i <= sides; i++)
+            {
+                float theta = i * stackAngle;
+                float x = radius * (float)Math.Cos(theta);
+                float y = radius * (float)Math.Sin(theta);
+
+                GL.TexCoord2(x / radius + 0.5f, y / radius + 0.5f);
+                GL.Vertex3(x, y, height);
+            }
+
+            GL.End();
+
+            // Render the bottom cap
+            GL.Begin(PrimitiveType.TriangleFan);
+            GL.Normal3(0, 0, -1); // Normal vector pointing down
+
+            GL.Color4(tint.r, tint.g, tint.b, tint.a); 
+            GL.TexCoord2(0.5f, 0.5f);
+            GL.Vertex3(0, 0, 0); // Center vertex
+
+            for (int i = 0; i <= sides; i++)
+            {
+                float theta = i * stackAngle;
+                float x = radius * (float)Math.Cos(theta);
+                float y = radius * (float)Math.Sin(theta);
+
+                GL.TexCoord2(x / radius + 0.5f, y / radius + 0.5f);
+                GL.Vertex3(x, y, 0);
+            }
+
+            GL.End();
+
+            GL.PopMatrix();
+
+            GL.Disable(EnableCap.Blend);
+            GL.Disable(EnableCap.Texture2D);
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+        }
+
+        public static void drawTexturedCapsule(Texture texture, System.Numerics.Vector3 position, System.Numerics.Vector3 scale, System.Numerics.Vector3 rotation, Color tint)
+        {
+            GL.Enable(EnableCap.DepthTest); // Enable depth testing
+            GL.DepthFunc(DepthFunction.Lequal); // Set depth function
+
+            int slices = 15;
+            int stacks = 15;
+            float radius = 2;
+            float height = 2;
+            GL.Enable(EnableCap.Texture2D);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            GL.BindTexture(TextureTarget.Texture2D, texture.id); 
+
+            // Enable blending for transparency
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+
+            GL.PushMatrix();
+            GL.Translate(position.X, position.Y, position.Z);
+            GL.Rotate(rotation.X, Vector3.UnitX);
+            GL.Rotate(rotation.Y, Vector3.UnitY);
+            GL.Rotate(rotation.Z, Vector3.UnitZ);
+            GL.Scale(scale.X, scale.Y, scale.Z);
+
+            float phiStep = (float)Math.PI / stacks;
+            float thetaStep = 2.0f * (float)Math.PI / slices;
+
+            for (int stack = 0; stack < stacks; stack++)
+            {
+                float phi = (float)Math.PI / 2 - stack * phiStep;
+                float nextPhi = (float)Math.PI / 2 - (stack + 1) * phiStep;
+
+                GL.Begin(PrimitiveType.Quads);
+
+                for (int slice = 0; slice < slices; slice++)
+                {
+                    float theta = slice * thetaStep;
+                    float nextTheta = (slice + 1) * thetaStep;
+
+                    // Vertices and texture coordinates for the current quad
+                    float x1 = radius * (float)Math.Cos(theta) * (float)Math.Cos(phi);
+                    float y1 = height * (stack / (float)stacks) - height / 2;
+                    float z1 = radius * (float)Math.Sin(theta) * (float)Math.Cos(phi);
+                    float u1 = 1.0f - (slice / (float)slices);
+                    float v1 = stack / (float)stacks;
+
+                    float x2 = radius * (float)Math.Cos(nextTheta) * (float)Math.Cos(phi);
+                    float y2 = height * (stack / (float)stacks) - height / 2;
+                    float z2 = radius * (float)Math.Sin(nextTheta) * (float)Math.Cos(phi);
+                    float u2 = 1.0f - ((slice + 1) / (float)slices);
+                    float v2 = stack / (float)stacks;
+
+                    float x3 = radius * (float)Math.Cos(nextTheta) * (float)Math.Cos(nextPhi);
+                    float y3 = height * ((stack + 1) / (float)stacks) - height / 2;
+                    float z3 = radius * (float)Math.Sin(nextTheta) * (float)Math.Cos(nextPhi);
+                    float u3 = 1.0f - ((slice + 1) / (float)slices);
+                    float v3 = (stack + 1) / (float)stacks;
+
+                    float x4 = radius * (float)Math.Cos(theta) * (float)Math.Cos(nextPhi);
+                    float y4 = height * ((stack + 1) / (float)stacks) - height / 2;
+                    float z4 = radius * (float)Math.Sin(theta) * (float)Math.Cos(nextPhi);
+                    float u4 = 1.0f - (slice / (float)slices);
+                    float v4 = (stack + 1) / (float)stacks;
+
+                    // Draw the quad
+                    GL.Color4(tint.r, tint.g, tint.b, tint.a);
+                    GL.TexCoord2(u1, v1);
+                    GL.Vertex3(x1, y1, z1);
+
+                    GL.TexCoord2(u2, v2);
+                    GL.Vertex3(x2, y2, z2);
+
+                    GL.TexCoord2(u3, v3);
+                    GL.Vertex3(x3, y3, z3);
+
+                    GL.TexCoord2(u4, v4);
+                    GL.Vertex3(x4, y4, z4);
+                }
+
+                GL.End();
+            }
+            
+            GL.PopMatrix();
+
+            GL.Disable(EnableCap.Blend);
+            GL.Disable(EnableCap.Texture2D);
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+        }
+
         public static void drawText(Font font, string text, float px, float py, float fontSize, Color color)
         {
+            GL.Enable(EnableCap.DepthTest); // Enable depth testing
+            GL.DepthFunc(DepthFunction.Lequal); // Set depth function
+
             float cursorX = 0.0f;
             float cursorY = 0.0f;
 

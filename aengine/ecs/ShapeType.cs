@@ -4,9 +4,8 @@ namespace aengine.ecs
     {
         BOX = 0,
         SPHERE = 1,
-        CYLINDER = 2, // can be a cone based on transform scale
+        CYLINDER = 2, 
         CAPSULE = 3,
-        TRIANGLE = 4,
-        MESH = 5
+        SPRITE3D = 4,
     }
 }

@@ -14,7 +14,7 @@ namespace aengine.loader
         public Material()
         {
             // Set default material properties
-            Name = "";
+            Name = String.Empty;
             AmbientColor = Vector3.One;
             DiffuseColor = Vector3.One;
             SpecularColor = Vector3.One;
