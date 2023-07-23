@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\aengine-cs.csproj": {}
+    "C:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\aengine-cs.csproj": {}
   },
   "projects": {
-    "c:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\aengine-cs.csproj": {
+    "C:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\aengine-cs.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\aengine-cs.csproj",
+        "projectUniqueName": "C:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\aengine-cs.csproj",
         "projectName": "aengine-cs",
-        "projectPath": "c:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\aengine-cs.csproj",
+        "projectPath": "C:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\aengine-cs.csproj",
         "packagesPath": "C:\\Users\\lukaa\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\obj\\",
+        "outputPath": "C:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Users\\lukaa\\AppData\\Roaming\\Godot\\mono\\GodotNuGetFallbackFolder",
@@ -46,9 +46,9 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
-            "BepuPhysics": {
+            "JitterPhysics": {
               "target": "Package",
-              "version": "[2.4.0, )"
+              "version": "[0.2.0.20, )"
             },
             "OpenTK": {
               "target": "Package",

@@ -37,6 +37,8 @@ namespace aengine.graphics
         public static Color MAROON = new Color(0.5f, 0.0f, 0.0f, 1.0f);
         public static Color OLIVE = new Color(0.5f, 0.5f, 0.0f, 1.0f);
 
+        public static Color GUI_DEFAULT = new Color(0.38f, 0.55f, 0.62f, 1.0f);
+
         public static Color BLANK = new Color(0.0f, 0.0f, 0.0f, 0.0f);
     }
 

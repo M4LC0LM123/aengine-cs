@@ -49,8 +49,6 @@ C:\Users\lukaa\Documents\GitHub\aengine-cs\bin\Debug\net6.0\aengine-cs.runtimeco
 C:\Users\lukaa\Documents\GitHub\aengine-cs\bin\Debug\net6.0\aengine-cs.dll
 C:\Users\lukaa\Documents\GitHub\aengine-cs\bin\Debug\net6.0\ref\aengine-cs.dll
 C:\Users\lukaa\Documents\GitHub\aengine-cs\bin\Debug\net6.0\aengine-cs.pdb
-C:\Users\lukaa\Documents\GitHub\aengine-cs\bin\Debug\net6.0\BepuPhysics.dll
-C:\Users\lukaa\Documents\GitHub\aengine-cs\bin\Debug\net6.0\BepuUtilities.dll
 C:\Users\lukaa\Documents\GitHub\aengine-cs\bin\Debug\net6.0\OpenTK.Compute.dll
 C:\Users\lukaa\Documents\GitHub\aengine-cs\bin\Debug\net6.0\OpenTK.Core.dll
 C:\Users\lukaa\Documents\GitHub\aengine-cs\bin\Debug\net6.0\OpenTK.Graphics.dll
@@ -77,3 +75,4 @@ C:\Users\lukaa\Documents\GitHub\aengine-cs\obj\Debug\net6.0\aengine-cs.dll
 C:\Users\lukaa\Documents\GitHub\aengine-cs\obj\Debug\net6.0\ref\aengine-cs.dll
 C:\Users\lukaa\Documents\GitHub\aengine-cs\obj\Debug\net6.0\aengine-cs.pdb
 C:\Users\lukaa\Documents\GitHub\aengine-cs\obj\Debug\net6.0\aengine-cs.genruntimeconfig.cache
+C:\Users\lukaa\Documents\GitHub\aengine-cs\bin\Debug\net6.0\Jitter.dll

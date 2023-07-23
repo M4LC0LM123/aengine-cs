@@ -5,6 +5,7 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common; 
 using OpenTK.Windowing.Desktop;
 using StbImageSharp;
+using aengine.input;
 
 namespace aengine.graphics
 {
@@ -17,6 +18,11 @@ namespace aengine.graphics
         private static int frameCount;
         private static int currFPS;
         public static System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
+
+        // event callbacks
+        private static GLFWCallbacks.CharCallback charCallback;
+        private static GLFWCallbacks.FramebufferSizeCallback framebufferSizeCallback;
+        private static GLFWCallbacks.KeyCallback keyCallback;
 
         // initialize GLFW window
         public static unsafe void init(int width, int height, string title)
@@ -50,6 +56,15 @@ namespace aengine.graphics
             GL.LoadBindings(new GLFWBindingsContext());
             GL.Enable(EnableCap.DepthTest);
             GL.Viewport(0, 0, width, height);
+
+            charCallback = CharCallback;
+            GLFW.SetCharCallback(window, charCallback);    
+
+            framebufferSizeCallback = OnFramebufferSizeChanged;
+            GLFW.SetFramebufferSizeCallback(window, framebufferSizeCallback);
+
+            keyCallback = OnKeyPressed;
+            GLFW.SetKeyCallback(window, keyCallback);
         }
 
         // check if a window should close often used in a while loop
@@ -144,6 +159,40 @@ namespace aengine.graphics
             // set the view matrix
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref camera.viewMatrix);
+        }
+
+        private static void CharCallback(Window* window, uint codepoint)
+        {
+            char character = (char)codepoint;
+            lastInputChar = character;
+        }
+
+        private static char lastInputChar = '\0';
+        
+        public static char GetKeyChar()
+        {
+            char inputChar = lastInputChar;
+            lastInputChar = '\0';
+            return inputChar;
+        }
+
+        private static unsafe void OnFramebufferSizeChanged(Window* window, int width, int height)
+        {
+            GL.Viewport(0, 0, width, height);
+        }
+
+        public static bool isKeyPressed = false;
+
+        private static unsafe void OnKeyPressed(Window* window, Keys keys, int scanCode, InputAction state, KeyModifiers mods)
+        {
+            if (state == InputAction.Press)
+            {
+                isKeyPressed = true;
+            }
+            else
+            {
+                isKeyPressed = false;
+            }
         }
 
         // destroys the window and cleans up GLFW and opengl

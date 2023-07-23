@@ -1,5 +1,6 @@
 using System.Drawing;
 using System.Drawing.Imaging;
+using aengine.gui;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using SharpFNT;
@@ -57,7 +58,7 @@ namespace aengine.graphics
             GL.Enable(EnableCap.Texture2D);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-            GL.BindTexture(TextureTarget.Texture2D, texture.id);
+            if (texture != null) GL.BindTexture(TextureTarget.Texture2D, texture.id);
 
             // Enable blending for transparency
             GL.Enable(EnableCap.Blend);
@@ -139,7 +140,7 @@ namespace aengine.graphics
             GL.Enable(EnableCap.Texture2D);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-            GL.BindTexture(TextureTarget.Texture2D, texture.id);
+            if (texture != null) GL.BindTexture(TextureTarget.Texture2D, texture.id);
 
             // Enable blending for transparency
             GL.Enable(EnableCap.Blend);
@@ -179,7 +180,7 @@ namespace aengine.graphics
             GL.Enable(EnableCap.Texture2D);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-            GL.BindTexture(TextureTarget.Texture2D, texture.id);
+            if (texture != null) GL.BindTexture(TextureTarget.Texture2D, texture.id);
 
             // Enable blending for transparency
             GL.Enable(EnableCap.Blend);
@@ -220,7 +221,7 @@ namespace aengine.graphics
             GL.Enable(EnableCap.Texture2D);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-            GL.BindTexture(TextureTarget.Texture2D, texture.id); 
+            if (texture != null) GL.BindTexture(TextureTarget.Texture2D, texture.id);
 
             // Enable blending for transparency
             GL.Enable(EnableCap.Blend);
@@ -287,7 +288,7 @@ namespace aengine.graphics
             GL.Enable(EnableCap.Texture2D);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-            GL.BindTexture(TextureTarget.Texture2D, texture.id); 
+            if (texture != null) GL.BindTexture(TextureTarget.Texture2D, texture.id);
 
             // Enable blending for transparency
             GL.Enable(EnableCap.Blend);
@@ -404,7 +405,7 @@ namespace aengine.graphics
             GL.Enable(EnableCap.Texture2D);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-            GL.BindTexture(TextureTarget.Texture2D, texture.id); 
+            if (texture != null) GL.BindTexture(TextureTarget.Texture2D, texture.id);
 
             // Enable blending for transparency
             GL.Enable(EnableCap.Blend);
@@ -482,8 +483,17 @@ namespace aengine.graphics
             GL.BindTexture(TextureTarget.Texture2D, 0);
         }
 
-        public static void drawText(Font font, string text, float px, float py, float fontSize, Color color)
+        public static void drawText(Font font, string text, float px, float py, float fontSize, Color color, GuiWindow window = null)
         {
+            float rx = px;
+            float ry = py;
+
+            if (window != null)
+            {
+                rx = window.rect.x + px;
+                ry = window.rect.y + py;
+            }
+
             GL.Enable(EnableCap.DepthTest); // Enable depth testing
             GL.DepthFunc(DepthFunction.Lequal); // Set depth function
 
@@ -493,7 +503,7 @@ namespace aengine.graphics
             GL.MatrixMode(MatrixMode.Projection);
             GL.PushMatrix();
             GL.LoadIdentity();
-            GL.Ortho(0, graphics.Graphics.getScreenSize().X, 0, graphics.Graphics.getScreenSize().Y, -1, 1); // Use an orthographic projection
+            GL.Ortho(0, graphics.Graphics.getScreenSize().X, graphics.Graphics.getScreenSize().Y, 0, 0, 1); // Use an orthographic projection
 
             GL.MatrixMode(MatrixMode.Modelview);
             GL.PushMatrix();
@@ -502,14 +512,14 @@ namespace aengine.graphics
             GL.Enable(EnableCap.Texture2D);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-            GL.BindTexture(TextureTarget.Texture2D, font.atlas.id); 
+            if (font.atlas != null) GL.BindTexture(TextureTarget.Texture2D, font.atlas.id); 
 
             // Enable blending for transparency
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
             GL.PushMatrix();
-            GL.Translate(px, py, 0);
+            GL.Translate(rx, ry, 0);
             GL.Scale(fontSize, fontSize, fontSize);
 
             foreach (char character in text)
@@ -535,16 +545,16 @@ namespace aengine.graphics
 
                     GL.Color4(color.r, color.g, color.b, color.a);
                     GL.TexCoord2(u1, v1);
-                    GL.Vertex2(x, y + height);
-
-                    GL.TexCoord2(u1, v2);
                     GL.Vertex2(x, y);
 
+                    GL.TexCoord2(u1, v2);
+                    GL.Vertex2(x, y + height);
+
                     GL.TexCoord2(u2, v2);
-                    GL.Vertex2(x + width, y);
+                    GL.Vertex2(x + width, y + height);
 
                     GL.TexCoord2(u2, v1);
-                    GL.Vertex2(x + width, y + height);
+                    GL.Vertex2(x + width, y);
 
                     GL.End();
 
@@ -552,6 +562,55 @@ namespace aengine.graphics
                     cursorX += glyph.XAdvance;
                 }
             }
+
+            GL.PopMatrix();
+
+            GL.Disable(EnableCap.Blend);
+            GL.Disable(EnableCap.Texture2D);
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+
+            GL.MatrixMode(MatrixMode.Projection);
+            GL.PopMatrix();
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.PopMatrix();
+        }
+
+        public static void drawTexturedRectangle(Texture texture, float x, float y, float width, float height, Color color)
+        {
+            GL.Enable(EnableCap.DepthTest); // Enable depth testing
+            GL.DepthFunc(DepthFunction.Lequal); // Set depth function
+
+            GL.MatrixMode(MatrixMode.Projection);
+            GL.PushMatrix();
+            GL.LoadIdentity();
+            GL.Ortho(0, graphics.Graphics.getScreenSize().X, graphics.Graphics.getScreenSize().Y, 0, 0, 1); // Use an orthographic projection
+
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.PushMatrix();
+            GL.LoadIdentity();
+
+            GL.Enable(EnableCap.Texture2D);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            if (texture != null) GL.BindTexture(TextureTarget.Texture2D, texture.id);
+
+            // Enable blending for transparency
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+
+            GL.PushMatrix();
+            GL.Translate(x, y, 0);
+            GL.Scale(width, height, 0);
+
+            GL.Begin(PrimitiveType.Quads);
+
+            GL.Color4(color.r, color.g, color.b, color.a);
+            GL.TexCoord2(0, 0); GL.Vertex2(0, 0);
+            GL.TexCoord2(0, 1); GL.Vertex2(0, 0.5f);
+            GL.TexCoord2(1, 1); GL.Vertex2(0.5f, 0.5f);
+            GL.TexCoord2(1, 0); GL.Vertex2(0.5f, 0);
+
+            GL.End();
 
             GL.PopMatrix();
 

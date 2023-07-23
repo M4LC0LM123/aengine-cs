@@ -2,25 +2,13 @@
   "version": 3,
   "targets": {
     "net6.0": {
-      "BepuPhysics/2.4.0": {
-        "type": "package",
-        "dependencies": {
-          "BepuUtilities": "2.4.0"
-        },
-        "compile": {
-          "lib/net6.0/BepuPhysics.dll": {}
-        },
-        "runtime": {
-          "lib/net6.0/BepuPhysics.dll": {}
-        }
-      },
-      "BepuUtilities/2.4.0": {
+      "JitterPhysics/0.2.0.20": {
         "type": "package",
         "compile": {
-          "lib/net6.0/BepuUtilities.dll": {}
+          "lib/net4/Jitter.dll": {}
         },
         "runtime": {
-          "lib/net6.0/BepuUtilities.dll": {}
+          "lib/net4/Jitter.dll": {}
         }
       },
       "Microsoft.NETCore.Platforms/1.1.0": {
@@ -1395,32 +1383,21 @@
     }
   },
   "libraries": {
-    "BepuPhysics/2.4.0": {
-      "sha512": "Ck/BJgSQrBqYrj0T9jGljDdHNILBP5kTPTylc7N/hCzR1XJJc7p6ORzwtjTfjgoYkkdajvLHxEQv6BRC8kaysQ==",
+    "JitterPhysics/0.2.0.20": {
+      "sha512": "Kgju3DCxS6ot55LX5+tFcALVcEDEfQ7jFkhjY+FR1bOn8Dh1YitomA9E6ZWIFGdKXeYDW1SKhGvKOnqJYjz4gQ==",
       "type": "package",
-      "path": "bepuphysics/2.4.0",
+      "path": "jitterphysics/0.2.0.20",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "bepuphysics.2.4.0.nupkg.sha512",
-        "bepuphysics.nuspec",
-        "bepuphysicslogo256.png",
-        "lib/net6.0/BepuPhysics.dll",
-        "lib/net6.0/BepuPhysics.xml"
-      ]
-    },
-    "BepuUtilities/2.4.0": {
-      "sha512": "KNMxkzKLHAvV7jRtErxs3rPv71fHToqo/WN96HlT6iomWuwL97tohEbt0B1WA8A6sO5t6PP+qF08d4T9A8k2uA==",
-      "type": "package",
-      "path": "bepuutilities/2.4.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "bepuphysicslogo256.png",
-        "bepuutilities.2.4.0.nupkg.sha512",
-        "bepuutilities.nuspec",
-        "lib/net6.0/BepuUtilities.dll",
-        "lib/net6.0/BepuUtilities.xml"
+        "jitterphysics.0.2.0.20.nupkg.sha512",
+        "jitterphysics.nuspec",
+        "lib/net4/Jitter.dll",
+        "lib/net4/Jitter.pdb",
+        "lib/net4/Jitter.xml",
+        "lib/portable-net45+netcore45+wpa81+wp8/Jitter.dll",
+        "lib/portable-net45+netcore45+wpa81+wp8/Jitter.pdb",
+        "lib/portable-net45+netcore45+wpa81+wp8/Jitter.xml"
       ]
     },
     "Microsoft.NETCore.Platforms/1.1.0": {
@@ -4918,7 +4895,7 @@
   },
   "projectFileDependencyGroups": {
     "net6.0": [
-      "BepuPhysics >= 2.4.0",
+      "JitterPhysics >= 0.2.0.20",
       "OpenTK >= 4.7.7",
       "SharpFNT >= 2.0.0",
       "StbImageSharp >= 2.27.13"
@@ -4971,9 +4948,9 @@
       "net6.0": {
         "targetAlias": "net6.0",
         "dependencies": {
-          "BepuPhysics": {
+          "JitterPhysics": {
             "target": "Package",
-            "version": "[2.4.0, )"
+            "version": "[0.2.0.20, )"
           },
           "OpenTK": {
             "target": "Package",
@@ -5006,5 +4983,17 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.102\\RuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'JitterPhysics 0.2.0.20' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
+      "libraryId": "JitterPhysics",
+      "targetGraphs": [
+        "net6.0"
+      ]
+    }
+  ]
 }
