@@ -5,7 +5,6 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using aengine.ecs;
 using Jitter.LinearMath;
-using aengine.graphics;
 
 namespace aengine.core
 {
@@ -59,40 +58,6 @@ namespace aengine.core
             return new Vector3(roll, pitch, yaw);
         }
 
-        public static OpenTK.Mathematics.Matrix4 MatrixRotateZYX(OpenTK.Mathematics.Vector3 rotationAngles)
-        {
-            float cosZ = MathF.Cos(rotationAngles.Z);
-            float sinZ = MathF.Sin(rotationAngles.Z);
-            float cosY = MathF.Cos(rotationAngles.Y);
-            float sinY = MathF.Sin(rotationAngles.Y);
-            float cosX = MathF.Cos(rotationAngles.X);
-            float sinX = MathF.Sin(rotationAngles.X);
-
-            OpenTK.Mathematics.Matrix4 matrix = new OpenTK.Mathematics.Matrix4();
-
-            matrix.M11 = cosZ * cosY;
-            matrix.M12 = sinZ * cosY;
-            matrix.M13 = -sinY;
-            matrix.M14 = 0.0f;
-
-            matrix.M21 = cosZ * sinY * sinX - sinZ * cosX;
-            matrix.M22 = sinZ * sinY * sinX + cosZ * cosX;
-            matrix.M23 = cosY * sinX;
-            matrix.M24 = 0.0f;
-
-            matrix.M31 = cosZ * sinY * cosX + sinZ * sinX;
-            matrix.M32 = sinZ * sinY * cosX - cosZ * sinX;
-            matrix.M33 = cosY * cosX;
-            matrix.M34 = 0.0f;
-
-            matrix.M41 = 0.0f;
-            matrix.M42 = 0.0f;
-            matrix.M43 = 0.0f;
-            matrix.M44 = 1.0f;
-
-            return matrix;
-        }
-
         public static bool CheckCollisionAABB(AABB one, AABB two)
         {
             float oneMinX = one.x - one.width / 2;
@@ -138,32 +103,6 @@ namespace aengine.core
         {
             Random r = new Random();
             return r.Next(min, max);
-        }
-
-        public static float sineWave(float frequency = 0.5f, float amplitude = 1.0f)
-        {
-            double timeValue = graphics.Graphics.timer.Elapsed.TotalSeconds;
-            float value = amplitude * (float) Math.Sin(timeValue * frequency) / 2.0f + 0.5f;
-            return value;
-        } 
-
-        public static Vector2 MeasureText(Font font, string text, float fontSize)
-        {
-            // This function should calculate and return the width and height of the rendered text
-
-            // For the sake of simplicity, let's assume each character has a fixed width and height
-            // You may need to adjust this based on the actual font rendering library you are using
-            float characterWidth = 0.1f * fontSize;
-            float characterHeight = 0.2f * fontSize;
-
-            // Calculate the width of the text by multiplying the number of characters with the character width
-            float textWidth = text.Length * characterWidth;
-
-            // The height of the text is just the character height
-            float textHeight = characterHeight;
-
-            // Return the calculated width and height as a Vector2
-            return new Vector2(textWidth, textHeight);
         }
 
     }

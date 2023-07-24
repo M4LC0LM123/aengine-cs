@@ -1,21 +1,17 @@
 using System;
-using OpenTK.Windowing.GraphicsLibraryFramework;
-using OpenTK.Graphics.OpenGL;
-using OpenTK.Mathematics;
-using OpenTK.Windowing.Common; 
-using OpenTK.Windowing.Desktop;
+using System.Numerics;
+using Raylib_CsLo;
+using static Raylib_CsLo.Raylib;
+using static Raylib_CsLo.RayMath;
 
 namespace aengine.graphics
 {
     public class Camera 
     {
-        public Matrix4 projectionMatrix;    
-        public Matrix4 viewMatrix;
 
-        public float aspectRatio;
-        public float fieldOfView;
-        public float nearPlane;
-        public float farPlane;
+        public float fov;
+
+        public Camera3D matrix;
 
         public Vector3 position;
         public Vector3 target;
@@ -27,19 +23,13 @@ namespace aengine.graphics
         private Vector2 prevMousePos;
         private Vector2 currMousePos;
 
-        public unsafe Camera(System.Numerics.Vector3 position, float fov)
+        public unsafe Camera(Vector3 position, float fov)
         {
-            aspectRatio = Graphics.getScreenSize().X / Graphics.getScreenSize().Y;
-            fieldOfView = MathHelper.DegreesToRadians(fov);
-            nearPlane = 0.1f;
-            farPlane = 500.0f;
-            projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlane, farPlane);
+            this.fov = fov;
 
-            // Set up the view matrix
             this.position = new Vector3(position.X, position.Y, position.Z);
             target = Vector3.Zero;
             up = Vector3.UnitY;
-            viewMatrix = Matrix4.LookAt(this.position, target, up);
 
             prevMousePos = new Vector2();
             currMousePos = new Vector2();
@@ -51,18 +41,19 @@ namespace aengine.graphics
 
         public void update()
         {
-            projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlane, farPlane);
-            viewMatrix = Matrix4.LookAt(position, target, up);
+            matrix.position = position;
+            matrix.target = target;
+            matrix.up = up;
+            matrix.fovy = fov;
         }
 
         public unsafe void setFirstPerson(float sensitivity, bool isMouseLocked)
         {
             if (isMouseLocked)
             {
-                GLFW.SetInputMode(Graphics.window, CursorStateAttribute.Cursor, CursorModeValue.CursorHidden);
-                GLFW.GetCursorPos(Graphics.window, out double mx, out double my);
-                currMousePos = new Vector2((float)mx, (float)my);
-                Vector2 mouseDelta = new Vector2(currMousePos.X - prevMousePos.X, currMousePos.Y - prevMousePos.Y);
+                HideCursor();
+                currMousePos = GetMousePosition();
+                Vector2 mouseDelta = new Vector2(currMousePos.X - prevMousePos.X, -1 * (currMousePos.Y - prevMousePos.Y));
 
                 rotation.Y -= mouseDelta.X * sensitivity;
                 rotation.X -= mouseDelta.Y * sensitivity;
@@ -75,19 +66,15 @@ namespace aengine.graphics
 
                 prevMousePos = currMousePos;
 
-                GLFW.SetCursorPos(Graphics.window, Graphics.getScreenSize().X/2, Graphics.getScreenSize().Y/2);
-                GLFW.GetCursorPos(Graphics.window, out double pmx, out double pmy);
-                prevMousePos = new Vector2((float)pmx, (float)pmy);
+                SetMousePosition(GetScreenWidth() / 2, GetScreenHeight() / 2);
+                prevMousePos = GetMousePosition();
             }
             else
             {
-                GLFW.SetInputMode(Graphics.window, CursorStateAttribute.Cursor, CursorModeValue.CursorNormal);
+                ShowCursor();
             }
 
-            Matrix4 cameraRotation = aengine.core.aengine.MatrixRotateZYX(new Vector3(aengine.core.aengine.deg2Rad(this.rotation.X), aengine.core.aengine.deg2Rad(this.rotation.Y), 0));
-            front = Vector3.TransformNormal(new Vector3(0, 0, -1), cameraRotation);
-            right = Vector3.TransformNormal(new Vector3(1, 0, 0), cameraRotation);
-            up = Vector3.TransformNormal(new Vector3(0, 1, 0), cameraRotation);
+            Matrix4x4 cameraRotation = MatrixRotateZYX(new Vector3())
         }
 
         public unsafe void setDefaultFPSControls(float speed, bool isMouseLocked, bool fly)

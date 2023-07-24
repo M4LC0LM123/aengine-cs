@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using aengine.core;
 using Jitter.Collision;
+using Raylib_CsLo;
 
 namespace aengine.ecs
 {
@@ -18,7 +19,7 @@ namespace aengine.ecs
 
         public static void update()
         {
-            World.world.Step(graphics.Graphics.getDeltaTime(), false);
+            World.world.Step(Raylib.GetFrameTime(), false);
             foreach (Entity entity in World.entities)
             {
                 entity.update();
