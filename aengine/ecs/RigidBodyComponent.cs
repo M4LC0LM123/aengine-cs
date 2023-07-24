@@ -14,9 +14,39 @@ namespace aengine.ecs
         public RigidBody body;
         public BodyType type;
 
-        public RigidBodyComponent(Entity entity)
+        public RigidBodyComponent(Entity entity, float mass = 1.0f, BodyType type = BodyType.DYNAMIC, ShapeType shape = ShapeType.BOX)
         {
-            
+            this.type = type;
+            if (shape == ShapeType.BOX)
+            {
+                this.shape = new BoxShape(new Jitter.LinearMath.JVector(entity.transform.scale.X, entity.transform.scale.Y, entity.transform.scale.Z));
+            }
+            else if (shape == ShapeType.SPHERE)
+            {
+                this.shape = new SphereShape(entity.transform.scale.X);
+            }
+            else if (shape == ShapeType.CAPSULE)
+            {
+                this.shape = new CapsuleShape(entity.transform.scale.X, entity.transform.scale.Y);
+            }
+            else if (shape == ShapeType.CYLINDER)
+            {
+                this.shape = new CylinderShape(entity.transform.scale.X, entity.transform.scale.Y);
+            }
+            this.body = new RigidBody(this.shape);
+            this.body.Position = new Jitter.LinearMath.JVector(entity.transform.position.X, entity.transform.position.Y, entity.transform.position.Z); 
+
+            switch (this.type)
+            {
+                case BodyType.DYNAMIC:
+                    this.body.IsStatic = false;
+                    break;
+                case BodyType.STATIC:
+                    this.body.IsStatic = true;
+                    break;
+            }
+
+            World.world.AddBody(this.body);
         }
 
         public void init(Entity entity, float mass = 1.0f, BodyType type = BodyType.DYNAMIC, ShapeType shape = ShapeType.BOX)

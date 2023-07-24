@@ -10,7 +10,7 @@ namespace aengine.input
 {
     public class Input 
     {
-        private static bool[] keys = new bool[(int)Keys.LastKey];
+        public static Dictionary<Keys, bool> keyStates = new Dictionary<Keys, bool>();
 
         public static unsafe bool IsKeyDown(Keys key)
         {
@@ -32,9 +32,16 @@ namespace aengine.input
             return GLFW.GetMouseButton(graphics.Graphics.window, mouseButton) == InputAction.Release;
         }
 
-        public static bool IsKeyPressed(Keys key)
+        public static unsafe bool IsKeyPressed(Keys key)
         {
-            return keys[(int)key];
+            // Check if the key exists in the keyStates dictionary
+            if (keyStates.TryGetValue(key, out bool isPressed))
+            {
+                return isPressed;
+            }
+
+            // Key was not found in the dictionary, treat as not pressed
+            return false;
         }
 
         public static char GetKeyChar()

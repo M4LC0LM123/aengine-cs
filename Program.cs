@@ -66,8 +66,7 @@ namespace Sandbox
             MeshComponent mc = new MeshComponent(ground);
             mc.texture = albedo;
             ground.addComponent(mc);
-            RigidBodyComponent rb = new RigidBodyComponent(ground);
-            rb.init(ground, 1.0f, BodyType.STATIC, ShapeType.BOX);
+            RigidBodyComponent rb = new RigidBodyComponent(ground, 1.0f, BodyType.STATIC, ShapeType.BOX);
             ground.addComponent(rb);
 
             Entity body = new Entity();
@@ -78,9 +77,8 @@ namespace Sandbox
             mc2.color = Colors.TEAL;
             mc2.shape = ShapeType.BOX;
             body.addComponent(mc2);
-            RigidBodyComponent rb2 = new RigidBodyComponent(body);
-            rb2.init(body, 1.0f, BodyType.DYNAMIC, mc2.shape);
-            body.addComponent(rb2);
+            RigidBodyComponent rb2 = new RigidBodyComponent(body, 1.0f, BodyType.DYNAMIC, mc2.shape);
+            body.addComponent(new RigidBodyComponent(body, 1.0f, BodyType.DYNAMIC, mc2.shape));
 
             GuiWindow window = new GuiWindow(10, 10, 400, 400);
 
@@ -92,7 +90,7 @@ namespace Sandbox
                 update();
                 World.update();
 
-                if (Input.IsKeyDown(Keys.Escape))
+                if (Input.IsKeyPressed(Keys.Escape))
                 {
                     isMouseLocked = !isMouseLocked;
                 }

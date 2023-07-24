@@ -193,6 +193,8 @@ namespace aengine.graphics
             {
                 isKeyPressed = false;
             }
+
+            Input.keyStates[keys] = state == InputAction.Press;
         }
 
         // destroys the window and cleans up GLFW and opengl
