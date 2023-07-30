@@ -51,7 +51,7 @@ public unsafe class RLights
 	//----------------------------------------------------------------------------------
 	// Defines and Macros
 	//----------------------------------------------------------------------------------
-	public const int MAX_LIGHTS = 4;         // Max dynamic lights supported by shader
+	public const int MAX_LIGHTS = 100;         // Max dynamic lights supported by shader
 
 	//----------------------------------------------------------------------------------
 	// Types and Structures Definition

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
 using aengine.core;
+using aengine.graphics;
 using Jitter.Collision;
 using Raylib_CsLo;
 
@@ -16,6 +17,8 @@ namespace aengine.ecs
 
         public static CollisionSystem collisionSystem = new CollisionSystemSAP();
         public static Jitter.World world = new Jitter.World(collisionSystem);
+
+        public static RLights lights = new RLights();
 
         public static void update()
         {

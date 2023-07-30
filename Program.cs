@@ -11,7 +11,7 @@ namespace Sandbox
 {
     public static class Program
     {
-        public static async Task Main(string[] args)
+        public static unsafe async Task Main(string[] args)
         {
             // use only in ides like visual studio and rider,
             // the final build should have the assets folder in the same directory as the exe so remove this line below then
@@ -41,6 +41,10 @@ namespace Sandbox
             body2.transform.scale = Vector3.One;
             body2.addComponent(new MeshComponent(body2, GenMeshSphere(1f, 15, 15), YELLOW, albedo));
             body2.addComponent(new RigidBodyComponent(body2, 1, BodyType.DYNAMIC, ShapeType.SPHERE));
+
+            Entity light = new Entity();
+            light.transform.position.Y = 5;
+            light.addComponent(new LightComponent(light, new aShader("assets/shaders/light.vert","assets/shaders/light.frag"), WHITE));
 
             GuiWindow window = new GuiWindow("SUIIIIIIIII", 10, 10, 300, 400);
             GuiTextBox textBox = new GuiTextBox();
@@ -79,17 +83,25 @@ namespace Sandbox
                 }
             }
 
+            foreach (var entity in World.entities)
+            {
+                if (entity.hasComponent<MeshComponent>())
+                {
+                    entity.getComponent<MeshComponent>().setShader(light.getComponent<LightComponent>().shader);
+                }
+            }
+
             // Main game loop
             while (!WindowShouldClose()) // Detect window close button or ESC key
             {
                 World.update();
-                
+
                 if (IsKeyPressed(KeyboardKey.KEY_ESCAPE))
                     isMouseLocked = !isMouseLocked;
 
                 if (IsKeyPressed(KeyboardKey.KEY_R))
                 {
-                    body2.getComponent<RigidBodyComponent>().applyImpulse(0, 10, 0);
+                    body2.getComponent<RigidBodyComponent>().applyTorque(0, 10, 0);
                     body.getComponent<RigidBodyComponent>().applyImpulse(0, 10, 0);
                 }
 
@@ -97,6 +109,9 @@ namespace Sandbox
                 camera.setDefaultFPSControls(10, isMouseLocked, true);
                 camera.defaultFpsMatrix();
                 camera.update();
+                
+                light.getComponent<LightComponent>().setUpdateVector(camera.position);
+                light.getComponent<LightComponent>().setIntensity(slider.value/10);
 
                 BeginDrawing();
                 ClearBackground(SKYBLUE);

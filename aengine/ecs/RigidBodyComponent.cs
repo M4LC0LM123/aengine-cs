@@ -77,7 +77,8 @@ namespace aengine.ecs
                 this.shape = new CylinderShape(entity.transform.scale.X, entity.transform.scale.Y);
             }
             this.body = new RigidBody(this.shape);
-            this.body.Position = new Jitter.LinearMath.JVector(entity.transform.position.X, entity.transform.position.Y, entity.transform.position.Z); 
+            this.body.Position = new Jitter.LinearMath.JVector(entity.transform.position.X, entity.transform.position.Y, entity.transform.position.Z);
+            this.body.Orientation = JMatrix.CreateFromYawPitchRoll(entity.transform.rotation.X, entity.transform.rotation.Y, entity.transform.rotation.Z);
 
             switch (this.type)
             {
@@ -106,10 +107,20 @@ namespace aengine.ecs
         {
             this.body.AddForce(new Jitter.LinearMath.JVector(force.X, force.Y, force.Z));
         }
+        
+        public void applyForce(float x, float y, float z)
+        {
+            this.body.AddForce(new Jitter.LinearMath.JVector(x, y, z));
+        }
 
         public void applyTorque(Vector3 torque)
         {
             this.body.AddTorque(new Jitter.LinearMath.JVector(torque.X, torque.Y, torque.Z));
+        }
+        
+        public void applyTorque(float x, float y, float z)
+        {
+            this.body.AddTorque(new Jitter.LinearMath.JVector(x, y, z));
         }
 
         public void setX(float x)
