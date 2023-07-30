@@ -13,11 +13,9 @@ uniform vec4 colDiffuse;
 // Output fragment color
 out vec4 finalColor;
 
-// NOTE: Add here your custom variables
-
-#define     MAX_LIGHTS              100
-#define     LIGHT_DIRECTIONAL       0
-#define     LIGHT_POINT             1
+#define MAX_LIGHTS 100
+#define LIGHT_DIRECTIONAL 0
+#define LIGHT_POINT 1
 
 struct MaterialProperty {
     vec3 color;

@@ -40,6 +40,7 @@ namespace aengine.ecs
             this.body = new RigidBody(this.shape);
             this.body.Position = new Jitter.LinearMath.JVector(entity.transform.position.X, entity.transform.position.Y, entity.transform.position.Z);
             this.body.Orientation = JMatrix.CreateFromYawPitchRoll(entity.transform.rotation.X, entity.transform.rotation.Y, entity.transform.rotation.Z);
+            body.Mass = mass;
             shapeType = shape;
 
             switch (this.type)
@@ -53,42 +54,6 @@ namespace aengine.ecs
             }
 
             m_transform = entity.transform;
-
-            World.world.AddBody(this.body);
-        }
-
-        public void init(Entity entity, float mass = 1.0f, BodyType type = BodyType.DYNAMIC, ShapeType shape = ShapeType.BOX)
-        {
-            this.type = type;
-            if (shape == ShapeType.BOX)
-            {
-                this.shape = new BoxShape(new Jitter.LinearMath.JVector(entity.transform.scale.X, entity.transform.scale.Y, entity.transform.scale.Z));
-            }
-            else if (shape == ShapeType.SPHERE)
-            {
-                this.shape = new SphereShape(entity.transform.scale.X);
-            }
-            else if (shape == ShapeType.CAPSULE)
-            {
-                this.shape = new CapsuleShape(entity.transform.scale.X, entity.transform.scale.Y);
-            }
-            else if (shape == ShapeType.CYLINDER)
-            {
-                this.shape = new CylinderShape(entity.transform.scale.X, entity.transform.scale.Y);
-            }
-            this.body = new RigidBody(this.shape);
-            this.body.Position = new Jitter.LinearMath.JVector(entity.transform.position.X, entity.transform.position.Y, entity.transform.position.Z);
-            this.body.Orientation = JMatrix.CreateFromYawPitchRoll(entity.transform.rotation.X, entity.transform.rotation.Y, entity.transform.rotation.Z);
-
-            switch (this.type)
-            {
-                case BodyType.DYNAMIC:
-                    this.body.IsStatic = false;
-                    break;
-                case BodyType.STATIC:
-                    this.body.IsStatic = true;
-                    break;
-            }
 
             World.world.AddBody(this.body);
         }

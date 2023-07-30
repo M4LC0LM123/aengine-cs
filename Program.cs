@@ -44,9 +44,9 @@ namespace Sandbox
 
             Entity light = new Entity();
             light.transform.position.Y = 5;
-            light.addComponent(new LightComponent(light, new aShader("assets/shaders/light.vert","assets/shaders/light.frag"), WHITE));
+            light.addComponent(new LightComponent(light, new aShader("assets/shaders/light.vert","assets/shaders/light.frag"), WHITE, RLights.LightType.LIGHT_DIRECTIONAL));
 
-            GuiWindow window = new GuiWindow("SUIIIIIIIII", 10, 10, 300, 400);
+            GuiWindow window = new GuiWindow("SUIIIIIIIII", 10, 10, 300, 250);
             GuiTextBox textBox = new GuiTextBox();
             GuiSlider slider = new GuiSlider();
 
@@ -101,7 +101,7 @@ namespace Sandbox
 
                 if (IsKeyPressed(KeyboardKey.KEY_R))
                 {
-                    body2.getComponent<RigidBodyComponent>().applyTorque(0, 10, 0);
+                    body2.getComponent<RigidBodyComponent>().applyImpulse(0, 10, 0);
                     body.getComponent<RigidBodyComponent>().applyImpulse(0, 10, 0);
                 }
 

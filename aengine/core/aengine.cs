@@ -53,9 +53,9 @@ namespace aengine.core
             float yaw = (float)Math.Atan2(-m32, m31);
 
             // Convert angles to degrees if needed
-            // roll = rad2Deg(roll);
-            // pitch = rad2Deg(pitch);
-            // yaw = rad2Deg(yaw);
+            roll = rad2Deg(roll);
+            pitch = rad2Deg(pitch);
+            yaw = rad2Deg(yaw);
 
             return new Vector3(roll, pitch, yaw);
         }
