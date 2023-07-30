@@ -1,73 +1,83 @@
-// using System;
-// using OpenTK.Windowing.GraphicsLibraryFramework;
-// using OpenTK.Graphics;
-// using OpenTK.Mathematics;
-// using OpenTK.Windowing.Common; 
-// using OpenTK.Windowing.Desktop;
-// using StbImageSharp;
-// using aengine;
-// using static aengine.core.aengine;
-// using static aengine.graphics.Graphics;
-// using static aengine.graphics.Rendering;
-// using aengine.ecs;
-// using aengine.graphics;
-// using aengine.input;
-// using SharpFNT;
-// using aengine.loader;
-// using System.Diagnostics;
+using System;
+using aengine;
+using static aengine.core.aengine;
+using aengine.ecs;
+using aengine.graphics;
+using System.Diagnostics;
+using System.Numerics;
+using Raylib_CsLo;
+using static Raylib_CsLo.Raylib;
 
-// namespace aengine.ecs
-// {
-//     public class MeshComponent : Component
-//     {
-//         private TransformComponent transform;
-//         public ShapeType shape;
-//         public Texture texture;
-//         public Color color;
-//         private String m_etag;
+namespace aengine.ecs
+{
+    public class MeshComponent : Component
+    {
+        private TransformComponent transform;
+        public Color color;
+        public Model model;
+        public float scale;
 
-//         public MeshComponent(Entity entity)
-//         {
-//             if (entity.transform != null) this.transform = entity.transform;
-//             else this.transform = new TransformComponent(null);
-//             this.texture = new Texture();
-//             this.color = Colors.WHITE;
-//             this.m_etag = entity.tag;
-//         }
+        public unsafe MeshComponent(Entity entity, Color color, Texture texture)
+        {
+            if (entity.transform != null) this.transform = entity.transform;
+            else transform = new TransformComponent(null);
+            this.color = color;
+            if (entity.transform != null)
+                model = LoadModelFromMesh(GenMeshCube(entity.transform.scale.X, entity.transform.scale.Y, entity.transform.scale.Z));
+            else model = LoadModelFromMesh(GenMeshCube(1, 1, 1));
+            scale = 1;
+            model.materials[0].maps[(int)MATERIAL_MAP_DIFFUSE].texture = texture;
+        }
+        
+        public unsafe MeshComponent(Entity entity, Mesh mesh, Color color, Texture texture)
+        {
+            if (entity.transform != null) this.transform = entity.transform;
+            else transform = new TransformComponent(null);
+            this.color = color;
+            model = LoadModelFromMesh(mesh);
+            scale = 1;
+            model.materials[0].maps[(int)MATERIAL_MAP_DIFFUSE].texture = texture;
+        }
 
-//         public override void update(Entity entity)
-//         {
-//             base.update(entity);
-//             this.transform = entity.transform;
-//         }
+        public unsafe void setTexture(Texture texture, int mat = 0, int map = 0)
+        {
+            model.materials[mat].maps[map].texture = texture;
+        }
 
-//         public override void render()
-//         {
-//             base.render();
-//             switch (this.shape)
-//             {
-//                 case ShapeType.BOX:
-//                     drawTexturedCube(this.texture, this.transform.position, this.transform.scale, this.transform.rotation, this.color);
-//                     break;
-//                 case ShapeType.SPHERE:
-//                     drawTexturedSphere(this.texture, this.transform.position, this.transform.scale, this.transform.rotation, this.color);
-//                     break;
-//                 case ShapeType.CYLINDER:
-//                     drawTexturedCylinder(this.texture, this.transform.position, this.transform.scale, this.transform.rotation, this.color);
-//                     break;
-//                 case ShapeType.CAPSULE:
-//                     drawTexturedCapsule(this.texture, this.transform.position, this.transform.scale, this.transform.rotation, this.color);
-//                     break;
-//                 case ShapeType.SPRITE3D:
-//                     drawSprite3D(this.texture, this.transform.position, this.transform.scale.X, this.transform.scale.Y, this.transform.rotation.X, this.color);
-//                     break;
-//             }
-//         }
+        public unsafe void setShader(Shader shader, int mat = 0)
+        {
+            model.materials[mat].shader = shader;
+        }
 
-//         public override void dispose()
-//         {
-//             base.dispose();
-//         }
+        private void setSCale(Vector3 scale)
+        {
+            model.transform = RayMath.MatrixScale(scale.X, scale.Y, scale.Z);
+        }
 
-//     }
-// }
+        private void setRotation(Vector3 rotation)
+        {
+            model.transform = RayMath.MatrixRotateXYZ(rotation);
+        }
+
+        public override void update(Entity entity)
+        {
+            base.update(entity);
+            transform = entity.transform;
+            setSCale(transform.scale);
+            setRotation(transform.rotation);
+        }
+
+        public override void render()
+        {
+            base.render();
+            DrawModel(model, transform.position, scale, color);
+        }
+
+        public override void dispose()
+        {
+            UnloadModel(model);
+            base.dispose();
+        }
+
+    }
+}

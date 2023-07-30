@@ -56,7 +56,7 @@ namespace aengine.graphics
                 Vector2 mouseDelta = new Vector2(currMousePos.X - prevMousePos.X, -1 * (currMousePos.Y - prevMousePos.Y));
 
                 rotation.Y -= mouseDelta.X * sensitivity;
-                rotation.X -= mouseDelta.Y * sensitivity;
+                rotation.X += mouseDelta.Y * sensitivity;
 
                 // Clamp camera pitch to avoid flipping
                 if (rotation.X > 89.0f)
@@ -74,40 +74,43 @@ namespace aengine.graphics
                 ShowCursor();
             }
 
-            Matrix4x4 cameraRotation = MatrixRotateZYX(new Vector3())
+            Matrix4x4 cameraRotation = MatrixRotateZYX(new Vector3(DEG2RAD * rotation.X, DEG2RAD * this.rotation.Y, 0));
+            front = Vector3Transform(new Vector3(0, 0, -1), cameraRotation);
+            right = Vector3Transform(new Vector3(1, 0, 0), cameraRotation);
+            up = Vector3Transform(new Vector3(0, 1, 0), cameraRotation);
         }
 
         public unsafe void setDefaultFPSControls(float speed, bool isMouseLocked, bool fly)
         {
-            if (GLFW.GetKey(Graphics.window, Keys.W) == InputAction.Press && isMouseLocked)
+            if (IsKeyDown(KeyboardKey.KEY_W) && isMouseLocked)
             {
-                this.position.X = this.position.X + this.front.X * speed * Graphics.getDeltaTime();
-                this.position.Z = this.position.Z + this.front.Z * speed * Graphics.getDeltaTime();
+                this.position.X = this.position.X + this.front.X * speed * GetFrameTime();
+                this.position.Z = this.position.Z + this.front.Z * speed * GetFrameTime();
             }
-            if (GLFW.GetKey(Graphics.window, Keys.S) == InputAction.Press && isMouseLocked)
+            if (IsKeyDown(KeyboardKey.KEY_S) && isMouseLocked)
             {
-                this.position.X = this.position.X - this.front.X * speed * Graphics.getDeltaTime();
-                this.position.Z = this.position.Z - this.front.Z * speed * Graphics.getDeltaTime();
+                this.position.X = this.position.X - this.front.X * speed * GetFrameTime();
+                this.position.Z = this.position.Z - this.front.Z * speed * GetFrameTime();
             }
-            if (GLFW.GetKey(Graphics.window, Keys.A) == InputAction.Press && isMouseLocked)
+            if (IsKeyDown(KeyboardKey.KEY_A) && isMouseLocked)
             {
-                this.position.X = this.position.X - this.right.X * speed * Graphics.getDeltaTime();
-                this.position.Z = this.position.Z - this.right.Z * speed * Graphics.getDeltaTime();
+                this.position.X = this.position.X - this.right.X * speed * GetFrameTime();
+                this.position.Z = this.position.Z - this.right.Z * speed * GetFrameTime();
             }
-            if (GLFW.GetKey(Graphics.window, Keys.D) == InputAction.Press && isMouseLocked)
+            if (IsKeyDown(KeyboardKey.KEY_D) && isMouseLocked)
             {
-                this.position.X = this.position.X + this.right.X * speed * Graphics.getDeltaTime();
-                this.position.Z = this.position.Z + this.right.Z * speed * Graphics.getDeltaTime();
+                this.position.X = this.position.X + this.right.X * speed * GetFrameTime();
+                this.position.Z = this.position.Z + this.right.Z * speed * GetFrameTime();
             }
             if (fly)
             {
-                if (GLFW.GetKey(Graphics.window, Keys.Space) == InputAction.Press && isMouseLocked)
+                if (IsKeyDown(KeyboardKey.KEY_SPACE) && isMouseLocked)
                 {
-                    this.position.Y += speed * Graphics.getDeltaTime();
+                    this.position.Y += speed * GetFrameTime();
                 }
-                if (GLFW.GetKey(Graphics.window, Keys.LeftControl) == InputAction.Press && isMouseLocked)
+                if (IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) && isMouseLocked)
                 {
-                    this.position.Y -= speed * Graphics.getDeltaTime();
+                    this.position.Y -= speed * GetFrameTime();
                 }
             }
         }

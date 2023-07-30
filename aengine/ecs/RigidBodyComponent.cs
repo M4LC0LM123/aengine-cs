@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using Jitter.Collision.Shapes;
 using Jitter.Dynamics;
+using Jitter.LinearMath;
 
 namespace aengine.ecs
 {
@@ -13,6 +14,9 @@ namespace aengine.ecs
         public Shape shape;
         public RigidBody body;
         public BodyType type;
+        public ShapeType shapeType;
+
+        private TransformComponent m_transform;
 
         public RigidBodyComponent(Entity entity, float mass = 1.0f, BodyType type = BodyType.DYNAMIC, ShapeType shape = ShapeType.BOX)
         {
@@ -34,7 +38,9 @@ namespace aengine.ecs
                 this.shape = new CylinderShape(entity.transform.scale.X, entity.transform.scale.Y);
             }
             this.body = new RigidBody(this.shape);
-            this.body.Position = new Jitter.LinearMath.JVector(entity.transform.position.X, entity.transform.position.Y, entity.transform.position.Z); 
+            this.body.Position = new Jitter.LinearMath.JVector(entity.transform.position.X, entity.transform.position.Y, entity.transform.position.Z);
+            this.body.Orientation = JMatrix.CreateFromYawPitchRoll(entity.transform.rotation.X, entity.transform.rotation.Y, entity.transform.rotation.Z);
+            shapeType = shape;
 
             switch (this.type)
             {
@@ -45,6 +51,8 @@ namespace aengine.ecs
                     this.body.IsStatic = true;
                     break;
             }
+
+            m_transform = entity.transform;
 
             World.world.AddBody(this.body);
         }
@@ -137,7 +145,16 @@ namespace aengine.ecs
             {
                 entity.transform.position = new Vector3(body.Position.X, body.Position.Y, body.Position.Z);
                 entity.transform.rotation = aengine.core.aengine.MatrixToEuler(body.Orientation);
+                m_transform = entity.transform;
             }
         }
+
+        public void debugRender()
+        {   
+            if (shapeType == ShapeType.BOX) Raylib_CsLo.Raylib.DrawCubeWires(m_transform.position, m_transform.scale.X, m_transform.scale.Y, m_transform.scale.Z, Raylib_CsLo.Raylib.GREEN);
+            if (shapeType == ShapeType.SPHERE) Raylib_CsLo.Raylib.DrawSphereWires(m_transform.position, m_transform.scale.X, 15, 15, Raylib_CsLo.Raylib.GREEN);
+            if (shapeType == ShapeType.CYLINDER) Raylib_CsLo.Raylib.DrawCylinderWires(m_transform.position, m_transform.scale.X, m_transform.scale.X, m_transform.scale.Y, 15, Raylib_CsLo.Raylib.GREEN);
+        }
+
     }
 }

@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "vOJURJyzuUZoo+g3X2ADAtY+WRlVvvS9GmQ8MKIfghUpgOtVQlBD3AowxWTg5nH5QhydGplwfrPFZDs4D2doOQ==",
+  "dgSpecHash": "E5Rb0U93vNIoFdADAN8aBbz6vMFgqapE5Z7gd9sj56vQb07Q6jswc4c5OQbjO7ntZVO0HLMFokKnMKlNwNm0JQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\aengine-cs.csproj",
+  "projectFilePath": "/home/lukamalovic/Documents/GitHub/aengine-cs/aengine-cs.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\lukaa\\.nuget\\packages\\jitterphysics\\0.2.0.20\\jitterphysics.0.2.0.20.nupkg.sha512",
-    "C:\\Users\\lukaa\\.nuget\\packages\\microsoft.toolkit.highperformance\\7.1.2\\microsoft.toolkit.highperformance.7.1.2.nupkg.sha512",
-    "C:\\Users\\lukaa\\.nuget\\packages\\raylib-cslo\\4.2.0.9\\raylib-cslo.4.2.0.9.nupkg.sha512"
+    "/home/lukamalovic/.nuget/packages/jitterphysics/0.2.0.20/jitterphysics.0.2.0.20.nupkg.sha512",
+    "/home/lukamalovic/.nuget/packages/microsoft.toolkit.highperformance/7.1.2/microsoft.toolkit.highperformance.7.1.2.nupkg.sha512",
+    "/home/lukamalovic/.nuget/packages/raylib-cslo/4.2.0.9/raylib-cslo.4.2.0.9.nupkg.sha512"
   ],
   "logs": [
     {
