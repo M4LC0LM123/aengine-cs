@@ -164,7 +164,7 @@ while running:
     for obj in objects:
         pygame.draw.rect(screen, RED, pygame.Rect(obj.x + offset_x, obj.z + offset_y, obj.w, obj.d))
         pygame.draw.rect(screen, BLACK, pygame.Rect(obj.x + offset_x, obj.z + offset_y, obj.w, obj.d), 1)
-        drawText(screen, obj.id, obj.x + obj.w/2 + offset_x, obj.z + obj.d/2  + offset_y, font, WHITE, None)
+        drawText(screen, obj.id, obj.x + obj.w/2 + offset_x, obj.z + obj.d/2 + offset_y, font, WHITE, None)
         
     pygame.draw.line(screen, WHITE, (offset_x - 10, offset_y), (offset_x + 10, offset_y), 1)
     pygame.draw.line(screen, WHITE, (offset_x, offset_y - 10), (offset_x, offset_y + 10), 1)

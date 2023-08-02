@@ -47,7 +47,7 @@ namespace aengine.graphics
             matrix.fovy = fov;
         }
 
-        public unsafe void setFirstPerson(float sensitivity, bool isMouseLocked)
+        public void setFirstPerson(float sensitivity, bool isMouseLocked)
         {
             if (isMouseLocked)
             {
@@ -74,13 +74,13 @@ namespace aengine.graphics
                 ShowCursor();
             }
 
-            Matrix4x4 cameraRotation = MatrixRotateZYX(new Vector3(DEG2RAD * rotation.X, DEG2RAD * this.rotation.Y, 0));
+            Matrix4x4 cameraRotation = MatrixRotateZYX(new Vector3(DEG2RAD * rotation.X, DEG2RAD * this.rotation.Y, DEG2RAD * rotation.Z));
             front = Vector3Transform(new Vector3(0, 0, -1), cameraRotation);
             right = Vector3Transform(new Vector3(1, 0, 0), cameraRotation);
             up = Vector3Transform(new Vector3(0, 1, 0), cameraRotation);
         }
 
-        public unsafe void setDefaultFPSControls(float speed, bool isMouseLocked, bool fly)
+        public void setDefaultFPSControls(float speed, bool isMouseLocked, bool fly)
         {
             if (IsKeyDown(KeyboardKey.KEY_W) && isMouseLocked)
             {

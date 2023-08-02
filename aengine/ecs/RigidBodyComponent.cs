@@ -58,6 +58,26 @@ namespace aengine.ecs
             World.world.AddBody(this.body);
         }
 
+        public void setLinearVelocity(Vector3 velocity)
+        {
+            body.LinearVelocity = new JVector(velocity.X, velocity.Y, velocity.Z);
+        }
+        
+        public void setLinearVelocity(float x, float y, float z)
+        {
+            body.LinearVelocity = new JVector(x, y, z);
+        }
+        
+        public void setAngularVelocity(Vector3 velocity)
+        {
+            body.AngularVelocity = new JVector(velocity.X, velocity.Y, velocity.Z);
+        }
+        
+        public void setAngularVelocity(float x, float y, float z)
+        {
+            body.AngularVelocity = new JVector(x, y, z);
+        }
+
         public void applyImpulse(float x, float y, float z)
         {
             this.body.ApplyImpulse(new Jitter.LinearMath.JVector(x,  y, z));
@@ -90,27 +110,32 @@ namespace aengine.ecs
 
         public void setX(float x)
         {
-            body.Position.Set(x, 0, 0);
+            body.Position = new JVector(x, body.Position.Y, body.Position.Z);
         }
-        
+
         public void setY(float y)
         {
-            body.Position.Set(0, y, 0);
+            body.Position = new JVector(body.Position.X, y, body.Position.Z);
         }
 
         public void setZ(float z)
         {
-            body.Position.Set(0, 0, z);
+            body.Position = new JVector(body.Position.X, body.Position.Y, z);
         }
 
         public void setPosition(float x, float y, float z)
         {
-            body.Position.Set(x, y, z);
+            body.Position = new JVector(x, y, z);
         }
 
         public void setPosition(Vector3 position)
         {
-            body.Position.Set(position.X, position.Y, position.Z);
+            body.Position = new JVector(position.X, position.Y, position.Z);
+        }
+
+        public void affectedByGravity(bool affected)
+        {
+            body.AffectedByGravity = affected;
         }
 
         public override void update(Entity entity)

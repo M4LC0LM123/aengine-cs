@@ -1,8 +1,11 @@
 ﻿using Raylib_CsLo;
 using static Raylib_CsLo.Raylib;
 using System.Numerics;
+using aengine.core;
 using aengine.graphics;
 using aengine.ecs;
+using Jitter.Dynamics;
+using Jitter.LinearMath;
 using Sandbox.aengine;
 using Sandbox.aengine.Gui;
 using World = aengine.ecs.World;
@@ -22,13 +25,36 @@ namespace Sandbox
             SetWindowIcon(LoadImage("assets/logo.png"));
             SetTargetFPS(60);
             SetExitKey(KeyboardKey.KEY_NULL);
+            InitAudioDevice();
+
+            Sound jump = LoadSound("assets/jump.mp3");
+            Sound shoot = LoadSound("assets/pew.mp3");
 
             Texture albedo = LoadTexture("assets/albedo.png");
+            Texture gun = LoadTexture("assets/hlpistol.png");
             Gui.font = LoadFont("assets/fonts/font.ttf");
-            
-            Camera camera = new Camera(new Vector3(0, 1, 0), 90);
+
+            Texture[] skybox = new[]
+            {
+                LoadTexture("assets/skybox/front.png"),
+                LoadTexture("assets/skybox/back.png"),
+                LoadTexture("assets/skybox/left.png"),
+                LoadTexture("assets/skybox/right.png"),
+                LoadTexture("assets/skybox/top.png"),
+                LoadTexture("assets/skybox/bottom.png"),
+            };
+
+            Camera camera = new Camera(new Vector3(0, 5, 0), 90);
+            float speed = 10;
             bool isMouseLocked = false;
 
+            Raycast cameraCast = new Raycast(camera.position, camera.position * camera.front * 100);
+
+            Entity player = new Entity();
+            player.transform.position = camera.position;
+            player.transform.scale = Vector3.One;
+            player.addComponent(new RigidBodyComponent(player, 1.0f, BodyType.DYNAMIC, ShapeType.SPHERE));
+            
             Entity body = new Entity();
             body.transform.position.Y = 15;
             body.transform.scale = Vector3.One;
@@ -80,6 +106,23 @@ namespace Sandbox
                         wall.addComponent(new MeshComponent(wall, Rendering.getRandomColor(), albedo));
                         wall.addComponent(new RigidBodyComponent(wall, 1.0f, BodyType.STATIC));
                         break;
+                    case 3:
+                        Entity model = new Entity();
+                        model.transform.position = new Vector3(obj.x, obj.y, obj.z);
+                        model.transform.scale = new Vector3(obj.w, obj.h, obj.d);
+                        model.transform.rotation = new Vector3(obj.rx, obj.ry, obj.rz);
+                        MeshComponent mesh = new MeshComponent(model, LoadModel("assets/models/scientist.glb"), WHITE, new Texture());
+                        mesh.scale = 0.1f;
+                        model.addComponent(mesh);
+                        break;
+                    case 4:
+                        Entity hehe = new Entity();
+                        hehe.tag = "hehe";
+                        hehe.transform.position = new Vector3(obj.x, obj.y, obj.z);
+                        hehe.transform.scale = new Vector3(obj.w, obj.h, obj.d);
+                        hehe.transform.rotation = new Vector3(obj.rx, obj.ry, obj.rz);
+                        hehe.addComponent(new MeshComponent(hehe, WHITE, LoadTexture("assets/trollface.png"), false));
+                        break;
                 }
             }
 
@@ -87,7 +130,8 @@ namespace Sandbox
             {
                 if (entity.hasComponent<MeshComponent>())
                 {
-                    entity.getComponent<MeshComponent>().setShader(light.getComponent<LightComponent>().shader);
+                    if (entity.getComponent<MeshComponent>().isModel)
+                        entity.getComponent<MeshComponent>().setShader(light.getComponent<LightComponent>().shader);
                 }
             }
 
@@ -101,28 +145,95 @@ namespace Sandbox
 
                 if (IsKeyPressed(KeyboardKey.KEY_R))
                 {
-                    body2.getComponent<RigidBodyComponent>().applyImpulse(0, 10, 0);
-                    body.getComponent<RigidBodyComponent>().applyImpulse(0, 10, 0);
+                    body2.getComponent<RigidBodyComponent>().applyImpulse(-10, 10, 0);
+                    body.getComponent<RigidBodyComponent>().applyImpulse(10, 10, 0);
                 }
 
                 camera.setFirstPerson(0.1f, isMouseLocked);
-                camera.setDefaultFPSControls(10, isMouseLocked, true);
+
+                Vector3 velocity = Vector3.Zero;
+
+                if (IsKeyDown(KeyboardKey.KEY_W))
+                    velocity += new Vector3((float)-Math.Sin(camera.rotation.Y * RayMath.DEG2RAD), 0, (float)-Math.Cos(camera.rotation.Y * RayMath.DEG2RAD));
+                if (IsKeyDown(KeyboardKey.KEY_S))
+                    velocity += new Vector3((float)Math.Sin(camera.rotation.Y * RayMath.DEG2RAD), 0, (float)Math.Cos(camera.rotation.Y * RayMath.DEG2RAD));
+                if (IsKeyDown(KeyboardKey.KEY_A))
+                {
+                    velocity += new Vector3((float)-Math.Cos(camera.rotation.Y * RayMath.DEG2RAD), 0, (float)Math.Sin(camera.rotation.Y * RayMath.DEG2RAD));
+                    camera.rotation.Z = 7.5f;
+                }
+                if (IsKeyDown(KeyboardKey.KEY_D))
+                {
+                    velocity += new Vector3((float)Math.Cos(camera.rotation.Y * RayMath.DEG2RAD), 0, -(float)Math.Sin(camera.rotation.Y * RayMath.DEG2RAD));
+                    camera.rotation.Z = -7.5f;
+                }
+
+                float speedMultiplier = IsKeyDown(KeyboardKey.KEY_LEFT_SHIFT) ? 2.0f : 1.0f;
+                velocity *= speed * speedMultiplier;
+
+                if (IsKeyPressed(KeyboardKey.KEY_SPACE))
+                {
+                    PlaySound(jump);
+                    player.getComponent<RigidBodyComponent>().applyImpulse(0, 6, 0);
+                }
+
+                player.getComponent<RigidBodyComponent>().setLinearVelocity(velocity.X, player.getComponent<RigidBodyComponent>().body.LinearVelocity.Y, velocity.Z);
+
+                if (player.transform.position.Y <= -500)
+                {
+                    player.getComponent<RigidBodyComponent>().setPosition(Vector3.UnitY*5);
+                }
+
+                player.getComponent<RigidBodyComponent>().body.Orientation = JMatrix.CreateFromQuaternion(new JQuaternion());
+                camera.position = player.transform.position;
                 camera.defaultFpsMatrix();
                 camera.update();
                 
                 light.getComponent<LightComponent>().setUpdateVector(camera.position);
                 light.getComponent<LightComponent>().setIntensity(slider.value/10);
+                
+                foreach (var entity in World.entities)
+                {
+                    if (entity.hasComponent<MeshComponent>())
+                    {
+                        if (!entity.getComponent<MeshComponent>().isModel)
+                            entity.transform.rotation.X = (float) Math.Atan2(player.transform.position.X - entity.transform.position.X, player.transform.position.Z - entity.transform.position.Z) * RayMath.RAD2DEG;
+                        if (entity.hasComponent<RigidBodyComponent>())
+                        {
+                            if (cameraCast.isColliding(entity.transform, entity.getComponent<RigidBodyComponent>().shapeType) && IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT))
+                            {
+                                if (!entity.getComponent<RigidBodyComponent>().body.IsStatic && isMouseLocked)
+                                {
+                                    entity.getComponent<RigidBodyComponent>().applyImpulse(cameraCast.target/5);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT) && isMouseLocked)
+                {
+                    PlaySound(shoot);
+                }
+                
+                cameraCast = new Raycast(camera.position, camera.position + Vector3.Normalize(camera.front) * 100);
 
                 BeginDrawing();
                 ClearBackground(SKYBLUE);
 
                 BeginMode3D(camera.matrix);
+                Rendering.drawSkyBox(skybox, WHITE, 1000);
                 World.render();
 
                 Rendering.drawDebugAxies();
                 Rendering.drawArrow(Vector3.Zero, Vector3.One, GREEN);
                 
+                cameraCast.debugRender();
+
                 EndMode3D();
+                Rendering.drawCrosshair(WHITE);
+                DrawTexturePro(gun, new Rectangle(0, 0, gun.width, gun.height), new Rectangle(GetScreenWidth()/2 + 75, GetScreenHeight()-250, 200, 250), Vector2.Zero, 0, WHITE);
+                
                 window.render();
 
                 Gui.GuiTextPro(Gui.font, "FPS: " + GetFPS(), new Vector2(10, 10), Gui.font.baseSize, WHITE, window);
