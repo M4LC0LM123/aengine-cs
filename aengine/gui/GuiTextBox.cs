@@ -48,6 +48,10 @@ public class GuiTextBox
 
         if (active)
         {
+            // DrawLine((int)textX, (int)(textY + Gui.font.baseSize * textScale), (int)(textX + text.Length * 15), (int)(textY + Gui.font.baseSize * textScale), WHITE);
+            DrawLine((int)textX, (int)(textY + Gui.font.baseSize * textScale), (int)(textX + temp.width - 5), (int)(textY + Gui.font.baseSize * textScale), WHITE);
+            DrawRectangle((int)(textX + text.Length * 15), (int)textY, 1, (int)temp.height, WHITE);
+            
             if (IsKeyPressed(KeyboardKey.KEY_BACKSPACE))
             {
                 if (text.Length > 0)

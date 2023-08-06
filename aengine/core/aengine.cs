@@ -11,6 +11,7 @@ namespace aengine.core
     public struct aengine
     {
         public static int GLSL_VERSION = 330;
+        public static string QUOTE = "\"";
         
         public static float deg2Rad(float degrees)
         {
@@ -22,16 +23,13 @@ namespace aengine.core
             return radians * 180 / (float) Math.PI;
         }
 
-        public static Vector3 QuaternionToEulerAngles(Quaternion q, bool degrees)
+        public static Vector3 QuaternionToEulerAngles(Quaternion q)
         {
             float roll = (float) Math.Atan2(2 * (q.Y * q.Z + q.W * q.X), q.W * q.W - q.X * q.X - q.Y * q.Y + q.Z * q.Z);
             float pitch = (float) Math.Asin(-2 * (q.X * q.Z - q.W * q.Y));
             float yaw = (float) Math.Atan2(2 * (q.X * q.Y + q.W * q.Z), q.W * q.W + q.X * q.X - q.Y * q.Y - q.Z * q.Z);
-
-            if (degrees)
-                return new Vector3(rad2Deg(roll), rad2Deg(pitch), rad2Deg(yaw));
-            else
-                return new Vector3(roll, pitch, yaw);
+            
+            return new Vector3(rad2Deg(roll), rad2Deg(pitch), rad2Deg(yaw));
         }
 
         public static Vector3 MatrixToEuler(JMatrix matrix)
@@ -47,17 +45,17 @@ namespace aengine.core
             float m32 = matrix.M32;
             float m33 = matrix.M33;
 
-            // Calculate Euler angles using ZYZ convention
-            float roll = (float)Math.Atan2(m21, m11);
-            float pitch = (float)Math.Acos(m33);
-            float yaw = (float)Math.Atan2(-m32, m31);
+            // Calculate Euler angles using XYZ convention
+            float pitch = (float)Math.Atan2(-m23, Math.Sqrt(m13 * m13 + m33 * m33));
+            float yaw = (float)Math.Atan2(m13, m33);
+            float roll = (float)Math.Atan2(m21, m22);
 
             // Convert angles to degrees if needed
-            roll = rad2Deg(roll);
             pitch = rad2Deg(pitch);
             yaw = rad2Deg(yaw);
+            roll = rad2Deg(roll);
 
-            return new Vector3(roll, pitch, yaw);
+            return new Vector3(pitch, yaw, roll);
         }
 
         public static bool CheckCollisionAABB(AABB one, AABB two)
@@ -83,6 +81,11 @@ namespace aengine.core
             }
 
             return false;  
+        }
+
+        public static Vector3 mullAddV3(Vector3 v1, Vector3 v2, float scalar)
+        {
+            return new Vector3(v1.X + v2.X * scalar, v1.Y + v2.Y * scalar, v1.Z + v2.Z * scalar);
         }
 
         public static string removeFromEnd(string str, int length)

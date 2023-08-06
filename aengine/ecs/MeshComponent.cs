@@ -12,7 +12,7 @@ namespace aengine.ecs
 {
     public class MeshComponent : Component
     {
-        private TransformComponent transform;
+        public TransformComponent transform;
         public Color color;
         public Model model;
         public bool isModel;
@@ -33,7 +33,7 @@ namespace aengine.ecs
             isModel = true;
         }
         
-        public unsafe MeshComponent(Entity entity, Color color, Texture texture, bool model = false)
+        public MeshComponent(Entity entity, Color color, Texture texture, bool model)
         {
             if (entity.transform != null) this.transform = entity.transform;
             else transform = new TransformComponent(null);
@@ -76,30 +76,33 @@ namespace aengine.ecs
             model.materials[mat].shader = shader;
         }
 
-        private void setSCale(Vector3 scale)
+        public void setSCale(Vector3 scale)
         {
             model.transform = RayMath.MatrixScale(scale.X, scale.Y, scale.Z);
         }
 
-        private void setRotation(Vector3 rotation)
+        public void setRotation(Vector3 rotation)
         {
             model.transform = RayMath.MatrixRotateXYZ(new Vector3(deg2Rad(rotation.X), deg2Rad(rotation.Y), deg2Rad(rotation.Z)));
-            // model.transform = Matrix4x4.CreateFromYawPitchRoll(rotation.X, rotation.Y, rotation.Z);
+            // model.transform = Matrix4x4.CreateFromYawPitchRoll(rotation.Y * RayMath.DEG2RAD, rotation.X * RayMath.DEG2RAD, rotation.Z * RayMath.DEG2RAD);
         }
 
         public override void update(Entity entity)
         {
             base.update(entity);
-            transform = entity.transform;
-            setSCale(transform.scale);
-            setRotation(transform.rotation);
+            if (entity != null)
+            {
+                transform = entity.transform;
+                setSCale(transform.scale);
+                setRotation(transform.rotation);
+            }
         }
 
         public override void render()
         {
             base.render();
             if (isModel) DrawModel(model, transform.position, scale, color);
-            else Rendering.drawSprite3D(texture, transform.position, transform.scale.X, transform.scale.Y, transform.rotation.X, color);
+            else Rendering.drawSprite3D(texture, transform.position, transform.scale.X, transform.scale.Y, transform.rotation.X, transform.rotation.Y, color);
         }
 
         public override void dispose()

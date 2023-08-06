@@ -8,7 +8,7 @@ namespace aengine.ecs
         public String tag;
         public TransformComponent transform;
         public List<Component> components;
-        
+
         public Entity()
         {
             this.id = World.entities.Count;
@@ -54,6 +54,12 @@ namespace aengine.ecs
             return false;
         }
 
+        public virtual void setFromSceneObj(SceneObject obj)
+        {
+            transform.position = new Vector3(obj.x, obj.y, obj.z);
+            transform.scale = new Vector3(obj.w, obj.h, obj.d);
+            transform.rotation = new Vector3(obj.rx, obj.ry, obj.rz);
+        }
 
         public virtual void update()
         {

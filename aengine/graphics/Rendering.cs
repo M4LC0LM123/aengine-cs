@@ -43,7 +43,7 @@ namespace aengine.graphics
             DrawCubeTexture(textures[5], new Vector3(0, -scale/2, 0), -scale, 0, scale, tint); // bottom
         }
         
-        public static void drawSprite3D(Texture texture, Vector3 position, float width, float height, float rotation, Color color)
+        public static void drawSprite3D(Texture texture, Vector3 position, float width, float height, float rotation, float rotationY, Color color)
         {
             float x = position.X;
             float y = position.Y;
@@ -54,6 +54,7 @@ namespace aengine.graphics
             rlPushMatrix();
             rlTranslatef(x, y, z);
             rlRotatef(rotation, 0.0f, 1.0f, 0.0f);
+            rlRotatef(rotationY, 1.0f, 0.0f, 0.0f);
             rlTranslatef(-x, -y, -z);
 
             rlBegin(RL_QUADS);

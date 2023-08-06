@@ -17,6 +17,8 @@ public class GuiWindow
     private Vector2 defaultScale;
     private bool moving;
 
+    public int id;
+
     public GuiWindow(string title = "GuiWindow", float x = 10, float y = 10, float width = 300, float height = 200)
     {
         topBar = new Rectangle(x, y, width, Gui.topBarHeight);
@@ -26,13 +28,33 @@ public class GuiWindow
         scalable = true;
         this.title = title;
         titleSize = Gui.font.baseSize;
+        
+        Gui.windowCount++;
+        id = Gui.windowCount;
     }
 
+    public void setPosition(Vector2 positon)
+    {
+        topBar.x = positon.X;
+        topBar.y = positon.Y;
+    }
+    
+    public void setPosition(float x, float y)
+    {
+        topBar.x = x;
+        topBar.y = y;
+    }
+
+    public Vector2 getPosition()
+    {
+        return new Vector2(topBar.x, topBar.y);
+    }
+    
     public void render()
     {
-        if (IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), topBar) && !Gui.GuiInteractiveRec(new GuiIcon(), topBar.x + topBar.width - Gui.exitScale, topBar.y, Gui.exitScale, Gui.exitScale, null, false))
+        if (IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), topBar) && !Gui.GuiInteractiveRec(new GuiIcon(), topBar.x + topBar.width - Gui.exitScale, topBar.y, Gui.exitScale, Gui.exitScale, IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT), null, false))
         {
-            if (movable)
+            if (movable && Gui.activeWindowID == 0 || Gui.activeWindowID == id)
             {
                 moving = true;
             }
@@ -40,9 +62,13 @@ public class GuiWindow
 
         if (moving)
         {
+            Gui.activeWindowID = id;
             if (IsMouseButtonReleased(MouseButton.MOUSE_BUTTON_LEFT))
+            {
                 moving = false;
-            
+                Gui.activeWindowID = 0;
+            }
+
             topBar.x = GetMousePosition().X - topBar.width/2;
             topBar.y = GetMousePosition().Y - topBar.height/2;
         }
@@ -52,7 +78,7 @@ public class GuiWindow
         Gui.GuiPlainRec(topBar.x, topBar.y, topBar.width, topBar.height);
         Gui.GuiPlainRec(rec.x, rec.y, rec.width, rec.height);
 
-        if (Gui.GuiInteractiveRec(new ExitIcon(), topBar.x + topBar.width - Gui.exitScale, topBar.y, Gui.exitScale, Gui.exitScale))
+        if (Gui.GuiInteractiveRec(new ExitIcon(), topBar.x + topBar.width - Gui.exitScale, topBar.y, Gui.exitScale, Gui.exitScale, IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT)))
         {
             topBar.x = -5000;
             topBar.y = -5000;
@@ -60,7 +86,7 @@ public class GuiWindow
         
         Gui.GuiTextPro(Gui.font, title, new Vector2(topBar.x + 5, topBar.y), titleSize, WHITE);
         
-        if (Gui.GuiInteractiveRec(new ResizeIcon(), rec.width - Gui.exitScale, rec.height - Gui.exitScale, Gui.exitScale, Gui.exitScale, this))
+        if (Gui.GuiInteractiveRec(new ResizeIcon(), rec.width - Gui.exitScale, rec.height - Gui.exitScale, Gui.exitScale, Gui.exitScale, IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT), this))
         {
             if (scalable)
             {

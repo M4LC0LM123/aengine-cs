@@ -6,6 +6,7 @@ using System.Text;
 using Jitter.Collision.Shapes;
 using Jitter.Dynamics;
 using Jitter.LinearMath;
+using Raylib_CsLo;
 
 namespace aengine.ecs
 {
@@ -39,7 +40,7 @@ namespace aengine.ecs
             }
             this.body = new RigidBody(this.shape);
             this.body.Position = new Jitter.LinearMath.JVector(entity.transform.position.X, entity.transform.position.Y, entity.transform.position.Z);
-            this.body.Orientation = JMatrix.CreateFromYawPitchRoll(entity.transform.rotation.X, entity.transform.rotation.Y, entity.transform.rotation.Z);
+            this.body.Orientation = JMatrix.CreateFromYawPitchRoll(entity.transform.rotation.Y, entity.transform.rotation.X, entity.transform.rotation.Z);
             body.Mass = mass;
             shapeType = shape;
 

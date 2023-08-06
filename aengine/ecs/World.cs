@@ -20,6 +20,11 @@ namespace aengine.ecs
 
         public static RLights lights = new RLights();
 
+        public static void removeEntity(Entity entity)
+        {
+            entities.Remove(entity);
+        }
+
         public static void update()
         {
             World.world.Step(Raylib.GetFrameTime(), false);

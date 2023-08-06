@@ -6,10 +6,10 @@ namespace Sandbox.aengine.Gui;
 
 public class Gui
 {
-    public static Color mainColor = new Color(20, 121, 135, 255);
+    public static Color mainColor = new Color(99, 141, 160, 255);
     public static Color accentColor = new Color(63, 105, 135, 255);
-    public static Color darkerColor = new Color(20, 87, 104, 255);
-    public static Color lighterColor = new Color(144, 197, 242, 255);
+    public static Color darkerColor = new Color(41, 59, 68, 255);
+    public static Color lighterColor = new Color(119, 169, 191, 255);
 
     public static float bezelSize = 2.5f;
     public static float textSpacing = 2;
@@ -17,6 +17,9 @@ public class Gui
     public static float exitScale = 25;
 
     public static Font font = GetFontDefault();
+
+    public static int windowCount = 0;
+    public static int activeWindowID = 0;
 
     public static void GuiText(string text, float x, float y, float size, Color color)
     {
@@ -32,9 +35,9 @@ public class Gui
     
     public static void GuiInverseRec(float x, float y, float width, float height)
     {
-        DrawRectangle((int)(x - bezelSize), (int)(y - bezelSize), (int)(width + bezelSize*2f), (int)(height + bezelSize*2f), darkerColor);
-        DrawRectangle((int)(x - bezelSize), (int)(y - bezelSize), (int)(width + bezelSize), (int)(height + bezelSize), lighterColor);
-        DrawRectangle((int)x, (int)y, (int)width, (int)height, accentColor);
+        DrawRectangle((int)(x - bezelSize), (int)(y - bezelSize), (int)(width + bezelSize*2f), (int)(height + bezelSize*2f), lighterColor);
+        DrawRectangle((int)(x - bezelSize), (int)(y - bezelSize), (int)(width + bezelSize), (int)(height + bezelSize), darkerColor);
+        DrawRectangle((int)x, (int)y, (int)width, (int)height, mainColor);
     }
 
     public static void GuiTextPro(Font font, string text, Vector2 position, float size, Color color, GuiWindow window = null)
@@ -101,7 +104,7 @@ public class Gui
         return pressed;
     }
 
-    public static bool GuiInteractiveRec(GuiIcon icon, float x, float y, float width, float height, GuiWindow window = null, bool show = true)
+    public static bool GuiInteractiveRec(GuiIcon icon, float x, float y, float width, float height, bool pressMode, GuiWindow window = null, bool show = true)
     {
         float rx = x;
         float ry = y;
@@ -113,7 +116,7 @@ public class Gui
         }
         
         Rectangle rec = new Rectangle(rx, ry, width, height);
-        bool pressed = CheckCollisionPointRec(GetMousePosition(), rec) && IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT);
+        bool pressed = CheckCollisionPointRec(GetMousePosition(), rec) && pressMode;
 
         if (show)
         {

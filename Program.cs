@@ -8,13 +8,14 @@ using Jitter.Dynamics;
 using Jitter.LinearMath;
 using Sandbox.aengine;
 using Sandbox.aengine.Gui;
+using Console = aengine.core.Console;
 using World = aengine.ecs.World;
 
 namespace Sandbox
 {
     public static class Program
     {
-        public static unsafe async Task Main(string[] args)
+        public static async Task Main(string[] args)
         {
             // use only in ides like visual studio and rider,
             // the final build should have the assets folder in the same directory as the exe so remove this line below then
@@ -32,6 +33,7 @@ namespace Sandbox
 
             Texture albedo = LoadTexture("assets/albedo.png");
             Texture gun = LoadTexture("assets/hlpistol.png");
+            Texture particle = LoadTexture("assets/particle.png");
             Gui.font = LoadFont("assets/fonts/font.ttf");
 
             Texture[] skybox = new[]
@@ -70,13 +72,18 @@ namespace Sandbox
 
             Entity light = new Entity();
             light.transform.position.Y = 5;
-            light.addComponent(new LightComponent(light, new aShader("assets/shaders/light.vert","assets/shaders/light.frag"), WHITE, RLights.LightType.LIGHT_DIRECTIONAL));
+            light.addComponent(new LightComponent(light, new aShader("assets/shaders/light.vert","assets/shaders/fog.frag"), WHITE, RLights.LightType.LIGHT_DIRECTIONAL));
 
             GuiWindow window = new GuiWindow("SUIIIIIIIII", 10, 10, 300, 250);
             GuiTextBox textBox = new GuiTextBox();
             GuiSlider slider = new GuiSlider();
+            
+            ParticleSystem ps = new ParticleSystem();
+            ParticleSystem ps2 = new ParticleSystem();
 
-            Scene scene = new Scene("assets/maps/map2.json");
+            Console console = new Console();
+
+            Scene scene = new Scene("assets/maps/map3.json");
 
             foreach (var obj in scene.data)
             {
@@ -123,6 +130,19 @@ namespace Sandbox
                         hehe.transform.rotation = new Vector3(obj.rx, obj.ry, obj.rz);
                         hehe.addComponent(new MeshComponent(hehe, WHITE, LoadTexture("assets/trollface.png"), false));
                         break;
+                    case 5:
+                        Entity billBoard = new Entity();
+                        billBoard.transform.position = new Vector3(obj.x, obj.y, obj.z);
+                        billBoard.transform.scale = new Vector3(obj.w, obj.h, obj.d);
+                        billBoard.transform.rotation = new Vector3(obj.rx, obj.ry, obj.rz);
+                        billBoard.addComponent(new MeshComponent(billBoard, WHITE, LoadTexture("assets/cacodemon.png"), false));
+                        break;
+                    case 6:
+                        ps.setFromSceneObj(obj);
+                        break;
+                    case 7:
+                        ps2.setFromSceneObj(obj);
+                        break;
                 }
             }
 
@@ -131,7 +151,9 @@ namespace Sandbox
                 if (entity.hasComponent<MeshComponent>())
                 {
                     if (entity.getComponent<MeshComponent>().isModel)
+                    {
                         entity.getComponent<MeshComponent>().setShader(light.getComponent<LightComponent>().shader);
+                    }
                 }
             }
 
@@ -158,15 +180,9 @@ namespace Sandbox
                 if (IsKeyDown(KeyboardKey.KEY_S))
                     velocity += new Vector3((float)Math.Sin(camera.rotation.Y * RayMath.DEG2RAD), 0, (float)Math.Cos(camera.rotation.Y * RayMath.DEG2RAD));
                 if (IsKeyDown(KeyboardKey.KEY_A))
-                {
                     velocity += new Vector3((float)-Math.Cos(camera.rotation.Y * RayMath.DEG2RAD), 0, (float)Math.Sin(camera.rotation.Y * RayMath.DEG2RAD));
-                    camera.rotation.Z = 7.5f;
-                }
                 if (IsKeyDown(KeyboardKey.KEY_D))
-                {
                     velocity += new Vector3((float)Math.Cos(camera.rotation.Y * RayMath.DEG2RAD), 0, -(float)Math.Sin(camera.rotation.Y * RayMath.DEG2RAD));
-                    camera.rotation.Z = -7.5f;
-                }
 
                 float speedMultiplier = IsKeyDown(KeyboardKey.KEY_LEFT_SHIFT) ? 2.0f : 1.0f;
                 velocity *= speed * speedMultiplier;
@@ -207,16 +223,38 @@ namespace Sandbox
                                     entity.getComponent<RigidBodyComponent>().applyImpulse(cameraCast.target/5);
                                 }
                             }
-                        }
+                        } 
                     }
                 }
 
                 if (IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT) && isMouseLocked)
                 {
                     PlaySound(shoot);
+                    velocity.X = -cameraCast.target.X / 5;
+                    velocity.Z = -cameraCast.target.Z / 5;
+                    player.getComponent<RigidBodyComponent>().applyImpulse(-cameraCast.target/5);
+                }
+
+                cameraCast = new Raycast(camera.position, camera.position + Vector3.Normalize(camera.front) * 100);
+
+                if (IsKeyPressed(KeyboardKey.KEY_GRAVE))
+                {
+                    console.window.setPosition(10, 10);
+                    console.active = !console.active;
                 }
                 
-                cameraCast = new Raycast(camera.position, camera.position + Vector3.Normalize(camera.front) * 100);
+                ps.setCamera(camera);
+                
+                ParticleComponent p = new ParticleComponent(new RandomrSideBehaviour(5f), WHITE, particle, Vector2.One / 2, 25);
+                p.addBehaviour(new DecayBehaviour());
+                ps.addParticle(p);
+                
+                ps2.setCamera(camera);
+                
+                ParticleComponent p2 = new ParticleComponent(new RandomrSideBehaviour(-5f), RED, 20);
+                p2.addBehaviour(new GradientBehaviour(p2.color, BLACK, 150));
+                p2.addBehaviour(new DecayBehaviour());
+                ps2.addParticle(p2);
 
                 BeginDrawing();
                 ClearBackground(SKYBLUE);
@@ -246,6 +284,8 @@ namespace Sandbox
                 
                 textBox.render(10, 150, 240, 40, window);
                 slider.render(10, 200, 240, 40, window);
+                
+                console.render();
 
                 EndDrawing();
             }
