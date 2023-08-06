@@ -40,6 +40,17 @@ public class ParticleComponent : Component
         this.color = color;
     }
 
+    public ParticleComponent clone()
+    {
+        ParticleComponent copy = new ParticleComponent(behaviours[0], color, texture,
+            new Vector2(transform.scale.X, transform.scale.Y), lifeTime);
+        foreach (var behaviour in behaviours)
+        {
+            copy.addBehaviour(behaviour);
+        }
+        return copy;
+    }
+
     public void addBehaviour(ParticleBehaviour behaviour)
     {
         behaviours.Add(behaviour);

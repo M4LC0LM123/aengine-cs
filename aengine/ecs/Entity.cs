@@ -2,7 +2,7 @@ using System.Numerics;
 
 namespace aengine.ecs
 {
-    public class Entity 
+    public class Entity
     {
         public int id;
         public String tag;
@@ -11,10 +11,10 @@ namespace aengine.ecs
 
         public Entity()
         {
-            this.id = World.entities.Count;
-            this.tag = "Entity" + World.entities.Count.ToString();
+            id = World.entities.Count;
+            tag = "Entity" + World.entities.Count;
             transform = new TransformComponent(this);
-            this.components = new List<Component>();
+            components = new List<Component>();
             World.entities.Add(this);
         }
 
@@ -39,18 +39,20 @@ namespace aengine.ecs
                     return (T)component;
                 }
             }
+
             return null;
         }
 
         public virtual bool hasComponent<T>() where T : Component
         {
-            foreach (Component component in this.components)
+            foreach (Component component in components)
             {
                 if (component.GetType().Equals(typeof(T)))
                 {
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -63,7 +65,7 @@ namespace aengine.ecs
 
         public virtual void update()
         {
-            foreach (Component component in this.components)
+            foreach (Component component in components)
             {
                 component.update(this);
             }
@@ -71,7 +73,7 @@ namespace aengine.ecs
 
         public virtual void render()
         {
-            foreach (Component component in this.components)
+            foreach (Component component in components)
             {
                 component.render();
             }
@@ -79,11 +81,10 @@ namespace aengine.ecs
 
         public virtual void dispose()
         {
-            foreach (Component component in this.components)
+            foreach (Component component in components)
             {
                 component.dispose();
             }
         }
-
     }
 }

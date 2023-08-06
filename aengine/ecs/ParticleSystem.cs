@@ -1,3 +1,4 @@
+using System.Numerics;
 using aengine.graphics;
 using Raylib_CsLo;
 
@@ -18,17 +19,44 @@ public class ParticleSystem : Entity
         this.camera = camera;
     }
 
-    public void addParticle(Color color, bool move = true, float gravity = 9.81f)
+    public void addParticle(Color color, bool move = true, float gravity = 9.81f, int density = 1)
     {
-        ParticleComponent p = new ParticleComponent(new ParticleBehaviour(move, gravity), color);
-        p.transform.position = transform.position;
-        particles.Add(p);
+        for (int i = 0; i < density; i++)
+        {
+            ParticleComponent p = new ParticleComponent(new ParticleBehaviour(move, gravity), color);
+            p.transform.position = transform.position + ErrorValues.PARTICLE_POS_ERROR * core.aengine.getRandomInt(-2, 2);
+            particles.Add(p);
+        }
     }
     
-    public void addParticle(ParticleComponent particle)
+    public void addParticle(ParticleComponent particle, int density = 1)
     {
-        particle.transform.position = transform.position;
-        particles.Add(particle);
+        for (int i = 0; i < density; i++)
+        {
+            ParticleComponent clone = particle.clone();
+            clone.transform.position = transform.position + ErrorValues.PARTICLE_POS_ERROR * core.aengine.getRandomInt(-2, 2);
+            particles.Add(clone);
+        }
+    }
+    
+    public void addParticle(Vector3 position, Color color, bool move = true, float gravity = 9.81f, int density = 1)
+    {
+        for (int i = 0; i < density; i++)
+        {
+            ParticleComponent p = new ParticleComponent(new ParticleBehaviour(move, gravity), color);
+            p.transform.position = transform.position + position + ErrorValues.PARTICLE_POS_ERROR * core.aengine.getRandomInt(-2, 2);
+            particles.Add(p);
+        }
+    }
+    
+    public void addParticle(ParticleComponent particle, Vector3 position, int density = 1)
+    {
+        for (int i = 0; i < density; i++)
+        {
+            ParticleComponent clone = particle.clone();
+            clone.transform.position = transform.position + position + ErrorValues.PARTICLE_POS_ERROR * core.aengine.getRandomInt(-2, 2);
+            particles.Add(clone);
+        }
     }
     
     public override void update()

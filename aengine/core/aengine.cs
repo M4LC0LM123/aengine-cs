@@ -88,6 +88,11 @@ namespace aengine.core
             return new Vector3(v1.X + v2.X * scalar, v1.Y + v2.Y * scalar, v1.Z + v2.Z * scalar);
         }
 
+        public static float getAspectRatio(Matrix4x4 matrix)
+        {
+            return matrix.M11 / matrix.M22;
+        }
+        
         public static string removeFromEnd(string str, int length)
         {
             if (str.Length < length)

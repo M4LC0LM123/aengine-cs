@@ -245,16 +245,17 @@ namespace Sandbox
                 
                 ps.setCamera(camera);
                 
-                ParticleComponent p = new ParticleComponent(new RandomrSideBehaviour(5f), WHITE, particle, Vector2.One / 2, 25);
+                ParticleComponent p = new ParticleComponent(new ParticleBehaviour(false, 5f), WHITE, particle, Vector2.One / 2, 25);
                 p.addBehaviour(new DecayBehaviour());
-                ps.addParticle(p);
+                ps.addParticle(p, ParticleSpawn.sphere(4), 2);
                 
                 ps2.setCamera(camera);
                 
                 ParticleComponent p2 = new ParticleComponent(new RandomrSideBehaviour(-5f), RED, 20);
                 p2.addBehaviour(new GradientBehaviour(p2.color, BLACK, 150));
                 p2.addBehaviour(new DecayBehaviour());
-                ps2.addParticle(p2);
+                p2.addBehaviour(new ScaleBehaviour(true));
+                ps2.addParticle(p2, ParticleSpawn.cube(8, 0, 0));
 
                 BeginDrawing();
                 ClearBackground(SKYBLUE);
@@ -265,7 +266,7 @@ namespace Sandbox
 
                 Rendering.drawDebugAxies();
                 Rendering.drawArrow(Vector3.Zero, Vector3.One, GREEN);
-                
+
                 cameraCast.debugRender();
 
                 EndMode3D();

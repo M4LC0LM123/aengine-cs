@@ -10,6 +10,8 @@ namespace aengine.graphics
     {
 
         public float fov;
+        public float near;
+        public float far;
 
         public Camera3D matrix;
 
@@ -23,9 +25,11 @@ namespace aengine.graphics
         private Vector2 prevMousePos;
         private Vector2 currMousePos;
 
-        public unsafe Camera(Vector3 position, float fov)
+        public Camera(Vector3 position, float fov, float near = 0.1f, float far = 100.0f)
         {
             this.fov = fov;
+            this.near = near;
+            this.far = far;
 
             this.position = new Vector3(position.X, position.Y, position.Z);
             target = Vector3.Zero;
@@ -84,33 +88,33 @@ namespace aengine.graphics
         {
             if (IsKeyDown(KeyboardKey.KEY_W) && isMouseLocked)
             {
-                this.position.X = this.position.X + this.front.X * speed * GetFrameTime();
-                this.position.Z = this.position.Z + this.front.Z * speed * GetFrameTime();
+                position.X += front.X * speed * GetFrameTime();
+                position.Z += front.Z * speed * GetFrameTime();
             }
             if (IsKeyDown(KeyboardKey.KEY_S) && isMouseLocked)
             {
-                this.position.X = this.position.X - this.front.X * speed * GetFrameTime();
-                this.position.Z = this.position.Z - this.front.Z * speed * GetFrameTime();
+                position.X -= front.X * speed * GetFrameTime();
+                position.Z -= front.Z * speed * GetFrameTime();
             }
             if (IsKeyDown(KeyboardKey.KEY_A) && isMouseLocked)
             {
-                this.position.X = this.position.X - this.right.X * speed * GetFrameTime();
-                this.position.Z = this.position.Z - this.right.Z * speed * GetFrameTime();
+                position.X -= right.X * speed * GetFrameTime();
+                position.Z -= right.Z * speed * GetFrameTime();
             }
             if (IsKeyDown(KeyboardKey.KEY_D) && isMouseLocked)
             {
-                this.position.X = this.position.X + this.right.X * speed * GetFrameTime();
-                this.position.Z = this.position.Z + this.right.Z * speed * GetFrameTime();
+                position.X += right.X * speed * GetFrameTime();
+                position.Z += right.Z * speed * GetFrameTime();
             }
             if (fly)
             {
                 if (IsKeyDown(KeyboardKey.KEY_SPACE) && isMouseLocked)
                 {
-                    this.position.Y += speed * GetFrameTime();
+                    position.Y += speed * GetFrameTime();
                 }
                 if (IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) && isMouseLocked)
                 {
-                    this.position.Y -= speed * GetFrameTime();
+                    position.Y -= speed * GetFrameTime();
                 }
             }
         }
