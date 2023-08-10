@@ -12,6 +12,7 @@ namespace aengine.core
     {
         public static int GLSL_VERSION = 330;
         public static string QUOTE = "\"";
+        public static float MAX_SOUND_DISTANCE = 10;
         
         public static float deg2Rad(float degrees)
         {

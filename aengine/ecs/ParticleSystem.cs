@@ -62,6 +62,9 @@ public class ParticleSystem : Entity
     public override void update()
     {
         base.update();
+
+        if (World.camera != null) camera = World.camera;
+        
         for (int i = 0; i < particles.Count; i++)
         {
             if (particles[i].lifeTime > 0)

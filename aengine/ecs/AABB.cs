@@ -20,6 +20,12 @@ namespace aengine.ecs
             this.height = height;
             this.depth = depth;
         }
-
+        
+        public bool overlaps(AABB other)
+        {
+            return !(x + width < other.x || other.x + other.width < x ||
+                     y + height < other.y || other.y + other.height < y ||
+                     z + depth < other.z || other.z + other.depth < z);
+        }
     }
 }

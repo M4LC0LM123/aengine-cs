@@ -20,6 +20,8 @@ namespace aengine.ecs
 
         public static RLights lights = new RLights();
 
+        public static Camera camera = null;
+
         public static void removeEntity(Entity entity)
         {
             entities.Remove(entity);
@@ -28,6 +30,7 @@ namespace aengine.ecs
         public static void update()
         {
             World.world.Step(Raylib.GetFrameTime(), false);
+            
             foreach (Entity entity in World.entities)
             {
                 entity.update();

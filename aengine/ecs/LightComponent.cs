@@ -36,6 +36,8 @@ public class LightComponent : Component
         core.enabled = enabled;
         
         SetShaderValue(shader, shader.locs[(int)SHADER_LOC_MAP_DIFFUSE], updateVector, ShaderUniformDataType.SHADER_UNIFORM_VEC4);
+
+        if (World.camera != null) updateVector = World.camera.position;
         
         World.lights.UpdateLightValues(shader, core);
     }

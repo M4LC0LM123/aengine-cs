@@ -1,17 +1,19 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
+namespace aengine.ecs;
 
-namespace aengine.ecs
+public class Scene
 {
-    public class Scene
+    public virtual void update()
     {
-        public List<SceneObject> data;
+        
+    }
 
-        public Scene(string path)
-        {
-            data = JsonSerializer.Deserialize<List<SceneObject>>(File.ReadAllText(path));
-        }
+    public virtual void render()
+    {
+        
+    }
+
+    public virtual void dispose()
+    {
+        
     }
 }

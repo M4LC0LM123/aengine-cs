@@ -5,6 +5,8 @@ using aengine.core;
 using aengine.graphics;
 using aengine.ecs;
 using Jitter.Dynamics;
+using Jitter.Dynamics.Constraints;
+using Jitter.Dynamics.Joints;
 using Jitter.LinearMath;
 using Sandbox.aengine;
 using Sandbox.aengine.Gui;
@@ -22,6 +24,7 @@ namespace Sandbox
             Directory.SetCurrentDirectory("../../../");
             
             SetConfigFlags(ConfigFlags.FLAG_WINDOW_RESIZABLE);
+            SetTraceLogLevel((int)TraceLogLevel.LOG_WARNING);
             InitWindow(1280, 720, "Hi Hi Hi Ha");
             SetWindowIcon(LoadImage("assets/logo.png"));
             SetTargetFPS(60);
@@ -50,11 +53,12 @@ namespace Sandbox
             float speed = 10;
             bool isMouseLocked = false;
 
-            Raycast cameraCast = new Raycast(camera.position, camera.position * camera.front * 100);
+            World.camera = camera;
 
             Entity player = new Entity();
             player.transform.position = camera.position;
             player.transform.scale = Vector3.One;
+            player.tag = "playa";
             player.addComponent(new RigidBodyComponent(player, 1.0f, BodyType.DYNAMIC, ShapeType.SPHERE));
             
             Entity body = new Entity();
@@ -70,9 +74,11 @@ namespace Sandbox
             body2.addComponent(new MeshComponent(body2, GenMeshSphere(1f, 15, 15), YELLOW, albedo));
             body2.addComponent(new RigidBodyComponent(body2, 1, BodyType.DYNAMIC, ShapeType.SPHERE));
 
+            Dummy dummy = new Dummy();
+
             Entity light = new Entity();
             light.transform.position.Y = 5;
-            light.addComponent(new LightComponent(light, new aShader("assets/shaders/light.vert","assets/shaders/fog.frag"), WHITE, RLights.LightType.LIGHT_DIRECTIONAL));
+            light.addComponent(new LightComponent(light, new aShader("assets/shaders/light.vert","assets/shaders/light.frag"), WHITE, RLights.LightType.LIGHT_POINT));
 
             GuiWindow window = new GuiWindow("SUIIIIIIIII", 10, 10, 300, 250);
             GuiTextBox textBox = new GuiTextBox();
@@ -80,12 +86,13 @@ namespace Sandbox
             
             ParticleSystem ps = new ParticleSystem();
             ParticleSystem ps2 = new ParticleSystem();
+            ps2.addComponent(new SpatialAudioComponent(ps2, LoadSound("assets/at_dooms_gate.mp3")));
 
             Console console = new Console();
 
-            Scene scene = new Scene("assets/maps/map3.json");
+            ScenePrefab scenePrefab = new ScenePrefab("assets/maps/map3.json");
 
-            foreach (var obj in scene.data)
+            foreach (var obj in scenePrefab.data)
             {
                 switch (obj.id)
                 {
@@ -118,9 +125,10 @@ namespace Sandbox
                         model.transform.position = new Vector3(obj.x, obj.y, obj.z);
                         model.transform.scale = new Vector3(obj.w, obj.h, obj.d);
                         model.transform.rotation = new Vector3(obj.rx, obj.ry, obj.rz);
-                        MeshComponent mesh = new MeshComponent(model, LoadModel("assets/models/scientist.glb"), WHITE, new Texture());
-                        mesh.scale = 0.1f;
+                        MeshComponent mesh = new MeshComponent(model, LoadModel("assets/models/zombie.glb"), WHITE, new Texture());
+                        mesh.scale = 5;
                         model.addComponent(mesh);
+                        model.getComponent<MeshComponent>().setShader(light.getComponent<LightComponent>().shader, 1);
                         break;
                     case 4:
                         Entity hehe = new Entity();
@@ -143,6 +151,16 @@ namespace Sandbox
                     case 7:
                         ps2.setFromSceneObj(obj);
                         break;
+                    case 8:
+                        dummy.setPosition(new Vector3(obj.x, obj.y, obj.z));
+                        break;
+                    case 9:
+                        Entity fluid = new Entity();
+                        fluid.setFromSceneObj(obj);
+                        fluid.addComponent(new FluidComponent(fluid, new aShader(null, "assets/shaders/wave.frag"),
+                            LoadTexture("assets/water.png"), new Color(255, 255, 255, 125)));
+                        fluid.addComponent(new SpatialAudioComponent(fluid, LoadSound("assets/splash.wav")));
+                        break;
                 }
             }
 
@@ -164,12 +182,6 @@ namespace Sandbox
 
                 if (IsKeyPressed(KeyboardKey.KEY_ESCAPE))
                     isMouseLocked = !isMouseLocked;
-
-                if (IsKeyPressed(KeyboardKey.KEY_R))
-                {
-                    body2.getComponent<RigidBodyComponent>().applyImpulse(-10, 10, 0);
-                    body.getComponent<RigidBodyComponent>().applyImpulse(10, 10, 0);
-                }
 
                 camera.setFirstPerson(0.1f, isMouseLocked);
 
@@ -205,7 +217,6 @@ namespace Sandbox
                 camera.defaultFpsMatrix();
                 camera.update();
                 
-                light.getComponent<LightComponent>().setUpdateVector(camera.position);
                 light.getComponent<LightComponent>().setIntensity(slider.value/10);
                 
                 foreach (var entity in World.entities)
@@ -216,46 +227,62 @@ namespace Sandbox
                             entity.transform.rotation.X = (float) Math.Atan2(player.transform.position.X - entity.transform.position.X, player.transform.position.Z - entity.transform.position.Z) * RayMath.RAD2DEG;
                         if (entity.hasComponent<RigidBodyComponent>())
                         {
-                            if (cameraCast.isColliding(entity.transform, entity.getComponent<RigidBodyComponent>().shapeType) && IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT))
+                            if (camera.raycast.isColliding(entity.transform, entity.getComponent<RigidBodyComponent>().shapeType) && IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT))
                             {
                                 if (!entity.getComponent<RigidBodyComponent>().body.IsStatic && isMouseLocked)
                                 {
-                                    entity.getComponent<RigidBodyComponent>().applyImpulse(cameraCast.target/5);
+                                    entity.getComponent<RigidBodyComponent>().applyImpulse(camera.raycast.target/5);
                                 }
                             }
-                        } 
+                        }
                     }
+
+                    if (entity.hasComponent<FluidComponent>())
+                    {
+                        if (player.getAABB().overlaps(entity.getAABB()))
+                        {
+                            if (entity.hasComponent<SpatialAudioComponent>())
+                            {
+                                entity.getComponent<SpatialAudioComponent>().play();
+                                entity.getComponent<SpatialAudioComponent>().canPlay = false;
+                            }
+                        }
+                        else
+                        {
+                            entity.getComponent<SpatialAudioComponent>().canPlay = true;
+                        }
+                    }
+                    
                 }
 
                 if (IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT) && isMouseLocked)
                 {
                     PlaySound(shoot);
-                    velocity.X = -cameraCast.target.X / 5;
-                    velocity.Z = -cameraCast.target.Z / 5;
-                    player.getComponent<RigidBodyComponent>().applyImpulse(-cameraCast.target/5);
+                    velocity.X = -camera.raycast.target.X / 5;
+                    velocity.Z = -camera.raycast.target.Z / 5;
+                    player.getComponent<RigidBodyComponent>().applyImpulse(-camera.raycast.target/5);
                 }
-
-                cameraCast = new Raycast(camera.position, camera.position + Vector3.Normalize(camera.front) * 100);
 
                 if (IsKeyPressed(KeyboardKey.KEY_GRAVE))
                 {
                     console.window.setPosition(10, 10);
                     console.active = !console.active;
                 }
-                
-                ps.setCamera(camera);
-                
+
                 ParticleComponent p = new ParticleComponent(new ParticleBehaviour(false, 5f), WHITE, particle, Vector2.One / 2, 25);
                 p.addBehaviour(new DecayBehaviour());
-                ps.addParticle(p, ParticleSpawn.sphere(4), 2);
-                
-                ps2.setCamera(camera);
-                
+
                 ParticleComponent p2 = new ParticleComponent(new RandomrSideBehaviour(-5f), RED, 20);
                 p2.addBehaviour(new GradientBehaviour(p2.color, BLACK, 150));
                 p2.addBehaviour(new DecayBehaviour());
                 p2.addBehaviour(new ScaleBehaviour(true));
+
+                ps.addParticle(p, ParticleSpawn.sphere(4), 2);
                 ps2.addParticle(p2, ParticleSpawn.cube(8, 0, 0));
+
+                ps2.getComponent<SpatialAudioComponent>().play();
+
+                dummy.transform.rotation.Y += 100 * GetFrameTime();
 
                 BeginDrawing();
                 ClearBackground(SKYBLUE);
@@ -267,12 +294,10 @@ namespace Sandbox
                 Rendering.drawDebugAxies();
                 Rendering.drawArrow(Vector3.Zero, Vector3.One, GREEN);
 
-                cameraCast.debugRender();
-
                 EndMode3D();
                 Rendering.drawCrosshair(WHITE);
                 DrawTexturePro(gun, new Rectangle(0, 0, gun.width, gun.height), new Rectangle(GetScreenWidth()/2 + 75, GetScreenHeight()-250, 200, 250), Vector2.Zero, 0, WHITE);
-                
+
                 window.render();
 
                 Gui.GuiTextPro(Gui.font, "FPS: " + GetFPS(), new Vector2(10, 10), Gui.font.baseSize, WHITE, window);

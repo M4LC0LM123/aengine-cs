@@ -1,5 +1,6 @@
 using System;
 using System.Numerics;
+using aengine.core;
 using Raylib_CsLo;
 using static Raylib_CsLo.Raylib;
 using static Raylib_CsLo.RayMath;
@@ -25,6 +26,8 @@ namespace aengine.graphics
         private Vector2 prevMousePos;
         private Vector2 currMousePos;
 
+        public Raycast raycast;
+
         public Camera(Vector3 position, float fov, float near = 0.1f, float far = 100.0f)
         {
             this.fov = fov;
@@ -41,6 +44,8 @@ namespace aengine.graphics
             right = new Vector3();
             rotation = new Vector3();
             front = new Vector3(0, 0, -1);
+                
+            raycast = new Raycast(position, position * front * far);
         }
 
         public void update()
@@ -49,6 +54,8 @@ namespace aengine.graphics
             matrix.target = target;
             matrix.up = up;
             matrix.fovy = fov;
+            
+            raycast = new Raycast(position, position + Vector3.Normalize(front) * far);
         }
 
         public void setFirstPerson(float sensitivity, bool isMouseLocked)

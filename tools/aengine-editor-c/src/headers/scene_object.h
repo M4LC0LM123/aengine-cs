@@ -12,6 +12,7 @@ class scene_object {
         Vector3 scale;
         int id;
         bool selected;
+        Color color;
 
         scene_object(int id); 
         scene_object(int id, Vector3 position);

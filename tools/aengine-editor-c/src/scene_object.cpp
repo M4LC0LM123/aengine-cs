@@ -2,12 +2,17 @@
 #include "../include/raylib.h"
 #include "iostream"
 
+#define R_MULTIPLIER 40
+#define G_MULTIPLIER 50
+#define B_MULTIPLIER 60
+
 scene_object::scene_object(int id) {
     position = {0, 0, 0};
     scale = {2, 2, 2};
     rotation = {0, 0, 0};
     this->id = id;
     selected = false;
+    color = Color {(unsigned char)(R_MULTIPLIER * id), (unsigned char)(G_MULTIPLIER * id), (unsigned char)(B_MULTIPLIER * id), 255};
 }
 
 scene_object::scene_object(int id, Vector3 position) {
@@ -16,6 +21,7 @@ scene_object::scene_object(int id, Vector3 position) {
     rotation = {0, 0, 0};
     this->id = id;
     selected = false;
+    color = Color {(unsigned char)(R_MULTIPLIER * id), (unsigned char)(G_MULTIPLIER * id), (unsigned char)(B_MULTIPLIER * id), 255};
 }
 
 void scene_object::update() {
@@ -78,7 +84,7 @@ void scene_object::update() {
 }
 
 void scene_object::render() {
-    DrawCubeV(position, scale, RED);
+    DrawCubeV(position, scale, color);
 
     if (selected) {
         DrawCubeWiresV(position, scale, YELLOW);

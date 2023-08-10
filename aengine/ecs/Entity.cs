@@ -1,4 +1,5 @@
 using System.Numerics;
+using Raylib_CsLo;
 
 namespace aengine.ecs
 {
@@ -61,6 +62,17 @@ namespace aengine.ecs
             transform.position = new Vector3(obj.x, obj.y, obj.z);
             transform.scale = new Vector3(obj.w, obj.h, obj.d);
             transform.rotation = new Vector3(obj.rx, obj.ry, obj.rz);
+        }
+
+        public virtual BoundingBox getBoundingBox()
+        {
+            return new BoundingBox(RayMath.Vector3Subtract(transform.position, transform.scale/2), transform.scale);
+        }
+
+        public virtual AABB getAABB()
+        {
+            return new AABB(transform.position.X - transform.scale.X / 2, transform.position.Y - transform.scale.Y / 2,
+                transform.position.Z - transform.scale.Z / 2, transform.scale.X, transform.scale.Y, transform.scale.Z);
         }
 
         public virtual void update()

@@ -9,7 +9,16 @@ public class aShader
 
     public aShader(string vert, string frag)
     {
-        shader = LoadShader(TextFormat("assets/shaders/light.vert", core.aengine.GLSL_VERSION),
-            TextFormat("assets/shaders/light.frag", core.aengine.GLSL_VERSION));
+        if (vert != null && frag != null)
+            shader = LoadShader(TextFormat(vert, core.aengine.GLSL_VERSION),
+                TextFormat(frag, core.aengine.GLSL_VERSION));
+        
+        if (vert == null) 
+            shader = LoadShader(null,
+                TextFormat(frag, core.aengine.GLSL_VERSION));
+        
+        if (frag == null) 
+            shader = LoadShader(TextFormat(vert, core.aengine.GLSL_VERSION),
+                null);
     }
 }
