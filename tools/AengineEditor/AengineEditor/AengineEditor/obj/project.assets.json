@@ -1,0 +1,362 @@
+{
+  "version": 3,
+  "targets": {
+    "net6.0": {
+      "JitterPhysics/0.2.0.20": {
+        "type": "package",
+        "compile": {
+          "lib/net4/Jitter.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net4/Jitter.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
+      "Microsoft.Toolkit.HighPerformance/7.1.2": {
+        "type": "package",
+        "compile": {
+          "lib/net5.0/Microsoft.Toolkit.HighPerformance.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net5.0/Microsoft.Toolkit.HighPerformance.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
+      "NativeFileDialogSharp/0.6.0-alpha": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/NativeFileDialogSharp.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/NativeFileDialogSharp.dll": {}
+        },
+        "contentFiles": {
+          "contentFiles/any/netstandard2.0/nfd.dll": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          },
+          "contentFiles/any/netstandard2.0/nfd_x86.dll": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/linux-x64/native/libnfd.so": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/osx-arm64/native/libnfd.dylib": {
+            "assetType": "native",
+            "rid": "osx-arm64"
+          },
+          "runtimes/osx-x64/native/libnfd.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/win-x64/native/nfd.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/nfd.exp": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/nfd.lib": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/nfd.pdb": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x86/native/nfd.dll": {
+            "assetType": "native",
+            "rid": "win-x86"
+          },
+          "runtimes/win-x86/native/nfd.exp": {
+            "assetType": "native",
+            "rid": "win-x86"
+          },
+          "runtimes/win-x86/native/nfd.lib": {
+            "assetType": "native",
+            "rid": "win-x86"
+          },
+          "runtimes/win-x86/native/nfd.pdb": {
+            "assetType": "native",
+            "rid": "win-x86"
+          }
+        }
+      },
+      "Raylib-CsLo/4.2.0.9": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Toolkit.HighPerformance": "7.1.2"
+        },
+        "compile": {
+          "lib/netstandard2.1/Raylib-CsLo.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.1/Raylib-CsLo.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "contentFiles": {
+          "contentFiles/any/netstandard2.1/raylib.dll": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          },
+          "contentFiles/any/netstandard2.1/raylib.pdb": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/linux-x64/native/libraylib.so": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/readme.md": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/osx-arm64/native/libraylib.dylib": {
+            "assetType": "native",
+            "rid": "osx-arm64"
+          },
+          "runtimes/osx-arm64/native/readme.md": {
+            "assetType": "native",
+            "rid": "osx-arm64"
+          },
+          "runtimes/osx-x64/native/libraylib.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/readme.md": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/win-x64/native/raylib.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/raylib.pdb": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x86/native/needs-pr.txt": {
+            "assetType": "native",
+            "rid": "win-x86"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "JitterPhysics/0.2.0.20": {
+      "sha512": "Kgju3DCxS6ot55LX5+tFcALVcEDEfQ7jFkhjY+FR1bOn8Dh1YitomA9E6ZWIFGdKXeYDW1SKhGvKOnqJYjz4gQ==",
+      "type": "package",
+      "path": "jitterphysics/0.2.0.20",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "jitterphysics.0.2.0.20.nupkg.sha512",
+        "jitterphysics.nuspec",
+        "lib/net4/Jitter.dll",
+        "lib/net4/Jitter.pdb",
+        "lib/net4/Jitter.xml",
+        "lib/portable-net45+netcore45+wpa81+wp8/Jitter.dll",
+        "lib/portable-net45+netcore45+wpa81+wp8/Jitter.pdb",
+        "lib/portable-net45+netcore45+wpa81+wp8/Jitter.xml"
+      ]
+    },
+    "Microsoft.Toolkit.HighPerformance/7.1.2": {
+      "sha512": "cezzRky0BUJyYmSrcQUcX8qAv90JfUwCqWEbqfWZLHyeANo9/LWgW6y50pqbyc8r8SPXVsu2GNH98fB3VxrnvA==",
+      "type": "package",
+      "path": "microsoft.toolkit.highperformance/7.1.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "License.md",
+        "ThirdPartyNotices.txt",
+        "lib/net5.0/Microsoft.Toolkit.HighPerformance.dll",
+        "lib/net5.0/Microsoft.Toolkit.HighPerformance.pdb",
+        "lib/net5.0/Microsoft.Toolkit.HighPerformance.xml",
+        "lib/netcoreapp2.1/Microsoft.Toolkit.HighPerformance.dll",
+        "lib/netcoreapp2.1/Microsoft.Toolkit.HighPerformance.pdb",
+        "lib/netcoreapp2.1/Microsoft.Toolkit.HighPerformance.xml",
+        "lib/netcoreapp3.1/Microsoft.Toolkit.HighPerformance.dll",
+        "lib/netcoreapp3.1/Microsoft.Toolkit.HighPerformance.pdb",
+        "lib/netcoreapp3.1/Microsoft.Toolkit.HighPerformance.xml",
+        "lib/netstandard1.4/Microsoft.Toolkit.HighPerformance.dll",
+        "lib/netstandard1.4/Microsoft.Toolkit.HighPerformance.pdb",
+        "lib/netstandard1.4/Microsoft.Toolkit.HighPerformance.xml",
+        "lib/netstandard2.0/Microsoft.Toolkit.HighPerformance.dll",
+        "lib/netstandard2.0/Microsoft.Toolkit.HighPerformance.pdb",
+        "lib/netstandard2.0/Microsoft.Toolkit.HighPerformance.xml",
+        "lib/netstandard2.1/Microsoft.Toolkit.HighPerformance.dll",
+        "lib/netstandard2.1/Microsoft.Toolkit.HighPerformance.pdb",
+        "lib/netstandard2.1/Microsoft.Toolkit.HighPerformance.xml",
+        "microsoft.toolkit.highperformance.7.1.2.nupkg.sha512",
+        "microsoft.toolkit.highperformance.nuspec"
+      ]
+    },
+    "NativeFileDialogSharp/0.6.0-alpha": {
+      "sha512": "2JvfxgAMWEGA9rIuYw+/vcj8eisBJbb4fzviJU47urU72z7m6BW2SykaMRtQorr06Xh3ZxG+gykiqV3D4crfLA==",
+      "type": "package",
+      "path": "nativefiledialogsharp/0.6.0-alpha",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "content/nfd.dll",
+        "content/nfd_x86.dll",
+        "contentFiles/any/netstandard2.0/nfd.dll",
+        "contentFiles/any/netstandard2.0/nfd_x86.dll",
+        "lib/netstandard2.0/NativeFileDialogSharp.dll",
+        "nativefiledialogsharp.0.6.0-alpha.nupkg.sha512",
+        "nativefiledialogsharp.nuspec",
+        "runtimes/linux-x64/native/libnfd.so",
+        "runtimes/osx-arm64/native/libnfd.dylib",
+        "runtimes/osx-x64/native/libnfd.dylib",
+        "runtimes/win-x64/native/nfd.dll",
+        "runtimes/win-x64/native/nfd.exp",
+        "runtimes/win-x64/native/nfd.lib",
+        "runtimes/win-x64/native/nfd.pdb",
+        "runtimes/win-x86/native/nfd.dll",
+        "runtimes/win-x86/native/nfd.exp",
+        "runtimes/win-x86/native/nfd.lib",
+        "runtimes/win-x86/native/nfd.pdb"
+      ]
+    },
+    "Raylib-CsLo/4.2.0.9": {
+      "sha512": "s0KLEXCfylhCgMfc0elHJyC7I2ZdqylQzSA1GhHwp7pPJmoQx80kZh5OkTbiirOuHSIeQ87JojEA439MarGhWQ==",
+      "type": "package",
+      "path": "raylib-cslo/4.2.0.9",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "content/raylib.dll",
+        "content/raylib.pdb",
+        "contentFiles/any/netstandard2.1/raylib.dll",
+        "contentFiles/any/netstandard2.1/raylib.pdb",
+        "lib/netstandard2.1/Raylib-CsLo.dll",
+        "lib/netstandard2.1/Raylib-CsLo.pdb",
+        "lib/netstandard2.1/Raylib-CsLo.xml",
+        "raylib-cslo.4.2.0.9.nupkg.sha512",
+        "raylib-cslo.nuspec",
+        "raylib-cslo_128x128.png",
+        "runtimes/linux-x64/native/libraylib.so",
+        "runtimes/linux-x64/native/readme.md",
+        "runtimes/osx-arm64/native/libraylib.dylib",
+        "runtimes/osx-arm64/native/readme.md",
+        "runtimes/osx-x64/native/libraylib.dylib",
+        "runtimes/osx-x64/native/readme.md",
+        "runtimes/readme.md",
+        "runtimes/win-x64/native/raylib.dll",
+        "runtimes/win-x64/native/raylib.pdb",
+        "runtimes/win-x86/native/needs-pr.txt"
+      ]
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net6.0": [
+      "JitterPhysics >= 0.2.0.20",
+      "NativeFileDialogSharp >= 0.6.0-alpha",
+      "Raylib-CsLo >= 4.2.0.9"
+    ]
+  },
+  "packageFolders": {
+    "/home/lukamalovic/.nuget/packages/": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "/home/lukamalovic/Documents/GitHub/aengine-cs/tools/AengineEditor/AengineEditor/AengineEditor/AengineEditor.csproj",
+      "projectName": "AengineEditor",
+      "projectPath": "/home/lukamalovic/Documents/GitHub/aengine-cs/tools/AengineEditor/AengineEditor/AengineEditor/AengineEditor.csproj",
+      "packagesPath": "/home/lukamalovic/.nuget/packages/",
+      "outputPath": "/home/lukamalovic/Documents/GitHub/aengine-cs/tools/AengineEditor/AengineEditor/AengineEditor/obj/",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "/home/lukamalovic/.nuget/NuGet/NuGet.Config"
+      ],
+      "originalTargetFrameworks": [
+        "net6.0"
+      ],
+      "sources": {
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "projectReferences": {}
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "net6.0": {
+        "targetAlias": "net6.0",
+        "dependencies": {
+          "JitterPhysics": {
+            "target": "Package",
+            "version": "[0.2.0.20, )"
+          },
+          "NativeFileDialogSharp": {
+            "target": "Package",
+            "version": "[0.6.0-alpha, )"
+          },
+          "Raylib-CsLo": {
+            "target": "Package",
+            "version": "[4.2.0.9, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/6.0.116/RuntimeIdentifierGraph.json"
+      }
+    }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'JitterPhysics 0.2.0.20' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
+      "libraryId": "JitterPhysics",
+      "targetGraphs": [
+        "net6.0"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/lukamalovic/Documents/GitHub/aengine-cs/tools/AengineEditor/AengineEditor/AengineEditor/AengineEditor.csproj": {}
+  },
+  "projects": {
+    "/home/lukamalovic/Documents/GitHub/aengine-cs/tools/AengineEditor/AengineEditor/AengineEditor/AengineEditor.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/lukamalovic/Documents/GitHub/aengine-cs/tools/AengineEditor/AengineEditor/AengineEditor/AengineEditor.csproj",
+        "projectName": "AengineEditor",
+        "projectPath": "/home/lukamalovic/Documents/GitHub/aengine-cs/tools/AengineEditor/AengineEditor/AengineEditor/AengineEditor.csproj",
+        "packagesPath": "/home/lukamalovic/.nuget/packages/",
+        "outputPath": "/home/lukamalovic/Documents/GitHub/aengine-cs/tools/AengineEditor/AengineEditor/AengineEditor/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/lukamalovic/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "JitterPhysics": {
+              "target": "Package",
+              "version": "[0.2.0.20, )"
+            },
+            "NativeFileDialogSharp": {
+              "target": "Package",
+              "version": "[0.6.0-alpha, )"
+            },
+            "Raylib-CsLo": {
+              "target": "Package",
+              "version": "[4.2.0.9, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/6.0.116/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

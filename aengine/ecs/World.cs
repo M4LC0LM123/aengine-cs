@@ -31,23 +31,23 @@ namespace aengine.ecs
         {
             World.world.Step(Raylib.GetFrameTime(), false);
             
-            foreach (Entity entity in World.entities)
-            {
-                entity.update();
-            }
+            int len = entities.Count;
+            for (int i = 0; i < len; i++)
+                entities[i].update();
         }
 
         public static void render()
         {
-            foreach (Entity entity in World.entities)
+            int len = entities.Count;
+            for (int i = 0; i < len; i++)
             {
-                entity.render();
+                entities[i].render();
 
                 if (RenderColliders)
                 {
-                    if (entity.hasComponent<RigidBodyComponent>())
+                    if (entities[i].hasComponent<RigidBodyComponent>())
                     {
-                        entity.getComponent<RigidBodyComponent>().debugRender();
+                        entities[i].getComponent<RigidBodyComponent>().debugRender();
                     }
                 }
             }
@@ -55,10 +55,9 @@ namespace aengine.ecs
 
         public static void dispose()
         {
-            foreach (Entity entity in World.entities)
-            {
-                entity.dispose();
-            }
+            int len = entities.Count;
+            for (int i = 0; i < len; i++)
+                entities[i].dispose();
         }
 
     }

@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="JitterPhysics" Version="0.2.0.20" />
+      <PackageReference Include="NativeFileDialogSharp" Version="0.6.0-alpha" />
+      <PackageReference Include="Raylib-CsLo" Version="4.2.0.9" />
+    </ItemGroup>
+
+</Project>

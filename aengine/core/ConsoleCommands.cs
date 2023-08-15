@@ -1,3 +1,6 @@
+using System.Numerics;
+using aengine.ecs;
+using aengine.graphics;
 using Raylib_CsLo;
 
 namespace aengine.core;
@@ -40,6 +43,21 @@ public class ConsoleCommands
     public static void minimizeWindow(Console console, string[] args)
     {
         Raylib.MinimizeWindow();
+    }
+
+    public static void clear(Console console, string[] args)
+    {
+        console.clear();
+    }
+
+    public static void newBody(Console console, string[] args)
+    {
+        Entity body = new Entity();
+        body.transform.position = World.camera.position with { Y = World.camera.position.Y + 5};
+        body.transform.scale = Vector3.One;
+        body.addComponent(new MeshComponent(body, Raylib.GenMeshSphere(1, 15, 15), Rendering.getRandomColor(),
+            Raylib.LoadTextureFromImage(Raylib.GenImageColor(16, 16, Rendering.getRandomColor()))));
+        body.addComponent(new RigidBodyComponent(body, 1.0f, BodyType.DYNAMIC, ShapeType.SPHERE));
     }
     
 }

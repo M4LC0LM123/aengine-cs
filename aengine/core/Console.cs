@@ -29,6 +29,13 @@ public class Console
         registerCommand(new ConsoleCommand("set_fps", "set fps of the game", ConsoleCommands.setFPS));
         registerCommand(new ConsoleCommand("window_maximize", "maximize window", ConsoleCommands.maximizeWindow));
         registerCommand(new ConsoleCommand("window_minimize", "minimize window", ConsoleCommands.minimizeWindow));
+        registerCommand(new ConsoleCommand("clear", "clears the console window", ConsoleCommands.clear));
+        registerCommand(new ConsoleCommand("add_body", "adds a spherical rigidbody", ConsoleCommands.newBody));
+    }
+
+    public void clear()
+    {
+        consoleLines.Clear();
     }
 
     public void print(string str)

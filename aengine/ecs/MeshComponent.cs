@@ -84,14 +84,13 @@ namespace aengine.ecs
         public void setRotation(Vector3 rotation)
         {
             model.transform = RayMath.MatrixRotateXYZ(new Vector3(deg2Rad(rotation.X), deg2Rad(rotation.Y), deg2Rad(rotation.Z)));
-            // model.transform = Matrix4x4.CreateFromYawPitchRoll(rotation.Y * RayMath.DEG2RAD, rotation.X * RayMath.DEG2RAD, rotation.Z * RayMath.DEG2RAD);
         }
 
         public override void update(Entity entity)
         {
             base.update(entity);
             if (entity != null)
-            {
+            { 
                 transform = entity.transform;
                 setSCale(transform.scale);
                 setRotation(transform.rotation);

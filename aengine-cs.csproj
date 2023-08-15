@@ -17,10 +17,13 @@
   <ItemGroup>
     <Compile Remove="AengineEditor\**" />
     <None Include="assets\shaders\light.frag" />
+    <Compile Remove="tools\AengineEditor\**" />
+    <None Remove="tools\AengineEditor\**" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Remove="AengineEditor\**" />
+    <EmbeddedResource Remove="tools\AengineEditor\**" />
   </ItemGroup>
 
   <ItemGroup>
