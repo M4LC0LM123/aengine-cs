@@ -194,7 +194,7 @@ namespace Sandbox
                 camera.setFirstPerson(0.1f, isMouseLocked);
 
                 Vector3 velocity = Vector3.Zero;
-
+                
                 if (IsKeyDown(KeyboardKey.KEY_W))
                     velocity += new Vector3((float)-Math.Sin(camera.rotation.Y * RayMath.DEG2RAD), 0, (float)-Math.Cos(camera.rotation.Y * RayMath.DEG2RAD));
                 if (IsKeyDown(KeyboardKey.KEY_S))
