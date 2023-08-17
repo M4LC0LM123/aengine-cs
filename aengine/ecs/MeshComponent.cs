@@ -18,7 +18,6 @@ namespace aengine.ecs
         public bool isModel;
         public Texture texture;
         public float scale;
-        public ShapeType shape;
 
         public unsafe MeshComponent(Entity entity, Color color, Texture texture)
         {
@@ -76,12 +75,12 @@ namespace aengine.ecs
             model.materials[mat].shader = shader;
         }
 
-        public void setSCale(Vector3 scale)
+        private void setSCale(Vector3 scale)
         {
             model.transform = RayMath.MatrixScale(scale.X, scale.Y, scale.Z);
         }
 
-        public void setRotation(Vector3 rotation)
+        private void setRotation(Vector3 rotation)
         {
             model.transform = RayMath.MatrixRotateXYZ(new Vector3(deg2Rad(rotation.X), deg2Rad(rotation.Y), deg2Rad(rotation.Z)));
         }
@@ -107,6 +106,7 @@ namespace aengine.ecs
         public override void dispose()
         {
             UnloadModel(model);
+            UnloadTexture(texture);
             base.dispose();
         }
 

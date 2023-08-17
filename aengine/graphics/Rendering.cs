@@ -50,7 +50,9 @@ namespace aengine.graphics
             float z = position.Z;
 
             rlSetTexture(texture.id);
-
+            
+            rlSetBlendMode((int)rlBlendMode.RL_BLEND_ALPHA);
+            
             rlPushMatrix();
             rlTranslatef(x, y, z);
             rlRotatef(rotation, 0.0f, 1.0f, 0.0f);

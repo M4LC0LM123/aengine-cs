@@ -6,14 +6,8 @@ namespace Sandbox.aengine.Gui;
 
 public class GuiTextBox
 {
-    public string text;
+    public string text = string.Empty;
     public bool active;
-
-    public GuiTextBox()
-    {
-        text = String.Empty;
-        active = false;
-    }
 
     public void render(float x, float y, float width, float height, GuiWindow window = null)
     {
@@ -48,7 +42,6 @@ public class GuiTextBox
 
         if (active)
         {
-            // DrawLine((int)textX, (int)(textY + Gui.font.baseSize * textScale), (int)(textX + text.Length * 15), (int)(textY + Gui.font.baseSize * textScale), WHITE);
             DrawLine((int)textX, (int)(textY + Gui.font.baseSize * textScale), (int)(textX + temp.width - 5), (int)(textY + Gui.font.baseSize * textScale), WHITE);
             DrawRectangle((int)(textX + text.Length * 15), (int)textY, 1, (int)temp.height, WHITE);
             
@@ -67,6 +60,9 @@ public class GuiTextBox
             }
 
             if (!CheckCollisionPointRec(GetMousePosition(), temp) && IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT))
+                active = false;
+
+            if (IsKeyPressed(KeyboardKey.KEY_ESCAPE))
                 active = false;
         }
     }

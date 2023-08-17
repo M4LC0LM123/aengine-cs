@@ -25,7 +25,7 @@ namespace Sandbox
             
             SetConfigFlags(ConfigFlags.FLAG_WINDOW_RESIZABLE);
             SetTraceLogLevel((int)TraceLogLevel.LOG_ERROR);
-            InitWindow(1280, 720, "Hi Hi Hi Ha");
+            InitWindow(800, 600, "aengine");
             SetWindowIcon(LoadImage("assets/logo.png"));
             SetTargetFPS(60);
             SetExitKey(KeyboardKey.KEY_NULL);

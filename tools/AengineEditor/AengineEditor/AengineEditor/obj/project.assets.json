@@ -279,24 +279,34 @@
     ]
   },
   "packageFolders": {
-    "/home/lukamalovic/.nuget/packages/": {}
+    "C:\\Users\\lukaa\\.nuget\\packages\\": {},
+    "C:\\Users\\lukaa\\AppData\\Roaming\\Godot\\mono\\GodotNuGetFallbackFolder": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/lukamalovic/Documents/GitHub/aengine-cs/tools/AengineEditor/AengineEditor/AengineEditor/AengineEditor.csproj",
+      "projectUniqueName": "C:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\tools\\AengineEditor\\AengineEditor\\AengineEditor\\AengineEditor.csproj",
       "projectName": "AengineEditor",
-      "projectPath": "/home/lukamalovic/Documents/GitHub/aengine-cs/tools/AengineEditor/AengineEditor/AengineEditor/AengineEditor.csproj",
-      "packagesPath": "/home/lukamalovic/.nuget/packages/",
-      "outputPath": "/home/lukamalovic/Documents/GitHub/aengine-cs/tools/AengineEditor/AengineEditor/AengineEditor/obj/",
+      "projectPath": "C:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\tools\\AengineEditor\\AengineEditor\\AengineEditor\\AengineEditor.csproj",
+      "packagesPath": "C:\\Users\\lukaa\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\tools\\AengineEditor\\AengineEditor\\AengineEditor\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Users\\lukaa\\AppData\\Roaming\\Godot\\mono\\GodotNuGetFallbackFolder",
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "/home/lukamalovic/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\lukaa\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\lukaa\\AppData\\Roaming\\NuGet\\config\\Godot.Offline.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -334,16 +344,35 @@
           "net47",
           "net471",
           "net472",
-          "net48"
+          "net48",
+          "net481"
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[6.0.20, 6.0.20]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.win-x64",
+            "version": "[6.0.20, 6.0.20]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[6.0.20, 6.0.20]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[6.0.20, 6.0.20]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/6.0.116/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
       }
     }
   },
@@ -352,7 +381,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Package 'JitterPhysics 0.2.0.20' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
+      "message": "Package 'JitterPhysics 0.2.0.20' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
       "libraryId": "JitterPhysics",
       "targetGraphs": [
         "net6.0"

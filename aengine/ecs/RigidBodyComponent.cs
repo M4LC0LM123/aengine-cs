@@ -169,5 +169,10 @@ namespace aengine.ecs
             if (shapeType == ShapeType.CYLINDER) Raylib_CsLo.Raylib.DrawCylinderWires(m_transform.position, m_transform.scale.X, m_transform.scale.X, m_transform.scale.Y, 15, Raylib_CsLo.Raylib.GREEN);
         }
 
+        public void dispose()
+        {
+            World.world.RemoveBody(body);
+        }
+
     }
 }

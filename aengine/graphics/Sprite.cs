@@ -22,13 +22,13 @@ public class Sprite
     public Sprite(Texture texture)
     {
         this.texture = texture;
-        position = new Vector2();
-        scale = new Vector2();
+        position = Vector2.Zero;
+        scale = Vector2.Zero;
         rotation = 0;
         color = WHITE;
         tint = WHITE;
         frame = 0;
-        frameScale = new Vector2(0, 0);
+        frameScale = Vector2.Zero;
         originX = 0;
         originY = 0;
         flipH = false;
@@ -72,6 +72,11 @@ public class Sprite
             else if (flipH && flipV)
                 DrawTexturePro(texture, new Rectangle(frame * frameScale.X + frameScale.X, frameScale.Y, -frameScale.X, -frameScale.Y), new Rectangle(position.X, position.Y, scale.X, scale.Y), new Vector2(originX, originY), rotation, tint);
         }
+    }
+
+    public void dispose()
+    {
+        UnloadTexture(texture);
     }
     
 }

@@ -19,6 +19,15 @@ namespace aengine.ecs
             World.entities.Add(this);
         }
 
+        public Entity(string tag)
+        {
+            id = World.entities.Count;
+            this.tag = tag;
+            transform = new TransformComponent(this);
+            components = new List<Component>();
+            World.entities.Add(this);
+        }
+
         public virtual T addComponent<T>(params object[] args) where T : Component
         {
             T component = (T)Activator.CreateInstance(typeof(T), args);
