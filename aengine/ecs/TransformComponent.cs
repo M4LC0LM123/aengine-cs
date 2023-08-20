@@ -20,5 +20,10 @@ namespace aengine.ecs
             return new AABB(this.position.X, this.position.Y, this.position.Z, this.scale.X, this.scale.Y, this.scale.Z);
         }
 
+        public void update(Entity entity) { }
+
+        public void render() { }
+
+        public void dispose() { }
     }
 }

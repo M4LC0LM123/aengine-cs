@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Numerics;
 using Raylib_CsLo;
 using static Raylib_CsLo.Raylib;
+using static Raylib_CsLo.RlGl;
 
 namespace aengine.ecs
 {
@@ -85,9 +86,8 @@ namespace aengine.ecs
             model.transform = RayMath.MatrixRotateXYZ(new Vector3(deg2Rad(rotation.X), deg2Rad(rotation.Y), deg2Rad(rotation.Z)));
         }
 
-        public override void update(Entity entity)
+        public void update(Entity entity)
         {
-            base.update(entity);
             if (entity != null)
             { 
                 transform = entity.transform;
@@ -96,18 +96,16 @@ namespace aengine.ecs
             }
         }
 
-        public override void render()
+        public void render()
         {
-            base.render();
             if (isModel) DrawModel(model, transform.position, scale, color);
             else Rendering.drawSprite3D(texture, transform.position, transform.scale.X, transform.scale.Y, transform.rotation.X, transform.rotation.Y, color);
         }
 
-        public override void dispose()
+        public void dispose()
         {
             UnloadModel(model);
             UnloadTexture(texture);
-            base.dispose();
         }
 
     }

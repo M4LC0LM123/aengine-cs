@@ -52,7 +52,7 @@ public class GuiWindow
     
     public void render()
     {
-        if (IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), topBar) && !Gui.GuiInteractiveRec(new GuiIcon(), topBar.x + topBar.width - Gui.exitScale, topBar.y, Gui.exitScale, Gui.exitScale, IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT), null, false))
+        if (IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), topBar) && !Gui.GuiInteractiveRec(default, topBar.x + topBar.width - Gui.exitScale, topBar.y, Gui.exitScale, Gui.exitScale, IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT), null, false))
         {
             if (movable && Gui.activeWindowID == 0 || Gui.activeWindowID == id)
             {

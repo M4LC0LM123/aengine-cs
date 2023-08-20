@@ -4,8 +4,7 @@ using Raylib_CsLo;
 
 namespace aengine.ecs;
 
-public class ParticleComponent : Component
-{
+public class ParticleComponent : Component {
     public TransformComponent transform;
     public Texture texture;
     public float maxLifeTime;
@@ -15,8 +14,7 @@ public class ParticleComponent : Component
 
     private Camera camera;
 
-    public ParticleComponent()
-    {
+    public ParticleComponent() {
         transform = new TransformComponent(null);
         transform.scale = Vector3.One;
         texture = Raylib.LoadTextureFromImage(Raylib.GenImageColor(1, 1, Raylib.WHITE));
@@ -27,8 +25,7 @@ public class ParticleComponent : Component
         color = Raylib.WHITE;
     }
 
-    public ParticleComponent(ParticleBehaviour behaviour, Color color, float maxLifeTime = 50)
-    {
+    public ParticleComponent(ParticleBehaviour behaviour, Color color, float maxLifeTime = 50) {
         transform = new TransformComponent(null);
         transform.scale = Vector3.One;
         texture = Raylib.LoadTextureFromImage(Raylib.GenImageColor(1, 1, Raylib.WHITE));
@@ -40,8 +37,7 @@ public class ParticleComponent : Component
     }
 
     public ParticleComponent(ParticleBehaviour behaviour, Color color, Texture texture, Vector2 scale,
-        float maxLifeTime = 50)
-    {
+        float maxLifeTime = 50) {
         transform = new TransformComponent(null);
         transform.scale = new Vector3(scale.X, scale.Y, 0);
         this.texture = texture;
@@ -52,39 +48,31 @@ public class ParticleComponent : Component
         this.color = color;
     }
 
-    public ParticleComponent clone()
-    {
+    public ParticleComponent clone() {
         ParticleComponent copy = new ParticleComponent(behaviours[0], color, texture,
             new Vector2(transform.scale.X, transform.scale.Y), lifeTime);
-        foreach (var behaviour in behaviours)
-        {
+        foreach (var behaviour in behaviours) {
             copy.addBehaviour(behaviour);
         }
+
         return copy;
     }
 
-    public void addBehaviour(ParticleBehaviour behaviour)
-    {
+    public void addBehaviour(ParticleBehaviour behaviour) {
         behaviours.Add(behaviour);
     }
 
-    public void setCamera(Camera camera)
-    {
+    public void setCamera(Camera camera) {
         this.camera = camera;
     }
 
-    public override void update(Entity entity)
-    {
-        base.update(entity);
-        foreach (var behaviour in behaviours)
-        {
+    public void update(Entity entity) {
+        foreach (var behaviour in behaviours) {
             behaviour.update(this);
         }
     }
 
-    public override void render()
-    {
-        base.render();
+    public void render() {
         transform.rotation.Y =
             (float)Math.Atan2(camera.position.X - transform.position.X, camera.position.Z - transform.position.Z) *
             RayMath.RAD2DEG;
@@ -94,13 +82,12 @@ public class ParticleComponent : Component
                 RayMath.Vector3Subtract(camera.position, transform.position).X +
                 RayMath.Vector3Subtract(camera.position, transform.position).Z *
                 RayMath.Vector3Subtract(camera.position, transform.position).Z)) * (180.0f / MathF.PI);
+
         Rendering.drawSprite3D(texture, transform.position, transform.scale.X, transform.scale.Y, transform.rotation.Y,
             -transform.rotation.X, color);
     }
 
-    public override void dispose()
-    {
-        base.dispose();
+    public void dispose() {
         Raylib.UnloadTexture(texture);
     }
 }

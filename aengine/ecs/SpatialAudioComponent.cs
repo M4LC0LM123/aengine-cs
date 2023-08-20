@@ -11,6 +11,7 @@ public class SpatialAudioComponent : Component
     public Vector3 target;
     public float strength;
     public bool canPlay;
+    public bool debug = false;
 
     public SpatialAudioComponent(Entity entity, Sound sound)
     {
@@ -31,9 +32,8 @@ public class SpatialAudioComponent : Component
         if (!IsSoundPlaying(sound) && canPlay) PlaySound(sound);
     }
     
-    public override void update(Entity entity)
+    public void update(Entity entity)
     {
-        base.update(entity);
         position = entity.transform.position;
 
         if (World.camera != null) target = World.camera.position;
@@ -44,5 +44,16 @@ public class SpatialAudioComponent : Component
         strength = Math.Clamp(strength, 0.0f, 1.0f);
         
         SetSoundVolume(sound, strength);
+    }
+
+    public void render()
+    {
+        if (debug)
+            DrawCube(position, 0.5f, 0.5f, 0.5f, WHITE);
+    }
+
+    public void dispose()
+    {
+        UnloadSound(sound);
     }
 }

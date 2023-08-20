@@ -12,7 +12,7 @@ public class Console
     public List<ConsoleCommand> commands;
     
     private List<string> consoleLines;
-    private string currentInput;
+    private string previousInput;
     private int maxLines;
 
     public Console()
@@ -23,14 +23,18 @@ public class Console
         commands = new List<ConsoleCommand>();
         consoleLines = new List<string>();
         maxLines = 18;
+        
+        previousInput = String.Empty;
 
         registerCommand(new ConsoleCommand("help", "lists every command and their description", ConsoleCommands.listCMDS));
         registerCommand(new ConsoleCommand("print", "prints text", ConsoleCommands.print));
-        registerCommand(new ConsoleCommand("set_fps", "set fps of the game", ConsoleCommands.setFPS));
-        registerCommand(new ConsoleCommand("window_maximize", "maximize window", ConsoleCommands.maximizeWindow));
-        registerCommand(new ConsoleCommand("window_minimize", "minimize window", ConsoleCommands.minimizeWindow));
+        registerCommand(new ConsoleCommand("w_fps", "set fps of the game", ConsoleCommands.setFPS));
+        registerCommand(new ConsoleCommand("w_maximize", "maximize window", ConsoleCommands.maximizeWindow));
+        registerCommand(new ConsoleCommand("w_minimize", "minimize window", ConsoleCommands.minimizeWindow));
         registerCommand(new ConsoleCommand("clear", "clears the console window", ConsoleCommands.clear));
-        registerCommand(new ConsoleCommand("add_body", "adds a spherical rigidbody", ConsoleCommands.newBody));
+        registerCommand(new ConsoleCommand("f_add_body", "adds a spherical rigidbody", ConsoleCommands.newBody));
+        registerCommand(new ConsoleCommand("w_width", "set's the width of window", ConsoleCommands.setWidth));
+        registerCommand(new ConsoleCommand("w_height", "set's the height of window", ConsoleCommands.setHeight));
     }
 
     public void clear()
@@ -86,9 +90,14 @@ public class Console
             
             commandInput.render(2.5f, window.rec.height - 42.5f, 400, 40, window);
 
+            if (commandInput.active)
+                if (Raylib.IsKeyPressed(KeyboardKey.KEY_UP))
+                    commandInput.text = previousInput;
+
             if (Gui.GuiButton("enter", 400, window.rec.height - 42.5f, window.rec.width - 400 - Gui.exitScale, 40, window) || (commandInput.active && Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER)))
             {
                 executeCommand(commandInput.text);
+                previousInput = commandInput.text;
                 commandInput.text = String.Empty;
             }
         }

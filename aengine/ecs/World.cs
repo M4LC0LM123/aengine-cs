@@ -43,12 +43,17 @@ namespace aengine.ecs
             {
                 entities[i].render();
 
-                if (RenderColliders)
+                if (entities[i].hasComponent<RigidBodyComponent>())
                 {
-                    if (entities[i].hasComponent<RigidBodyComponent>())
-                    {
-                        entities[i].getComponent<RigidBodyComponent>().debugRender();
-                    }
+                    entities[i].getComponent<RigidBodyComponent>().debug = RenderColliders;
+                }
+                else if (entities[i].hasComponent<LightComponent>())
+                {
+                    entities[i].getComponent<LightComponent>().debug = RenderColliders;
+                } 
+                else if (entities[i].hasComponent<SpatialAudioComponent>())
+                {
+                    entities[i].getComponent<SpatialAudioComponent>().debug = RenderColliders;
                 }
             }
         }

@@ -50,7 +50,7 @@ namespace aengine.ecs
                 }
             }
 
-            return null;
+            return default;
         }
 
         public virtual bool hasComponent<T>() where T : Component

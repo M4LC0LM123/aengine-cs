@@ -2,22 +2,10 @@ using System.Numerics;
 
 namespace aengine.ecs
 {
-    public class Component 
+    public interface Component
     {
-        public virtual void update(Entity entity)
-        {
-
-        }   
-
-        public virtual void render()
-        {
-
-        }
-
-        public virtual void dispose()
-        {
-
-        }
-
+        public void update(Entity entity);
+        public void render();
+        public void dispose();
     }
 }

@@ -17,6 +17,7 @@ namespace aengine.ecs
         public RigidBody body;
         public BodyType type;
         public ShapeType shapeType;
+        public bool debug = false;
 
         private TransformComponent m_transform;
 
@@ -144,10 +145,8 @@ namespace aengine.ecs
             body.AffectedByGravity = affected;
         }
 
-        public override void update(Entity entity)
+        public void update(Entity entity)
         {
-            base.update(entity);
-
             if (entity != null && entity.transform != null && body != null)
             {
                 if (shapeType == ShapeType.CONE)
@@ -162,11 +161,14 @@ namespace aengine.ecs
             }
         }
 
-        public void debugRender()
-        {   
-            if (shapeType == ShapeType.BOX) Raylib_CsLo.Raylib.DrawCubeWires(m_transform.position, m_transform.scale.X, m_transform.scale.Y, m_transform.scale.Z, Raylib_CsLo.Raylib.GREEN);
-            if (shapeType == ShapeType.SPHERE) Raylib_CsLo.Raylib.DrawSphereWires(m_transform.position, m_transform.scale.X, 15, 15, Raylib_CsLo.Raylib.GREEN);
-            if (shapeType == ShapeType.CYLINDER) Raylib_CsLo.Raylib.DrawCylinderWires(m_transform.position, m_transform.scale.X, m_transform.scale.X, m_transform.scale.Y, 15, Raylib_CsLo.Raylib.GREEN);
+        public void render()
+        {
+            if (debug)
+            {
+                if (shapeType == ShapeType.BOX) Raylib_CsLo.Raylib.DrawCubeWires(m_transform.position, m_transform.scale.X, m_transform.scale.Y, m_transform.scale.Z, Raylib_CsLo.Raylib.GREEN);
+                if (shapeType == ShapeType.SPHERE) Raylib_CsLo.Raylib.DrawSphereWires(m_transform.position, m_transform.scale.X, 15, 15, Raylib_CsLo.Raylib.GREEN);
+                if (shapeType == ShapeType.CYLINDER) Raylib_CsLo.Raylib.DrawCylinderWires(m_transform.position, m_transform.scale.X, m_transform.scale.X, m_transform.scale.Y, 15, Raylib_CsLo.Raylib.GREEN);
+            }
         }
 
         public void dispose()

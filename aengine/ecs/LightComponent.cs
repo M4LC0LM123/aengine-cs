@@ -13,8 +13,12 @@ public class LightComponent : Component
     public RLights.Light core;
     public bool enabled;
     public Vector3 updateVector;
+
+    public bool debug = false;
+
+    private Model cube;
     
-    public unsafe LightComponent(Entity entity, aShader shader, Color color, RLights.LightType type = RLights.LightType.LIGHT_POINT)
+    public unsafe LightComponent(Entity entity, aShader shader, Color color, LightType type = LightType.POINT)
     {
         updateVector = new Vector3();
         intensity = 2.5f;
@@ -27,12 +31,14 @@ public class LightComponent : Component
         int ambientLoc = GetShaderLocation(this.shader, "ambient");
         SetShaderValue(this.shader, ambientLoc, new Vector4(intensity, intensity, intensity, 1.0f), ShaderUniformDataType.SHADER_UNIFORM_VEC4);
         
-        core = World.lights.CreateLight(type, entity.transform.position, Vector3.Zero, color, this.shader);
+        core = World.lights.CreateLight((RLights.LightType)type, entity.transform.position, Vector3.Zero, color, this.shader);
+
+        cube = LoadModelFromMesh(GenMeshCube(0.5f, 0.5f, 0.5f));
+        cube.materials[0].shader = this.shader;
     }
 
-    public override unsafe void update(Entity entity)
+    public unsafe void update(Entity entity)
     {
-        base.update(entity);
         core.enabled = enabled;
         
         SetShaderValue(shader, shader.locs[(int)SHADER_LOC_MAP_DIFFUSE], updateVector, ShaderUniformDataType.SHADER_UNIFORM_VEC4);
@@ -40,6 +46,17 @@ public class LightComponent : Component
         if (World.camera != null) updateVector = World.camera.position;
         
         World.lights.UpdateLightValues(shader, core);
+    }
+
+    public void render()
+    {
+        if (debug)
+            DrawModel(cube, core.position, 1, core.color);
+    }
+
+    public void dispose()
+    {
+        UnloadShader(shader);
     }
 
     public void setUpdateVector(Vector3 updateVector)

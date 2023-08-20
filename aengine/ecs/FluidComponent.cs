@@ -5,12 +5,11 @@ using System.Numerics;
 
 namespace aengine.ecs;
 
-public class FluidComponent : Component
-{
+public class FluidComponent : Component {
     public Shader shader;
     public Texture texture;
     public Color color;
-    
+
     public float freqX;
     public float freqY;
     public float ampX;
@@ -19,7 +18,7 @@ public class FluidComponent : Component
     public float speedY;
 
     public float seconds;
-    
+
     private int _secondsLoc;
     private int _freqXLoc;
     private int _freqYLoc;
@@ -32,11 +31,10 @@ public class FluidComponent : Component
     public Vector2 scale;
     public float rotation;
 
-    public unsafe FluidComponent(Entity entity, aShader shader, Texture texture, Color color)
-    {
+    public unsafe FluidComponent(Entity entity, aShader shader, Texture texture, Color color) {
         this.texture = texture;
         this.shader = shader.shader;
-            
+
         _secondsLoc = GetShaderLocation(this.shader, "seconds");
         _freqXLoc = GetShaderLocation(this.shader, "freqX");
         _freqYLoc = GetShaderLocation(this.shader, "freqY");
@@ -44,16 +42,17 @@ public class FluidComponent : Component
         _ampYLoc = GetShaderLocation(this.shader, "ampY");
         _speedXLoc = GetShaderLocation(this.shader, "speedX");
         _speedYLoc = GetShaderLocation(this.shader, "speedY");
-        
+
         freqX = 25.0f;
         freqY = 25.0f;
         ampX = 5.0f;
         ampY = 5.0f;
         speedX = 8.0f;
         speedY = 8.0f;
-            
-        Vector2 screenSize = new((float)GetScreenWidth(), (float)GetScreenHeight());
-        SetShaderValue(this.shader, GetShaderLocation(this.shader, "size"), &screenSize, ShaderUniformDataType.SHADER_UNIFORM_VEC2);
+
+        Vector2 screenSize = new(GetScreenWidth(), GetScreenHeight());
+        SetShaderValue(this.shader, GetShaderLocation(this.shader, "size"), &screenSize,
+            ShaderUniformDataType.SHADER_UNIFORM_VEC2);
         SetShaderValue(this.shader, _freqXLoc, freqX, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
         SetShaderValue(this.shader, _freqYLoc, freqY, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
         SetShaderValue(this.shader, _ampXLoc, ampX, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
@@ -70,27 +69,22 @@ public class FluidComponent : Component
         this.color = color;
     }
 
-    public override void update(Entity entity)
-    {
+    public void update(Entity entity) {
         seconds += GetFrameTime();
         SetShaderValue(shader, _secondsLoc, seconds, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
-        
+
         position = entity.transform.position;
         scale = new Vector2(entity.transform.scale.X, entity.transform.scale.Z);
         rotation = entity.transform.rotation.Y;
     }
 
-    public override void render()
-    {
-        base.render();
+    public void render() {
         BeginShaderMode(shader);
         Rendering.drawTexturedPlane(texture, position, scale.X, scale.Y, rotation, color);
         EndShaderMode();
     }
 
-    public override void dispose()
-    {
-        base.dispose();
+    public void dispose() {
         UnloadTexture(texture);
     }
 }
