@@ -50,9 +50,9 @@
               "target": "Package",
               "version": "[0.2.0.20, )"
             },
-            "Raylib-CsLo": {
+            "OpenTK": {
               "target": "Package",
-              "version": "[4.2.0.9, )"
+              "version": "[5.0.0-pre.8, )"
             }
           },
           "imports": [
