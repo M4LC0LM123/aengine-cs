@@ -16,7 +16,7 @@ using World = aengine.ecs.World;
 namespace Sandbox; 
 
 public static class Sandbox {
-    public static async Task Main(string[] args) {
+    public static unsafe async Task Main(string[] args) {
         // use only in ides like visual studio and rider,
         // the final build should have the assets folder in the same directory as the exe so remove this line below then
         Directory.SetCurrentDirectory("../../../");
@@ -70,6 +70,13 @@ public static class Sandbox {
         body2.transform.scale = Vector3.One;
         body2.addComponent(new MeshComponent(body2, GenMeshSphere(1, 15, 15), YELLOW, albedo));
         body2.addComponent(new RigidBodyComponent(body2, 1, BodyType.DYNAMIC, ShapeType.SPHERE));
+        
+        var body3 = new Entity();
+        body3.transform.position.Y = 15;
+        body3.transform.position.X = 2.5f;
+        body3.transform.scale = Vector3.One;
+        body3.addComponent(new MeshComponent(body3, LoadModel("assets/models/zombie.glb"), YELLOW, albedo));
+        body3.addComponent(new RigidBodyComponent(body3, LoadModel("assets/models/zombie.glb"), 1, BodyType.DYNAMIC));
 
         var dummy = new Dummy();
 

@@ -8,5 +8,6 @@ namespace aengine.ecs
         CAPSULE = 3,
         CONE = 4,
         TERRAIN = 5,
+        MODEL = 6
     }
 }
