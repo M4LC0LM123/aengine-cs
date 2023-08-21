@@ -10,8 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AssimpNet" Version="4.1.0" />
     <PackageReference Include="JitterPhysics" Version="0.2.0.20" />
     <PackageReference Include="OpenTK" Version="4.8.0" />
+    <PackageReference Include="SharpFNT" Version="2.0.0" />
+    <PackageReference Include="StbImageSharp" Version="2.27.13" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,7 +31,12 @@
 
   <ItemGroup>
     <None Remove="AengineEditor\**" />
+
+
+
+
   </ItemGroup>
+
 
 
 

@@ -46,6 +46,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "AssimpNet": {
+              "target": "Package",
+              "version": "[4.1.0, )"
+            },
             "JitterPhysics": {
               "target": "Package",
               "version": "[0.2.0.20, )"
@@ -53,6 +57,14 @@
             "OpenTK": {
               "target": "Package",
               "version": "[4.8.0, )"
+            },
+            "SharpFNT": {
+              "target": "Package",
+              "version": "[2.0.0, )"
+            },
+            "StbImageSharp": {
+              "target": "Package",
+              "version": "[2.27.13, )"
             }
           },
           "imports": [
