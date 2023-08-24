@@ -201,6 +201,8 @@ public unsafe class Window {
     public static void dispose() {
         timer.Stop();
         GLFW.DestroyWindow(window);
+        Console.WriteLine("[aengine]: successfully destroyed GLFW window");;
         GLFW.Terminate();
+        Console.WriteLine("[aengine]: successfully closed GLFW window");
     }
 }

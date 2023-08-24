@@ -61,4 +61,9 @@ public class Texture {
             GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
         }
     }
+
+
+    public void dispose() {
+        GL.DeleteTexture(id);
+    }
 }
