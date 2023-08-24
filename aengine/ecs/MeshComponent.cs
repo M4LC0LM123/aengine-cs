@@ -65,6 +65,16 @@ namespace aengine.ecs
             model.materials[0].maps[(int)MATERIAL_MAP_DIFFUSE].texture = texture;
             isModel = true;
         }
+        
+        public unsafe MeshComponent(Entity entity, Model model, Color color)
+        {
+            if (entity.transform != null) this.transform = entity.transform;
+            else transform = new TransformComponent(null);
+            this.color = color;
+            this.model = model;
+            scale = 1;
+            isModel = true;
+        }
 
         public unsafe void setTexture(Texture texture, int mat = 0, int map = 0)
         {

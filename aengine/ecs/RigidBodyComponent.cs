@@ -20,6 +20,8 @@ namespace aengine.ecs {
 
         private TransformComponent m_transform;
 
+        private Model m_collisionModel;
+
         public RigidBodyComponent(Entity entity, float mass = 1.0f, BodyType type = BodyType.DYNAMIC, ShapeType shape = ShapeType.BOX) {
             this.type = type;
             if (shape == ShapeType.BOX) {
@@ -63,15 +65,15 @@ namespace aengine.ecs {
         
         public unsafe RigidBodyComponent(Entity entity, Model model, float mass = 1.0f, BodyType type = BodyType.DYNAMIC) {
             this.type = type;
-
+            
             List<JVector> vertices = new List<JVector>();
 
             for (int i = 0; i < model.meshCount; i++) {
                 Mesh mesh = model.meshes[i];
                 for (int j = 0; j < mesh.vertexCount; j += 3) {
-                    float x = -mesh.vertices[j];
-                    float y = -mesh.vertices[j + 1];
-                    float z = -mesh.vertices[j + 2];
+                    float x = mesh.vertices[j];
+                    float y = mesh.vertices[j + 1];
+                    float z = mesh.vertices[j + 2];
 
                     JVector vertex = new JVector(x, y, z);
                 
@@ -101,6 +103,8 @@ namespace aengine.ecs {
             m_transform = entity.transform;
 
             World.world.AddBody(body);
+
+            m_collisionModel = model;
         }
 
         public void setLinearVelocity(Vector3 velocity) {
@@ -195,6 +199,8 @@ namespace aengine.ecs {
                 if (shapeType == ShapeType.CYLINDER)
                     Raylib_CsLo.Raylib.DrawCylinderWires(m_transform.position, m_transform.scale.X, m_transform.scale.X,
                         m_transform.scale.Y, 15, Raylib_CsLo.Raylib.GREEN);
+                if (shapeType == ShapeType.MODEL)
+                    Raylib.DrawModelWires(m_collisionModel, m_transform.position, 1, Raylib.GREEN);
             }
         }
 
