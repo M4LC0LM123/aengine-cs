@@ -22,7 +22,7 @@ public class Sandbox {
     public static void Main(string[] args) {
         Directory.SetCurrentDirectory("../../../");
         
-        Window.init(800, 600, "aengine - opengl immediate mode fps: ", 5000);
+        Window.init(800, 600, "aengine - opengl immediate mode fps: ", 60);
         Window.setIcon(new Texture("assets/logo.png"));
 
         Camera camera = new Camera(Vector3.One * 2, 90);
@@ -37,6 +37,7 @@ public class Sandbox {
         Texture albedo = new Texture("assets/albedo.png");
 
         Model model = new Model("assets/models/trench.obj");
+        model.position.Y = -5;
         model.texture = albedo;
         model.scale = Vector3.One;
         
