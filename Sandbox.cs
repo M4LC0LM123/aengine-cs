@@ -22,7 +22,7 @@ public class Sandbox {
     public static void Main(string[] args) {
         Directory.SetCurrentDirectory("../../../");
         
-        Window.init(800, 600, "aengine - opengl immediate mode fps: ", 60);
+        Window.init(800, 600, "aengine - opengl immediate mode fps: ", 5000);
         Window.setIcon(new Texture("assets/logo.png"));
 
         Camera camera = new Camera(Vector3.One * 2, 90);
@@ -50,10 +50,11 @@ public class Sandbox {
         Fog.enable();
         Fog.create(0, Vector3.Zero, Colors.TEAL);
         
+        GL.Enable(EnableCap.DepthTest); 
+        GL.DepthFunc(DepthFunction.Lequal);
+        
         GL.Enable(EnableCap.Blend);
         GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-        
-        GL.Enable(EnableCap.DepthTest);
         
         GL.Enable(EnableCap.CullFace);
         GL.CullFace(CullFaceMode.Back);
@@ -77,7 +78,7 @@ public class Sandbox {
             
             Rendering.drawDebugAxes();
             Rendering.drawGrid(100);
-
+ 
             // model.rotation.Y += 100 * Window.getDeltaTime();
             
             GL.Enable(EnableCap.Lighting);
@@ -86,6 +87,8 @@ public class Sandbox {
             model.render();
             
             GL.Disable(EnableCap.Lighting);
+            
+            Rendering.drawRectangleTexture(albedo,5, 10, 275, 50, Colors.WHITE);
             
             Rendering.drawText(font, "Hello opengl!", 10, 10, 0.5f,
                 Colors.BLACK with { g = (float)Math.Sin(Window.getTimer().Elapsed.TotalSeconds) / 2.0f + 0.5f });

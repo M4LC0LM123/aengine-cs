@@ -94,9 +94,6 @@ public class Model {
         GL.Rotate(rotation.X, 1, 0, 0);
         GL.Scale(scale.X, scale.Y, scale.Z);
 
-        GL.Enable(EnableCap.DepthTest);
-        GL.DepthFunc(DepthFunction.Lequal);
-
         GL.Enable(EnableCap.Texture2D);
         GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter,
             (int)TextureMinFilter.LinearMipmapLinear);

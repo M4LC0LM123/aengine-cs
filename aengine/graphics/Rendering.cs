@@ -35,12 +35,81 @@ public class Rendering {
         }
     }
 
+    public static void drawRectangle(float x, float y, float width, float height, Color color) {
+        GL.MatrixMode(MatrixMode.Projection);
+        GL.PushMatrix();
+        GL.LoadIdentity();
+        GL.Ortho(0, Window.getScreenSize().X, Window.getScreenSize().Y, 0, 0,1); // Use an orthographic projection
+
+        GL.MatrixMode(MatrixMode.Modelview);
+        GL.PushMatrix();
+        GL.LoadIdentity();
+
+        GL.PushMatrix();
+        GL.Translate(x, y, 0);
+        GL.Scale(width, height, 0);
+        
+        GL.Begin(PrimitiveType.Quads);
+        
+        GL.Color4(color.r, color.g, color.b, color.a);
+        GL.Vertex2(0, 0);
+        GL.Vertex2(0, 1);
+        GL.Vertex2(1, 1);
+        GL.Vertex2(1, 0);
+        
+        GL.End();
+
+        GL.PopMatrix();
+
+        GL.MatrixMode(MatrixMode.Projection);
+        GL.PopMatrix();
+        GL.MatrixMode(MatrixMode.Modelview);
+        GL.PopMatrix();
+    }
+    
+    public static void drawRectangleTexture(Texture texture, float x, float y, float width, float height, Color color) {
+        GL.MatrixMode(MatrixMode.Projection);
+        GL.PushMatrix();
+        GL.LoadIdentity();
+        GL.Ortho(0, Window.getScreenSize().X, Window.getScreenSize().Y, 0, 0,1); // Use an orthographic projection
+
+        GL.MatrixMode(MatrixMode.Modelview);
+        GL.PushMatrix();
+        GL.LoadIdentity();
+
+        GL.PushMatrix();
+        GL.Translate(x, y, 0);
+        GL.Scale(width, height, 0);
+        
+        GL.Enable(EnableCap.Texture2D);
+        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter,
+            (int)TextureMinFilter.LinearMipmapLinear);
+        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+        GL.BindTexture(TextureTarget.Texture2D, texture.id);
+        
+        GL.Begin(PrimitiveType.Quads);
+        
+        GL.Color4(color.r, color.g, color.b, color.a);
+        GL.TexCoord2(0, 0); GL.Vertex2(0, 0);
+        GL.TexCoord2(0, 1); GL.Vertex2(0, 1);
+        GL.TexCoord2(1, 1); GL.Vertex2(1, 1);
+        GL.TexCoord2(1, 0); GL.Vertex2(1, 0);
+        
+        GL.End();
+
+        GL.BindTexture(TextureTarget.Texture2D, 0);
+        
+        GL.PopMatrix();
+
+        GL.MatrixMode(MatrixMode.Projection);
+        GL.PopMatrix();
+        GL.MatrixMode(MatrixMode.Modelview);
+        GL.PopMatrix();
+    }
+
     public static void drawText(Font font, string text, float px, float py, float fontSize, Color color) {
         float rx = px;
         float ry = py;
-
-        GL.Enable(EnableCap.DepthTest); // Enable depth testing
-        GL.DepthFunc(DepthFunction.Lequal); // Set depth function
 
         float cursorX = 0.0f;
         float cursorY = 0.0f;
@@ -48,8 +117,7 @@ public class Rendering {
         GL.MatrixMode(MatrixMode.Projection);
         GL.PushMatrix();
         GL.LoadIdentity();
-        GL.Ortho(0, Window.getScreenSize().X, Window.getScreenSize().Y, 0, 0,
-            1); // Use an orthographic projection
+        GL.Ortho(0, Window.getScreenSize().X, Window.getScreenSize().Y, 0, 0,1); // Use an orthographic projection
 
         GL.MatrixMode(MatrixMode.Modelview);
         GL.PushMatrix();
@@ -60,10 +128,6 @@ public class Rendering {
             (int)TextureMinFilter.LinearMipmapLinear);
         GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
         if (font.atlas != null) GL.BindTexture(TextureTarget.Texture2D, font.atlas.id);
-
-        // Enable blending for transparency
-        GL.Enable(EnableCap.Blend);
-        GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
         GL.PushMatrix();
         GL.Translate(rx, ry, 0);
@@ -109,8 +173,7 @@ public class Rendering {
         }
 
         GL.PopMatrix();
-
-        GL.Disable(EnableCap.Blend);
+        
         GL.Disable(EnableCap.Texture2D);
         GL.BindTexture(TextureTarget.Texture2D, 0);
 
