@@ -101,7 +101,7 @@ public static class Sandbox {
 
         var console = new Console();
 
-        var scenePrefab = new ScenePrefab("assets/maps/map3.json");
+        var scenePrefab = new ScenePrefab("assets/maps/sample.json");
 
         foreach (var obj in scenePrefab.data)
             switch (obj.id) {
