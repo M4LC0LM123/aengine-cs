@@ -32,7 +32,7 @@ namespace aengine.ecs
 
         public static void update()
         {
-            World.world.Step(Raylib.GetFrameTime(), false);
+            World.world.Step(1.0f/60.0f, false);
             
             int len = entities.Count;
             for (int i = 0; i < len; i++)
