@@ -37,8 +37,8 @@ public class LightComponent : Component
         cube.materials[0].shader = this.shader;
     }
 
-    public unsafe void update(Entity entity)
-    {
+    public unsafe void update(Entity entity) {
+        core.position = entity.transform.position;
         core.enabled = enabled;
         
         SetShaderValue(shader, shader.locs[(int)SHADER_LOC_MAP_DIFFUSE], updateVector, ShaderUniformDataType.SHADER_UNIFORM_VEC4);

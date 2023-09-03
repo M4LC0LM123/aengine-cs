@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using aengine.core;
 using aengine.graphics;
+using Jitter;
 using Jitter.Collision;
 using Raylib_CsLo;
 
@@ -21,6 +22,8 @@ namespace aengine.ecs
         public static RLights lights = new RLights();
 
         public static Camera camera = null;
+        
+        public static DebugRenderer debugRenderer = new DebugRenderer();
 
         public static void removeEntity(Entity entity)
         {
@@ -42,7 +45,7 @@ namespace aengine.ecs
             for (int i = 0; i < len; i++)
             {
                 entities[i].render();
-
+                
                 if (entities[i].hasComponent<RigidBodyComponent>())
                 {
                     entities[i].getComponent<RigidBodyComponent>().debug = RenderColliders;

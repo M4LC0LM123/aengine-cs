@@ -9,6 +9,8 @@ using Jitter.Collision.Shapes;
 using Jitter.Dynamics;
 using Jitter.LinearMath;
 using Raylib_CsLo;
+using static aengine.core.aengine;
+using static Raylib_CsLo.RlGl;
 
 namespace aengine.ecs {
     public class RigidBodyComponent : Component {
@@ -20,24 +22,18 @@ namespace aengine.ecs {
 
         private TransformComponent m_transform;
 
-        private Model m_collisionModel;
-
         public RigidBodyComponent(Entity entity, float mass = 1.0f, BodyType type = BodyType.DYNAMIC, ShapeType shape = ShapeType.BOX) {
             this.type = type;
             if (shape == ShapeType.BOX) {
                 this.shape = new BoxShape(new Jitter.LinearMath.JVector(entity.transform.scale.X,
                     entity.transform.scale.Y, entity.transform.scale.Z));
-            }
-            else if (shape == ShapeType.SPHERE) {
+            } else if (shape == ShapeType.SPHERE) {
                 this.shape = new SphereShape(entity.transform.scale.X);
-            }
-            else if (shape == ShapeType.CAPSULE) {
+            } else if (shape == ShapeType.CAPSULE) {
                 this.shape = new CapsuleShape(entity.transform.scale.X, entity.transform.scale.Y);
-            }
-            else if (shape == ShapeType.CYLINDER) {
+            } else if (shape == ShapeType.CYLINDER) {
                 this.shape = new CylinderShape(entity.transform.scale.X, entity.transform.scale.Y);
-            }
-            else if (shape == ShapeType.CONE) {
+            } else if (shape == ShapeType.CONE) {
                 this.shape = new ConeShape(entity.transform.scale.Y, entity.transform.scale.X);
             }
 
@@ -61,28 +57,95 @@ namespace aengine.ecs {
             m_transform = entity.transform;
 
             World.world.AddBody(body);
+            body.EnableDebugDraw = true;
         }
+        
+        // public unsafe RigidBodyComponent(Entity entity, Model model, float mass = 1.0f, BodyType type = BodyType.DYNAMIC) {
+        //     this.type = type;
+        //     
+        //     List<JVector> vertices = new List<JVector>();
+        //
+        //     for (int i = 0; i < model.meshCount; i++) {
+        //         Mesh mesh = model.meshes[i];
+        //         for (int j = 0; j < mesh.vertexCount; j += 3) {
+        //             float x = mesh.vertices[j];
+        //             float y = mesh.vertices[j + 1];
+        //             float z = mesh.vertices[j + 2];
+        //
+        //             JVector vertex = new JVector(x, y, z);
+        //         
+        //             vertices.Add(vertex);
+        //         }
+        //     }
+        //
+        //     shape = new ConvexHullShape(vertices);
+        //     
+        //     body = new RigidBody(shape);
+        //     body.Position = new JVector(entity.transform.position.X, entity.transform.position.Y,
+        //         entity.transform.position.Z);
+        //     body.Orientation = JMatrix.CreateFromYawPitchRoll(entity.transform.rotation.Y * RayMath.DEG2RAD,
+        //         entity.transform.rotation.X * RayMath.DEG2RAD, entity.transform.rotation.Z * RayMath.DEG2RAD);
+        //     body.Mass = mass;
+        //     shapeType = ShapeType.MODEL;
+        //
+        //     switch (this.type) {
+        //         case BodyType.DYNAMIC:
+        //             body.IsStatic = false;
+        //             break;
+        //         case BodyType.STATIC:
+        //             body.IsStatic = true;
+        //             break;
+        //     }
+        //
+        //     m_transform = entity.transform;
+        //
+        //     World.world.AddBody(body);
+        //     
+        //     body.EnableDebugDraw = true;
+        // }
         
         public unsafe RigidBodyComponent(Entity entity, Model model, float mass = 1.0f, BodyType type = BodyType.DYNAMIC) {
             this.type = type;
-            
-            List<JVector> vertices = new List<JVector>();
 
-            for (int i = 0; i < model.meshCount; i++) {
+            // Create a list of convex shapes to represent the compound shape
+            List<CompoundShape.TransformedShape> convexShapes = new List<CompoundShape.TransformedShape>();
+            
+            for (int i = 0; i < model.meshCount; i++)
+            {
                 Mesh mesh = model.meshes[i];
+                
+                JVector position = calculatePosition(calculateBoundingBox(mesh));
+
+                List<JVector> vertices = new List<JVector>();
+                
                 for (int j = 0; j < mesh.vertexCount; j += 3) {
                     float x = mesh.vertices[j];
                     float y = mesh.vertices[j + 1];
                     float z = mesh.vertices[j + 2];
 
                     JVector vertex = new JVector(x, y, z);
-                
+        
                     vertices.Add(vertex);
                 }
+                
+                ConvexHullShape convexShape = new ConvexHullShape(vertices);
+                CompoundShape.TransformedShape transformedShape = new CompoundShape.TransformedShape(convexShape, JMatrix.Identity,
+                    position);
+                // Console.WriteLine(transformedShape.BoundingBox.Max);
+
+                // Create a convex shape (e.g., a box) for each mesh
+                // ConvexHullShape convexShape = new BoxShape(width, height, depth);
+                // convexShape.Position = position;
+
+                // Add the convex shape to the list
+                convexShapes.Add(transformedShape);
             }
 
-            shape = new ConvexHullShape(vertices);
-
+            // Console.WriteLine(convexShapes.Count);
+            
+            // Create a compound shape from the list of convex shapes
+            shape = new CompoundShape(convexShapes);
+            
             body = new RigidBody(shape);
             body.Position = new JVector(entity.transform.position.X, entity.transform.position.Y,
                 entity.transform.position.Z);
@@ -103,8 +166,72 @@ namespace aengine.ecs {
             m_transform = entity.transform;
 
             World.world.AddBody(body);
+            
+            body.EnableDebugDraw = true;
+        }
+        
+        public unsafe RigidBodyComponent(Entity entity, Texture heightmap, float mass = 1.0f, BodyType type = BodyType.DYNAMIC) {
+            this.type = type;
+            shapeType = ShapeType.TERRAIN;
 
-            m_collisionModel = model;
+            Image image = Raylib.LoadImageFromTexture(heightmap);
+            float[] heights = new float[image.width * image.height];
+
+            Color* imageData = Raylib.LoadImageColors(image);
+            
+            for (int y = 0; y < image.height; y++)
+            {
+                for (int x = 0; x < image.width; x++)
+                {
+                    // Calculate the index for the current pixel
+                    int index = y * image.width + x;
+
+                    // Get the grayscale value from the pixel
+                    float grayscaleValue = imageData[index].r / 255.0f;
+
+                    // Store the grayscale value as a height (0 to 1)
+                    heights[index] = grayscaleValue;
+                }
+            }
+            
+            float[,] heights2d = new float[image.height, image.width];
+
+            // Populate the 2D array from the flat array
+            for (int y = 0; y < image.height; y++)
+            {
+                for (int x = 0; x < image.width; x++)
+                {
+                    // Assign the value to the 2D array
+                    heights2d[x, y] = heights[y * image.width + x] * entity.transform.scale.Y;
+                }
+            }
+
+            shape = new TerrainShape(heights2d, entity.transform.scale.X / image.width, entity.transform.scale.Z / image.height);
+            
+            Raylib.UnloadImage(image);
+            
+            body = new RigidBody(shape);
+            body.Position = new JVector(entity.transform.position.X - entity.transform.scale.X/2, entity.transform.position.Y  - entity.transform.scale.Y/2,
+                entity.transform.position.Z - entity.transform.scale.Z/2);
+            body.Orientation = JMatrix.CreateFromYawPitchRoll(entity.transform.rotation.Y * RayMath.DEG2RAD,
+                entity.transform.rotation.X * RayMath.DEG2RAD, entity.transform.rotation.Z * RayMath.DEG2RAD);
+            body.Mass = mass;
+            shapeType = ShapeType.MODEL;
+
+            switch (this.type) {
+                case BodyType.DYNAMIC:
+                    body.IsStatic = false;
+                    break;
+                case BodyType.STATIC:
+                    body.IsStatic = true;
+                    break;
+            }
+
+            m_transform = entity.transform;
+
+            World.world.AddBody(body);
+            
+            body.EnableDebugDraw = false;
         }
 
         public void setLinearVelocity(Vector3 velocity) {
@@ -179,33 +306,54 @@ namespace aengine.ecs {
                 else
                     entity.transform.position = new Vector3(body.Position.X, body.Position.Y, body.Position.Z);
                 if (shapeType == ShapeType.CYLINDER)
-                    entity.transform.rotation = new Vector3(core.aengine.MatrixToEuler(body.Orientation).X - 90,
-                        core.aengine.MatrixToEuler(body.Orientation).Y - 90,
-                        core.aengine.MatrixToEuler(body.Orientation).Z);
+                    entity.transform.rotation = new Vector3(MatrixToEuler(body.Orientation).X - 90,
+                        MatrixToEuler(body.Orientation).Y - 90,
+                        MatrixToEuler(body.Orientation).Z);
                 else
-                    entity.transform.rotation = core.aengine.MatrixToEuler(body.Orientation);
+                    entity.transform.rotation = MatrixToEuler(body.Orientation);
                 m_transform = entity.transform;
             }
         }
 
         public void render() {
             if (debug) {
-                if (shapeType == ShapeType.BOX)
-                    Raylib_CsLo.Raylib.DrawCubeWires(m_transform.position, m_transform.scale.X, m_transform.scale.Y,
-                        m_transform.scale.Z, Raylib_CsLo.Raylib.GREEN);
-                if (shapeType == ShapeType.SPHERE)
-                    Raylib_CsLo.Raylib.DrawSphereWires(m_transform.position, m_transform.scale.X, 15, 15,
-                        Raylib_CsLo.Raylib.GREEN);
-                if (shapeType == ShapeType.CYLINDER)
-                    Raylib_CsLo.Raylib.DrawCylinderWires(m_transform.position, m_transform.scale.X, m_transform.scale.X,
-                        m_transform.scale.Y, 15, Raylib_CsLo.Raylib.GREEN);
-                if (shapeType == ShapeType.MODEL)
-                    Raylib.DrawModelWires(m_collisionModel, m_transform.position, 1, Raylib.GREEN);
+                if (shapeType != ShapeType.TERRAIN) body.DebugDraw(World.debugRenderer);
             }
         }
 
         public void dispose() {
             World.world.RemoveBody(body);
         }
+        
+        private unsafe BoundingBox calculateBoundingBox(Mesh mesh) {
+            BoundingBox boundingBox = new BoundingBox();
+
+                for (int i = 0; i < mesh.vertexCount; i += 3) {
+                float x = mesh.vertices[i];
+                float y = mesh.vertices[i + 1];
+                float z = mesh.vertices[i + 2];
+                
+                // Update the bounding box min and max coordinates
+                if (x < boundingBox.min.X) boundingBox.min.X = x;
+                if (x > boundingBox.max.X) boundingBox.max.X = x;
+                if (y < boundingBox.min.Y) boundingBox.min.Y = y;
+                if (y > boundingBox.max.Y) boundingBox.max.Y = y;
+                if (z < boundingBox.min.Z) boundingBox.min.Z = z;
+                if (z > boundingBox.max.Z) boundingBox.max.Z = z;
+            }
+
+            return boundingBox;
+        }
+
+        // Calculate the position based on the bounding box
+        private JVector calculatePosition(BoundingBox boundingBox) {
+            // Calculate the center of the bounding box
+            float centerX = (boundingBox.min.X + boundingBox.max.X) / 2.0f;
+            float centerY = (boundingBox.min.Y + boundingBox.max.Y) / 2.0f;
+            float centerZ = (boundingBox.min.Z + boundingBox.max.Z) / 2.0f;
+
+            return new JVector(centerX, centerY, centerZ);
+        }
+        
     }
 }

@@ -22,7 +22,7 @@ public static class Sandbox {
         Directory.SetCurrentDirectory("../../../");
         
         SetConfigFlags(ConfigFlags.FLAG_WINDOW_RESIZABLE);
-        SetTraceLogLevel((int)TraceLogLevel.LOG_ALL);
+        SetTraceLogLevel((int)TraceLogLevel.LOG_NONE);
         InitWindow(800, 600, "aengine");
         SetWindowIcon(LoadImage("assets/logo.png"));
         SetTargetFPS(60);
@@ -68,22 +68,28 @@ public static class Sandbox {
         body2.transform.position.Y = 15;
         body2.transform.position.X = 2.5f;
         body2.transform.scale = Vector3.One;
-        body2.addComponent(new MeshComponent(body2, GenMeshSphere(1, 15, 15), YELLOW, albedo));
-        body2.addComponent(new RigidBodyComponent(body2, 1, BodyType.DYNAMIC, ShapeType.SPHERE));
+        body2.setRootTransform();
+        body2.addComponent(new MeshComponent(body2, GenMeshCylinder(1, 1, 15), YELLOW, albedo));
+        body2.addComponent(new RigidBodyComponent(body2, 1, BodyType.DYNAMIC, ShapeType.CYLINDER));
+        body2.setParent(player);
         
         var body3 = new Entity();
-        body3.transform.position.X = 100;
         body3.transform.scale = Vector3.One * 0.5f;
-        body3.addComponent(new MeshComponent(body3, LoadModel("assets/models/trench.obj"), WHITE));
+        body3.transform.position.X = 100;
+        body3.addComponent(new MeshComponent(body3, LoadModel("assets/models/trenchb.glb"), WHITE));
         body3.addComponent(new RigidBodyComponent(body3, body3.getComponent<MeshComponent>().model, 1, BodyType.STATIC));
 
         var dummy = new Dummy();
 
-        // var light = new Entity();
-        // light.transform.position.Y = 5;
-        // light.addComponent(new LightComponent(light,
-        //     new aShader("assets/shaders/light.vert", "assets/shaders/light.frag"), WHITE,
-        //     LightType.POINT));
+        var light = new Entity();
+        light.transform.position.Y = 5;
+        light.addComponent(new LightComponent(light,
+            new aShader("assets/shaders/light.vert", "assets/shaders/light.frag"), WHITE,
+            LightType.POINT));
+
+        float fogDensity = 0.15f;
+        int fogDensityLoc = GetShaderLocation(light.getComponent<LightComponent>().shader, "fogDensity");
+        SetShaderValue(light.getComponent<LightComponent>().shader, fogDensityLoc, fogDensity, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
 
         var window = new GuiWindow("SUIIIIIIIII", 10, 10, 300, 250);
         var textBox = new GuiTextBox();
@@ -132,7 +138,7 @@ public static class Sandbox {
                     var mesh = new MeshComponent(model, LoadModel("assets/models/zombie.glb"), WHITE, new Texture());
                     mesh.scale = 5;
                     model.addComponent(mesh);
-                    // model.getComponent<MeshComponent>().setShader(light.getComponent<LightComponent>().shader, 1);
+                    model.getComponent<MeshComponent>().setShader(light.getComponent<LightComponent>().shader, 1);
                     break;
                 case 4:
                     var hehe = new Entity();
@@ -174,13 +180,22 @@ public static class Sandbox {
                         albedo));
                     cone.addComponent(new RigidBodyComponent(cone, 1.0f, BodyType.STATIC, ShapeType.CONE));
                     break;
+                case 11:
+                    var terrain = new Entity();
+                    terrain.setFromSceneObj(obj);
+                    Image heightmap = LoadImage("assets/heightmap2.png");
+                    terrain.addComponent(new MeshComponent(terrain,
+                        GenMeshHeightmap(heightmap, terrain.transform.scale), GREEN, albedo));
+                    terrain.addComponent(new RigidBodyComponent(terrain, LoadTextureFromImage(heightmap), 1, BodyType.STATIC));
+                    break;
             }
 
-        // foreach (var entity in World.entities)
-        //     if (entity.hasComponent<MeshComponent>())
-        //         if (entity.getComponent<MeshComponent>().isModel)
-        //             entity.getComponent<MeshComponent>().setShader(light.getComponent<LightComponent>().shader);
-        
+        foreach (var entity in World.entities)
+            if (entity.hasComponent<MeshComponent>()) {
+                if (entity.getComponent<MeshComponent>().isModel) {
+                    entity.getComponent<MeshComponent>().setShader(light.getComponent<LightComponent>().shader);
+                }
+            }
         
         // Main game loop
         while (!WindowShouldClose()) // Detect window close button or ESC key
@@ -192,43 +207,46 @@ public static class Sandbox {
 
             camera.setFirstPerson(0.1f, isMouseLocked);
 
-            // var velocity = Vector3.Zero;
-            //
-            // if (IsKeyDown(KeyboardKey.KEY_W))
-            //     velocity += new Vector3((float)-Math.Sin(camera.rotation.Y * RayMath.DEG2RAD), 0,
-            //         (float)-Math.Cos(camera.rotation.Y * RayMath.DEG2RAD));
-            // if (IsKeyDown(KeyboardKey.KEY_S))
-            //     velocity += new Vector3((float)Math.Sin(camera.rotation.Y * RayMath.DEG2RAD), 0,
-            //         (float)Math.Cos(camera.rotation.Y * RayMath.DEG2RAD));
-            // if (IsKeyDown(KeyboardKey.KEY_A))
-            //     velocity += new Vector3((float)-Math.Cos(camera.rotation.Y * RayMath.DEG2RAD), 0,
-            //         (float)Math.Sin(camera.rotation.Y * RayMath.DEG2RAD));
-            // if (IsKeyDown(KeyboardKey.KEY_D))
-            //     velocity += new Vector3((float)Math.Cos(camera.rotation.Y * RayMath.DEG2RAD), 0,
-            //         -(float)Math.Sin(camera.rotation.Y * RayMath.DEG2RAD));
-            //
-            // var speedMultiplier = IsKeyDown(KeyboardKey.KEY_LEFT_SHIFT) ? 2.0f : 1.0f;
-            // velocity *= speed * speedMultiplier;
-            //
-            // if (IsKeyPressed(KeyboardKey.KEY_SPACE)) {
-            //     PlaySound(jump);
-            //     player.getComponent<RigidBodyComponent>().applyImpulse(0, 6, 0);
-            // }
-            //
-            // player.getComponent<RigidBodyComponent>().setLinearVelocity(velocity.X,
-            //     player.getComponent<RigidBodyComponent>().body.LinearVelocity.Y, velocity.Z);
-            //
-            // if (player.transform.position.Y <= -500)
-            //     player.getComponent<RigidBodyComponent>().setPosition(Vector3.UnitY * 5);
-            //
-            // player.getComponent<RigidBodyComponent>().body.Orientation =
-            //     JMatrix.CreateFromQuaternion(new JQuaternion());
-            // camera.position = player.transform.position;
+            var velocity = Vector3.Zero;
+
+            if (IsKeyDown(KeyboardKey.KEY_W))
+                velocity += new Vector3((float)-Math.Sin(camera.rotation.Y * RayMath.DEG2RAD), 0,
+                    (float)-Math.Cos(camera.rotation.Y * RayMath.DEG2RAD));
+            if (IsKeyDown(KeyboardKey.KEY_S))
+                velocity += new Vector3((float)Math.Sin(camera.rotation.Y * RayMath.DEG2RAD), 0,
+                    (float)Math.Cos(camera.rotation.Y * RayMath.DEG2RAD));
+            if (IsKeyDown(KeyboardKey.KEY_A))
+                velocity += new Vector3((float)-Math.Cos(camera.rotation.Y * RayMath.DEG2RAD), 0,
+                    (float)Math.Sin(camera.rotation.Y * RayMath.DEG2RAD));
+            if (IsKeyDown(KeyboardKey.KEY_D))
+                velocity += new Vector3((float)Math.Cos(camera.rotation.Y * RayMath.DEG2RAD), 0,
+                    -(float)Math.Sin(camera.rotation.Y * RayMath.DEG2RAD));
+
+            var speedMultiplier = IsKeyDown(KeyboardKey.KEY_LEFT_SHIFT) ? 2.0f : 1.0f;
+            velocity *= speed * speedMultiplier;
+
+            if (IsKeyPressed(KeyboardKey.KEY_SPACE)) {
+                PlaySound(jump);
+                player.getComponent<RigidBodyComponent>().applyImpulse(0, 6, 0);
+            }
+
+            player.getComponent<RigidBodyComponent>().setLinearVelocity(velocity.X,
+                player.getComponent<RigidBodyComponent>().body.LinearVelocity.Y, velocity.Z);
+
+            if (player.transform.position.Y <= -500)
+                player.getComponent<RigidBodyComponent>().setPosition(Vector3.UnitY * 5);
+
+            player.getComponent<RigidBodyComponent>().body.Orientation =
+                JMatrix.CreateFromQuaternion(new JQuaternion());
+            camera.position = player.transform.position;
             camera.setDefaultFPSControls(speed, isMouseLocked, true);
             camera.defaultFpsMatrix();
             camera.update();
 
-            // light.getComponent<LightComponent>().setIntensity(slider.value / 10);
+            light.transform.position = player.transform.position;
+            
+            SetShaderValue(light.getComponent<LightComponent>().shader, fogDensityLoc, 0.025f, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
+            light.getComponent<LightComponent>().setIntensity(slider.value / 10);
 
             foreach (var entity in World.entities) {
                 if (entity.hasComponent<MeshComponent>()) {
@@ -259,8 +277,8 @@ public static class Sandbox {
 
             if (IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT) && isMouseLocked) {
                 PlaySound(shoot);
-                // velocity.X = -camera.raycast.target.X / 5;
-                // velocity.Z = -camera.raycast.target.Z / 5;
+                velocity.X = -camera.raycast.target.X / 5;
+                velocity.Z = -camera.raycast.target.Z / 5;
                 player.getComponent<RigidBodyComponent>().applyImpulse(-camera.raycast.target / 5);
             }
 
@@ -272,7 +290,7 @@ public static class Sandbox {
             var p = new ParticleComponent(new ParticleBehaviour(false, 5f), WHITE, particle, Vector2.One / 2, 25);
             p.addBehaviour(new DecayBehaviour());
 
-            var p2 = new ParticleComponent(new RandomrSideBehaviour(-5f), RED, 20);
+            var p2 = new ParticleComponent(new RandomSideBehaviour(-5f), RED, 20);
             p2.addBehaviour(new GradientBehaviour(p2.color, BLACK, 150));
             p2.addBehaviour(new DecayBehaviour());
             p2.addBehaviour(new ScaleBehaviour(true));

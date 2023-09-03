@@ -18,13 +18,13 @@ public class ConsoleCommands {
     }
 
     public static void setFPS(Console console, string[] args) {
-        if (Int32.TryParse(console.commandInput.text.Remove(0, 8), out int fps)) {
+        if (Int32.TryParse(console.commandInput.text.Remove(0, 10), out int fps)) {
             console.print($"set fps to {fps}");
             Raylib.SetTargetFPS(fps);
         }
         else {
             console.print(aengine.QUOTE + console.commandInput.text.Remove(0, 8) + aengine.QUOTE + "is not a number");
-            console.print($"example usage of {aengine.QUOTE}set_fps{aengine.QUOTE}: set_fps 60");
+            console.print($"example usage of {aengine.QUOTE}w_fps_set{aengine.QUOTE}: w_fps_set 60");
         }
     }
 
@@ -73,6 +73,12 @@ public class ConsoleCommands {
             console.print(aengine.QUOTE + console.commandInput.text.Remove(0, 11) + aengine.QUOTE + "is not a number");
             console.print($"example usage of {aengine.QUOTE}set_height{aengine.QUOTE}: set_height 600");
         }
+    }
+
+    public static void close(Console console, string[] args) {
+        World.dispose();
+        Raylib.CloseAudioDevice();
+        Raylib.CloseWindow();
     }
     
 }

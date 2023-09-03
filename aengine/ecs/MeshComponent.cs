@@ -55,6 +55,16 @@ namespace aengine.ecs
             isModel = true;
         }
         
+        public unsafe MeshComponent(Entity entity, Mesh mesh, Color color)
+        {
+            if (entity.transform != null) this.transform = entity.transform;
+            else transform = new TransformComponent(null);
+            this.color = color;
+            model = LoadModelFromMesh(mesh);
+            scale = 1;
+            isModel = true;
+        }
+        
         public unsafe MeshComponent(Entity entity, Model model, Color color, Texture texture)
         {
             if (entity.transform != null) this.transform = entity.transform;
@@ -86,7 +96,7 @@ namespace aengine.ecs
             model.materials[mat].shader = shader;
         }
 
-        private void setSCale(Vector3 scale)
+        private void setScale(Vector3 scale)
         {
             model.transform = RayMath.MatrixScale(scale.X, scale.Y, scale.Z);
         }
@@ -101,8 +111,16 @@ namespace aengine.ecs
             if (entity != null)
             { 
                 transform = entity.transform;
-                setSCale(transform.scale);
-                setRotation(transform.rotation);
+                setScale(transform.scale);
+                if (entity.hasComponent<RigidBodyComponent>()) {
+                    if (entity.getComponent<RigidBodyComponent>().shapeType == ShapeType.CYLINDER) {
+                        setRotation(transform.rotation with { X = transform.rotation.X - 90});
+                    } else {
+                        setRotation(transform.rotation);  
+                    }
+                } else {
+                    setRotation(transform.rotation);  
+                }
             }
         }
 

@@ -1,6 +1,7 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using aengine.ecs;
 using Raylib_CsLo;
 using static Raylib_CsLo.Raylib;
 using static Raylib_CsLo.RlGl;
@@ -41,18 +42,19 @@ namespace aengine.graphics {
 
         public static void drawSprite3D(Texture texture, Vector3 position, float width, float height, float rotation,
             float rotationY, Color color) {
+            
             float x = position.X;
             float y = position.Y;
             float z = position.Z;
-
+            
             rlSetTexture(texture.id);
-
+            
             rlPushMatrix();
             rlTranslatef(x, y, z);
             rlRotatef(rotation, 0.0f, 1.0f, 0.0f);
             rlRotatef(rotationY, 1.0f, 0.0f, 0.0f);
             rlTranslatef(-x, -y, -z);
-
+            
             rlBegin(RL_QUADS);
             rlColor4ub(color.r, color.g, color.b, color.a);
             rlNormal3f(0.0f, 0.0f, 1.0f); // Normal Pointing Towards Viewer
@@ -64,7 +66,7 @@ namespace aengine.graphics {
             rlVertex3f(x + width / 2, y + height / 2, z);
             rlTexCoord2f(1.0f, 0.0f);
             rlVertex3f(x - width / 2, y + height / 2, z);
-
+            
             rlNormal3f(0.0f, 0.0f, 1.0f); // Normal Pointing Towards Viewer
             rlTexCoord2f(1.0f, 1.0f);
             rlVertex3f(x + width / 2, y - height / 2, z);
@@ -76,7 +78,7 @@ namespace aengine.graphics {
             rlVertex3f(x + width / 2, y + height / 2, z);
             rlEnd();
             rlPopMatrix();
-
+            
             rlSetTexture(0);
         }
 
