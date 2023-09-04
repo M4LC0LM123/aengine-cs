@@ -68,10 +68,8 @@ public static class Sandbox {
         body2.transform.position.Y = 15;
         body2.transform.position.X = 2.5f;
         body2.transform.scale = Vector3.One;
-        body2.setRootTransform();
         body2.addComponent(new MeshComponent(body2, GenMeshCylinder(1, 1, 15), YELLOW, albedo));
         body2.addComponent(new RigidBodyComponent(body2, 1, BodyType.DYNAMIC, ShapeType.CYLINDER));
-        body2.setParent(player);
         
         var body3 = new Entity();
         body3.transform.scale = Vector3.One * 0.5f;
@@ -100,7 +98,7 @@ public static class Sandbox {
         ps2.addComponent(new SpatialAudioComponent(ps2, LoadSound("assets/at_dooms_gate.mp3")));
 
         var console = new Console();
-
+ 
         var scenePrefab = new ScenePrefab("assets/maps/sample.json");
 
         foreach (var obj in scenePrefab.data)
