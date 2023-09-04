@@ -70,12 +70,6 @@ public static class Sandbox {
         body2.transform.scale = Vector3.One;
         body2.addComponent(new MeshComponent(body2, GenMeshCylinder(1, 1, 15), YELLOW, albedo));
         body2.addComponent(new RigidBodyComponent(body2, 1, BodyType.DYNAMIC, ShapeType.CYLINDER));
-        
-        var body3 = new Entity();
-        body3.transform.scale = Vector3.One * 0.5f;
-        body3.transform.position.X = 100;
-        body3.addComponent(new MeshComponent(body3, LoadModel("assets/models/trenchb.glb"), WHITE));
-        body3.addComponent(new RigidBodyComponent(body3, body3.getComponent<MeshComponent>().model, 1, BodyType.STATIC));
 
         var dummy = new Dummy();
 
@@ -99,7 +93,7 @@ public static class Sandbox {
 
         var console = new Console();
  
-        var scenePrefab = new ScenePrefab("assets/maps/sample.json");
+        var scenePrefab = new ScenePrefab("assets/maps/map3.json");
 
         foreach (var obj in scenePrefab.data)
             switch (obj.id) {
