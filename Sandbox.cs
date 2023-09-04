@@ -45,7 +45,7 @@ public class Sandbox {
         light.intensity = 0.1f;
         light.position = new Vector3(5.0f, 5.0f, 0.0f);
 
-        float speed = 10;
+        float speed;
         
         Fog.enable();
         Fog.create(0, Vector3.Zero, Colors.TEAL);
@@ -78,8 +78,6 @@ public class Sandbox {
             
             Rendering.drawDebugAxes();
             Rendering.drawGrid(100);
- 
-            // model.rotation.Y += 100 * Window.getDeltaTime();
             
             GL.Enable(EnableCap.Lighting);
             light.enable(LightName.Light0);

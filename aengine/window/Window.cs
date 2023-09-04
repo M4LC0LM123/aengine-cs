@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using aengine.graphics;
 using OpenTK;
 using OpenTK.Windowing.GraphicsLibraryFramework;
@@ -59,7 +60,12 @@ public unsafe class Window {
         GLFW.MakeContextCurrent(window);
         GL.LoadBindings(new GLFWBindingsContext());
         GL.Enable(EnableCap.DepthTest);
-        GL.Viewport(0, 0, width, height);
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
+            GL.Viewport(0, 0, width*2, height*2);
+        } else {
+            GL.Viewport(0, 0, width, height);
+        }
 
         Input.keyHandle += key => { };
         Input.mouseHandle += MouseButton => { };
