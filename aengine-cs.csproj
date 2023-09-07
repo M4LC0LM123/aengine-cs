@@ -9,6 +9,10 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="JitterPhysics" Version="0.2.0.20" />
     <PackageReference Include="Raylib-CsLo" Version="4.2.0.9" />
@@ -29,6 +33,7 @@
   <ItemGroup>
     <None Remove="AengineEditor\**" />
   </ItemGroup>
+
 
 
 </Project>

@@ -16,7 +16,7 @@ using World = aengine.ecs.World;
 namespace Sandbox; 
 
 public static class Sandbox {
-    public static unsafe async Task Main(string[] args) {
+    public static async Task Main(string[] args) {
         // use only in ides like visual studio and rider,
         // the final build should have the assets folder in the same directory as the exe so remove this line below then
         Directory.SetCurrentDirectory("../../../");

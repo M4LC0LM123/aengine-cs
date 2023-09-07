@@ -8,6 +8,7 @@ using aengine.graphics;
 using Jitter;
 using Jitter.Collision;
 using Raylib_CsLo;
+using Console = System.Console;
 
 namespace aengine.ecs
 {
@@ -37,6 +38,8 @@ namespace aengine.ecs
             int len = entities.Count;
             for (int i = 0; i < len; i++)
                 entities[i].update();
+
+            Console.WriteLine("HEHe");
         }
 
         public static void render()
