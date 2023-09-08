@@ -94,10 +94,11 @@ public sealed class RigidBody2D {
 
             for (int i = 0; i < m_vertices.Length; i++) {
                 Vector2 v = m_vertices[i];
-                m_transformedVertices[i] = PhysicsUtils.transform(v, transform); // left of here at 12:22 of https://www.youtube.com/watch?v=oXl0YlmDVJs
+                m_transformedVertices[i] = PhysicsUtils.transform(v, transform);
             }
         }
         
+        m_transformUpdateRequired = false;
         return m_transformedVertices;
     }
     
