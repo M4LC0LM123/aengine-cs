@@ -21,7 +21,7 @@ public sealed class RigidBody2D {
     public readonly float height;
 
     private readonly Vector2[] m_vertices;
-    private readonly int[] triangles; // indices
+    public readonly int[] triangles; // indices
     private Vector2[] m_transformedVertices;
 
     private bool m_transformUpdateRequired;

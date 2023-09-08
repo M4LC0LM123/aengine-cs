@@ -19,7 +19,7 @@ public class Sandbox2D {
 
         for (int i = 0; i < 10; i++) {
             // PhysicsShape type = (PhysicsShape) aengine.core.aengine.getRandomInt(0, 2);
-            PhysicsShape type = PhysicsShape.CIRCLE;
+            PhysicsShape type = PhysicsShape.BOX;
             
             if (type == PhysicsShape.CIRCLE) {
                 bool success = RigidBody2D.createCircleBody(aengine.core.aengine.getRandomFloat(10, 50),
@@ -67,6 +67,11 @@ public class Sandbox2D {
                 bodies[0].move(vel);
             }
 
+            for (int i = 0; i < bodies.Count; i++) {
+                bodies[i].rotate(150);
+            }
+            
+#if false
             for (int i = 0; i < bodies.Count - 1; i++) {
                 RigidBody2D bodyA = bodies[i];
                 
@@ -80,15 +85,19 @@ public class Sandbox2D {
                     }
                 }
             }
+#endif
             
             BeginDrawing();
             ClearBackground(RAYWHITE);
 
             foreach (var body in bodies) {
-                if (body.shape is PhysicsShape.BOX)
-                    DrawRectanglePro(new Rectangle(body.getPosition().X, body.getPosition().Y, body.width, body.height), Vector2.Zero, body.getRotation(), GREEN);
+                if (body.shape is PhysicsShape.BOX) {
+                    DrawRectanglePro(new Rectangle(body.getPosition().X, body.getPosition().Y, body.width, body.height),
+                        Vector2.Zero with { X = body.width / 2, Y = body.height / 2 }, body.getRotation(), GREEN);
+                }
+
                 if (body.shape is PhysicsShape.CIRCLE)
-                    DrawCircleV(body.getPosition(), body.radius, GREEN);
+                        DrawCircleV(body.getPosition(), body.radius, GREEN);
             }
             
             DrawFPS(10, 10);
