@@ -1,7 +1,7 @@
 using System.Numerics;
 using Raylib_CsLo;
 
-namespace aengine.physics2D; 
+namespace aengine.physics2D;
 
 public sealed class RigidBody2D {
     private Vector2 m_position;
@@ -9,11 +9,13 @@ public sealed class RigidBody2D {
     private float m_rotation;
     private float m_rotationalVelocity;
 
+    private Vector2 m_force;
+
     public readonly float mass;
     public readonly float density;
     public readonly float restitution;
     public readonly float area;
-    
+
     public readonly bool isStatic;
 
     public readonly float radius;
@@ -25,7 +27,7 @@ public sealed class RigidBody2D {
     private Vector2[] m_transformedVertices;
 
     private bool m_transformUpdateRequired;
-    
+
     public readonly PhysicsShape shape;
 
     private RigidBody2D(Vector2 position, float mass,
@@ -35,25 +37,28 @@ public sealed class RigidBody2D {
         m_linearVelocity = Vector2.Zero;
         m_rotation = 0;
         m_rotationalVelocity = 0;
-        
+
+        m_force = Vector2.Zero;
+
         this.mass = mass;
         this.density = density;
         this.restitution = restitution;
         this.area = area;
-        
+
         this.isStatic = isStatic;
-        
+
         this.radius = radius;
         this.width = width;
         this.height = height;
-        
+
         this.shape = shape;
 
         if (this.shape is PhysicsShape.BOX) {
             m_vertices = createBoxVertices(width, height);
             triangles = triangulateBox();
             m_transformedVertices = new Vector2[m_vertices.Length];
-        } else {
+        }
+        else {
             m_vertices = null;
             m_transformedVertices = null;
         }
@@ -61,8 +66,130 @@ public sealed class RigidBody2D {
         m_transformUpdateRequired = true;
     }
 
+    public void tick(float dt) {
+        Vector2 acceleration = m_force / mass;
+        
+        m_linearVelocity += acceleration * dt;
+        
+        m_position += m_linearVelocity * dt;
+        m_rotation += m_rotationalVelocity * dt;
+        
+        m_force = Vector2.Zero;
+        m_transformUpdateRequired = true;
+    }
+
+    public Vector2 getLinearVelocity() {
+        return m_linearVelocity;
+    }
+
+    public void setLinearVelocity(Vector2 velocity) {
+        m_linearVelocity = velocity;
+    }
+    
+    public void applyForce(Vector2 amount) {
+        m_force = amount;
+    }
+
+    public void move(Vector2 amount) {
+        m_position += amount;
+        m_transformUpdateRequired = true;
+    }
+
+    public void rotate(float amount) {
+        m_rotation += amount;
+        m_transformUpdateRequired = true;
+    }
+
+    public void setPosition(Vector2 position) {
+        m_position = position;
+        m_transformUpdateRequired = true;
+    }
+
+    public Vector2 getPosition() {
+        return m_position;
+    }
+
+    public float getRotation() {
+        return m_rotation;
+    }
+
+    public static bool createCircleBody(float radius, Vector2 position, float density, bool isStatic,
+        float restitution, out RigidBody2D body, out string errorMsg) {
+        body = null;
+        errorMsg = string.Empty;
+
+        float area = radius * radius * MathF.PI;
+
+        if (area < PhysicsWorld.minBodySize) {
+            errorMsg = $"Circle radius is too small, minimum circle area is {PhysicsWorld.minBodySize}!";
+            return false;
+        }
+
+        if (area > PhysicsWorld.maxBodySize) {
+            errorMsg = $"Circle radius is too large, maximum circle area is {PhysicsWorld.maxBodySize}!";
+            return false;
+        }
+
+        if (density < PhysicsWorld.minDensity) {
+            errorMsg = $"Body density is too small, minimum body density is {PhysicsWorld.minBodySize}!";
+            return false;
+        }
+
+        if (density > PhysicsWorld.maxDensity) {
+            errorMsg = $"Body density is too large, maximum body density is {PhysicsWorld.maxBodySize}!";
+            return false;
+        }
+
+        restitution = Math.Clamp(restitution, 0, 1);
+
+        // mass = area * depth * density
+        float mass = area * density / PhysicsWorld.massScalar;
+
+        body = new RigidBody2D(position, mass, density, restitution, area, isStatic, radius, 0, 0, PhysicsShape.CIRCLE);
+
+        return true;
+    }
+
+    public static bool createBoxBody(float width, float height, Vector2 position, float density, bool isStatic,
+        float restitution, out RigidBody2D body, out string errorMsg) {
+        body = null;
+        errorMsg = string.Empty;
+
+        float area = width * height;
+
+        if (area < PhysicsWorld.minBodySize) {
+            errorMsg = $"Box radius is too small, minimum box area is {PhysicsWorld.minBodySize}!";
+            return false;
+        }
+
+        if (area > PhysicsWorld.maxBodySize) {
+            errorMsg = $"Box radius is too large, maximum box area is {PhysicsWorld.maxBodySize}!";
+            return false;
+        }
+
+        if (density < PhysicsWorld.minDensity) {
+            errorMsg = $"Body density is too small, minimum body density is {PhysicsWorld.minBodySize}!";
+            return false;
+        }
+
+        if (density > PhysicsWorld.maxDensity) {
+            errorMsg = $"Body density is too large, maximum body density is {PhysicsWorld.maxBodySize}!";
+            return false;
+        }
+
+        restitution = Math.Clamp(restitution, 0, 1);
+
+        // mass = area * depth * density
+        float mass = area * density / PhysicsWorld.massScalar;
+
+        body = new RigidBody2D(position, mass, density, restitution, area, isStatic, 0, width, height,
+            PhysicsShape.BOX);
+
+        return true;
+    }
+    
     private static Vector2[] createBoxVertices(float width, float height) {
-        float left = -width / 2;
+        float left = -width / 2; 
         float right = left + width;
         float bottom = -height / 2;
         float top = bottom + height;
@@ -97,108 +224,9 @@ public sealed class RigidBody2D {
                 m_transformedVertices[i] = PhysicsUtils.transform(v, transform);
             }
         }
-        
+
         m_transformUpdateRequired = false;
         return m_transformedVertices;
-    }
-    
-    public void move(Vector2 amount) {
-        m_position += amount * Raylib.GetFrameTime();
-        m_transformUpdateRequired = true;
-    }
-
-    public void rotate(float amount) {
-        m_rotation += amount * Raylib.GetFrameTime();
-        m_transformUpdateRequired = true;
-    }
-
-    public void setPosition(Vector2 position) {
-        m_position = position;
-        m_transformUpdateRequired = true;
-    }
-
-    public Vector2 getPosition() {
-        return m_position;
-    }
-
-    public float getRotation() {
-        return m_rotation;
-    }
-
-    public static bool createCircleBody(float radius, Vector2 position, float density, bool isStatic,
-        float restitution, out RigidBody2D body, out string errorMsg) {
-
-        body = null;
-        errorMsg = string.Empty;
-
-        float area = radius * radius * MathF.PI;
-
-        if (area < PhysicsWorld.minBodySize) {
-            errorMsg = $"Circle radius is too small, minimum circle area is {PhysicsWorld.minBodySize}!";
-            return false;
-        }
-        
-        if (area > PhysicsWorld.maxBodySize) {
-            errorMsg = $"Circle radius is too large, maximum circle area is {PhysicsWorld.maxBodySize}!";
-            return false;
-        }
-        
-        if (density < PhysicsWorld.minDensity) {
-            errorMsg = $"Body density is too small, minimum body density is {PhysicsWorld.minBodySize}!";
-            return false;
-        }
-        
-        if (density > PhysicsWorld.maxDensity) {
-            errorMsg = $"Body density is too large, maximum body density is {PhysicsWorld.maxBodySize}!";
-            return false;
-        }
-
-        restitution = Math.Clamp(restitution, 0, 1);
-
-        // mass = area * depth * density
-        float mass = area * density;
-
-        body = new RigidBody2D(position, mass, density, restitution, area, isStatic, radius, 0, 0, PhysicsShape.CIRCLE);
-        
-        return true;
-    }
-    
-    public static bool createBoxBody(float width, float height, Vector2 position, float density, bool isStatic,
-        float restitution, out RigidBody2D body, out string errorMsg) {
-
-        body = null;
-        errorMsg = string.Empty;
-
-        float area = width * height;
-
-        if (area < PhysicsWorld.minBodySize) {
-            errorMsg = $"Box radius is too small, minimum box area is {PhysicsWorld.minBodySize}!";
-            return false;
-        }
-        
-        if (area > PhysicsWorld.maxBodySize) {
-            errorMsg = $"Box radius is too large, maximum box area is {PhysicsWorld.maxBodySize}!";
-            return false;
-        }
-        
-        if (density < PhysicsWorld.minDensity) {
-            errorMsg = $"Body density is too small, minimum body density is {PhysicsWorld.minBodySize}!";
-            return false;
-        }
-        
-        if (density > PhysicsWorld.maxDensity) {
-            errorMsg = $"Body density is too large, maximum body density is {PhysicsWorld.maxBodySize}!";
-            return false;
-        }
-
-        restitution = Math.Clamp(restitution, 0, 1);
-
-        // mass = area * depth * density
-        float mass = area * density;
-
-        body = new RigidBody2D(position, mass, density, restitution, area, isStatic, 0, width, height, PhysicsShape.BOX);
-        
-        return true;
     }
     
 }

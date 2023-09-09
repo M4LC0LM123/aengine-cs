@@ -23,6 +23,7 @@ public static class Collisions {
 
             Vector2 edge = vb - va;
             axis = Vector2.Zero with { X = -edge.Y, Y = edge.X }; 
+            axis = Vector2.Normalize(axis);
             
             projectVertices(vertices, axis, out minA, out maxA);
             projectCircle(circleCenter, circleRadius, axis, out minB, out maxB);
@@ -42,6 +43,7 @@ public static class Collisions {
         Vector2 cp = vertices[cpIndex];
 
         axis = cp - circleCenter;
+        axis = Vector2.Normalize(axis);
         
         projectVertices(vertices, axis, out minA, out maxA);
         projectCircle(circleCenter, circleRadius, axis, out minB, out maxB);
@@ -55,9 +57,6 @@ public static class Collisions {
             depth = axisDepth;
             normal = axis;
         }
-
-        depth /= normal.Length();
-        normal = Vector2.Normalize(normal);
 
         Vector2 polyCenter = findArithmeticMean(vertices);
 
@@ -111,7 +110,8 @@ public static class Collisions {
             Vector2 vb = verticesB[(i + 1) % verticesA.Length];
 
             Vector2 edge = vb - va;
-            Vector2 axis = Vector2.Zero with { X = -edge.Y, Y = edge.X }; 
+            Vector2 axis = Vector2.Zero with { X = -edge.Y, Y = edge.X };
+            axis = Vector2.Normalize(axis);
             
             projectVertices(verticesA, axis, out float minA, out float maxA);
             projectVertices(verticesB, axis, out float minB, out float maxB);
@@ -133,6 +133,7 @@ public static class Collisions {
 
             Vector2 edge = vb - va;
             Vector2 axis = Vector2.Zero with { X = -edge.Y, Y = edge.X };
+            axis = Vector2.Normalize(axis);
             
             projectVertices(verticesA, axis, out float minA, out float maxA);
             projectVertices(verticesB, axis, out float minB, out float maxB);
@@ -147,9 +148,6 @@ public static class Collisions {
                 normal = axis;
             }
         }
-
-        depth /= normal.Length();
-        normal = Vector2.Normalize(normal);
 
         Vector2 centerA = findArithmeticMean(verticesA);
         Vector2 centerB = findArithmeticMean(verticesB);
