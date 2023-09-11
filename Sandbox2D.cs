@@ -17,77 +17,28 @@ public class Sandbox2D {
         SetTargetFPS(60);
 
         PhysicsWorld world = new PhysicsWorld();
-        
-        for (int i = 0; i < 10; i++) {
-            PhysicsShape type = (PhysicsShape) aengine.core.aengine.getRandomInt(0, 2);
-            
-            if (type == PhysicsShape.CIRCLE) {
-                bool success = RigidBody2D.createCircleBody(aengine.core.aengine.getRandomFloat(10, 50),
-                    new Vector2(aengine.core.aengine.getRandomFloat(0, GetScreenWidth()),
-                        aengine.core.aengine.getRandomFloat(0, GetScreenHeight())), 1, false, 0.5f,
-                    out RigidBody2D body, out string errorMsg);
 
-                if (success) {
-                    world.addBody(body);
-                } else {
-                    Console.WriteLine(errorMsg);  
-                }
-            } else if (type == PhysicsShape.BOX) {
-                bool success = RigidBody2D.createBoxBody(40, 40,
-                    new Vector2(aengine.core.aengine.getRandomFloat(0, GetScreenWidth()),
-                        aengine.core.aengine.getRandomFloat(0, GetScreenHeight())), 1, false, 0.5f,
-                    out RigidBody2D body, out string errorMsg);
-
-                if (success) {
-                    world.addBody(body);
-                } else {
-                    Console.WriteLine(errorMsg);  
-                }
-            }
+        if (RigidBody2D.createBoxBody(GetScreenWidth() / 8 * 6, 50,
+                new Vector2(GetScreenWidth() / 2, GetScreenHeight() - 25),
+                1.0f, true, 0.5f, out RigidBody2D floor, out string error)) {
+            world.addBody(floor);
+        } else {
+            throw new Exception(error);
         }
         
         // Main game loop
         while (!WindowShouldClose()) {
             world.tick(GetFrameTime());
-            
-            float dx = 0;
-            float dy = 0;
-
-            if (!world.getBody(0, out RigidBody2D player)) {
-                throw new Exception("Body not found!");
-            }
-                
-            if (IsKeyDown(KeyboardKey.KEY_LEFT) && !IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL))
-                dx -= 10 * GetFrameTime();
-            if (IsKeyDown(KeyboardKey.KEY_RIGHT) && !IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL))
-                dx += 10 * GetFrameTime();
-            if (IsKeyDown(KeyboardKey.KEY_UP))
-                dy -= 10 * GetFrameTime();
-            if (IsKeyDown(KeyboardKey.KEY_DOWN))
-                dy += 10 * GetFrameTime();
-
-            if (IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL)) {
-                if (IsKeyDown(KeyboardKey.KEY_RIGHT)) 
-                    player.rotate(4);
-                if (IsKeyDown(KeyboardKey.KEY_LEFT)) 
-                    player.rotate(-4);
-            }
-
-            if (dx != 0 || dy != 0) {
-                Vector2 forceDir = Vector2.Normalize(new Vector2(dx, dy));
-                Vector2 force = forceDir * 100;
-                player.applyForce(force);
-            }
 
             if (IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT)) {
-                bool success = RigidBody2D.createBoxBody(40, 40,
+                bool success = RigidBody2D.createBoxBody(aengine.core.aengine.getRandomFloat(10, 50), aengine.core.aengine.getRandomFloat(10, 50),
                     GetMousePosition(), 1, false, 0.5f,
                     out RigidBody2D body, out string errorMsg);
                 
                 if (success) {
                     world.addBody(body);
                 } else {
-                    Console.WriteLine(errorMsg);  
+                    throw new Exception(errorMsg); 
                 }
             }
             
@@ -99,7 +50,7 @@ public class Sandbox2D {
                 if (success) {
                     world.addBody(body);
                 } else {
-                    Console.WriteLine(errorMsg);  
+                    throw new Exception(errorMsg);
                 }
             }
             
@@ -112,12 +63,25 @@ public class Sandbox2D {
                 }
                 
                 if (body.shape is PhysicsShape.BOX) {
-                    DrawRectanglePro(new Rectangle(body.getPosition().X, body.getPosition().Y, body.width, body.height),
-                        Vector2.Zero with { X = body.width / 2, Y = body.height / 2 }, body.getRotation(), GREEN);
+
+                    if (body.isStatic) {
+                        DrawRectanglePro(new Rectangle(body.getPosition().X, body.getPosition().Y, body.width, body.height),
+                            Vector2.Zero with { X = body.width / 2, Y = body.height / 2 }, body.getRotation(), BLUE);
+                    }
+                    else {
+                        DrawRectanglePro(new Rectangle(body.getPosition().X, body.getPosition().Y, body.width, body.height),
+                            Vector2.Zero with { X = body.width / 2, Y = body.height / 2 }, body.getRotation(), GREEN);   
+                    }
                 }
 
-                if (body.shape is PhysicsShape.CIRCLE)
-                    DrawCircleV(body.getPosition(), body.radius, GREEN);
+                if (body.shape is PhysicsShape.CIRCLE) {
+                    if (body.isStatic) {
+                        DrawCircleV(body.getPosition(), body.radius, BLUE);
+                    }
+                    else {
+                        DrawCircleV(body.getPosition(), body.radius, GREEN);   
+                    }
+                }
             }
             
             DrawFPS(10, 10);

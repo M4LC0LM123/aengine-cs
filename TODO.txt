@@ -1,4 +1,4 @@
 2d physics engine dev
 
-left of at https://www.youtube.com/watch?v=mw9jANHWKxE (1:46)
-static bodies
+left of at https://www.youtube.com/watch?v=LjJvJBARlpM (1:46)
+AABB

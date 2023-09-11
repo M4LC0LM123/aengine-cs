@@ -116,6 +116,10 @@ namespace aengine.core
             return r.Next(min, max);
         }
 
+        public static bool getRandomBool() {
+            return System.Convert.ToBoolean(getRandomInt(0, 2));
+        }
+
     }
 
 }

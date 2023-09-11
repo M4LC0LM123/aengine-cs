@@ -68,6 +68,69 @@ public static class Collisions {
         
         return true;
     }
+    
+    public static bool checkPolyCircleOverlap(Vector2 circleCenter, float circleRadius, Vector2 polyCenter, Vector2[] vertices,
+        out Vector2 normal, out float depth) {
+        normal = Vector2.Zero;
+        depth = float.MaxValue;
+        
+        Vector2 axis = Vector2.Zero;
+        float axisDepth;
+
+        float minA;
+        float maxA;
+        float minB;
+        float maxB;
+        
+        for (int i = 0; i < vertices.Length; i++) {
+            Vector2 va = vertices[i];
+            Vector2 vb = vertices[(i + 1) % vertices.Length];
+
+            Vector2 edge = vb - va;
+            axis = Vector2.Zero with { X = -edge.Y, Y = edge.X }; 
+            axis = Vector2.Normalize(axis);
+            
+            projectVertices(vertices, axis, out minA, out maxA);
+            projectCircle(circleCenter, circleRadius, axis, out minB, out maxB);
+
+            if (minA >= maxB || minB >= maxA) // seperated
+                return false;
+
+            axisDepth = MathF.Min(maxB - minA, maxA - minB);
+
+            if (axisDepth < depth) {
+                depth = axisDepth;
+                normal = axis;
+            }
+        }
+
+        int cpIndex = findClosestPointOnPoly(circleCenter, vertices);
+        Vector2 cp = vertices[cpIndex];
+
+        axis = cp - circleCenter;
+        axis = Vector2.Normalize(axis);
+        
+        projectVertices(vertices, axis, out minA, out maxA);
+        projectCircle(circleCenter, circleRadius, axis, out minB, out maxB);
+
+        if (minA >= maxB || minB >= maxA) // seperated
+            return false;
+
+        axisDepth = MathF.Min(maxB - minA, maxA - minB);
+
+        if (axisDepth < depth) {
+            depth = axisDepth;
+            normal = axis;
+        }
+
+        Vector2 dir = polyCenter - circleCenter;
+
+        if (Vector2.Dot(dir, normal) < 0) {
+            normal = -normal;
+        }
+        
+        return true;
+    }
 
     private static int findClosestPointOnPoly(Vector2 circleCenter, Vector2[] vertices) {
         int result = -1;
@@ -160,6 +223,63 @@ public static class Collisions {
         
         return true;
     }
+    
+    public static bool checkPolyOverlap(Vector2 centerA, Vector2[] verticesA, Vector2 centerB, Vector2[] verticesB, out Vector2 normal, out float depth) {
+        normal = Vector2.Zero;
+        depth = float.MaxValue;
+        
+        for (int i = 0; i < verticesA.Length; i++) {
+            Vector2 va = verticesA[i];
+            Vector2 vb = verticesB[(i + 1) % verticesA.Length];
+
+            Vector2 edge = vb - va;
+            Vector2 axis = Vector2.Zero with { X = -edge.Y, Y = edge.X };
+            axis = Vector2.Normalize(axis);
+            
+            projectVertices(verticesA, axis, out float minA, out float maxA);
+            projectVertices(verticesB, axis, out float minB, out float maxB);
+
+            if (minA >= maxB || minB >= maxA) // seperated
+                return false;
+
+            float axisDepth = MathF.Min(maxB - minA, maxA - minB);
+
+            if (axisDepth < depth) {
+                depth = axisDepth;
+                normal = axis;
+            }
+        }
+        
+        for (int i = 0; i < verticesB.Length; i++) {
+            Vector2 va = verticesB[i];
+            Vector2 vb = verticesB[(i + 1) % verticesB.Length];
+
+            Vector2 edge = vb - va;
+            Vector2 axis = Vector2.Zero with { X = -edge.Y, Y = edge.X };
+            axis = Vector2.Normalize(axis);
+            
+            projectVertices(verticesA, axis, out float minA, out float maxA);
+            projectVertices(verticesB, axis, out float minB, out float maxB);
+
+            if (minA >= maxB || minB >= maxA) // seperated
+                return false;
+            
+            float axisDepth = MathF.Min(maxB - minA, maxA - minB);
+
+            if (axisDepth < depth) {
+                depth = axisDepth;
+                normal = axis;
+            }
+        }
+
+        Vector2 dir = centerB - centerA;
+
+        if (Vector2.Dot(dir, normal) < 0) {
+            normal = -normal;
+        }
+        
+        return true;
+    }
 
     private static Vector2 findArithmeticMean(Vector2[] vertices) {
         float sumX = 0;
@@ -193,12 +313,12 @@ public static class Collisions {
     
     public static bool checkCircleOverlap(Vector2 centerA, float radiusA, Vector2 centerB, float radiusB, out Vector2 normal, out float depth) {
         normal = Vector2.Zero;
-        depth = 0;
-        
+        depth = 0f;
+
         float distance = Vector2.Distance(centerA, centerB);
         float radii = radiusA + radiusB;
 
-        if (distance >= radii) {
+        if(distance >= radii) {
             return false;
         }
 

@@ -12,6 +12,7 @@ public sealed class RigidBody2D {
     private Vector2 m_force;
 
     public readonly float mass;
+    public readonly float inverseMass;
     public readonly float density;
     public readonly float restitution;
     public readonly float area;
@@ -53,6 +54,12 @@ public sealed class RigidBody2D {
 
         this.shape = shape;
 
+        if (!isStatic) {
+            inverseMass = 1.0f / mass;
+        } else {
+            inverseMass = 0.0f;
+        }
+
         if (this.shape is PhysicsShape.BOX) {
             m_vertices = createBoxVertices(width, height);
             triangles = triangulateBox();
@@ -66,11 +73,16 @@ public sealed class RigidBody2D {
         m_transformUpdateRequired = true;
     }
 
-    public void tick(float dt) {
-        Vector2 acceleration = m_force / mass;
+    internal void tick(float dt, Vector2 gravity) {
+        // Vector2 acceleration = m_force / mass;
+        //
+        // m_linearVelocity += acceleration * dt;
+
+        if (isStatic) {
+            return;
+        }
         
-        m_linearVelocity += acceleration * dt;
-        
+        m_linearVelocity += gravity * dt;
         m_position += m_linearVelocity * dt;
         m_rotation += m_rotationalVelocity * dt;
         
