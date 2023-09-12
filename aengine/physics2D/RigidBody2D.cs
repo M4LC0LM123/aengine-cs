@@ -25,9 +25,11 @@ public sealed class RigidBody2D {
 
     private readonly Vector2[] m_vertices;
     public readonly int[] triangles; // indices
-    private Vector2[] m_transformedVertices;
-
+    private readonly Vector2[] m_transformedVertices;
+    private PhysicsAABB aabb;
+    
     private bool m_transformUpdateRequired;
+    private bool m_aabbUpdateRequired;
 
     public readonly PhysicsShape shape;
 
@@ -69,11 +71,12 @@ public sealed class RigidBody2D {
             m_vertices = null;
             m_transformedVertices = null;
         }
-
+        
         m_transformUpdateRequired = true;
+        m_aabbUpdateRequired = true;
     }
 
-    internal void tick(float dt, Vector2 gravity) {
+    internal void tick(float dt, Vector2 gravity, int iterations) {
         // Vector2 acceleration = m_force / mass;
         //
         // m_linearVelocity += acceleration * dt;
@@ -81,6 +84,8 @@ public sealed class RigidBody2D {
         if (isStatic) {
             return;
         }
+
+        dt /= iterations;
         
         m_linearVelocity += gravity * dt;
         m_position += m_linearVelocity * dt;
@@ -88,6 +93,7 @@ public sealed class RigidBody2D {
         
         m_force = Vector2.Zero;
         m_transformUpdateRequired = true;
+        m_aabbUpdateRequired = true;
     }
 
     public Vector2 getLinearVelocity() {
@@ -105,16 +111,19 @@ public sealed class RigidBody2D {
     public void move(Vector2 amount) {
         m_position += amount;
         m_transformUpdateRequired = true;
+        m_aabbUpdateRequired = true;
     }
 
     public void rotate(float amount) {
         m_rotation += amount;
         m_transformUpdateRequired = true;
+        m_aabbUpdateRequired = true;
     }
 
     public void setPosition(Vector2 position) {
         m_position = position;
         m_transformUpdateRequired = true;
+        m_aabbUpdateRequired = true;
     }
 
     public Vector2 getPosition() {
@@ -123,6 +132,38 @@ public sealed class RigidBody2D {
 
     public float getRotation() {
         return m_rotation;
+    }
+
+    public PhysicsAABB getAABB() {
+        if (m_aabbUpdateRequired) {
+            float minX = 0;
+            float minY = 0;
+            float maxX = 0;
+            float maxY = 0;
+        
+            if (shape is PhysicsShape.BOX) {
+                for (int i = 0; i < getTransformedVertices().Length; i++) {
+                    Vector2 v = getTransformedVertices()[i];
+
+                    if (v.X < minX) minX = v.X;
+                    if (v.X > maxX) maxX = v.X;
+                    if (v.Y < minY) minY = v.Y;
+                    if (v.Y > maxY) maxY = v.Y;
+                }
+            } else if (shape is PhysicsShape.CIRCLE) {
+                minX = m_position.X - radius;
+                minY = m_position.Y - radius;
+                maxX = m_position.X + radius;
+                maxY = m_position.Y + radius;
+            } else {
+                throw new Exception("Unknown shape!");
+            }
+
+            aabb = new PhysicsAABB(minX, minY, maxX, maxY);
+        }
+
+        m_aabbUpdateRequired = true;
+        return aabb;
     }
 
     public static bool createCircleBody(float radius, Vector2 position, float density, bool isStatic,

@@ -12,6 +12,9 @@ public sealed class PhysicsWorld {
     public static readonly float minDensity = 0.25f; // g/cm^3
     public static readonly float maxDensity = 21.4f;
 
+    public static readonly int minIterations = 1;
+    public static readonly int maxIterations = 128;
+
     private List<RigidBody2D> bodies;
     private Vector2 gravity;
 
@@ -49,35 +52,39 @@ public sealed class PhysicsWorld {
         return true;
     }
 
-    public void tick(float dt) {
-        // move tick
-        for (int i = 0; i < bodies.Count; i++) {
-            bodies[i].tick(dt, gravity);
-        }
+    public void tick(float dt, int iterations = 20) {
+        iterations = Math.Clamp(iterations, minIterations, maxIterations);
 
-        // collision tick
-        for (int i = 0; i < bodies.Count - 1; i++) {
-            RigidBody2D bodyA = bodies[i];
+        for (int k = 0; k < iterations; k++) {
+            // move tick
+            for (int i = 0; i < bodies.Count; i++) {
+                bodies[i].tick(dt, gravity, iterations);
+            }
+
+            // collision tick
+            for (int i = 0; i < bodies.Count - 1; i++) {
+                RigidBody2D bodyA = bodies[i];
                 
-            for (int j = i + 1; j < bodies.Count; j++) {
-                RigidBody2D bodyB = bodies[j];
+                for (int j = i + 1; j < bodies.Count; j++) {
+                    RigidBody2D bodyB = bodies[j];
 
-                if (bodyA.isStatic && bodyB.isStatic) {
-                    continue;
-                }
-                
-                if (collide(bodyA, bodyB, out Vector2 normal, out float depth)) {
-
-                    if (bodyA.isStatic) {
-                        bodyB.move(normal * depth);
-                    } else if (bodyB.isStatic) {
-                        bodyA.move(-normal * depth);
-                    } else {
-                        bodyA.move(-normal * depth / 2);
-                        bodyB.move(normal * depth / 2);
+                    if (bodyA.isStatic && bodyB.isStatic) {
+                        continue;
                     }
+                
+                    if (collide(bodyA, bodyB, out Vector2 normal, out float depth)) {
+
+                        if (bodyA.isStatic) {
+                            bodyB.move(normal * depth);
+                        } else if (bodyB.isStatic) {
+                            bodyA.move(-normal * depth);
+                        } else {
+                            bodyA.move(-normal * depth / 2);
+                            bodyB.move(normal * depth / 2);
+                        }
                     
-                    resolveCollision(bodyA, bodyB, normal, depth);
+                        resolveCollision(bodyA, bodyB, normal, depth);
+                    }
                 }
             }
         }

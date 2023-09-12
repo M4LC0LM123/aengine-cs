@@ -79,7 +79,6 @@ public class ConsoleCommands {
         World.dispose();
         Raylib.CloseAudioDevice();
         Raylib.CloseWindow();
-        Raylib.EndDrawing();
         Environment.Exit(0);
     }
     

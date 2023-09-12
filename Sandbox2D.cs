@@ -1,9 +1,14 @@
+using System.Diagnostics;
 using System.Numerics;
+using aengine.core;
 using aengine.graphics;
 using aengine.physics2D;
 using Raylib_CsLo;
+using Sandbox.aengine.Gui;
 using static Raylib_CsLo.Raylib;
 using PhysicsShape = aengine.physics2D.PhysicsShape;
+
+using A_Console = aengine.core.Console;
 
 namespace Sandbox2D;
 
@@ -15,7 +20,10 @@ public class Sandbox2D {
         InitWindow(800, 600, "Sandbox2D");
         SetWindowIcon(LoadImage("assets/logo.png"));
         SetTargetFPS(60);
-
+        
+        Gui.font = LoadFont("assets/fonts/font.ttf");
+        A_Console console = new A_Console();
+        
         PhysicsWorld world = new PhysicsWorld();
 
         if (RigidBody2D.createBoxBody(GetScreenWidth() / 8 * 6, 50,
@@ -25,33 +33,56 @@ public class Sandbox2D {
         } else {
             throw new Exception(error);
         }
+
+        Stopwatch stopwatch = new Stopwatch();
         
         // Main game loop
         while (!WindowShouldClose()) {
+            stopwatch.Restart();
             world.tick(GetFrameTime());
+            stopwatch.Stop();
 
-            if (IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT)) {
-                bool success = RigidBody2D.createBoxBody(aengine.core.aengine.getRandomFloat(10, 50), aengine.core.aengine.getRandomFloat(10, 50),
-                    GetMousePosition(), 1, false, 0.5f,
-                    out RigidBody2D body, out string errorMsg);
-                
-                if (success) {
-                    world.addBody(body);
-                } else {
-                    throw new Exception(errorMsg); 
+            for (int i = 0; i < world.bodyCount(); i++) {
+                if (!world.getBody(i, out RigidBody2D body)) {
+                    throw new ArgumentOutOfRangeException();
+                }
+
+                PhysicsAABB box = body.getAABB();
+
+                if (box.max.Y > GetScreenHeight()) {
+                    world.removeBody(body);
                 }
             }
-            
-            if (IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_RIGHT)) {
-                bool success = RigidBody2D.createCircleBody(aengine.core.aengine.getRandomFloat(10, 50),
-                    GetMousePosition(), 1, false, 0.5f,
-                    out RigidBody2D body, out string errorMsg);
 
-                if (success) {
-                    world.addBody(body);
-                } else {
-                    throw new Exception(errorMsg);
+            if (!console.active) {
+                if (IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT)) {
+                    bool success = RigidBody2D.createBoxBody(aengine.core.aengine.getRandomFloat(10, 50), aengine.core.aengine.getRandomFloat(10, 50),
+                        GetMousePosition(), 1, false, 0.5f,
+                        out RigidBody2D body, out string errorMsg);
+                
+                    if (success) {
+                        world.addBody(body);
+                    } else {
+                        throw new Exception(errorMsg); 
+                    }
                 }
+            
+                if (IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_RIGHT)) {
+                    bool success = RigidBody2D.createCircleBody(aengine.core.aengine.getRandomFloat(10, 50),
+                        GetMousePosition(), 1, false, 0.5f,
+                        out RigidBody2D body, out string errorMsg);
+
+                    if (success) {
+                        world.addBody(body);
+                    } else {
+                        throw new Exception(errorMsg);
+                    }
+                }
+            }
+
+            if (IsKeyPressed(KeyboardKey.KEY_GRAVE)) {
+                console.window.setPosition(10, 10);
+                console.active = !console.active;
             }
             
             BeginDrawing();
@@ -85,6 +116,9 @@ public class Sandbox2D {
             }
             
             DrawFPS(10, 10);
+            DrawText("bodies: " + world.bodyCount(), 10, 40, 24, GREEN);
+            DrawText("step time: " + stopwatch.Elapsed.TotalMilliseconds, 10, 70, 24, GREEN);
+            console.render();
             EndDrawing();
         }
 
