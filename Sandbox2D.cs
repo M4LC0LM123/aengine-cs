@@ -87,7 +87,7 @@ public class Sandbox2D {
             }
             
             BeginDrawing();
-            ClearBackground(RAYWHITE);
+            ClearBackground(BLACK);
 
             for (int i = 0; i < world.bodyCount(); i++) {
                 if (!world.getBody(i, out PhysicsBody body)) {
@@ -117,7 +117,7 @@ public class Sandbox2D {
             }
             
             foreach (Vector2 contactPoint in world.contactPointList) {
-                DrawCircleLines((int)contactPoint.X, (int)contactPoint.Y, 5, RED);
+                DrawCircleLines((int)contactPoint.X, (int)contactPoint.Y, 5, WHITE);
             }
             
             DrawFPS(10, 10);
