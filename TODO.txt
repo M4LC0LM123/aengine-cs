@@ -1,4 +1,4 @@
 2d physics engine dev
 
-left of at https://www.youtube.com/watch?v=aIgxC2oJIwc
-collision manifold
+left of at https://www.youtube.com/watch?v=5gDC1GU3Ivg
+polygon/polygon contact points

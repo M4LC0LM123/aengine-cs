@@ -15,132 +15,130 @@ public sealed class PhysicsWorld {
     public static readonly int minIterations = 1;
     public static readonly int maxIterations = 128;
 
-    private List<RigidBody2D> bodies;
-    private Vector2 gravity;
+    private List<PhysicsBody> m_bodies;
+    private List<PhysicsManifold> m_manifolds;
+    private Vector2 m_gravity;
+
+    public List<Vector2> contactPointList;
 
     public PhysicsWorld() {
-        gravity = new Vector2(0, 981f);
-        bodies = new List<RigidBody2D>();
+        m_gravity = new Vector2(0, 981f);
+        m_bodies = new List<PhysicsBody>();
+        m_manifolds = new List<PhysicsManifold>();
+        contactPointList = new List<Vector2>();
     }
 
     public PhysicsWorld(Vector2 gravity) {
-        this.gravity = gravity;
-        bodies = new List<RigidBody2D>();
+        m_gravity = gravity;
+        m_bodies = new List<PhysicsBody>();
+        m_manifolds = new List<PhysicsManifold>();
+        contactPointList = new List<Vector2>();
     }
 
     public int bodyCount() {
-        return bodies.Count;
+        return m_bodies.Count;
     }
     
-    public void addBody(RigidBody2D body) {
-        bodies.Add(body);
+    public void addBody(PhysicsBody body) {
+        m_bodies.Add(body);
     }
 
-    public bool removeBody(RigidBody2D body) {
-        return bodies.Remove(body);
+    public bool removeBody(PhysicsBody body) {
+        return m_bodies.Remove(body);
     }
 
-    public bool getBody(int index, out RigidBody2D body) {
+    public bool getBody(int index, out PhysicsBody body) {
         body = null;
         
-        if (index < 0 || index >= bodies.Count) {
+        if (index < 0 || index >= m_bodies.Count) {
             return false;
         }
 
-        body = bodies[index];
+        body = m_bodies[index];
         
         return true;
     }
 
-    public void tick(float dt, int iterations = 20) {
+    public void tick(float dt, int iterations = 15) {
         iterations = Math.Clamp(iterations, minIterations, maxIterations);
+        
+        contactPointList.Clear();
 
         for (int k = 0; k < iterations; k++) {
             // move tick
-            for (int i = 0; i < bodies.Count; i++) {
-                bodies[i].tick(dt, gravity, iterations);
+            for (int i = 0; i < m_bodies.Count; i++) {
+                m_bodies[i].tick(dt, m_gravity, iterations);
             }
+            
+            m_manifolds.Clear();
 
             // collision tick
-            for (int i = 0; i < bodies.Count - 1; i++) {
-                RigidBody2D bodyA = bodies[i];
+            for (int i = 0; i < m_bodies.Count - 1; i++) {
+                PhysicsBody bodyA = m_bodies[i];
+                PhysicsAABB bodyA_aabb = bodyA.getAABB();
                 
-                for (int j = i + 1; j < bodies.Count; j++) {
-                    RigidBody2D bodyB = bodies[j];
-
+                for (int j = i + 1; j < m_bodies.Count; j++) {
+                    PhysicsBody bodyB = m_bodies[j];
+                    PhysicsAABB bodyB_aabb = bodyB.getAABB();
+                    
                     if (bodyA.isStatic && bodyB.isStatic) {
                         continue;
                     }
-                
-                    if (collide(bodyA, bodyB, out Vector2 normal, out float depth)) {
 
-                        if (bodyA.isStatic) {
-                            bodyB.move(normal * depth);
-                        } else if (bodyB.isStatic) {
-                            bodyA.move(-normal * depth);
-                        } else {
-                            bodyA.move(-normal * depth / 2);
-                            bodyB.move(normal * depth / 2);
-                        }
-                    
-                        resolveCollision(bodyA, bodyB, normal, depth);
+                    if (Collisions.checkCollisionAABB(bodyA_aabb, bodyB_aabb)) {
+                        if (Collisions.collide(bodyA, bodyB, out Vector2 normal, out float depth) && bodyA.collisionEnabled && bodyB.collisionEnabled) {
+
+                            if (bodyA.isStatic) {
+                                bodyB.move(normal * depth);
+                            } else if (bodyB.isStatic) {
+                                bodyA.move(-normal * depth);
+                            } else {
+                                bodyA.move(-normal * depth / 2);
+                                bodyB.move(normal * depth / 2);
+                            }
+
+                            Collisions.findContactPoints(bodyA, bodyB, out Vector2 contactOne, out Vector2 contactTwo, out int contactCount);
+                            PhysicsManifold contact = new PhysicsManifold(bodyA, bodyB, normal, depth, contactOne, contactTwo, contactCount);
+                            m_manifolds.Add(contact);
+                        }   
                     }
                 }
             }
         }
+        
+        for (int i = 0; i < m_manifolds.Count; i++) {
+            PhysicsManifold manifold = m_manifolds[i];
+            resolveCollision(in manifold);
+
+            if (manifold.contactCount > 0) {
+                contactPointList.Add(manifold.contactOne);
+                
+                if (manifold.contactCount > 1) {
+                    contactPointList.Add(manifold.contactTwo);
+                }
+            }
+        }
+        
     }
 
-    private void resolveCollision(RigidBody2D bodyA, RigidBody2D bodyB, Vector2 normal, float depth) {
-        Vector2 relativeVel = bodyB.getLinearVelocity() - bodyA.getLinearVelocity();
+    private void resolveCollision(in PhysicsManifold manifold) {
+        Vector2 relativeVel = manifold.bodyB.getLinearVelocity() - manifold.bodyA.getLinearVelocity();
 
-        if (Vector2.Dot(relativeVel, normal) > 0) {
+        if (Vector2.Dot(relativeVel, manifold.normal) > 0) {
             return;
         }
         
-        float e = MathF.Min(bodyA.restitution, bodyB.restitution);
+        float e = MathF.Min(manifold.bodyA.restitution, manifold.bodyB.restitution);
         
-        float j = -(1 + e) * Vector2.Dot(relativeVel, normal);
-        j /= bodyA.inverseMass + bodyB.inverseMass;
+        float j = -(1 + e) * Vector2.Dot(relativeVel, manifold.normal);
+        j /= manifold.bodyA.inverseMass + manifold.bodyB.inverseMass;
 
-        Vector2 impulse = j * normal;
+        Vector2 impulse = j * manifold.normal;
         
-        bodyA.setLinearVelocity(bodyA.getLinearVelocity() - impulse * bodyA.inverseMass);
-        bodyB.setLinearVelocity(bodyB.getLinearVelocity() + impulse * bodyB.inverseMass);
+        manifold.bodyA.setLinearVelocity(manifold.bodyA.getLinearVelocity() - impulse * manifold.bodyA.inverseMass);
+        manifold.bodyB.setLinearVelocity(manifold.bodyB.getLinearVelocity() + impulse * manifold.bodyB.inverseMass);
     }
     
-    private bool collide(RigidBody2D bodyA, RigidBody2D bodyB, out Vector2 normal, out float depth) {
-        normal = Vector2.Zero;
-        depth = 0;
-
-        PhysicsShape physicsShapeA = bodyA.shape;
-        PhysicsShape physicsShapeB = bodyB.shape;
-
-        if (physicsShapeA is PhysicsShape.BOX) {
-            if (physicsShapeB is PhysicsShape.BOX) {
-                return Collisions.checkPolyOverlap(bodyA.getPosition(), bodyA.getTransformedVertices(), bodyB.getPosition(), bodyB.getTransformedVertices(),
-                    out normal, out depth);
-            }
-            
-            if (physicsShapeB is PhysicsShape.CIRCLE) {
-                bool result = Collisions.checkPolyCircleOverlap(bodyB.getPosition(), bodyB.radius, bodyA.getPosition(),
-                    bodyA.getTransformedVertices(), out normal, out depth);
-
-                normal = -normal;
-                return result;
-            }
-        } else if (physicsShapeA is PhysicsShape.CIRCLE) {
-            if (physicsShapeB is PhysicsShape.BOX) {
-                return Collisions.checkPolyCircleOverlap(bodyA.getPosition(), bodyA.radius, bodyB.getPosition(),
-                    bodyB.getTransformedVertices(), out normal, out depth);
-            }
-            
-            if (physicsShapeB is PhysicsShape.CIRCLE) {
-                return Collisions.checkCircleOverlap(bodyA.getPosition(), bodyA.radius, bodyB.getPosition(),
-                    bodyB.radius, out normal, out depth);
-            }
-        }
-
-        return false;
-    }
+    
 
 }

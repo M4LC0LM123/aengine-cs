@@ -3,7 +3,7 @@ using Raylib_CsLo;
 
 namespace aengine.physics2D;
 
-public sealed class RigidBody2D {
+public sealed class PhysicsBody {
     private Vector2 m_position;
     private Vector2 m_linearVelocity;
     private float m_rotation;
@@ -33,7 +33,9 @@ public sealed class RigidBody2D {
 
     public readonly PhysicsShape shape;
 
-    private RigidBody2D(Vector2 position, float mass,
+    public bool collisionEnabled = true;
+
+    private PhysicsBody(Vector2 position, float mass,
         float density, float restitution, float area, bool isStatic, float radius, float width, float height,
         PhysicsShape shape) {
         m_position = position;
@@ -167,7 +169,7 @@ public sealed class RigidBody2D {
     }
 
     public static bool createCircleBody(float radius, Vector2 position, float density, bool isStatic,
-        float restitution, out RigidBody2D body, out string errorMsg) {
+        float restitution, out PhysicsBody body, out string errorMsg) {
         body = null;
         errorMsg = string.Empty;
 
@@ -198,13 +200,13 @@ public sealed class RigidBody2D {
         // mass = area * depth * density
         float mass = area * density / PhysicsWorld.massScalar;
 
-        body = new RigidBody2D(position, mass, density, restitution, area, isStatic, radius, 0, 0, PhysicsShape.CIRCLE);
+        body = new PhysicsBody(position, mass, density, restitution, area, isStatic, radius, 0, 0, PhysicsShape.CIRCLE);
 
         return true;
     }
 
     public static bool createBoxBody(float width, float height, Vector2 position, float density, bool isStatic,
-        float restitution, out RigidBody2D body, out string errorMsg) {
+        float restitution, out PhysicsBody body, out string errorMsg) {
         body = null;
         errorMsg = string.Empty;
 
@@ -235,7 +237,7 @@ public sealed class RigidBody2D {
         // mass = area * depth * density
         float mass = area * density / PhysicsWorld.massScalar;
 
-        body = new RigidBody2D(position, mass, density, restitution, area, isStatic, 0, width, height,
+        body = new PhysicsBody(position, mass, density, restitution, area, isStatic, 0, width, height,
             PhysicsShape.BOX);
 
         return true;
@@ -270,11 +272,11 @@ public sealed class RigidBody2D {
 
     public Vector2[] getTransformedVertices() {
         if (m_transformUpdateRequired) {
-            Transform2D transform = new Transform2D(m_position, m_rotation);
+            PhysicsTransform physicsTransform = new PhysicsTransform(m_position, m_rotation);
 
             for (int i = 0; i < m_vertices.Length; i++) {
                 Vector2 v = m_vertices[i];
-                m_transformedVertices[i] = PhysicsUtils.transform(v, transform);
+                m_transformedVertices[i] = PhysicsUtils.transform(v, physicsTransform);
             }
         }
 

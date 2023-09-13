@@ -9,6 +9,7 @@ using static Raylib_CsLo.Raylib;
 using PhysicsShape = aengine.physics2D.PhysicsShape;
 
 using A_Console = aengine.core.Console;
+using Console = System.Console;
 
 namespace Sandbox2D;
 
@@ -26,9 +27,9 @@ public class Sandbox2D {
         
         PhysicsWorld world = new PhysicsWorld();
 
-        if (RigidBody2D.createBoxBody(GetScreenWidth() / 8 * 6, 50,
+        if (PhysicsBody.createBoxBody(GetScreenWidth() / 8 * 6, 50,
                 new Vector2(GetScreenWidth() / 2, GetScreenHeight() - 25),
-                1.0f, true, 0.5f, out RigidBody2D floor, out string error)) {
+                1.0f, true, 0.5f, out PhysicsBody floor, out string error)) {
             world.addBody(floor);
         } else {
             throw new Exception(error);
@@ -41,9 +42,9 @@ public class Sandbox2D {
             stopwatch.Restart();
             world.tick(GetFrameTime());
             stopwatch.Stop();
-
+            
             for (int i = 0; i < world.bodyCount(); i++) {
-                if (!world.getBody(i, out RigidBody2D body)) {
+                if (!world.getBody(i, out PhysicsBody body)) {
                     throw new ArgumentOutOfRangeException();
                 }
 
@@ -56,9 +57,9 @@ public class Sandbox2D {
 
             if (!console.active) {
                 if (IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT)) {
-                    bool success = RigidBody2D.createBoxBody(aengine.core.aengine.getRandomFloat(10, 50), aengine.core.aengine.getRandomFloat(10, 50),
+                    bool success = PhysicsBody.createBoxBody(aengine.core.aengine.getRandomFloat(10, 50), aengine.core.aengine.getRandomFloat(10, 50),
                         GetMousePosition(), 1, false, 0.5f,
-                        out RigidBody2D body, out string errorMsg);
+                        out PhysicsBody body, out string errorMsg);
                 
                     if (success) {
                         world.addBody(body);
@@ -68,9 +69,9 @@ public class Sandbox2D {
                 }
             
                 if (IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_RIGHT)) {
-                    bool success = RigidBody2D.createCircleBody(aengine.core.aengine.getRandomFloat(10, 50),
+                    bool success = PhysicsBody.createCircleBody(aengine.core.aengine.getRandomFloat(10, 50),
                         GetMousePosition(), 1, false, 0.5f,
-                        out RigidBody2D body, out string errorMsg);
+                        out PhysicsBody body, out string errorMsg);
 
                     if (success) {
                         world.addBody(body);
@@ -89,7 +90,7 @@ public class Sandbox2D {
             ClearBackground(RAYWHITE);
 
             for (int i = 0; i < world.bodyCount(); i++) {
-                if (!world.getBody(i, out RigidBody2D body)) {
+                if (!world.getBody(i, out PhysicsBody body)) {
                     throw new Exception("Body not found!");
                 }
                 
@@ -115,9 +116,14 @@ public class Sandbox2D {
                 }
             }
             
+            foreach (Vector2 contactPoint in world.contactPointList) {
+                DrawCircleLines((int)contactPoint.X, (int)contactPoint.Y, 5, RED);
+            }
+            
             DrawFPS(10, 10);
             DrawText("bodies: " + world.bodyCount(), 10, 40, 24, GREEN);
             DrawText("step time: " + stopwatch.Elapsed.TotalMilliseconds, 10, 70, 24, GREEN);
+            DrawText("contact points: " + world.contactPointList.Count, 10, 100, 24, GREEN);
             console.render();
             EndDrawing();
         }

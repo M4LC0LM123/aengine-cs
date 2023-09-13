@@ -3,70 +3,124 @@ using System.Numerics;
 namespace aengine.physics2D; 
 
 public static class Collisions {
+    public static bool checkCollisionAABB(PhysicsAABB a, PhysicsAABB b) {
+        if(a.max.X <= b.min.X || b.max.X <= a.min.X ||
+           a.max.Y <= b.min.Y || b.max.Y <= a.min.Y)
+        {
+            return false;
+        }
 
-    public static bool checkPolyCircleOverlap(Vector2 circleCenter, float circleRadius, Vector2[] vertices,
-        out Vector2 normal, out float depth) {
+        return true;
+    }
+
+    public static void findContactPoints(PhysicsBody bodyA, PhysicsBody bodyB, out Vector2 contactOne,
+        out Vector2 contactTwo, out int contactCount) {
+        contactOne = Vector2.Zero;
+        contactTwo = Vector2.Zero;
+        contactCount = 0;
+
+        PhysicsShape shapeTypeA = bodyA.shape;
+        PhysicsShape shapeTypeB = bodyB.shape;
+
+        if (shapeTypeA is PhysicsShape.BOX) {
+            if (shapeTypeB is PhysicsShape.BOX) {
+            }
+            else if (shapeTypeB is PhysicsShape.CIRCLE) {
+                findContactPoint(bodyB.getPosition(), bodyB.radius, bodyA.getPosition(), bodyA.getTransformedVertices(),
+                    out contactOne);
+                contactCount = 1;
+            }
+        }
+        else if (shapeTypeA is PhysicsShape.CIRCLE) {
+            if (shapeTypeB is PhysicsShape.BOX) {
+                findContactPoint(bodyA.getPosition(), bodyA.radius, bodyB.getPosition(), bodyB.getTransformedVertices(),
+                    out contactOne);
+                contactCount = 1;
+            }
+            else if (shapeTypeB is PhysicsShape.CIRCLE) {
+                findContactPoint(bodyA.getPosition(), bodyA.radius, bodyB.getPosition(), out contactOne);
+                contactCount = 1;
+            }
+        }
+    }
+
+    private static void findContactPoint(Vector2 circleCenter, float circleRadius, Vector2 polygonCenter,
+        Vector2[] polygonVertices, out Vector2 cp) {
+        cp = Vector2.Zero;
+
+        float minDistSq = float.MaxValue;
+
+        for (int i = 0; i < polygonVertices.Length; i++) {
+            Vector2 va = polygonVertices[i];
+            Vector2 vb = polygonVertices[(i + 1) % polygonVertices.Length];
+
+            pointSegmentDistance(circleCenter, va, vb, out float distSq, out Vector2 contact);
+
+            if (distSq < minDistSq) {
+                minDistSq = distSq;
+                cp = contact;
+            }
+        }
+    }
+    
+    private static void findContactPoint(Vector2 centerA, float radiusA, Vector2 centerB, out Vector2 cp) {
+        Vector2 ab = centerB - centerA;
+        Vector2 dir = Vector2.Normalize(ab);
+        cp = centerA + dir * radiusA;
+    }
+    
+    private static void pointSegmentDistance(Vector2 p, Vector2 a, Vector2 b, out float distanceSquared, out Vector2 cp) {
+        Vector2 ab = b - a;
+        Vector2 ap = p - a;
+
+        float proj = Vector2.Dot(ap, ab);
+        float abLenSq = PhysicsUtils.lengthSquared(ab);
+        float d = proj / abLenSq;
+
+        if (d <= 0f) {
+            cp = a;
+        } else if (d >= 1.0f) {
+            cp = b;
+        } else {
+            cp = a + ab * d;
+        }
+
+        distanceSquared = Vector2.DistanceSquared(p, cp);
+    }
+    
+    internal static bool collide(PhysicsBody bodyA, PhysicsBody bodyB, out Vector2 normal, out float depth) {
         normal = Vector2.Zero;
-        depth = float.MaxValue;
-        
-        Vector2 axis = Vector2.Zero;
-        float axisDepth;
+        depth = 0;
 
-        float minA;
-        float maxA;
-        float minB;
-        float maxB;
-        
-        for (int i = 0; i < vertices.Length; i++) {
-            Vector2 va = vertices[i];
-            Vector2 vb = vertices[(i + 1) % vertices.Length];
+        PhysicsShape physicsShapeA = bodyA.shape;
+        PhysicsShape physicsShapeB = bodyB.shape;
 
-            Vector2 edge = vb - va;
-            axis = Vector2.Zero with { X = -edge.Y, Y = edge.X }; 
-            axis = Vector2.Normalize(axis);
+        if (physicsShapeA is PhysicsShape.BOX) {
+            if (physicsShapeB is PhysicsShape.BOX) {
+                return checkPolyOverlap(bodyA.getPosition(), bodyA.getTransformedVertices(), bodyB.getPosition(), bodyB.getTransformedVertices(),
+                    out normal, out depth);
+            }
             
-            projectVertices(vertices, axis, out minA, out maxA);
-            projectCircle(circleCenter, circleRadius, axis, out minB, out maxB);
+            if (physicsShapeB is PhysicsShape.CIRCLE) {
+                bool result = checkPolyCircleOverlap(bodyB.getPosition(), bodyB.radius, bodyA.getPosition(),
+                    bodyA.getTransformedVertices(), out normal, out depth);
 
-            if (minA >= maxB || minB >= maxA) // seperated
-                return false;
-
-            axisDepth = MathF.Min(maxB - minA, maxA - minB);
-
-            if (axisDepth < depth) {
-                depth = axisDepth;
-                normal = axis;
+                normal = -normal;
+                return result;
+            }
+        } else if (physicsShapeA is PhysicsShape.CIRCLE) {
+            if (physicsShapeB is PhysicsShape.BOX) {
+                return checkPolyCircleOverlap(bodyA.getPosition(), bodyA.radius, bodyB.getPosition(),
+                    bodyB.getTransformedVertices(), out normal, out depth);
+            }
+            
+            if (physicsShapeB is PhysicsShape.CIRCLE) {
+                return checkCircleOverlap(bodyA.getPosition(), bodyA.radius, bodyB.getPosition(),
+                    bodyB.radius, out normal, out depth);
             }
         }
 
-        int cpIndex = findClosestPointOnPoly(circleCenter, vertices);
-        Vector2 cp = vertices[cpIndex];
-
-        axis = cp - circleCenter;
-        axis = Vector2.Normalize(axis);
-        
-        projectVertices(vertices, axis, out minA, out maxA);
-        projectCircle(circleCenter, circleRadius, axis, out minB, out maxB);
-
-        if (minA >= maxB || minB >= maxA) // seperated
-            return false;
-
-        axisDepth = MathF.Min(maxB - minA, maxA - minB);
-
-        if (axisDepth < depth) {
-            depth = axisDepth;
-            normal = axis;
-        }
-
-        Vector2 polyCenter = findArithmeticMean(vertices);
-
-        Vector2 dir = polyCenter - circleCenter;
-
-        if (Vector2.Dot(dir, normal) < 0) {
-            normal = -normal;
-        }
-        
-        return true;
+        return false;
     }
     
     public static bool checkPolyCircleOverlap(Vector2 circleCenter, float circleRadius, Vector2 polyCenter, Vector2[] vertices,
@@ -164,66 +218,6 @@ public static class Collisions {
         }
     }
     
-    public static bool checkPolyOverlap(Vector2[] verticesA, Vector2[] verticesB, out Vector2 normal, out float depth) {
-        normal = Vector2.Zero;
-        depth = float.MaxValue;
-        
-        for (int i = 0; i < verticesA.Length; i++) {
-            Vector2 va = verticesA[i];
-            Vector2 vb = verticesB[(i + 1) % verticesA.Length];
-
-            Vector2 edge = vb - va;
-            Vector2 axis = Vector2.Zero with { X = -edge.Y, Y = edge.X };
-            axis = Vector2.Normalize(axis);
-            
-            projectVertices(verticesA, axis, out float minA, out float maxA);
-            projectVertices(verticesB, axis, out float minB, out float maxB);
-
-            if (minA >= maxB || minB >= maxA) // seperated
-                return false;
-
-            float axisDepth = MathF.Min(maxB - minA, maxA - minB);
-
-            if (axisDepth < depth) {
-                depth = axisDepth;
-                normal = axis;
-            }
-        }
-        
-        for (int i = 0; i < verticesB.Length; i++) {
-            Vector2 va = verticesB[i];
-            Vector2 vb = verticesB[(i + 1) % verticesB.Length];
-
-            Vector2 edge = vb - va;
-            Vector2 axis = Vector2.Zero with { X = -edge.Y, Y = edge.X };
-            axis = Vector2.Normalize(axis);
-            
-            projectVertices(verticesA, axis, out float minA, out float maxA);
-            projectVertices(verticesB, axis, out float minB, out float maxB);
-
-            if (minA >= maxB || minB >= maxA) // seperated
-                return false;
-            
-            float axisDepth = MathF.Min(maxB - minA, maxA - minB);
-
-            if (axisDepth < depth) {
-                depth = axisDepth;
-                normal = axis;
-            }
-        }
-
-        Vector2 centerA = findArithmeticMean(verticesA);
-        Vector2 centerB = findArithmeticMean(verticesB);
-
-        Vector2 dir = centerB - centerA;
-
-        if (Vector2.Dot(dir, normal) < 0) {
-            normal = -normal;
-        }
-        
-        return true;
-    }
-    
     public static bool checkPolyOverlap(Vector2 centerA, Vector2[] verticesA, Vector2 centerB, Vector2[] verticesB, out Vector2 normal, out float depth) {
         normal = Vector2.Zero;
         depth = float.MaxValue;
@@ -279,20 +273,6 @@ public static class Collisions {
         }
         
         return true;
-    }
-
-    private static Vector2 findArithmeticMean(Vector2[] vertices) {
-        float sumX = 0;
-        float sumY = 0;
-        
-        for (int i = 0; i < vertices.Length; i++) {
-            Vector2 v = vertices[i];
-
-            sumX += v.X;
-            sumY += v.Y;
-        }
-
-        return new Vector2(sumX / vertices.Length, sumY / vertices.Length);
     }
     
     private static void projectVertices(Vector2[] vertices, Vector2 axis, out float min, out float max) {
