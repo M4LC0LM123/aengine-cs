@@ -80,7 +80,7 @@ public class Console
     {
         if (active)
         {
-            window.render();
+            window.render(this);
             
             Gui.GuiInverseRec(2.5f + window.rec.x, 2.5f + window.rec.y, window.rec.width - 5f, window.rec.height - 50);
 
@@ -89,13 +89,13 @@ public class Console
                 Gui.GuiTextPro(Gui.font, consoleLines[i], new Vector2(5f, 2.5f + 17.5f * i), 17.5f, Raylib.WHITE, window);
             }
             
-            commandInput.render(2.5f, window.rec.height - 42.5f, 400, 40, window);
+            commandInput.render(2.5f, window.rec.height - 42.5f, window.rec.width - 2.5f - 100, 40, window);
 
             if (commandInput.active)
                 if (Raylib.IsKeyPressed(KeyboardKey.KEY_UP))
                     commandInput.text = previousInput;
 
-            if (Gui.GuiButton("enter", 400, window.rec.height - 42.5f, window.rec.width - 400 - Gui.exitScale, 40, window) || (commandInput.active && Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER)))
+            if (Gui.GuiButton("enter", window.rec.width - Gui.exitScale - 100, window.rec.height - 42.5f, 100 - Gui.exitScale, 40, window) || (commandInput.active && Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER)))
             {
                 executeCommand(commandInput.text);
                 previousInput = commandInput.text;

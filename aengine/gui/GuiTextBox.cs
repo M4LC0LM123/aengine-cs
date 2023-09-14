@@ -35,15 +35,17 @@ public class GuiTextBox
         float textY = ry + (temp.height - Gui.font.baseSize * textScale) / 2;
         
         float textX = rx + Gui.bezelSize;
-            
+
         Gui.GuiInverseRec(rx, ry, temp.width, temp.height);
         
-        Gui.GuiTextPro(Gui.font, text, new Vector2(textX, textY), Gui.font.baseSize * textScale, WHITE);
+        Gui.GuiTextPro(Gui.font, text + "_", new Vector2(textX, textY), Gui.font.baseSize * textScale, WHITE);
 
         if (active)
         {
-            DrawLine((int)textX, (int)(textY + Gui.font.baseSize * textScale), (int)(textX + temp.width - 5), (int)(textY + Gui.font.baseSize * textScale), WHITE);
-            DrawRectangle((int)(textX + text.Length * 15), (int)textY, 1, (int)temp.height, WHITE);
+            // DrawLine((int)textX, (int)(textY + Gui.font.baseSize * textScale), (int)(textX + temp.width - 5), (int)(textY + Gui.font.baseSize * textScale), WHITE);
+            // DrawRectangle((int)(textX + text.Length * 15), (int)textY, 1, (int)temp.height, WHITE);
+            
+            // DrawCircle((int)textX, (int)textY, 5, RED);
             
             if (IsKeyPressed(KeyboardKey.KEY_BACKSPACE))
             {

@@ -1,6 +1,7 @@
 using System.Numerics;
 using Raylib_CsLo;
 using static Raylib_CsLo.Raylib;
+using Console = aengine.core.Console;
 
 namespace Sandbox.aengine.Gui;
 
@@ -50,7 +51,7 @@ public class GuiWindow
         return new Vector2(topBar.x, topBar.y);
     }
     
-    public void render()
+    public void render(Console console = null)
     {
         if (IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), topBar) && !Gui.GuiInteractiveRec(default, topBar.x + topBar.width - Gui.exitScale, topBar.y, Gui.exitScale, Gui.exitScale, IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT), null, false))
         {
@@ -82,6 +83,11 @@ public class GuiWindow
         {
             topBar.x = -5000;
             topBar.y = -5000;
+
+            if (console != null) {
+                console.active = false;
+            }
+            
         }
         
         Gui.GuiTextPro(Gui.font, title, new Vector2(topBar.x + 5, topBar.y), titleSize, WHITE);
