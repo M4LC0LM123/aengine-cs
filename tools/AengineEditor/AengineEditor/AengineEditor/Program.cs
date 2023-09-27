@@ -54,6 +54,9 @@ namespace Editor
                 
                 if (IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) && IsKeyPressed(KeyboardKey.KEY_S) && !isMouseLocked)
                     manager.save();
+
+                if (IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) && IsKeyPressed(KeyboardKey.KEY_O) && !isMouseLocked)
+                    manager.outlined = !manager.outlined;
                 
                 mover.update(camera);
                 

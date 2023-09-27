@@ -11,6 +11,7 @@ namespace Editor;
 public class ObjectManager
 {
     public List<Object> objects;
+    public bool outlined = false;
 
     public ObjectManager()
     {
@@ -81,7 +82,7 @@ public class ObjectManager
     {
         foreach (var obj in objects)
         {
-            obj.render();
+            obj.render(outlined);
         }
     }
 
@@ -100,19 +101,29 @@ public class ObjectManager
         };
 
         string json = JsonSerializer.Serialize(jsonObjects, options);
-        File.WriteAllText(Dialog.FileSave().Path, json);
+
+        if (Dialog.FileSave().Path != null) {
+            File.WriteAllText(Dialog.FileSave().Path, json);   
+        } else {
+            Console.WriteLine("cancelled");  
+        }
     }
 
     public void load()
     {
         objects.Clear();
-        List<SceneObject> data = JsonSerializer.Deserialize<List<SceneObject>>(File.ReadAllText(Dialog.FileOpen().Path));
-        foreach (var obj in data)
-        {
-            Object new_object = new Object(obj.id, new Vector3(obj.x, obj.y, obj.z));
-            new_object.rotation = new Vector3(obj.rx, obj.ry, obj.rz);
-            new_object.scale = new Vector3(obj.w, obj.h, obj.d);
-            objects.Add(new_object);
+
+        if (Dialog.FileOpen().Path != null) {
+            List<SceneObject> data = JsonSerializer.Deserialize<List<SceneObject>>(File.ReadAllText(Dialog.FileOpen().Path));
+            foreach (var obj in data)
+            {
+                Object new_object = new Object(obj.id, new Vector3(obj.x, obj.y, obj.z));
+                new_object.rotation = new Vector3(obj.rx, obj.ry, obj.rz);
+                new_object.scale = new Vector3(obj.w, obj.h, obj.d);
+                objects.Add(new_object);
+            }   
+        } else {
+            Console.WriteLine("cancelled");  
         }
     }
 
