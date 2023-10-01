@@ -109,18 +109,20 @@ namespace aengine.ecs
         public void update(Entity entity)
         {
             if (entity != null)
-            { 
-                transform = entity.transform;
-                setScale(transform.scale);
+            {
                 if (entity.hasComponent<RigidBodyComponent>()) {
                     if (entity.getComponent<RigidBodyComponent>().shapeType == ShapeType.CYLINDER) {
-                        setRotation(transform.rotation with { X = transform.rotation.X - 90});
+                        transform.position = entity.transform.position;
+                        transform.rotation = entity.transform.rotation with { X = entity.transform.rotation.X + 90 };
+                        transform.scale = entity.transform.scale;
                     } else {
-                        setRotation(transform.rotation);  
+                        transform = entity.transform;  
                     }
                 } else {
-                    setRotation(transform.rotation);  
+                    transform = entity.transform;         
                 }
+                setScale(transform.scale);
+                setRotation(transform.rotation);
             }
         }
 
