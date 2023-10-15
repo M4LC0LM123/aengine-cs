@@ -16,6 +16,8 @@ public sealed class PhysicsBody {
     public readonly float density;
     public readonly float restitution;
     public readonly float area;
+    public readonly float inertia;
+    public readonly float inverseInertia;
 
     public readonly bool isStatic;
 
@@ -55,13 +57,17 @@ public sealed class PhysicsBody {
         this.radius = radius;
         this.width = width;
         this.height = height;
-
+ 
         this.shape = shape;
+        
+        inertia = calculateRotationalInertia();
 
         if (!isStatic) {
-            inverseMass = 1.0f / mass;
+            inverseMass = 1.0f / this.mass;
+            inverseInertia = 1.0f / inertia;
         } else {
             inverseMass = 0.0f;
+            inverseInertia = 0.0f;
         }
 
         if (this.shape is PhysicsShape.BOX) {
@@ -76,6 +82,17 @@ public sealed class PhysicsBody {
         
         m_transformUpdateRequired = true;
         m_aabbUpdateRequired = true;
+    }
+
+    private float calculateRotationalInertia() {
+        if (shape is PhysicsShape.CIRCLE) {
+            return (1 / 2) * mass * radius * radius;
+        }
+        if (shape is PhysicsShape.BOX) {
+            return (1 / 12) * mass * (width * width + height * height);
+        }
+        
+        throw new ArgumentOutOfRangeException(nameof(shape) + "is not a valid shape type");
     }
 
     internal void tick(float dt, Vector2 gravity, int iterations) {
@@ -130,6 +147,12 @@ public sealed class PhysicsBody {
 
     public Vector2 getPosition() {
         return m_position;
+    }
+
+    public void setRotation(float rotation) {
+        m_rotation = rotation;
+        m_transformUpdateRequired = true;
+        m_aabbUpdateRequired = true;
     }
 
     public float getRotation() {

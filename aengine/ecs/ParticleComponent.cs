@@ -1,6 +1,7 @@
 using System.Numerics;
 using aengine.graphics;
 using Raylib_CsLo;
+using static Raylib_CsLo.Raylib;
 
 namespace aengine.ecs;
 

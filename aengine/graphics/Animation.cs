@@ -3,12 +3,13 @@ using Raylib_CsLo;
 
 namespace aengine.graphics;
 
-public struct Animation
-{
+public class Animation {
     public Texture texture;
+    
     public int frame;
     public int speed;
-    public int frames;
+    public int frameCount;
     public int frameCounter;
+    
     public Vector2 frameSize;
 }

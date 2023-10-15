@@ -39,9 +39,7 @@ public class Raycast
 
             if (tmin > tmax)
             {
-                float temp = tmin;
-                tmin = tmax;
-                tmax = temp;
+                (tmin, tmax) = (tmax, tmin);
             }
 
             float tymin = (boxMin.Y - position.Y) / rayDirection.Y;
@@ -49,9 +47,7 @@ public class Raycast
 
             if (tymin > tymax)
             {
-                float temp = tymin;
-                tymin = tymax;
-                tymax = temp;
+                (tymin, tymax) = (tymax, tymin);
             }
 
             if ((tmin > tymax) || (tymin > tmax))
@@ -74,9 +70,7 @@ public class Raycast
 
             if (tzmin > tzmax)
             {
-                float temp = tzmin;
-                tzmin = tzmax;
-                tzmax = temp;
+                (tzmin, tzmax) = (tzmax, tzmin);
             }
 
             if ((tmin > tzmax) || (tzmin > tmax))

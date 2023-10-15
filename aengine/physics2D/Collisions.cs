@@ -24,6 +24,7 @@ public static class Collisions {
 
         if (shapeTypeA is PhysicsShape.BOX) {
             if (shapeTypeB is PhysicsShape.BOX) {
+                findContactPoints(bodyA.getTransformedVertices(), bodyB.getTransformedVertices(), out contactOne, out contactTwo, out contactCount);
             }
             else if (shapeTypeB is PhysicsShape.CIRCLE) {
                 findContactPoint(bodyB.getPosition(), bodyB.radius, bodyA.getPosition(), bodyA.getTransformedVertices(),
@@ -44,6 +45,60 @@ public static class Collisions {
         }
     }
 
+    private static void findContactPoints(Vector2[] verticesA, Vector2[] verticesB, out Vector2 contact1, 
+        out Vector2 contact2, out int contactCount) {
+        contact1 = Vector2.Zero;
+        contact2 = Vector2.Zero;
+        contactCount = 0;
+
+        float minDistSq = float.MaxValue;
+        
+        for (var i = 0; i < verticesA.Length; i++) {
+            Vector2 p = verticesA[i];
+            
+            for (var j = 0; j < verticesB.Length; j++) {
+                Vector2 va = verticesB[j];
+                Vector2 vb = verticesB[(j + 1) % verticesB.Length];
+                
+                pointSegmentDistance(p, va, vb, out float distSq, out Vector2 cp);
+
+                if (PhysicsUtils.nearlyEqual(distSq, minDistSq)) {
+                    if (!PhysicsUtils.nearlyEqual(cp, contact1)) {
+                        contact2 = cp;
+                        contactCount = 2;   
+                    }
+                } else if (distSq < minDistSq) {
+                    minDistSq = distSq;
+                    contactCount = 1;
+                    contact1 = cp;
+                }
+            }
+        }
+        
+        for (var i = 0; i < verticesB.Length; i++) {
+            Vector2 p = verticesB[i];
+            
+            for (var j = 0; j < verticesA.Length; j++) {
+                Vector2 va = verticesA[j];
+                Vector2 vb = verticesA[(j + 1) % verticesA.Length];
+                
+                pointSegmentDistance(p, va, vb, out float distSq, out Vector2 cp);
+
+                if (PhysicsUtils.nearlyEqual(distSq, minDistSq)) {
+                    if (!PhysicsUtils.nearlyEqual(cp, contact1)) {
+                        contact2 = cp;
+                        contactCount = 2;   
+                    }
+                } else if (distSq < minDistSq) {
+                    minDistSq = distSq;
+                    contactCount = 1;
+                    contact1 = cp;
+                }
+            }
+        }
+        
+    }
+    
     private static void findContactPoint(Vector2 circleCenter, float circleRadius, Vector2 polygonCenter,
         Vector2[] polygonVertices, out Vector2 cp) {
         cp = Vector2.Zero;

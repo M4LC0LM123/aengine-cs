@@ -34,8 +34,32 @@ public class Sandbox2D {
         } else {
             throw new Exception(error);
         }
+        
+        if (PhysicsBody.createBoxBody(250, 20,
+                new Vector2(200, 400),
+                1.0f, true, 0.5f, out PhysicsBody ledge, out error)) {
+
+            ledge.setRotation(45 * RayMath.DEG2RAD);
+            world.addBody(ledge);
+        } else {
+            throw new Exception(error);
+        }
 
         Stopwatch stopwatch = new Stopwatch();
+
+        Sprite sprite = new Sprite(LoadTexture("assets/animation.png"));
+        sprite.position = new Vector2(10, 400);
+        sprite.scale = Vector2.One * 40;
+        sprite.setFrame(0);
+
+        Animation animation = new Animation() {
+            texture = sprite.texture,
+            frame = 0,
+            frameCounter = 0,
+            frameCount = 5,
+            frameSize = sprite.frameScale,
+            speed = 5
+        };
         
         // Main game loop
         while (!WindowShouldClose()) {
@@ -89,6 +113,12 @@ public class Sandbox2D {
             BeginDrawing();
             ClearBackground(BLACK);
 
+            sprite.render();
+
+            if (IsKeyDown(KeyboardKey.KEY_TAB)) {
+                sprite.animate(animation);
+            }
+            
             for (int i = 0; i < world.bodyCount(); i++) {
                 if (!world.getBody(i, out PhysicsBody body)) {
                     throw new Exception("Body not found!");
@@ -98,11 +128,11 @@ public class Sandbox2D {
 
                     if (body.isStatic) {
                         DrawRectanglePro(new Rectangle(body.getPosition().X, body.getPosition().Y, body.width, body.height),
-                            Vector2.Zero with { X = body.width / 2, Y = body.height / 2 }, body.getRotation(), BLUE);
+                            Vector2.Zero with { X = body.width / 2, Y = body.height / 2 }, body.getRotation() * RayMath.RAD2DEG, BLUE);
                     }
                     else {
                         DrawRectanglePro(new Rectangle(body.getPosition().X, body.getPosition().Y, body.width, body.height),
-                            Vector2.Zero with { X = body.width / 2, Y = body.height / 2 }, body.getRotation(), GREEN);   
+                            Vector2.Zero with { X = body.width / 2, Y = body.height / 2 }, body.getRotation() * RayMath.RAD2DEG, GREEN);   
                     }
                 }
 
@@ -116,6 +146,12 @@ public class Sandbox2D {
                 }
             }
             
+            foreach (Vector2 transformedVertex in ledge.getTransformedVertices()) {
+                DrawCircleV(transformedVertex, 5, WHITE);
+            }
+            
+            DrawRectangleV(floor.getAABB().min, floor.getAABB().max - floor.getAABB().min, WHITE with { a = 128});
+            
             foreach (Vector2 contactPoint in world.contactPointList) {
                 DrawCircleLines((int)contactPoint.X, (int)contactPoint.Y, 5, WHITE);
             }
@@ -128,6 +164,7 @@ public class Sandbox2D {
             EndDrawing();
         }
 
+        sprite.dispose();
         CloseWindow();
     }
 }
