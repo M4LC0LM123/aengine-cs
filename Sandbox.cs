@@ -21,7 +21,7 @@ public static class Sandbox {
         // the final build should have the assets folder in the same directory as the exe so remove this line below then
         Directory.SetCurrentDirectory("../../../");
         
-        SetConfigFlags(ConfigFlags.FLAG_WINDOW_RESIZABLE);
+        SetConfigFlags((uint)ConfigFlags.FLAG_WINDOW_RESIZABLE);
         SetTraceLogLevel((int)TraceLogLevel.LOG_NONE);
         InitWindow(800, 600, "aengine");
         SetWindowIcon(LoadImage("assets/logo.png"));
