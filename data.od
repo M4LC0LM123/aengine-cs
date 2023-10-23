@@ -1,0 +1,46 @@
+
+/* hehe 
+
+
+ hhee
+*/
+
+/* hehe */
+
+object object_name {
+    int a = 5;
+    float b = 6.9;
+    string c = "hehe";
+}
+
+/* 
+    this is a multi line comment
+*/
+
+object object_name2 {
+    int x = 100;
+    float y = 4.20;
+    string z = "hihi";
+}
+
+// this is a comment!
+
+object PlayerEntity {
+    float x = 0;
+    float y = 0;
+    float z = 0;
+    float width = 10;
+    float height = 10;
+    float depth = 10;
+
+    string tag = "Player";
+}
+
+// bool test
+
+object bool_test {
+    bool a = false;
+    bool b = true;
+    
+    int bool_count = 2;
+}
