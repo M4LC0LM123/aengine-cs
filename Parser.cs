@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace aengine_cs;
@@ -7,8 +8,9 @@ public class Parser {
         var objects = new Dictionary<string, Dictionary<string, object>>();
         string currentObjectName = null;
         Dictionary<string, object> currentObject = null;
+        Dictionary<string, object> macros = new Dictionary<string, object>();
         bool isInComment = false;
-
+        
         foreach (var line in fileContent) {
             var trimmedLine = line.Trim();
 
@@ -32,6 +34,24 @@ public class Parser {
                 continue;
             }
 
+            if (trimmedLine.StartsWith("#macro ")) {
+                Match match = Regex.Match(trimmedLine, @"#macro (\w+) (.+)");
+
+                if (match.Success) {
+                    string macroName = match.Groups[1].Value;
+                    string macroValue = match.Groups[2].Value;
+                    
+                    if (int.TryParse(macroValue, out int intValue)) {
+                        macros[macroName] = intValue;
+                    } else if (float.TryParse(macroValue, out float floatValue)) {
+                        macros[macroName] = floatValue;
+                    } else {
+                        // else its a string
+                        macros[macroName] = macroValue.Trim('"');
+                    }
+                }
+            }
+
             if (trimmedLine.StartsWith("object ")) {
                 if (currentObject != null) {
                     objects[currentObjectName] = currentObject;
@@ -44,14 +64,19 @@ public class Parser {
                 var match = Regex.Match(trimmedLine, @"(\w+) (\w+) = (.+);");
 
                 if (match.Success) {
-                    var dataType = match.Groups[1].Value;
-                    var attribute = match.Groups[2].Value;
-                    var value = match.Groups[3].Value;
+                    string dataType = match.Groups[1].Value;
+                    string attribute = match.Groups[2].Value;
+                    string value = match.Groups[3].Value;
 
+                    if (macros.ContainsKey(value)) {
+                        value = macros[value].ToString();
+                    }
+                    
                     if (dataType == "int") {
                         currentObject[attribute] = int.Parse(value);
                     } else if (dataType == "float") {
-                        currentObject[attribute] = float.Parse(value);
+                        currentObject[attribute] = float.Parse(value, 
+                            CultureInfo.InvariantCulture.NumberFormat);
                     } else if (dataType == "bool") {
                         currentObject[attribute] = bool.Parse(value);
                     } else if (dataType == "string") {
@@ -74,7 +99,7 @@ public class Parser {
 
     public static void main() {
         Directory.SetCurrentDirectory("../../../");
-
+        
         var fileLines = readCustomFile("data.od");
         var parsedData = parseCustomFile(fileLines);
 
@@ -83,7 +108,7 @@ public class Parser {
 
             foreach (var attribute in parsedData[objectName].Keys) {
                 var value = parsedData[objectName][attribute];
-                Console.WriteLine($"  {attribute}: {value}");
+                Console.WriteLine($"  {attribute}: {value}, type: {value.GetType()}");
             }
         }
     }

@@ -7,10 +7,18 @@
 
 /* hehe */
 
+#macro NULL 0
+#macro SOME_FLOAT 6.9
+#macro STRING_ZERO "-_-"
+
 object object_name {
     int a = 5;
     float b = 6.9;
     string c = "hehe";
+    
+    int macro_test = NULL;
+    float f_macro = SOME_FLOAT;
+    string str_macro_test = STRING_ZERO;
 }
 
 /* 
@@ -42,5 +50,28 @@ object bool_test {
     bool a = false;
     bool b = true;
     
+    int c = 2;
+    
     int bool_count = 2;
 }
+
+// same name
+object same {
+    int a = 6;
+}
+
+object same {
+    int b = 9;
+}
+
+/* this should be commented
+
+object commented_object {
+    float t = 1;
+    float h = 2;
+    string ss = "Str";
+    
+    int i = 0;
+}
+
+*/
