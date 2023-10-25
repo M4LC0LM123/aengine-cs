@@ -8,8 +8,9 @@
 /* hehe */
 
 #macro NULL 0
-#macro SOME_FLOAT 6.9
+#macro SOME_FLOAT 69.99
 #macro STRING_ZERO "-_-"
+#macro BOOLEAN true
 
 object object_name {
     int a = 5;
@@ -19,6 +20,8 @@ object object_name {
     int macro_test = NULL;
     float f_macro = SOME_FLOAT;
     string str_macro_test = STRING_ZERO;
+    
+    bool bool_test = BOOLEAN;
 }
 
 /* 

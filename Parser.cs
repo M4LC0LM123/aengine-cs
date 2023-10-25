@@ -43,8 +43,10 @@ public class Parser {
                     
                     if (int.TryParse(macroValue, out int intValue)) {
                         macros[macroName] = intValue;
-                    } else if (float.TryParse(macroValue, out float floatValue)) {
+                    } else if (float.TryParse(macroValue, NumberStyles.Any, CultureInfo.InvariantCulture, out float floatValue)) { // float parsing bug
                         macros[macroName] = floatValue;
+                    } else if (macroValue.Contains("true") || macroValue.Contains("false")) {
+                        macros[macroName] = bool.Parse(macroValue);
                     } else {
                         // else its a string
                         macros[macroName] = macroValue.Trim('"');
