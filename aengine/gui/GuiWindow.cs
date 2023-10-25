@@ -1,4 +1,5 @@
 using System.Numerics;
+using aengine_cs.aengine.windowing;
 using Raylib_CsLo;
 using static Raylib_CsLo.Raylib;
 using Console = aengine.core.Console;
@@ -53,7 +54,7 @@ public class GuiWindow
     
     public void render(Console console = null)
     {
-        if (IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), topBar) && !Gui.GuiInteractiveRec(default, topBar.x + topBar.width - Gui.exitScale, topBar.y, Gui.exitScale, Gui.exitScale, IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT), null, false))
+        if (IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(Window.mousePosition, topBar) && !Gui.GuiInteractiveRec(default, topBar.x + topBar.width - Gui.exitScale, topBar.y, Gui.exitScale, Gui.exitScale, IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT), null, false))
         {
             if (movable && Gui.activeWindowID == 0 || Gui.activeWindowID == id)
             {
@@ -70,8 +71,8 @@ public class GuiWindow
                 Gui.activeWindowID = 0;
             }
 
-            topBar.x = GetMousePosition().X - topBar.width/2;
-            topBar.y = GetMousePosition().Y - topBar.height/2;
+            topBar.x = Window.mousePosition.X - topBar.width/2;
+            topBar.y = Window.mousePosition.Y - topBar.height/2;
         }
 
         rec.x = topBar.x;
@@ -105,8 +106,8 @@ public class GuiWindow
             if (IsMouseButtonReleased(MouseButton.MOUSE_BUTTON_LEFT))
                 resizing = false;
             
-            rec.width = GetMousePosition().X - rec.x + 7.5f;
-            rec.height = GetMousePosition().Y - rec.y + 7.5f;
+            rec.width = Window.mousePosition.X - rec.x + 7.5f;
+            rec.height = Window.mousePosition.Y - rec.y + 7.5f;
             rec.width = Math.Clamp(rec.width, defaultScale.X, 1000);
             rec.height = Math.Clamp(rec.height, defaultScale.Y, 1000);
         }

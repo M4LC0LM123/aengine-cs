@@ -1,5 +1,6 @@
 using System;
 using System.Numerics;
+using aengine_cs.aengine.windowing;
 using aengine.core;
 using Raylib_CsLo;
 using static Raylib_CsLo.Raylib;
@@ -85,7 +86,7 @@ namespace aengine.graphics
                 ShowCursor();
             }
 
-            Matrix4x4 cameraRotation = MatrixRotateZYX(new Vector3(DEG2RAD * rotation.X, DEG2RAD * this.rotation.Y, DEG2RAD * rotation.Z));
+            Matrix4x4 cameraRotation = MatrixRotateZYX(new Vector3(DEG2RAD * rotation.X, DEG2RAD * rotation.Y, DEG2RAD * rotation.Z));
             front = Vector3Transform(new Vector3(0, 0, -1), cameraRotation);
             right = Vector3Transform(new Vector3(1, 0, 0), cameraRotation);
             up = Vector3Transform(new Vector3(0, 1, 0), cameraRotation);

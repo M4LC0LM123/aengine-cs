@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Numerics;
+using aengine_cs.aengine.windowing;
 using aengine.core;
 using aengine.graphics;
 using aengine.physics2D;
@@ -17,18 +18,17 @@ public class Sandbox2D {
     public static void main() {
         Directory.SetCurrentDirectory("../../../");
         
-        SetConfigFlags(ConfigFlags.FLAG_WINDOW_RESIZABLE);
-        InitWindow(800, 600, "Sandbox2D");
+        Window.create();
+        Window.title = "FIZIKS";
         SetWindowIcon(LoadImage("assets/logo.png"));
-        SetTargetFPS(60);
         
         Gui.font = LoadFont("assets/fonts/font.ttf");
         A_Console console = new A_Console();
         
         PhysicsWorld world = new PhysicsWorld();
 
-        if (PhysicsBody.createBoxBody(GetScreenWidth() / 8 * 6, 50,
-                new Vector2(GetScreenWidth() / 2, GetScreenHeight() - 25),
+        if (PhysicsBody.createBoxBody(Window.renderWidth / 8 * 6, 50,
+                new Vector2(Window.renderWidth / 2, Window.renderHeight - 25),
                 1.0f, true, 0.5f, out PhysicsBody floor, out string error)) {
             world.addBody(floor);
         } else {
@@ -63,6 +63,8 @@ public class Sandbox2D {
         
         // Main game loop
         while (!WindowShouldClose()) {
+            Window.tick();
+            
             stopwatch.Restart();
             world.tick(GetFrameTime());
             stopwatch.Stop();
@@ -82,7 +84,7 @@ public class Sandbox2D {
             if (!console.active) {
                 if (IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT)) {
                     bool success = PhysicsBody.createBoxBody(aengine.core.aengine.getRandomFloat(10, 50), aengine.core.aengine.getRandomFloat(10, 50),
-                        GetMousePosition(), 1, false, 0.5f,
+                        Window.mousePosition, 1, false, 0.5f,
                         out PhysicsBody body, out string errorMsg);
                 
                     if (success) {
@@ -94,7 +96,7 @@ public class Sandbox2D {
             
                 if (IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_RIGHT)) {
                     bool success = PhysicsBody.createCircleBody(aengine.core.aengine.getRandomFloat(10, 50),
-                        GetMousePosition(), 1, false, 0.5f,
+                        Window.mousePosition, 1, false, 0.5f,
                         out PhysicsBody body, out string errorMsg);
 
                     if (success) {
@@ -110,7 +112,7 @@ public class Sandbox2D {
                 console.active = !console.active;
             }
             
-            BeginDrawing();
+            Window.beginRender();
             ClearBackground(BLACK);
 
             sprite.render();
@@ -161,7 +163,8 @@ public class Sandbox2D {
             DrawText("step time: " + stopwatch.Elapsed.TotalMilliseconds, 10, 70, 24, GREEN);
             DrawText("contact points: " + world.contactPointList.Count, 10, 100, 24, GREEN);
             console.render();
-            EndDrawing();
+            
+            Window.endRender();
         }
 
         sprite.dispose();

@@ -78,7 +78,7 @@ public class Parser {
                         currentObject[attribute] = int.Parse(value);
                     } else if (dataType == "float") {
                         currentObject[attribute] = float.Parse(value, 
-                            CultureInfo.InvariantCulture.NumberFormat);
+                            CultureInfo.InvariantCulture);
                     } else if (dataType == "bool") {
                         currentObject[attribute] = bool.Parse(value);
                     } else if (dataType == "string") {

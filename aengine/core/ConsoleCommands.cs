@@ -1,4 +1,5 @@
 using System.Numerics;
+using aengine_cs.aengine.windowing;
 using aengine.ecs;
 using aengine.graphics;
 using Raylib_CsLo;
@@ -20,7 +21,7 @@ public class ConsoleCommands {
     public static void setFPS(Console console, string[] args) {
         if (Int32.TryParse(console.commandInput.text.Remove(0, 10), out int fps)) {
             console.print($"set fps to {fps}");
-            Raylib.SetTargetFPS(fps);
+            Window.targetFps = fps;
         }
         else {
             console.print(aengine.QUOTE + console.commandInput.text.Remove(0, 8) + aengine.QUOTE + "is not a number");

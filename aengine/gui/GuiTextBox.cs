@@ -1,4 +1,5 @@
 using System.Numerics;
+using aengine_cs.aengine.windowing;
 using Raylib_CsLo;
 using static Raylib_CsLo.Raylib;
 
@@ -22,7 +23,7 @@ public class GuiTextBox
 
         Rectangle temp = new Rectangle(rx, ry, width, height);
         // rec = temp;
-        if (CheckCollisionPointRec(GetMousePosition(), temp) && IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT))
+        if (CheckCollisionPointRec(Window.mousePosition, temp) && IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT))
         {
             active = !active;
         }
@@ -61,7 +62,7 @@ public class GuiTextBox
                 }
             }
 
-            if (!CheckCollisionPointRec(GetMousePosition(), temp) && IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT))
+            if (!CheckCollisionPointRec(Window.mousePosition, temp) && IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT))
                 active = false;
 
             if (IsKeyPressed(KeyboardKey.KEY_ESCAPE))

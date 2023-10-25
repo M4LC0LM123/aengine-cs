@@ -1,6 +1,7 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using aengine_cs.aengine.windowing;
 using aengine.ecs;
 using Raylib_CsLo;
 using static Raylib_CsLo.Raylib;
@@ -124,10 +125,10 @@ namespace aengine.graphics {
         }
 
         public static void drawCrosshair(Color color, float size = 25, int thickness = 2) {
-            DrawLineEx(new Vector2(GetScreenWidth() / 2 - size / 2, GetScreenHeight() / 2),
-                new Vector2(GetScreenWidth() / 2 + size / 2, GetScreenHeight() / 2), thickness, color);
-            DrawLineEx(new Vector2(GetScreenWidth() / 2, GetScreenHeight() / 2 - size / 2),
-                new Vector2(GetScreenWidth() / 2, GetScreenHeight() / 2 + size / 2), thickness, color);
+            DrawLineEx(new Vector2(Window.renderWidth / 2 - size / 2, Window.renderHeight / 2),
+                new Vector2(Window.renderWidth / 2 + size / 2, Window.renderHeight / 2), thickness, color);
+            DrawLineEx(new Vector2(Window.renderWidth / 2, Window.renderHeight / 2 - size / 2),
+                new Vector2(Window.renderWidth / 2, Window.renderHeight / 2 + size / 2), thickness, color);
         }
 
         public static unsafe Mesh genMeshCapsule(float radius, float height, int rings, int slices) {

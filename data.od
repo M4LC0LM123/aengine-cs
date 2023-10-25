@@ -22,6 +22,10 @@ object object_name {
     string str_macro_test = STRING_ZERO;
     
     bool bool_test = BOOLEAN;
+
+
+    // unnamed test
+    int a = 5;
 }
 
 /* 

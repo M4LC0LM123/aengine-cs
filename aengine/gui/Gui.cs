@@ -1,5 +1,6 @@
 using System;
 using System.Numerics;
+using aengine_cs.aengine.windowing;
 using Raylib_CsLo;
 using static Raylib_CsLo.Raylib;
 namespace Sandbox.aengine.Gui;
@@ -63,8 +64,8 @@ public class Gui
         }
         
         Rectangle rec = new Rectangle(rx, ry, width, height);
-        bool pressed = CheckCollisionPointRec(GetMousePosition(), rec) && IsMouseButtonReleased(MouseButton.MOUSE_BUTTON_LEFT);
-        bool held = CheckCollisionPointRec(GetMousePosition(), rec) && IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT);
+        bool pressed = CheckCollisionPointRec(Window.mousePosition, rec) && IsMouseButtonReleased(MouseButton.MOUSE_BUTTON_LEFT);
+        bool held = CheckCollisionPointRec(Window.mousePosition, rec) && IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT);
 
         DrawRectangle((int)(rx - bezelSize), (int)(ry - bezelSize), (int)(width + bezelSize*2f), (int)(height + bezelSize*2f), darkerColor);
         DrawRectangle((int)(rx - bezelSize), (int)(ry - bezelSize), (int)(width + bezelSize), (int)(height + bezelSize), lighterColor);
@@ -116,7 +117,7 @@ public class Gui
         }
         
         Rectangle rec = new Rectangle(rx, ry, width, height);
-        bool pressed = CheckCollisionPointRec(GetMousePosition(), rec) && pressMode;
+        bool pressed = CheckCollisionPointRec(Window.mousePosition, rec) && pressMode;
 
         if (show)
         {

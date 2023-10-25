@@ -1,6 +1,7 @@
 ﻿using Raylib_CsLo;
 using static Raylib_CsLo.Raylib;
 using System.Numerics;
+using aengine_cs.aengine.windowing;
 using aengine.core;
 using aengine.graphics;
 using aengine.ecs;
@@ -21,13 +22,9 @@ public static class Sandbox {
         // the final build should have the assets folder in the same directory as the exe so remove this line below then
         Directory.SetCurrentDirectory("../../../");
         
-        SetConfigFlags((uint)ConfigFlags.FLAG_WINDOW_RESIZABLE);
-        SetTraceLogLevel((int)TraceLogLevel.LOG_NONE);
-        InitWindow(800, 600, "aengine");
+        Window.create();
+        Window.title = "aengine";
         SetWindowIcon(LoadImage("assets/logo.png"));
-        SetTargetFPS(60);
-        SetExitKey(KeyboardKey.KEY_NULL);
-        InitAudioDevice();
 
         var jump = LoadSound("assets/jump.mp3");
         var shoot = LoadSound("assets/pew.mp3");
@@ -192,6 +189,7 @@ public static class Sandbox {
         // Main game loop
         while (!WindowShouldClose()) // Detect window close button or ESC key
         {
+            Window.tick();
             World.update();
 
             if (IsKeyPressed(KeyboardKey.KEY_ESCAPE))
@@ -294,7 +292,7 @@ public static class Sandbox {
 
             dummy.transform.rotation.Y += 100 * GetFrameTime();
 
-            BeginDrawing();
+            Window.beginRender();
             ClearBackground(SKYBLUE);
 
             BeginMode3D(camera.matrix);
@@ -307,7 +305,7 @@ public static class Sandbox {
             EndMode3D();
             Rendering.drawCrosshair(WHITE);
             DrawTexturePro(gun, new Rectangle(0, 0, gun.width, gun.height),
-                new Rectangle(GetScreenWidth() / 2 + 75, GetScreenHeight() - 250, 200, 250), Vector2.Zero, 0, WHITE);
+                new Rectangle(Window.renderWidth / 2 + 75, Window.renderHeight - 250, 200, 250), Vector2.Zero, 0, WHITE);
 
             window.render();
 
@@ -323,7 +321,7 @@ public static class Sandbox {
 
             console.render();
 
-            EndDrawing();
+            Window.endRender();
         }
 
         World.dispose();
