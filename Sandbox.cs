@@ -70,16 +70,6 @@ public static class Sandbox {
 
         var dummy = new Dummy();
 
-        var light = new Entity();
-        light.transform.position.Y = 5;
-        light.addComponent(new LightComponent(light,
-            new aShader("assets/shaders/light.vert", "assets/shaders/light.frag"), WHITE,
-            LightType.POINT));
-
-        float fogDensity = 0.15f;
-        int fogDensityLoc = GetShaderLocation(light.getComponent<LightComponent>().shader, "fogDensity");
-        SetShaderValue(light.getComponent<LightComponent>().shader, fogDensityLoc, fogDensity, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
-
         var window = new GuiWindow("SUIIIIIIIII", 10, 10, 300, 250);
         var textBox = new GuiTextBox();
         var slider = new GuiSlider();
@@ -127,7 +117,6 @@ public static class Sandbox {
                     var mesh = new MeshComponent(model, LoadModel("assets/models/zombie.glb"), WHITE, new Texture());
                     mesh.scale = 5;
                     model.addComponent(mesh);
-                    model.getComponent<MeshComponent>().setShader(light.getComponent<LightComponent>().shader, 1);
                     break;
                 case 4:
                     var hehe = new Entity();
@@ -177,13 +166,20 @@ public static class Sandbox {
                         GenMeshHeightmap(heightmap, terrain.transform.scale), GREEN, albedo));
                     terrain.addComponent(new RigidBodyComponent(terrain, LoadTextureFromImage(heightmap), 1, BodyType.STATIC));
                     break;
-            }
-
-        foreach (var entity in World.entities)
-            if (entity.hasComponent<MeshComponent>()) {
-                if (entity.getComponent<MeshComponent>().isModel) {
-                    entity.getComponent<MeshComponent>().setShader(light.getComponent<LightComponent>().shader);
-                }
+                case 12:
+                    var light = new Entity();
+                    light.setFromSceneObj(obj);
+                    light.addComponent(new LightComponent(light,
+                        new aShader("assets/shaders/light.vert", "assets/shaders/light.frag"), WHITE,
+                        LightType.POINT));
+                    
+                    foreach (var entity in World.entities)
+                        if (entity.hasComponent<MeshComponent>()) {
+                            if (entity.getComponent<MeshComponent>().isModel) {
+                                entity.getComponent<MeshComponent>().setShader(light.getComponent<LightComponent>().shader);
+                            }
+                        }
+                    break;
             }
         
         // Main game loop
@@ -233,10 +229,10 @@ public static class Sandbox {
             camera.defaultFpsMatrix();
             camera.update();
 
-            light.transform.position = player.transform.position;
+            // light.transform.position = player.transform.position;
             
-            SetShaderValue(light.getComponent<LightComponent>().shader, fogDensityLoc, 0.025f, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
-            light.getComponent<LightComponent>().setIntensity(slider.value / 10);
+            // SetShaderValue(light.getComponent<LightComponent>().shader, fogDensityLoc, 0.025f, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
+            // light.getComponent<LightComponent>().setIntensity(slider.value / 10);
 
             foreach (var entity in World.entities) {
                 if (entity.hasComponent<MeshComponent>()) {

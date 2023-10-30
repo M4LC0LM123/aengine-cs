@@ -45,7 +45,7 @@ public class ObjectManager
             
             if (IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT))
             {
-                if (AxieMover.collision.hit)
+                if (AxieMover.collision.hit && AxieMover.CURRENT_MODE is Mode.ROAM)
                 {
                     obj.selected = true;
                     mover.position = obj.position;

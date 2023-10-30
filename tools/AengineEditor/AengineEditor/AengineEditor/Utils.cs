@@ -10,6 +10,8 @@ public class Utils
     public static Color transBlue = new Color(0, 0, 255, 125);
     public static Color transRed = new Color(255, 0, 0, 125);
     public static Color transGreen = new Color(0, 255, 0, 125);
+
+    public static Color semiWhite = new Color(255, 255, 255, 127);
     
     public static void drawAxisLine(Axis axis, Vector3 start, float length, float thickness, Color color)
     {

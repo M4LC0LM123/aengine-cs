@@ -19,11 +19,12 @@ public class AxieMover
     RayCollision collisionZ;
 
     public static float AXIES_RADIUS = 1f;
-    public static float MOVE_SPEED = 25F;
+    public static float MOVE_SPEED = 1;
     public static int CURRENT_ID = 0;
     public static bool IS_OBJ_ACTIVE = false;
     public static Object ACTIVE_OBJ = null;
     public static Mode CURRENT_MODE = Mode.ROAM;
+    public static CameraMode CAMERA_MODE = CameraMode.FPS;
 
     public AxieMover()
     {
@@ -47,22 +48,25 @@ public class AxieMover
         {
             if (IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT))
             {
-                if (collisionX.hit)
-                {
+                if (collisionX.hit && CAMERA_MODE != CameraMode.ZY) {
                     if (CURRENT_MODE == Mode.MOVE) position.X = collisionX.point.X - lengthX;
                 }
 
-                if (collisionY.hit)
-                {
+                if (collisionY.hit && CAMERA_MODE != CameraMode.XZ) {
                     if (CURRENT_MODE == Mode.MOVE) position.Y = collisionY.point.Y - lengthY;
                 }
 
-                if (collisionZ.hit)
-                {
+                if (collisionZ.hit && CAMERA_MODE != CameraMode.XY) {
                     if (CURRENT_MODE == Mode.MOVE) position.Z = collisionZ.point.Z - lengthZ;
                 }
             }
 
+            if (IsMouseButtonDown(MouseButton.MOUSE_BUTTON_MIDDLE)) {
+                MOVE_SPEED = 25;
+            } else {
+                MOVE_SPEED = 1;
+            }
+            
             if (IsKeyDown(KeyboardKey.KEY_LEFT_SHIFT))
             {
                 if (CURRENT_MODE == Mode.MOVE)
