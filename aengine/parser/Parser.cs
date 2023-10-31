@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 namespace aengine_cs.aengine.parser; 
 
 public class Parser {
-    public static Dictionary<string, Dictionary<string, object>> parse(string[] fileContent) {
+    public static ParsedData parse(string[] fileContent) {
         var objects = new Dictionary<string, Dictionary<string, object>>();
         string currentObjectName = null;
         Dictionary<string, object> currentObject = null;
@@ -92,7 +92,7 @@ public class Parser {
             objects[currentObjectName] = currentObject;
         }
 
-        return objects;
+        return new ParsedData(objects);
     }
     
     public static string[] read(string filePath) {

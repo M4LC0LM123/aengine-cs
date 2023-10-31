@@ -9,7 +9,7 @@
 
 #macro NULL 0
 #macro SOME_FLOAT 69.99
-#macro STRING_ZERO "-_-"
+#macro STRING_ZERO ":D"
 #macro BOOLEAN true
 
 object object_name {
