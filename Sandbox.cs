@@ -229,11 +229,6 @@ public static class Sandbox {
             camera.defaultFpsMatrix();
             camera.update();
 
-            // light.transform.position = player.transform.position;
-            
-            // SetShaderValue(light.getComponent<LightComponent>().shader, fogDensityLoc, 0.025f, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
-            // light.getComponent<LightComponent>().setIntensity(slider.value / 10);
-
             foreach (var entity in World.entities) {
                 if (entity.hasComponent<MeshComponent>()) {
                     if (!entity.getComponent<MeshComponent>().isModel)

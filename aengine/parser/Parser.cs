@@ -1,10 +1,10 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-namespace aengine_cs;
+namespace aengine_cs.aengine.parser; 
 
 public class Parser {
-    public static Dictionary<string, Dictionary<string, object>> parseCustomFile(string[] fileContent) {
+    public static Dictionary<string, Dictionary<string, object>> parse(string[] fileContent) {
         var objects = new Dictionary<string, Dictionary<string, object>>();
         string currentObjectName = null;
         Dictionary<string, object> currentObject = null;
@@ -94,24 +94,9 @@ public class Parser {
 
         return objects;
     }
-
-    public static string[] readCustomFile(string filePath) {
+    
+    public static string[] read(string filePath) {
         return File.ReadAllLines(filePath);
     }
-
-    public static void main() {
-        Directory.SetCurrentDirectory("../../../");
-        
-        var fileLines = readCustomFile("data.od");
-        var parsedData = parseCustomFile(fileLines);
-
-        foreach (var objectName in parsedData.Keys) {
-            Console.WriteLine($"Object: {objectName}");
-
-            foreach (var attribute in parsedData[objectName].Keys) {
-                var value = parsedData[objectName][attribute];
-                Console.WriteLine($"  {attribute}: {value}, type: {value.GetType()}");
-            }
-        }
-    }
+    
 }
