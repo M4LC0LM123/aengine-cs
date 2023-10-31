@@ -82,3 +82,31 @@ object commented_object {
 }
 
 */
+
+/*
+
+#macro BOX 0
+#macro SPHERE 1
+#macro CYLINDER 2
+#macro CAPSULE 3
+#macro CONE 4
+#macro TERRAIN 5
+#macro MODEL 6 
+
+object mesh {
+    int shape = MODEL;
+
+    int r = 0;
+    int g = 0;
+    int b = 0;
+    int a = 0;
+
+    bool isModel = 0;
+    
+    string texture = "assets/texture";
+    string model = "assets/model";
+
+    float scale = 1;
+}
+
+*/

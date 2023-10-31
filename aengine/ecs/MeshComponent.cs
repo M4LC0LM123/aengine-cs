@@ -5,6 +5,7 @@ using aengine.ecs;
 using aengine.graphics;
 using System.Diagnostics;
 using System.Numerics;
+using aengine_cs.aengine.parser;
 using Raylib_CsLo;
 using static Raylib_CsLo.Raylib;
 using static Raylib_CsLo.RlGl;
@@ -22,7 +23,7 @@ namespace aengine.ecs
 
         public unsafe MeshComponent(Entity entity, Color color, Texture texture)
         {
-            if (entity.transform != null) this.transform = entity.transform;
+            if (entity.transform != null) transform = entity.transform;
             else transform = new TransformComponent(null);
             this.color = color;
             if (entity.transform != null)

@@ -43,23 +43,20 @@ public static class Sandbox {
             LoadTexture("assets/skybox/bottom.png")
         };
 
-        var camera = new Camera(new Vector3(0, 5, 0), 90);
+        var camera = new Camera(Vector3.Zero, 90);
         float speed = 10;
         var isMouseLocked = false;
 
         World.camera = camera;
 
-        var player = new Entity();
-        player.transform.position = camera.position;
-        player.transform.scale = Vector3.One;
-        player.tag = "playa";
-        player.addComponent(new RigidBodyComponent(player, 1.0f, BodyType.DYNAMIC, ShapeType.SPHERE));
+        Entity player = Prefab.loadEntity("assets/data/player.od", "player");
+        player.addComponent(Prefab.loadComponent(player, "assets/data/player.od", "rb", typeof(RigidBodyComponent)));
 
         var body = new Entity();
         body.transform.position.Y = 15;
         body.transform.scale = Vector3.One;
-        body.addComponent(new MeshComponent(body, GREEN, albedo));
-        body.addComponent(new RigidBodyComponent(body));
+        body.addComponent(Prefab.loadComponent(body, "assets/data/player.od", "zombie_mesh", typeof(MeshComponent)));
+        body.addComponent(Prefab.loadComponent(body, "assets/data/player.od", "zombie", typeof(RigidBodyComponent)));
 
         var body2 = new Entity();
         body2.transform.position.Y = 15;
@@ -111,12 +108,8 @@ public static class Sandbox {
                     break;
                 case 3:
                     var model = new Entity();
-                    model.transform.position = new Vector3(obj.x, obj.y, obj.z);
-                    model.transform.scale = new Vector3(obj.w, obj.h, obj.d);
-                    model.transform.rotation = new Vector3(obj.rx, obj.ry, obj.rz);
-                    var mesh = new MeshComponent(model, LoadModel("assets/models/zombie.glb"), WHITE, new Texture());
-                    mesh.scale = 5;
-                    model.addComponent(mesh);
+                    model.setFromSceneObj(obj);
+                    model.addComponent(Prefab.loadComponent(model, "assets/data/mesh.od", "mesh", typeof(MeshComponent)));
                     break;
                 case 4:
                     var hehe = new Entity();

@@ -17,8 +17,8 @@ public class ParsedData {
         return data[objName].Keys;
     }
 
-    public Dictionary<string, object> getObject(string name) {
-        return data[name];
+    public ParsedObject getObject(string name) {
+        return new ParsedObject(data[name]);
     }
     
     public object getObjectValue(string name, string attribute) {

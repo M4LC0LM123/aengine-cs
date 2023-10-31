@@ -1,0 +1,28 @@
+#macro BOX 0
+#macro SPHERE 1
+#macro CYLINDER 2
+#macro CAPSULE 3
+#macro CONE 4
+#macro TERRAIN 5
+#macro MODEL 6
+
+#macro EMPTY ""
+
+object mesh {
+    int shape = MODEL;
+
+    int r = 255;
+    int g = 255;
+    int b = 255;
+    int a = 255;
+
+    bool isModel = true;
+   
+    string texture = EMPTY;
+    string model = "assets/models/zombie.glb";
+
+    string terrain = EMPY;
+
+    int scale = 5;
+}
+

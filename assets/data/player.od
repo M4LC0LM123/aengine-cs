@@ -1,0 +1,71 @@
+#macro BOX 0
+#macro SPHERE 1
+#macro CYLINDER 2
+#macro CAPSULE 3
+#macro CONE 4
+#macro TERRAIN 5
+#macro MODEL 6
+
+#macro DYNAMIC 0
+#macro STATIC 2
+
+#macro EMPTY ""
+
+object player {
+    string tag = "playa";
+
+    float x = 0;
+    float y = 10;
+    float z = 0;
+
+    float width = 1;
+    float height = 1;
+    float depth = 1;
+
+    float rx = 0; // rotation x (pitch)
+    float ry = 0; // rotation y (yaw)
+    float rz = 0; // rotation z (roll)
+}
+
+object rb {
+    float mass = 1;
+
+    int shape = SPHERE;
+    int type = DYNAMIC;
+
+    string model = EMPTY;
+
+    string heightmap = EMPTY;
+}
+
+// other tests
+
+object zombie_mesh {
+    int shape = MODEL;
+
+    int r = 255;
+    int g = 255;
+    int b = 255;
+    int a = 255;
+
+    bool isModel = true;
+   
+    string texture = EMPTY;
+    string model = "assets/models/zombie.glb";
+
+    string terrain = EMPTY;
+
+    int scale = 1;
+}
+
+object zombie {
+    float mass = 1;
+    
+    int shape = MODEL;
+    int type = DYNAMIC;
+
+    string model = "assets/models/zombie.glb";
+
+    string heightmap = EMPTY;
+}
+

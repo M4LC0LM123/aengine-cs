@@ -15,7 +15,7 @@ public class Test {
             Console.WriteLine($"Object: {objectName}");
             
             foreach (string attribute in parsedData.dataKeys(objectName)) {
-                object value = parsedData.getObject(objectName)[attribute];
+                object value = parsedData.getObject(objectName).getValue<object>(attribute);
                 Console.WriteLine($"  {attribute}: {value}, type: {value.GetType()}");
             }
         }
