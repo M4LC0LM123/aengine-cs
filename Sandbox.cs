@@ -49,14 +49,13 @@ public static class Sandbox {
 
         World.camera = camera;
 
-        Entity player = Prefab.loadEntity("assets/data/player.od", "player");
-        player.addComponent(Prefab.loadComponent(player, "assets/data/player.od", "rb", typeof(RigidBodyComponent)));
+        Entity player = Prefab.loadPrefab("assets/data/player.od", "player");
 
         var body = new Entity();
         body.transform.position.Y = 15;
         body.transform.scale = Vector3.One;
-        body.addComponent(Prefab.loadComponent(body, "assets/data/player.od", "zombie_mesh", typeof(MeshComponent)));
-        body.addComponent(Prefab.loadComponent(body, "assets/data/player.od", "zombie", typeof(RigidBodyComponent)));
+        body.addComponent(Prefab.loadComponent(body, "assets/data/player.od", "zombie_mesh"));
+        body.addComponent(Prefab.loadComponent(body, "assets/data/player.od", "zombie"));
 
         var body2 = new Entity();
         body2.transform.position.Y = 15;
@@ -109,7 +108,7 @@ public static class Sandbox {
                 case 3:
                     var model = new Entity();
                     model.setFromSceneObj(obj);
-                    model.addComponent(Prefab.loadComponent(model, "assets/data/mesh.od", "mesh", typeof(MeshComponent)));
+                    model.addComponent(Prefab.loadComponent(model, "assets/data/mesh.od", "mesh"));
                     break;
                 case 4:
                     var hehe = new Entity();

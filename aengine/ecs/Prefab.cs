@@ -5,6 +5,42 @@ using Raylib_CsLo;
 namespace aengine.ecs; 
 
 public class Prefab {
+    public static Entity loadPrefab(string path, string name) {
+        ParsedData data = Parser.parse(Parser.read(path));
+        ParsedObject obj = data.getObject(name);
+
+        string tag = obj.getValue<string>("tag");
+        
+        Entity result = new Entity(tag);
+
+        float x = obj.getValue<float>("x");
+        float y = obj.getValue<float>("y");
+        float z = obj.getValue<float>("z");
+        
+        float width = obj.getValue<float>("width");
+        float height = obj.getValue<float>("height");
+        float depth = obj.getValue<float>("depth");
+        
+        float rx = obj.getValue<float>("rx");
+        float ry = obj.getValue<float>("ry");
+        float rz = obj.getValue<float>("rz");
+
+        result.transform.position = new Vector3(x, y, z);
+        result.transform.scale = new Vector3(width, height, depth);
+        result.transform.rotation = new Vector3(rx, ry, rz);
+
+        string components = obj.getValue<string>("components");
+        char separator = ',';
+
+        string[] componentNameArray = components.Split(separator, StringSplitOptions.TrimEntries);
+
+        foreach (string s in componentNameArray) {
+            result.addComponent(loadComponent(result, path, s));
+        }
+        
+        return result;
+    }
+    
     public static Entity loadEntity(string path, string name) {
         ParsedData data = Parser.parse(Parser.read(path));
         ParsedObject obj = data.getObject(name);
@@ -32,15 +68,17 @@ public class Prefab {
         return result;
     }
     
-    public static Component loadComponent(Entity entity, string path, string name, Type type) {
+    public static Component loadComponent(Entity entity, string path, string name) {
         ParsedData data = Parser.parse(Parser.read(path));
         ParsedObject obj = data.getObject(name);
+
+        string type = obj.getValue<string>("type");
         
-        if (type == typeof(MeshComponent)) {
+        if (type == "MeshComponent" || type == "Mesh") {
             return loadMeshComponent(entity, obj);
         }
         
-        if (type == typeof(RigidBodyComponent)) {
+        if (type == "RigidBodyComponent" || type == "RigidBody") {
             return loadRigidBodyComponent(entity, obj);
         }
 
@@ -112,7 +150,7 @@ public class Prefab {
     public static Component loadRigidBodyComponent(Entity entity, ParsedObject obj) {
         float mass = obj.getValue<float>("mass");
         ShapeType shape = (ShapeType)obj.getValue<int>("shape");
-        BodyType bodyType = (BodyType) obj.getValue<int>("type");
+        BodyType bodyType = (BodyType) obj.getValue<int>("body_type");
 
         string modelPath = obj.getValue<string>("model");
         string heightmapPath = obj.getValue<string>("heightmap");

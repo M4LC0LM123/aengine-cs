@@ -25,13 +25,19 @@ object player {
     float rx = 0; // rotation x (pitch)
     float ry = 0; // rotation y (yaw)
     float rz = 0; // rotation z (roll)
+    
+    // "list" of components format "component_name, component_name, component_name"
+    string components = "rb";
+
 }
 
 object rb {
+    string type = "RigidBodyComponent";
+
     float mass = 1;
 
     int shape = SPHERE;
-    int type = DYNAMIC;
+    int body_type = DYNAMIC;
 
     string model = EMPTY;
 
@@ -41,6 +47,8 @@ object rb {
 // other tests
 
 object zombie_mesh {
+    string type = "MeshComponent";
+
     int shape = MODEL;
 
     int r = 255;
@@ -59,10 +67,12 @@ object zombie_mesh {
 }
 
 object zombie {
+    string type = "RigidBodyComponent";
+
     float mass = 1;
     
     int shape = MODEL;
-    int type = DYNAMIC;
+    int body_type = DYNAMIC;
 
     string model = "assets/models/zombie.glb";
 

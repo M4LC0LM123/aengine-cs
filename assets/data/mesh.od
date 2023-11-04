@@ -9,6 +9,8 @@
 #macro EMPTY ""
 
 object mesh {
+    string type = "MeshComponent";
+
     int shape = MODEL;
 
     int r = 255;
