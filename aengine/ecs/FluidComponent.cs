@@ -17,7 +17,7 @@ public class FluidComponent : Component {
     public float speedX;
     public float speedY;
 
-    public float seconds;
+    private float seconds;
 
     private int _secondsLoc;
     private int _freqXLoc;
@@ -67,6 +67,15 @@ public class FluidComponent : Component {
         rotation = entity.transform.rotation.Y;
 
         this.color = color;
+    }
+
+    public void resetValues() {
+        SetShaderValue(shader, _freqXLoc, freqX, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
+        SetShaderValue(shader, _freqYLoc, freqY, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
+        SetShaderValue(shader, _ampXLoc, ampX, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
+        SetShaderValue(shader, _ampYLoc, ampY, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
+        SetShaderValue(shader, _speedXLoc, speedX, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
+        SetShaderValue(shader, _speedYLoc, speedY, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
     }
 
     public void update(Entity entity) {

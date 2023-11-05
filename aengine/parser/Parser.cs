@@ -4,6 +4,17 @@ using System.Text.RegularExpressions;
 namespace aengine_cs.aengine.parser; 
 
 public class Parser {
+    private static string COMMENT_CHAR       = "//";
+    private static string COMMENT_START_CHAR = "/*";
+    private static string COMMENT_END_CHAR   = "*/";
+    private static string FLOAT_CHAR         = "float";
+    private static string F32_CHAR           = "f32";
+    private static string INT_CHAR           = "int";
+    private static string I32_CHAR           = "i32";
+    private static string STRING_CHAR        = "string";
+    private static string STR_CHAR           = "str";
+    private static string BOOL_CHAR          = "bool";
+    
     public static ParsedData parse(string[] fileContent) {
         var objects = new Dictionary<string, Dictionary<string, object>>();
         string currentObjectName = null;
@@ -15,20 +26,20 @@ public class Parser {
             var trimmedLine = line.Trim();
 
             if (string.IsNullOrEmpty(trimmedLine) || 
-                trimmedLine.StartsWith("//") ||
-                trimmedLine.Contains("/*") && trimmedLine.Contains("*/")) {
+                trimmedLine.StartsWith(COMMENT_CHAR) ||
+                trimmedLine.Contains(COMMENT_START_CHAR) && trimmedLine.Contains(COMMENT_END_CHAR)) {
                 continue;
             }
 
             if (isInComment) {
-                if (trimmedLine.Contains("*/")) {
+                if (trimmedLine.Contains(COMMENT_END_CHAR)) {
                     isInComment = false;
                 }
                 
                 continue;
             }
 
-            if (trimmedLine.Contains("/*")) {
+            if (trimmedLine.Contains(COMMENT_START_CHAR)) {
                 isInComment = true;
                 
                 continue;
@@ -74,14 +85,14 @@ public class Parser {
                         value = macros[value].ToString();
                     }
                     
-                    if (dataType == "int") {
+                    if (dataType == INT_CHAR || dataType == I32_CHAR) {
                         currentObject[attribute] = int.Parse(value);
-                    } else if (dataType == "float") {
+                    } else if (dataType == FLOAT_CHAR || dataType == F32_CHAR) {
                         currentObject[attribute] = float.Parse(value, 
                             CultureInfo.InvariantCulture);
-                    } else if (dataType == "bool") {
+                    } else if (dataType == BOOL_CHAR) {
                         currentObject[attribute] = bool.Parse(value);
-                    } else if (dataType == "string") {
+                    } else if (dataType == STRING_CHAR || dataType == STR_CHAR) {
                         currentObject[attribute] = value.Trim('"');
                     }
                 }

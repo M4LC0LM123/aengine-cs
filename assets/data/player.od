@@ -9,6 +9,9 @@
 #macro DYNAMIC 0
 #macro STATIC 2
 
+#macro POINT_LIGHT 1
+#macro DIRECTIONAL_LIGHT 0
+
 #macro EMPTY ""
 
 object player {
@@ -77,5 +80,72 @@ object zombie {
     string model = "assets/models/zombie.glb";
 
     string heightmap = EMPTY;
+}
+
+object light {
+    string type = "LightComponent";
+
+    f32 intensity = 2.5;
+
+    i32 r = 255;
+    i32 g = 255;
+    i32 b = 255;
+    i32 a = 255;
+
+    string shader_vert = "assets/shaders/light.vert";
+    string shader_frag = "assets/shaders/light.frag";
+
+    bool enabled = true;
+
+    i32 light_type = POINT_LIGHT;
+}
+
+object water {
+    string tag = "water";
+
+    float x = 0;
+    float y = 0;
+    float z = 0;
+
+    float width = 0;
+    float height = 0;
+    float depth = 0;
+
+    float rx = 0; // rotation x (pitch)
+    float ry = 0; // rotation y (yaw)
+    float rz = 0; // rotation z (roll)
+    
+    string components = "fluid, audio";
+}
+
+object audio {
+    string type = "SpatialAudioComponent";
+
+    string sound = "assets/splash.wav";
+
+    float strength = 1;
+
+    bool can_play = true;
+}
+
+object fluid {
+    string type = "FluidComponent";
+
+    string shader_vert = "";
+    string shader_frag = "assets/shaders/wave.frag";
+
+    string texture = "assets/water.png";
+
+    i32 r = 255;
+    i32 g = 255;
+    i32 b = 255;
+    i32 a = 125;
+
+    f32 freqX = 25;
+    f32 freqY = 25;
+    f32 ampX = 5;
+    f32 ampY = 5;
+    f32 speedX = 8;
+    f32 speedY = 8;
 }
 

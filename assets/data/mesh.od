@@ -23,7 +23,7 @@ object mesh {
     string texture = EMPTY;
     string model = "assets/models/zombie.glb";
 
-    string terrain = EMPY;
+    string terrain = EMPTY;
 
     int scale = 5;
 }

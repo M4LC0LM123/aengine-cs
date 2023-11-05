@@ -136,11 +136,8 @@ public static class Sandbox {
                     dummy.setPosition(new Vector3(obj.x, obj.y, obj.z));
                     break;
                 case 9:
-                    var fluid = new Entity();
+                    Entity fluid = Prefab.loadPrefab("assets/data/player.od", "water");
                     fluid.setFromSceneObj(obj);
-                    fluid.addComponent(new FluidComponent(fluid, new aShader(null, "assets/shaders/wave.frag"),
-                        LoadTexture("assets/water.png"), new Color(255, 255, 255, 125)));
-                    fluid.addComponent(new SpatialAudioComponent(fluid, LoadSound("assets/splash.wav")));
                     break;
                 case 10:
                     var cone = new Entity();
@@ -161,9 +158,7 @@ public static class Sandbox {
                 case 12:
                     var light = new Entity();
                     light.setFromSceneObj(obj);
-                    light.addComponent(new LightComponent(light,
-                        new aShader("assets/shaders/light.vert", "assets/shaders/light.frag"), WHITE,
-                        LightType.POINT));
+                    light.addComponent(Prefab.loadComponent(light, "assets/data/player.od", "light"));
                     
                     foreach (var entity in World.entities)
                         if (entity.hasComponent<MeshComponent>()) {
