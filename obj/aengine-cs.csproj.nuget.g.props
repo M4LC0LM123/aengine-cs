@@ -32,4 +32,22 @@
       <Link>raylib.pdb</Link>
     </Content>
   </ItemGroup>
+  <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Content Include="$(NuGetPackageRoot)nativefiledialogsharp\0.5.0\contentFiles\any\netstandard2.0\nfd.dll" Condition="Exists('$(NuGetPackageRoot)nativefiledialogsharp\0.5.0\contentFiles\any\netstandard2.0\nfd.dll')">
+      <NuGetPackageId>NativeFileDialogSharp</NuGetPackageId>
+      <NuGetPackageVersion>0.5.0</NuGetPackageVersion>
+      <NuGetItemType>Content</NuGetItemType>
+      <Pack>false</Pack>
+      <Private>False</Private>
+      <Link>nfd.dll</Link>
+    </Content>
+    <Content Include="$(NuGetPackageRoot)nativefiledialogsharp\0.5.0\contentFiles\any\netstandard2.0\nfd_x86.dll" Condition="Exists('$(NuGetPackageRoot)nativefiledialogsharp\0.5.0\contentFiles\any\netstandard2.0\nfd_x86.dll')">
+      <NuGetPackageId>NativeFileDialogSharp</NuGetPackageId>
+      <NuGetPackageVersion>0.5.0</NuGetPackageVersion>
+      <NuGetItemType>Content</NuGetItemType>
+      <Pack>false</Pack>
+      <Private>False</Private>
+      <Link>nfd_x86.dll</Link>
+    </Content>
+  </ItemGroup>
 </Project>

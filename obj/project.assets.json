@@ -28,6 +28,69 @@
           }
         }
       },
+      "NativeFileDialogSharp/0.5.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/NativeFileDialogSharp.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/NativeFileDialogSharp.dll": {}
+        },
+        "contentFiles": {
+          "contentFiles/any/netstandard2.0/nfd.dll": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          },
+          "contentFiles/any/netstandard2.0/nfd_x86.dll": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/linux-x64/native/libnfd.so": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/osx-x64/native/libnfd.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/win-x64/native/nfd.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/nfd.exp": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/nfd.lib": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/nfd.pdb": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x86/native/nfd.dll": {
+            "assetType": "native",
+            "rid": "win-x86"
+          },
+          "runtimes/win-x86/native/nfd.exp": {
+            "assetType": "native",
+            "rid": "win-x86"
+          },
+          "runtimes/win-x86/native/nfd.lib": {
+            "assetType": "native",
+            "rid": "win-x86"
+          },
+          "runtimes/win-x86/native/nfd.pdb": {
+            "assetType": "native",
+            "rid": "win-x86"
+          }
+        }
+      },
       "Raylib-CsLo/4.2.0.9": {
         "type": "package",
         "dependencies": {
@@ -146,6 +209,32 @@
         "microsoft.toolkit.highperformance.nuspec"
       ]
     },
+    "NativeFileDialogSharp/0.5.0": {
+      "sha512": "OvASDrHJhY1OzD3Cr9Pw7sgaj+WliK0CAD+0HL14jPJMxnkirC5vr3XhxbY24MKwkxANNgmN+ao7iiNOopOSqQ==",
+      "type": "package",
+      "path": "nativefiledialogsharp/0.5.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "content/nfd.dll",
+        "content/nfd_x86.dll",
+        "contentFiles/any/netstandard2.0/nfd.dll",
+        "contentFiles/any/netstandard2.0/nfd_x86.dll",
+        "lib/netstandard2.0/NativeFileDialogSharp.dll",
+        "nativefiledialogsharp.0.5.0.nupkg.sha512",
+        "nativefiledialogsharp.nuspec",
+        "runtimes/linux-x64/native/libnfd.so",
+        "runtimes/osx-x64/native/libnfd.dylib",
+        "runtimes/win-x64/native/nfd.dll",
+        "runtimes/win-x64/native/nfd.exp",
+        "runtimes/win-x64/native/nfd.lib",
+        "runtimes/win-x64/native/nfd.pdb",
+        "runtimes/win-x86/native/nfd.dll",
+        "runtimes/win-x86/native/nfd.exp",
+        "runtimes/win-x86/native/nfd.lib",
+        "runtimes/win-x86/native/nfd.pdb"
+      ]
+    },
     "Raylib-CsLo/4.2.0.9": {
       "sha512": "s0KLEXCfylhCgMfc0elHJyC7I2ZdqylQzSA1GhHwp7pPJmoQx80kZh5OkTbiirOuHSIeQ87JojEA439MarGhWQ==",
       "type": "package",
@@ -180,6 +269,7 @@
   "projectFileDependencyGroups": {
     "net6.0": [
       "JitterPhysics >= 0.2.0.20",
+      "NativeFileDialogSharp >= 0.5.0",
       "Raylib-CsLo >= 4.2.0.9"
     ]
   },
@@ -233,6 +323,10 @@
           "JitterPhysics": {
             "target": "Package",
             "version": "[0.2.0.20, )"
+          },
+          "NativeFileDialogSharp": {
+            "target": "Package",
+            "version": "[0.5.0, )"
           },
           "Raylib-CsLo": {
             "target": "Package",

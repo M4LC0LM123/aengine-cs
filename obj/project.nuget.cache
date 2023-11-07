@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "nSWQz7UC5sWVDWdvuI9ohusnjJF4Pe46H9jzw+5BUMrZKweSq335XmjqM42N30HJBoq1H9PFkCmdPtXV3LJpAw==",
+  "dgSpecHash": "h6gEi3iV8onaOMSzmE2PZKuJ5dA6CINck8GZLEdDcKC1EtoMJeSDgypRHFXGA9rU/Zcl+a3x0L99zu4cMrUlUA==",
   "success": true,
   "projectFilePath": "C:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\aengine-cs.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\lukaa\\.nuget\\packages\\jitterphysics\\0.2.0.20\\jitterphysics.0.2.0.20.nupkg.sha512",
     "C:\\Users\\lukaa\\.nuget\\packages\\microsoft.toolkit.highperformance\\7.1.2\\microsoft.toolkit.highperformance.7.1.2.nupkg.sha512",
+    "C:\\Users\\lukaa\\.nuget\\packages\\nativefiledialogsharp\\0.5.0\\nativefiledialogsharp.0.5.0.nupkg.sha512",
     "C:\\Users\\lukaa\\.nuget\\packages\\raylib-cslo\\4.2.0.9\\raylib-cslo.4.2.0.9.nupkg.sha512",
     "C:\\Users\\lukaa\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.20\\microsoft.netcore.app.ref.6.0.20.nupkg.sha512",
     "C:\\Users\\lukaa\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.20\\microsoft.windowsdesktop.app.ref.6.0.20.nupkg.sha512",

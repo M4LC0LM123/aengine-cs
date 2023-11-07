@@ -54,3 +54,14 @@ C:\Users\lukaa\Documents\GitHub\aengine-cs\obj\Release\net6.0\refint\aengine-cs.
 C:\Users\lukaa\Documents\GitHub\aengine-cs\obj\Release\net6.0\aengine-cs.pdb
 C:\Users\lukaa\Documents\GitHub\aengine-cs\obj\Release\net6.0\aengine-cs.genruntimeconfig.cache
 C:\Users\lukaa\Documents\GitHub\aengine-cs\obj\Release\net6.0\ref\aengine-cs.dll
+C:\Users\lukaa\Documents\GitHub\aengine-cs\bin\Release\net6.0\NativeFileDialogSharp.dll
+C:\Users\lukaa\Documents\GitHub\aengine-cs\bin\Release\net6.0\runtimes\linux-x64\native\libnfd.so
+C:\Users\lukaa\Documents\GitHub\aengine-cs\bin\Release\net6.0\runtimes\osx-x64\native\libnfd.dylib
+C:\Users\lukaa\Documents\GitHub\aengine-cs\bin\Release\net6.0\runtimes\win-x64\native\nfd.dll
+C:\Users\lukaa\Documents\GitHub\aengine-cs\bin\Release\net6.0\runtimes\win-x64\native\nfd.exp
+C:\Users\lukaa\Documents\GitHub\aengine-cs\bin\Release\net6.0\runtimes\win-x64\native\nfd.lib
+C:\Users\lukaa\Documents\GitHub\aengine-cs\bin\Release\net6.0\runtimes\win-x64\native\nfd.pdb
+C:\Users\lukaa\Documents\GitHub\aengine-cs\bin\Release\net6.0\runtimes\win-x86\native\nfd.dll
+C:\Users\lukaa\Documents\GitHub\aengine-cs\bin\Release\net6.0\runtimes\win-x86\native\nfd.exp
+C:\Users\lukaa\Documents\GitHub\aengine-cs\bin\Release\net6.0\runtimes\win-x86\native\nfd.lib
+C:\Users\lukaa\Documents\GitHub\aengine-cs\bin\Release\net6.0\runtimes\win-x86\native\nfd.pdb
