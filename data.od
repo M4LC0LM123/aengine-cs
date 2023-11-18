@@ -28,6 +28,8 @@ object object_name {
     int a = 5;
 }
 
+object format { int n = 69; }
+
 /* 
     this is a multi line comment
 */

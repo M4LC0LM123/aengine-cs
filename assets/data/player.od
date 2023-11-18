@@ -31,7 +31,6 @@ object player {
     
     // "list" of components format "component_name, component_name, component_name"
     string components = "rb";
-
 }
 
 object rb {
@@ -132,7 +131,7 @@ object fluid {
     string type = "FluidComponent";
 
     string shader_vert = "";
-    string shader_frag = "assets/shaders/wave.frag";
+    string shader_frag = "assets/wave.frag";
 
     string texture = "assets/water.png";
 

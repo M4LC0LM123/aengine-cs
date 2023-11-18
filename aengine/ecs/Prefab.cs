@@ -7,8 +7,17 @@ namespace aengine.ecs;
 
 public class Prefab {
     public static Entity loadPrefab(string path, string name) {
+        string prevDir = Directory.GetCurrentDirectory();
+        // Console.WriteLine("prev dir: " + prevDir);
+        
         ParsedData data = Parser.parse(Parser.read(path));
         ParsedObject obj = data.getObject(name);
+        
+        string newDir = prevDir + "\\" + Path.GetDirectoryName(path);
+        string newPath = prevDir + "\\" + path.Replace("/", "\\");
+        // Console.WriteLine("new dir " + newDir);
+        // Console.WriteLine("new path " + newPath);
+        Directory.SetCurrentDirectory(newDir);
 
         string tag = obj.getValue<string>("tag");
         
@@ -36,16 +45,18 @@ public class Prefab {
         string[] componentNameArray = components.Split(separator, StringSplitOptions.TrimEntries);
 
         foreach (string s in componentNameArray) {
-            result.addComponent(loadComponent(result, path, s));
+            // Console.WriteLine("comp path load: " + newPath);
+            result.addComponent(m_loadComponent(result, newPath, s));
         }
         
+        Directory.SetCurrentDirectory(prevDir);
         return result;
     }
     
     public static Entity loadEntity(string path, string name) {
         ParsedData data = Parser.parse(Parser.read(path));
         ParsedObject obj = data.getObject(name);
-
+        
         string tag = obj.getValue<string>("tag");
         
         Entity result = new Entity(tag);
@@ -65,14 +76,43 @@ public class Prefab {
         result.transform.position = new Vector3(x, y, z);
         result.transform.scale = new Vector3(width, height, depth);
         result.transform.rotation = new Vector3(rx, ry, rz);
-
+        
         return result;
     }
     
     public static Component loadComponent(Entity entity, string path, string name) {
         ParsedData data = Parser.parse(Parser.read(path));
         ParsedObject obj = data.getObject(name);
+        
+        string type = obj.getValue<string>("type");
+        
+        if (type == "MeshComponent" || type == "Mesh") {
+            return loadMeshComponent(entity, obj);
+        }
+        
+        if (type == "RigidBodyComponent" || type == "RigidBody") {
+            return loadRigidBodyComponent(entity, obj);
+        }
 
+        if (type == "LightComponent" || type == "Light") {
+            return loadLightComponent(entity, obj);
+        }
+        
+        if (type == "SpatialAudioComponent" || type == "SpatialAudio" || type == "Sound") {
+            return loadSpatialAudioComponent(entity, obj);
+        }
+
+        if (type == "FluidComponent" || type == "Fluid") {
+            return loadFluidComponent(entity, obj);
+        }
+        
+        return null;
+    }
+    
+    private static Component m_loadComponent(Entity entity, string path, string name) {
+        ParsedData data = Parser.parse(Parser.read(path));
+        ParsedObject obj = data.getObject(name);
+        
         string type = obj.getValue<string>("type");
         
         if (type == "MeshComponent" || type == "Mesh") {
@@ -141,6 +181,9 @@ public class Prefab {
         }
 
         if (shape is ShapeType.MODEL) {
+            // Console.WriteLine(obj.getValue<string>("model"));
+            // Console.WriteLine(Directory.GetCurrentDirectory());
+            //
             model = Raylib.LoadModel(obj.getValue<string>("model"));
         }
         else {

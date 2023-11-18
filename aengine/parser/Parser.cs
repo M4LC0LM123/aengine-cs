@@ -21,9 +21,11 @@ public class Parser {
         Dictionary<string, object> currentObject = null;
         Dictionary<string, object> macros = new Dictionary<string, object>();
         bool isInComment = false;
+        bool openingBraceFound = false;
         
-        foreach (var line in fileContent) {
-            var trimmedLine = line.Trim();
+        for (int i = 0; i < fileContent.Length; i++) {
+            string trimmedLine = fileContent[i].Trim();
+            string lineInFront = fileContent[(i + 1) % fileContent.Length].Trim();
 
             if (string.IsNullOrEmpty(trimmedLine) || 
                 trimmedLine.StartsWith(COMMENT_CHAR) ||
@@ -54,7 +56,7 @@ public class Parser {
                     
                     if (int.TryParse(macroValue, out int intValue)) {
                         macros[macroName] = intValue;
-                    } else if (float.TryParse(macroValue, NumberStyles.Any, CultureInfo.InvariantCulture, out float floatValue)) { // float parsing bug
+                    } else if (float.TryParse(macroValue, NumberStyles.Any, CultureInfo.InvariantCulture, out float floatValue)) { // float parsing bug on OSX
                         macros[macroName] = floatValue;
                     } else if (macroValue.Contains("true") || macroValue.Contains("false")) {
                         macros[macroName] = bool.Parse(macroValue);
@@ -65,22 +67,43 @@ public class Parser {
                 }
             }
 
-            if (trimmedLine.StartsWith("object ")) {
+            if (trimmedLine.StartsWith("object ") && (trimmedLine.EndsWith("{") || lineInFront.StartsWith("{"))) {
+                if (openingBraceFound) {
+                    throw new Exception(
+                        "Invalid format: Object definition must have both opening and closing curly braces: " + (i + 1)
+                    );
+                }
+                
                 if (currentObject != null) {
                     objects[currentObjectName] = currentObject;
                 }
 
-                var match = Regex.Match(trimmedLine, @"object (\w+)");
+                Match match = Regex.Match(trimmedLine, @"object (\w+)");
                 currentObjectName = match.Groups[1].Value;
                 currentObject = new Dictionary<string, object>();
-            } else {
-                var match = Regex.Match(trimmedLine, @"(\w+) (\w+) = (.+);");
+                openingBraceFound = true;
+            } else if (trimmedLine == "}") {
+                if (!openingBraceFound) {
+                    throw new Exception(
+                        "Invalid format: Closing brace without a corresponding opening brace, line: " + (i + 1)
+                    );
+                }
+                
+                if (currentObject != null) {
+                    objects[currentObjectName] = currentObject;
+                }
 
+                currentObject = null;
+                currentObjectName = null;
+                openingBraceFound = false;
+            } else {
+                Match match = Regex.Match(trimmedLine, @"(\w+) (\w+) = (.+);");
+                
                 if (match.Success) {
                     string dataType = match.Groups[1].Value;
                     string attribute = match.Groups[2].Value;
                     string value = match.Groups[3].Value;
-
+                
                     if (macros.ContainsKey(value)) {
                         value = macros[value].ToString();
                     }
@@ -97,6 +120,10 @@ public class Parser {
                     }
                 }
             }
+        }
+
+        if (openingBraceFound) {
+            throw new Exception("Invalid format: Unclosed object definition");
         }
 
         if (currentObject != null) {
