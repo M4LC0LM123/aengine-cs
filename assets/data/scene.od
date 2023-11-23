@@ -1,0 +1,4 @@
+object scene {
+    str player = "player.od";
+    str floor = "floor.od";
+}

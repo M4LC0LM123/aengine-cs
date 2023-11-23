@@ -7,7 +7,7 @@
 #macro MODEL 6
 
 #macro DYNAMIC 0
-#macro STATIC 2
+#macro STATIC 1
 
 #macro POINT_LIGHT 1
 #macro DIRECTIONAL_LIGHT 0

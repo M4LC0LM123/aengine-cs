@@ -1,0 +1,66 @@
+#macro BOX 0
+#macro SPHERE 1
+#macro CYLINDER 2
+#macro CAPSULE 3
+#macro CONE 4
+#macro TERRAIN 5
+#macro MODEL 6
+
+#macro DYNAMIC 0
+#macro STATIC 1
+
+#macro POINT_LIGHT 1
+#macro DIRECTIONAL_LIGHT 0
+
+#macro EMPTY ""
+
+object floor {
+    string tag = "floor";
+    
+    float x = 0;
+    float y = -10;
+    float z = 0;
+
+    float width = 25;
+    float height = 2;
+    float depth = 25;
+
+    float rx = 0; // rotation x (pitch)
+    float ry = 0; // rotation y (yaw)
+    float rz = 0; // rotation z (roll)
+    
+    string components = "floor_rb, floor_mesh";
+}
+
+object floor_rb {
+    string type = "RigidBodyComponent";
+    
+    float mass = 1;
+    
+    int shape = BOX;
+    int body_type = STATIC;
+    
+    string model = EMPTY;
+    
+    string heightmap = EMPTY;
+}
+
+object floor_mesh {
+    string type = "MeshComponent";
+
+    int shape = BOX;
+
+    int r = 255;
+    int g = 255;
+    int b = 255;
+    int a = 255;
+
+    bool isModel = false;
+   
+    string texture = "assets/albedo.png";
+    string model = EMPTY;
+
+    string terrain = EMPTY;
+
+    int scale = 1;
+}

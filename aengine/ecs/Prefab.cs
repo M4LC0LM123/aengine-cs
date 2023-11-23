@@ -6,6 +6,27 @@ using Raylib_CsLo;
 namespace aengine.ecs; 
 
 public class Prefab {
+    public static void loadScene(string path, string name) {
+        string prevDir = Directory.GetCurrentDirectory();
+        // Console.WriteLine("prev dir: " + prevDir);
+        
+        ParsedData data = Parser.parse(Parser.read(path));
+        ParsedObject obj = data.getObject(name);
+        
+        string newDir = prevDir + "\\" + Path.GetDirectoryName(path);
+        string newPath = prevDir + "\\" + path.Replace("/", "\\");
+        // Console.WriteLine("new dir " + newDir);
+        // Console.WriteLine("new path " + newPath);
+        Directory.SetCurrentDirectory(newDir);
+        
+        foreach (string attribute in data.dataKeys(name)) {
+            string entityPath = obj.getValue<string>(attribute);
+            World.entities.Add(loadPrefab(entityPath, attribute));
+        }
+        
+        Directory.SetCurrentDirectory(prevDir);
+    }
+    
     public static Entity loadPrefab(string path, string name) {
         string prevDir = Directory.GetCurrentDirectory();
         // Console.WriteLine("prev dir: " + prevDir);
@@ -165,19 +186,19 @@ public class Prefab {
         Model model = new Model();
 
         if (shape is ShapeType.BOX) {
-            mesh = Raylib.GenMeshCube(1, 1, 1);
+            mesh = Raylib.GenMeshCube(entity.transform.scale.X, entity.transform.scale.Y, entity.transform.scale.Z);
         }
         else if (shape is ShapeType.SPHERE) {
-            mesh = Raylib.GenMeshSphere(1, 15, 15);
+            mesh = Raylib.GenMeshSphere(entity.transform.scale.X * 0.5f, 15, 15);
         }
         else if (shape is ShapeType.CYLINDER) {
-            mesh = Raylib.GenMeshCylinder(1, 1, 15);
+            mesh = Raylib.GenMeshCylinder(entity.transform.scale.X * 0.5f, entity.transform.scale.Y, 15);
         }
         else if (shape is ShapeType.CONE) {
-            mesh = Raylib.GenMeshCone(1, 1, 15);
+            mesh = Raylib.GenMeshCone(entity.transform.scale.X * 0.5f, entity.transform.scale.Y, 15);
         }
         else if (shape is ShapeType.TERRAIN) {
-            mesh = Raylib.GenMeshHeightmap(Raylib.LoadImageFromTexture(terrain), Vector3.One);
+            mesh = Raylib.GenMeshHeightmap(Raylib.LoadImageFromTexture(terrain), entity.transform.scale);
         }
 
         if (shape is ShapeType.MODEL) {
@@ -185,8 +206,7 @@ public class Prefab {
             // Console.WriteLine(Directory.GetCurrentDirectory());
             //
             model = Raylib.LoadModel(obj.getValue<string>("model"));
-        }
-        else {
+        } else {
             model = Raylib.LoadModelFromMesh(mesh);
         }
 

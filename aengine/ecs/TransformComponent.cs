@@ -25,5 +25,9 @@ namespace aengine.ecs
         public void render() { }
 
         public void dispose() { }
+
+        public override string ToString() {
+            return position + "," + scale + ", " + rotation;
+        }
     }
 }
