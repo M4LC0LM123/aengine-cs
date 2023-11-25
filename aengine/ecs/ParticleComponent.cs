@@ -14,6 +14,7 @@ public class ParticleComponent : Component {
     public List<ParticleBehaviour> behaviours;
 
     private Camera camera;
+    private string m_name = "particle";
 
     public ParticleComponent() {
         transform = new TransformComponent(null);
@@ -89,6 +90,10 @@ public class ParticleComponent : Component {
     }
 
     public void dispose() {
-        Raylib.UnloadTexture(texture);
+        UnloadTexture(texture);
+    }
+
+    public string fileName() {
+        return m_name;
     }
 }

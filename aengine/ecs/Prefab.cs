@@ -32,6 +32,11 @@ public class Prefab {
         string close = "}";
         // string text = $"object {name} {open} \n    int n = 0; \n{close}";
 
+        string components = String.Empty;
+        foreach (Component component in entity.components) {
+            components += component.fileName() + ", ";
+        }
+        
         string text = $@"object {name} {open}
     str tag = {entity.tag};
     
@@ -47,7 +52,7 @@ public class Prefab {
     f32 ry = {entity.transform.rotation.Y}; // rotation y (yaw)
     f32 rz = {entity.transform.rotation.Z}; // rotation z (roll)
 
-    str components = {core.aengine.QUOTE}{core.aengine.QUOTE};
+    str components = {core.aengine.QUOTE}{components}{core.aengine.QUOTE};
 {close}";
         
         File.WriteAllText(path, text);

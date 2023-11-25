@@ -21,6 +21,7 @@ namespace aengine.ecs {
         public bool debug = false;
 
         private TransformComponent m_transform;
+        private string m_name = "rb";
 
         public RigidBodyComponent(Entity entity, float mass = 1.0f, BodyType type = BodyType.DYNAMIC, ShapeType shape = ShapeType.BOX) {
             this.type = type;
@@ -324,7 +325,11 @@ namespace aengine.ecs {
         public void dispose() {
             World.world.RemoveBody(body);
         }
-        
+
+        public string fileName() {
+            return m_name;
+        }
+
         private unsafe BoundingBox calculateBoundingBox(Mesh mesh) {
             BoundingBox boundingBox = new BoundingBox();
 

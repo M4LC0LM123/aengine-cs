@@ -12,6 +12,8 @@ public class SpatialAudioComponent : Component
     public float strength;
     public bool canPlay;
     public bool debug = false;
+    
+    private string m_name = "audio";
 
     public SpatialAudioComponent(Entity entity, Sound sound)
     {
@@ -55,5 +57,9 @@ public class SpatialAudioComponent : Component
     public void dispose()
     {
         UnloadSound(sound);
+    }
+
+    public string fileName() {
+        return m_name;
     }
 }

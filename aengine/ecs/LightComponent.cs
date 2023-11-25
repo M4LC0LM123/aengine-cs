@@ -17,6 +17,7 @@ public class LightComponent : Component
     public bool debug = false;
 
     private Model cube;
+    private string m_name = "light";
     
     public unsafe LightComponent(Entity entity, aShader shader, Color color, LightType type = LightType.POINT)
     {
@@ -57,6 +58,10 @@ public class LightComponent : Component
     public void dispose()
     {
         UnloadShader(shader);
+    }
+
+    public string fileName() {
+        return m_name;
     }
 
     public void setUpdateVector(Vector3 updateVector)

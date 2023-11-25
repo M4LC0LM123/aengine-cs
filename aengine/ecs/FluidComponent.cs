@@ -30,6 +30,8 @@ public class FluidComponent : Component {
     public Vector3 position;
     public Vector2 scale;
     public float rotation;
+    
+    private string m_name = "fluid";
 
     public unsafe FluidComponent(Entity entity, aShader shader, Texture texture, Color color) {
         this.texture = texture;
@@ -95,5 +97,9 @@ public class FluidComponent : Component {
 
     public void dispose() {
         UnloadTexture(texture);
+    }
+
+    public string fileName() {
+        return m_name;
     }
 }

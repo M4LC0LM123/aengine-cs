@@ -8,6 +8,8 @@ namespace aengine.ecs
         public Vector3 rotation;
         public Vector3 scale;
 
+        private string m_name = "transform";
+        
         public TransformComponent(Entity entity)
         {
             position = new Vector3();
@@ -25,6 +27,10 @@ namespace aengine.ecs
         public void render() { }
 
         public void dispose() { }
+
+        public string fileName() {
+            return m_name;
+        }
 
         public override string ToString() {
             return position + "," + scale + ", " + rotation;

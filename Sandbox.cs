@@ -86,7 +86,7 @@ public static class Sandbox {
             }
         }
         
-        Prefab.saveEntity("save_test.od", "SOME_SAVED_ENTITY", player);
+        Prefab.saveEntity("save_test.od", "SOME_SAVED_ENTITY", body2);
         
         // var scenePrefab = new ScenePrefab("assets/maps/map3.json");
         //

@@ -20,6 +20,8 @@ namespace aengine.ecs
         public bool isModel;
         public Texture texture;
         public float scale;
+        
+        private string m_name = "mesh";
 
         public unsafe MeshComponent(Entity entity, Color color, Texture texture)
         {
@@ -139,5 +141,8 @@ namespace aengine.ecs
             UnloadTexture(texture);
         }
 
+        public string fileName() {
+            return m_name;
+        }
     }
 }
