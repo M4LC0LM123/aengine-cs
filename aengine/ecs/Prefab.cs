@@ -26,6 +26,32 @@ public class Prefab {
         
         Directory.SetCurrentDirectory(prevDir);
     }
+
+    public static void saveEntity(string path, string name, Entity entity) {
+        string open = "{";
+        string close = "}";
+        // string text = $"object {name} {open} \n    int n = 0; \n{close}";
+
+        string text = $@"object {name} {open}
+    str tag = {entity.tag};
+    
+    f32 x = {entity.transform.position.X};
+    f32 y = {entity.transform.position.Y};
+    f32 z = {entity.transform.position.Z};
+
+    f32 width  = {entity.transform.scale.X};
+    f32 height = {entity.transform.scale.Y};
+    f32 depth  = {entity.transform.scale.Z};
+
+    f32 rx = {entity.transform.rotation.X}; // rotation x (pitch)
+    f32 ry = {entity.transform.rotation.Y}; // rotation y (yaw)
+    f32 rz = {entity.transform.rotation.Z}; // rotation z (roll)
+
+    str components = {core.aengine.QUOTE}{core.aengine.QUOTE};
+{close}";
+        
+        File.WriteAllText(path, text);
+    }
     
     public static Entity loadPrefab(string path, string name) {
         string prevDir = Directory.GetCurrentDirectory();

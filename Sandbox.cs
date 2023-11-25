@@ -86,6 +86,8 @@ public static class Sandbox {
             }
         }
         
+        Prefab.saveEntity("save_test.od", "SOME_SAVED_ENTITY", player);
+        
         // var scenePrefab = new ScenePrefab("assets/maps/map3.json");
         //
         // foreach (var obj in scenePrefab.data)

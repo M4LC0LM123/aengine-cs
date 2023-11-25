@@ -1,0 +1,17 @@
+object SOME_SAVED_ENTITY {
+    str tag = playa;
+    
+    f32 x = 0;
+    f32 y = 10;
+    f32 z = 0;
+
+    f32 width  = 1;
+    f32 height = 1;
+    f32 depth  = 1;
+
+    f32 rx = 0; // rotation x (pitch)
+    f32 ry = 0; // rotation y (yaw)
+    f32 rz = 0; // rotation z (roll)
+
+    str components = "";
+}
