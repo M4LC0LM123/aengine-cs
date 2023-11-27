@@ -62,4 +62,8 @@ public class SpatialAudioComponent : Component
     public string fileName() {
         return m_name;
     }
+    
+    public string getType() {
+        return "SpatialAudioComponent";
+    }
 }

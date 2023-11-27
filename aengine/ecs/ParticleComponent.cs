@@ -96,4 +96,8 @@ public class ParticleComponent : Component {
     public string fileName() {
         return m_name;
     }
+    
+    public string getType() {
+        return "ParticleComponent";
+    }
 }

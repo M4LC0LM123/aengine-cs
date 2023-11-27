@@ -9,4 +9,5 @@ public interface Component {
     public void dispose();
 
     public string fileName();
+    public string getType();
 }

@@ -31,6 +31,10 @@ namespace aengine.ecs
         public string fileName() {
             return m_name;
         }
+        
+        public string getType() {
+            return "TransformComponent";
+        }
 
         public override string ToString() {
             return position + "," + scale + ", " + rotation;

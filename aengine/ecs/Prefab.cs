@@ -6,6 +6,9 @@ using Raylib_CsLo;
 namespace aengine.ecs; 
 
 public class Prefab {
+    private static string open = "{";
+    private static string close = "}";
+    
     public static void loadScene(string path, string name) {
         string prevDir = Directory.GetCurrentDirectory();
         // Console.WriteLine("prev dir: " + prevDir);
@@ -28,10 +31,6 @@ public class Prefab {
     }
 
     public static void saveEntity(string path, string name, Entity entity) {
-        string open = "{";
-        string close = "}";
-        // string text = $"object {name} {open} \n    int n = 0; \n{close}";
-
         string components = String.Empty;
         foreach (Component component in entity.components) {
             components += component.fileName() + ", ";
@@ -57,6 +56,61 @@ public class Prefab {
         
         File.WriteAllText(path, text);
     }
+
+    public static void saveComponent(string path, string name, Component component) {
+        string text = String.Empty;
+        
+        if (component.getType() == "MeshComponent") {
+            m_saveMeshComponent(name, (MeshComponent)component);
+        } else if (component.getType() == "RigidBodyComponent") {
+            m_saveRigidBody(name, (RigidBodyComponent)component);
+        } else if (component.getType() == "LightComponent") {
+            
+        } else if (component.getType() == "SpatialAudioComponent") {
+            
+        } else if (component.getType() == "FluidComponent") {
+            
+        }
+    }
+
+    private static string m_saveMeshComponent(string name, MeshComponent component) {
+        string text = $@"object {name} {open}
+    str type = {core.aengine.QUOTE}MeshComponent{core.aengine.QUOTE};
+    
+    i32 r = {component.color.r};
+    i32 g = {component.color.g};
+    i32 b = {component.color.b};
+    i32 a = {component.color.a};
+
+    bool isModel = {component.isModel};
+
+    str texture = {core.aengine.QUOTE}{core.aengine.QUOTE};
+    str model = {core.aengine.QUOTE}{core.aengine.QUOTE};
+    
+    str terrain = {core.aengine.QUOTE}{core.aengine.QUOTE};
+
+    i32 scale = {component.scale};    
+{close}";
+
+        return text;
+    }
+    
+    private static string m_saveRigidBody(string name, RigidBodyComponent component) {
+        string text = $@"object {name} {open}
+    str type = {core.aengine.QUOTE}RigidBodyComponent{core.aengine.QUOTE};
+    
+    f32 mass = {component.body.Mass};
+
+    i32 shape = {component.shapeType};
+    i32 body_type = {Convert.ToInt32(component.body.IsStatic)};
+
+    str model = {core.aengine.QUOTE}{core.aengine.QUOTE};
+
+    str heightmap = {core.aengine.QUOTE}{core.aengine.QUOTE};
+{close}";
+
+        return text;
+    } 
     
     public static Entity loadPrefab(string path, string name) {
         string prevDir = Directory.GetCurrentDirectory();

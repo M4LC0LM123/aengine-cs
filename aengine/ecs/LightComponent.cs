@@ -63,6 +63,10 @@ public class LightComponent : Component
     public string fileName() {
         return m_name;
     }
+    
+    public string getType() {
+        return "LightComponent";
+    }
 
     public void setUpdateVector(Vector3 updateVector)
     {

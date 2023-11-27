@@ -329,6 +329,10 @@ namespace aengine.ecs {
         public string fileName() {
             return m_name;
         }
+        
+        public string getType() {
+            return "RigidBodyComponent";
+        }
 
         private unsafe BoundingBox calculateBoundingBox(Mesh mesh) {
             BoundingBox boundingBox = new BoundingBox();

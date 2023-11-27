@@ -144,5 +144,10 @@ namespace aengine.ecs
         public string fileName() {
             return m_name;
         }
+
+        public string getType() {
+            return "MeshComponent";
+        }
+        
     }
 }
