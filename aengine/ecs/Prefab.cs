@@ -3,31 +3,56 @@ using aengine_cs.aengine.parser;
 using aengine.graphics;
 using Raylib_CsLo;
 
-namespace aengine.ecs; 
+namespace aengine.ecs;
 
 public class Prefab {
     private static string open = "{";
     private static string close = "}";
-    
+
     public static void loadScene(string path, string name) {
         string prevDir = Directory.GetCurrentDirectory();
         // Console.WriteLine("prev dir: " + prevDir);
-        
+
         ParsedData data = Parser.parse(Parser.read(path));
         ParsedObject obj = data.getObject(name);
-        
+
         string newDir = prevDir + "\\" + Path.GetDirectoryName(path);
         string newPath = prevDir + "\\" + path.Replace("/", "\\");
         // Console.WriteLine("new dir " + newDir);
         // Console.WriteLine("new path " + newPath);
         Directory.SetCurrentDirectory(newDir);
-        
+
         foreach (string attribute in data.dataKeys(name)) {
             string entityPath = obj.getValue<string>(attribute);
             World.entities.Add(loadPrefab(entityPath, attribute));
         }
-        
+
         Directory.SetCurrentDirectory(prevDir);
+    }
+
+    public static void savePrefab(string path, string name, Entity entity) {
+        saveEntity(path, name, entity);
+
+        foreach (var component in entity.components) {
+            if (component.GetType() == typeof(MeshComponent)) {
+                using (StreamWriter sw = File.AppendText(path)) {
+                    sw.WriteLine(m_saveMeshComponent(component.fileName(), entity.getComponent<MeshComponent>()));   
+                }
+                
+                // File.AppendAllText(path,
+                //     m_saveMeshComponent(component.fileName(), entity.getComponent<MeshComponent>()) +
+                //     Environment.NewLine);
+            }
+            else if (component.GetType() == typeof(RigidBodyComponent)) {
+                using (StreamWriter sw = File.AppendText(path)) {
+                    sw.WriteLine(m_saveRigidBody(component.fileName(), entity.getComponent<RigidBodyComponent>()));   
+                }
+                
+                // File.AppendAllText(path,
+                //     m_saveRigidBody(component.fileName(), entity.getComponent<RigidBodyComponent>()) +
+                //     Environment.NewLine);
+            }
+        }
     }
 
     public static void saveEntity(string path, string name, Entity entity) {
@@ -35,7 +60,7 @@ public class Prefab {
         foreach (Component component in entity.components) {
             components += component.fileName() + ", ";
         }
-        
+
         string text = $@"object {name} {open}
     str tag = {entity.tag};
     
@@ -53,24 +78,8 @@ public class Prefab {
 
     str components = {core.aengine.QUOTE}{components}{core.aengine.QUOTE};
 {close}";
-        
-        File.WriteAllText(path, text);
-    }
 
-    public static void saveComponent(string path, string name, Component component) {
-        string text = String.Empty;
-        
-        if (component.getType() == "MeshComponent") {
-            m_saveMeshComponent(name, (MeshComponent)component);
-        } else if (component.getType() == "RigidBodyComponent") {
-            m_saveRigidBody(name, (RigidBodyComponent)component);
-        } else if (component.getType() == "LightComponent") {
-            
-        } else if (component.getType() == "SpatialAudioComponent") {
-            
-        } else if (component.getType() == "FluidComponent") {
-            
-        }
+        File.WriteAllText(path, text);
     }
 
     private static string m_saveMeshComponent(string name, MeshComponent component) {
@@ -94,7 +103,7 @@ public class Prefab {
 
         return text;
     }
-    
+
     private static string m_saveRigidBody(string name, RigidBodyComponent component) {
         string text = $@"object {name} {open}
     str type = {core.aengine.QUOTE}RigidBodyComponent{core.aengine.QUOTE};
@@ -110,15 +119,15 @@ public class Prefab {
 {close}";
 
         return text;
-    } 
-    
+    }
+
     public static Entity loadPrefab(string path, string name) {
         string prevDir = Directory.GetCurrentDirectory();
         // Console.WriteLine("prev dir: " + prevDir);
-        
+
         ParsedData data = Parser.parse(Parser.read(path));
         ParsedObject obj = data.getObject(name);
-        
+
         string newDir = prevDir + "\\" + Path.GetDirectoryName(path);
         string newPath = prevDir + "\\" + path.Replace("/", "\\");
         // Console.WriteLine("new dir " + newDir);
@@ -126,17 +135,17 @@ public class Prefab {
         Directory.SetCurrentDirectory(newDir);
 
         string tag = obj.getValue<string>("tag");
-        
+
         Entity result = new Entity(tag);
 
         float x = obj.getValue<float>("x");
         float y = obj.getValue<float>("y");
         float z = obj.getValue<float>("z");
-        
+
         float width = obj.getValue<float>("width");
         float height = obj.getValue<float>("height");
         float depth = obj.getValue<float>("depth");
-        
+
         float rx = obj.getValue<float>("rx"); // pitch
         float ry = obj.getValue<float>("ry"); // yaw
         float rz = obj.getValue<float>("rz"); // roll
@@ -154,27 +163,27 @@ public class Prefab {
             // Console.WriteLine("comp path load: " + newPath);
             result.addComponent(m_loadComponent(result, newPath, s));
         }
-        
+
         Directory.SetCurrentDirectory(prevDir);
         return result;
     }
-    
+
     public static Entity loadEntity(string path, string name) {
         ParsedData data = Parser.parse(Parser.read(path));
         ParsedObject obj = data.getObject(name);
-        
+
         string tag = obj.getValue<string>("tag");
-        
+
         Entity result = new Entity(tag);
 
         float x = obj.getValue<float>("x");
         float y = obj.getValue<float>("y");
         float z = obj.getValue<float>("z");
-        
+
         float width = obj.getValue<float>("width");
         float height = obj.getValue<float>("height");
         float depth = obj.getValue<float>("depth");
-        
+
         float rx = obj.getValue<float>("rx");
         float ry = obj.getValue<float>("ry");
         float rz = obj.getValue<float>("rz");
@@ -182,20 +191,20 @@ public class Prefab {
         result.transform.position = new Vector3(x, y, z);
         result.transform.scale = new Vector3(width, height, depth);
         result.transform.rotation = new Vector3(rx, ry, rz);
-        
+
         return result;
     }
-    
+
     public static Component loadComponent(Entity entity, string path, string name) {
         ParsedData data = Parser.parse(Parser.read(path));
         ParsedObject obj = data.getObject(name);
-        
+
         string type = obj.getValue<string>("type");
-        
+
         if (type == "MeshComponent" || type == "Mesh") {
             return loadMeshComponent(entity, obj);
         }
-        
+
         if (type == "RigidBodyComponent" || type == "RigidBody") {
             return loadRigidBodyComponent(entity, obj);
         }
@@ -203,7 +212,7 @@ public class Prefab {
         if (type == "LightComponent" || type == "Light") {
             return loadLightComponent(entity, obj);
         }
-        
+
         if (type == "SpatialAudioComponent" || type == "SpatialAudio" || type == "Sound") {
             return loadSpatialAudioComponent(entity, obj);
         }
@@ -211,20 +220,20 @@ public class Prefab {
         if (type == "FluidComponent" || type == "Fluid") {
             return loadFluidComponent(entity, obj);
         }
-        
+
         return null;
     }
-    
+
     private static Component m_loadComponent(Entity entity, string path, string name) {
         ParsedData data = Parser.parse(Parser.read(path));
         ParsedObject obj = data.getObject(name);
-        
+
         string type = obj.getValue<string>("type");
-        
+
         if (type == "MeshComponent" || type == "Mesh") {
             return loadMeshComponent(entity, obj);
         }
-        
+
         if (type == "RigidBodyComponent" || type == "RigidBody") {
             return loadRigidBodyComponent(entity, obj);
         }
@@ -232,7 +241,7 @@ public class Prefab {
         if (type == "LightComponent" || type == "Light") {
             return loadLightComponent(entity, obj);
         }
-        
+
         if (type == "SpatialAudioComponent" || type == "SpatialAudio" || type == "Sound") {
             return loadSpatialAudioComponent(entity, obj);
         }
@@ -240,7 +249,7 @@ public class Prefab {
         if (type == "FluidComponent" || type == "Fluid") {
             return loadFluidComponent(entity, obj);
         }
-        
+
         return null;
     }
 
@@ -291,7 +300,8 @@ public class Prefab {
             // Console.WriteLine(Directory.GetCurrentDirectory());
             //
             model = Raylib.LoadModel(obj.getValue<string>("model"));
-        } else {
+        }
+        else {
             model = Raylib.LoadModelFromMesh(mesh);
         }
 
@@ -311,19 +321,19 @@ public class Prefab {
     public static Component loadRigidBodyComponent(Entity entity, ParsedObject obj) {
         float mass = obj.getValue<float>("mass");
         ShapeType shape = (ShapeType)obj.getValue<int>("shape");
-        BodyType bodyType = (BodyType) obj.getValue<int>("body_type");
+        BodyType bodyType = (BodyType)obj.getValue<int>("body_type");
 
         string modelPath = obj.getValue<string>("model");
         string heightmapPath = obj.getValue<string>("heightmap");
 
         if (modelPath != "") {
             Model model = Raylib.LoadModel(modelPath);
- 
+
             return new RigidBodyComponent(entity,
                 model, mass, bodyType
             );
         }
-            
+
         if (heightmapPath != "") {
             Texture heightmap = Raylib.LoadTexture(heightmapPath);
 
@@ -341,7 +351,7 @@ public class Prefab {
 
     public static Component loadLightComponent(Entity entity, ParsedObject obj) {
         float intensity = obj.getValue<float>("intensity");
-        
+
         int r = obj.getValue<int>("r");
         int g = obj.getValue<int>("g");
         int b = obj.getValue<int>("b");
@@ -353,7 +363,7 @@ public class Prefab {
 
         if (vertShaderPath == "")
             vertShaderPath = null;
-        
+
         if (fragShaderPath == "")
             fragShaderPath = null;
 
@@ -388,17 +398,17 @@ public class Prefab {
 
         result.strength = strength;
         result.canPlay = canPlay;
-        
+
         return result;
     }
 
     public static Component loadFluidComponent(Entity entity, ParsedObject obj) {
         string vertShaderPath = obj.getValue<string>("shader_vert");
         string fragShaderPath = obj.getValue<string>("shader_frag");
-        
+
         if (vertShaderPath == "")
             vertShaderPath = null;
-        
+
         if (fragShaderPath == "")
             fragShaderPath = null;
 
@@ -408,14 +418,14 @@ public class Prefab {
 
         if (texturePath != "")
             texture = Raylib.LoadTexture(texturePath);
-        
+
         int r = obj.getValue<int>("r");
         int g = obj.getValue<int>("g");
         int b = obj.getValue<int>("b");
         int a = obj.getValue<int>("a");
         Color color = new Color(r, g, b, a);
 
-        FluidComponent result = new FluidComponent(entity, 
+        FluidComponent result = new FluidComponent(entity,
             new aShader(vertShaderPath, fragShaderPath), texture, color);
 
         result.freqX = obj.getValue<float>("freqX");
@@ -426,8 +436,7 @@ public class Prefab {
         result.speedY = obj.getValue<float>("speedY");
 
         result.resetValues();
-        
+
         return result;
     }
-    
 }
