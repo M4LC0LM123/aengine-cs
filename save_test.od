@@ -2,7 +2,7 @@ object SOME_SAVED_ENTITY {
     str tag = water;
     
     f32 x = 0;
-    f32 y = -8,5;
+    f32 y = -8.5;
     f32 z = 0;
 
     f32 width  = 25;

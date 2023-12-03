@@ -57,7 +57,6 @@ public static class Sandbox {
         body.transform.position.Y = 15;
         body.transform.scale = Vector3.One;
         body.addComponent(Prefab.loadComponent(body, "assets/data/player.od", "zombie_mesh"));
-        // body.addComponent(new MeshComponent(body, GenMeshCube(1, 1, 1), YELLOW, new aTexture("assets/albedo.png")));
         body.addComponent(Prefab.loadComponent(body, "assets/data/player.od", "zombie"));
 
         var body2 = new Entity();
