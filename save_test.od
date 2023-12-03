@@ -1,28 +1,45 @@
 object SOME_SAVED_ENTITY {
-    str tag = playa;
+    str tag = water;
     
     f32 x = 0;
-    f32 y = 10;
+    f32 y = -8.5;
     f32 z = 0;
 
-    f32 width  = 1;
-    f32 height = 1;
-    f32 depth  = 1;
+    f32 width  = 25;
+    f32 height = 0;
+    f32 depth  = 25;
 
     f32 rx = 0; // rotation x (pitch)
     f32 ry = 0; // rotation y (yaw)
     f32 rz = 0; // rotation z (roll)
 
-    str components = "rb, ";
-}object rb {
-    str type = "RigidBodyComponent";
-    
-    f32 mass = 1;
+    str components = "fluid, audio, ";
+}object audio {
+    str type = "SpatialAudioComponent";
 
-    i32 shape = SPHERE;
-    i32 body_type = 0;
+    str sound = "assets/splash.wav";
+        
+    f32 strength = 1;
+        
+    bool can_play = true;
+}
+object fluid {
+    str type = "FluidComponent";
 
-    str model = "";
+    str shader_vert = "";
+    str shader_frag = "assets/wave.frag";
 
-    str heightmap = "";
+    str texture = "assets/water.png";
+
+    i32 r = 255;
+    i32 g = 255;
+    i32 b = 255;
+    i32 a = 125;
+
+    f32 freqX  = 25;
+    f32 freqY  = 25;
+    f32 ampX   = 5;
+    f32 ampY   = 5;
+    f32 speedX = 8;
+    f32 speedY = 8;
 }

@@ -1,4 +1,5 @@
 using System.Numerics;
+using aengine.graphics;
 using Raylib_CsLo;
 using static Raylib_CsLo.Raylib;
 
@@ -6,7 +7,7 @@ namespace aengine.ecs;
 
 public class SpatialAudioComponent : Component
 {
-    public Sound sound;
+    public aSound sound;
     public Vector3 position;
     public Vector3 target;
     public float strength;
@@ -15,7 +16,7 @@ public class SpatialAudioComponent : Component
     
     private string m_name = "audio";
 
-    public SpatialAudioComponent(Entity entity, Sound sound)
+    public SpatialAudioComponent(Entity entity, aSound sound)
     {
         this.sound = sound;
         position = entity.transform.position;
@@ -31,7 +32,7 @@ public class SpatialAudioComponent : Component
 
     public void play()
     {
-        if (!IsSoundPlaying(sound) && canPlay) PlaySound(sound);
+        if (!IsSoundPlaying(sound.data) && canPlay) PlaySound(sound.data);
     }
     
     public void update(Entity entity)
@@ -45,7 +46,7 @@ public class SpatialAudioComponent : Component
 
         strength = Math.Clamp(strength, 0.0f, 1.0f);
         
-        SetSoundVolume(sound, strength);
+        SetSoundVolume(sound.data, strength);
     }
 
     public void render()
@@ -56,7 +57,7 @@ public class SpatialAudioComponent : Component
 
     public void dispose()
     {
-        UnloadSound(sound);
+        if (sound != null) sound.dispose();
     }
 
     public string fileName() {

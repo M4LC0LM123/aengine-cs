@@ -33,24 +33,38 @@ public class Prefab {
     public static void savePrefab(string path, string name, Entity entity) {
         saveEntity(path, name, entity);
 
-        foreach (var component in entity.components) {
-            if (component.GetType() == typeof(MeshComponent)) {
-                using (StreamWriter sw = File.AppendText(path)) {
-                    sw.WriteLine(m_saveMeshComponent(component.fileName(), entity.getComponent<MeshComponent>()));   
-                }
-                
-                // File.AppendAllText(path,
-                //     m_saveMeshComponent(component.fileName(), entity.getComponent<MeshComponent>()) +
-                //     Environment.NewLine);
+        if (entity.hasComponent<MeshComponent>()) {
+            using (StreamWriter sw = File.AppendText(path)) {
+                MeshComponent mesh = entity.getComponent<MeshComponent>(); 
+                sw.WriteLine(m_saveMeshComponent(mesh.fileName(), mesh));   
             }
-            else if (component.GetType() == typeof(RigidBodyComponent)) {
-                using (StreamWriter sw = File.AppendText(path)) {
-                    sw.WriteLine(m_saveRigidBody(component.fileName(), entity.getComponent<RigidBodyComponent>()));   
-                }
-                
-                // File.AppendAllText(path,
-                //     m_saveRigidBody(component.fileName(), entity.getComponent<RigidBodyComponent>()) +
-                //     Environment.NewLine);
+        }
+        
+        if (entity.hasComponent<RigidBodyComponent>()) {
+            using (StreamWriter sw = File.AppendText(path)) {
+                RigidBodyComponent rb = entity.getComponent<RigidBodyComponent>();
+                sw.WriteLine(m_saveRigidBody(rb.fileName(), rb));   
+            }
+        }
+        
+        if (entity.hasComponent<SpatialAudioComponent>()) {
+            using (StreamWriter sw = File.AppendText(path)) {
+                SpatialAudioComponent sa = entity.getComponent<SpatialAudioComponent>();
+                sw.WriteLine(m_saveSoundComponent(sa.fileName(), sa));   
+            }
+        }
+        
+        if (entity.hasComponent<LightComponent>()) {
+            using (StreamWriter sw = File.AppendText(path)) {
+                LightComponent l = entity.getComponent<LightComponent>();
+                sw.WriteLine(m_saveLightComponent(l.fileName(), l));   
+            }
+        }
+        
+        if (entity.hasComponent<FluidComponent>()) {
+            using (StreamWriter sw = File.AppendText(path)) {
+                FluidComponent f = entity.getComponent<FluidComponent>();
+                sw.WriteLine(m_saveFluidComponent(f.fileName(), f));   
             }
         }
     }
@@ -83,7 +97,7 @@ public class Prefab {
     }
 
     private static string m_saveMeshComponent(string name, MeshComponent component) {
-        string text = $@"object {name} {open}
+        string text = $@"object {name} {open} // null reference exception here
     str type = {core.aengine.QUOTE}MeshComponent{core.aengine.QUOTE};
     
     i32 r = {component.color.r};
@@ -91,12 +105,12 @@ public class Prefab {
     i32 b = {component.color.b};
     i32 a = {component.color.a};
 
-    bool isModel = {component.isModel};
+    bool isModel = {component.isModel.ToString().ToLower()};
 
-    str texture = {core.aengine.QUOTE}{core.aengine.QUOTE};
-    str model = {core.aengine.QUOTE}{core.aengine.QUOTE};
-    
-    str terrain = {core.aengine.QUOTE}{core.aengine.QUOTE};
+    str texture = {core.aengine.QUOTE}{component.texture.path}{core.aengine.QUOTE};
+    str model = {core.aengine.QUOTE}{component.model.path}{core.aengine.QUOTE};
+
+    str heightmap = {core.aengine.QUOTE}{component.terrainPath}{core.aengine.QUOTE};
 
     i32 scale = {component.scale};    
 {close}";
@@ -113,9 +127,70 @@ public class Prefab {
     i32 shape = {component.shapeType};
     i32 body_type = {Convert.ToInt32(component.body.IsStatic)};
 
-    str model = {core.aengine.QUOTE}{core.aengine.QUOTE};
+    str model = {core.aengine.QUOTE}{component.model.path}{core.aengine.QUOTE};
 
-    str heightmap = {core.aengine.QUOTE}{core.aengine.QUOTE};
+    str heightmap = {core.aengine.QUOTE}{component.heightmap.path}{core.aengine.QUOTE};
+{close}";
+
+        return text;
+    }
+
+    private static string m_saveSoundComponent(string name, SpatialAudioComponent component) {
+        string text = $@"object {name} {open}
+    str type = {core.aengine.QUOTE}SpatialAudioComponent{core.aengine.QUOTE};
+
+    str sound = {core.aengine.QUOTE}{component.sound.path}{core.aengine.QUOTE};
+        
+    f32 strength = {component.strength};
+        
+    bool can_play = {component.canPlay.ToString().ToLower()};
+{close}";
+
+        return text;
+    }
+    
+    private static string m_saveLightComponent(string name, LightComponent component) {
+        string text = $@"object {name} {open}
+    string type = {core.aengine.QUOTE}LightComponent{core.aengine.QUOTE};
+        
+    f32 intensity = {component.intensity};
+
+    i32 r = {component.core.color.r};
+    i32 g = {component.core.color.g};
+    i32 b = {component.core.color.b};
+    i32 a = {component.core.color.a};
+
+    string shader_vert = {core.aengine.QUOTE}{component.shader.vertPath}{core.aengine.QUOTE};
+    string shader_frag = {core.aengine.QUOTE}{component.shader.fragPath}{core.aengine.QUOTE};
+
+    bool enabled = {component.enabled};
+
+    i32 light_type = {component.core.type};
+{close}";
+
+        return text;
+    }
+    
+    private static string m_saveFluidComponent(string name, FluidComponent component) {
+        string text = $@"object {name} {open}
+    str type = {core.aengine.QUOTE}FluidComponent{core.aengine.QUOTE};
+
+    str shader_vert = {core.aengine.QUOTE}{component.shader.vertPath}{core.aengine.QUOTE};
+    str shader_frag = {core.aengine.QUOTE}{component.shader.fragPath}{core.aengine.QUOTE};
+
+    str texture = {core.aengine.QUOTE}assets/water.png{core.aengine.QUOTE};
+
+    i32 r = {component.color.r};
+    i32 g = {component.color.g};
+    i32 b = {component.color.b};
+    i32 a = {component.color.a};
+
+    f32 freqX  = {component.freqX};
+    f32 freqY  = {component.freqY};
+    f32 ampX   = {component.ampX};
+    f32 ampY   = {component.ampY};
+    f32 speedX = {component.speedX};
+    f32 speedY = {component.speedY};
 {close}";
 
         return text;
@@ -295,24 +370,25 @@ public class Prefab {
             mesh = Raylib.GenMeshHeightmap(Raylib.LoadImageFromTexture(terrain), entity.transform.scale);
         }
 
+        MeshComponent result = new MeshComponent(entity,
+            mesh,
+            color
+        );
+        
         if (shape is ShapeType.MODEL) {
             // Console.WriteLine(obj.getValue<string>("model"));
             // Console.WriteLine(Directory.GetCurrentDirectory());
             //
             model = Raylib.LoadModel(obj.getValue<string>("model"));
+            result.model = new aModel(obj.getValue<string>("model"), model);
         }
         else {
             model = Raylib.LoadModelFromMesh(mesh);
+            result.model = new aModel(obj.getValue<string>("model"), model);
         }
 
-        MeshComponent result = new MeshComponent(entity,
-            mesh,
-            color
-        );
-
         result.scale = obj.getValue<int>("scale");
-
-        result.model = model;
+        
         result.setTexture(texture);
 
         return result;
@@ -327,7 +403,7 @@ public class Prefab {
         string heightmapPath = obj.getValue<string>("heightmap");
 
         if (modelPath != "") {
-            Model model = Raylib.LoadModel(modelPath);
+            aModel model = new aModel(modelPath);
 
             return new RigidBodyComponent(entity,
                 model, mass, bodyType
@@ -335,7 +411,7 @@ public class Prefab {
         }
 
         if (heightmapPath != "") {
-            Texture heightmap = Raylib.LoadTexture(heightmapPath);
+            aTexture heightmap = new aTexture(heightmapPath);
 
             return new RigidBodyComponent(entity,
                 heightmap, mass, bodyType
@@ -394,7 +470,7 @@ public class Prefab {
             sound = Raylib.LoadSound(soundFile);
         }
 
-        SpatialAudioComponent result = new SpatialAudioComponent(entity, sound);
+        SpatialAudioComponent result = new SpatialAudioComponent(entity, new aSound(soundFile, sound));
 
         result.strength = strength;
         result.canPlay = canPlay;

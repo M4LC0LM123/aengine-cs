@@ -6,6 +6,8 @@ namespace aengine.graphics;
 public class aShader
 {
     public Shader shader;
+    public string vertPath;
+    public string fragPath;
 
     public aShader(string vert, string frag)
     {
@@ -20,5 +22,8 @@ public class aShader
         if (frag == null) 
             shader = LoadShader(TextFormat(vert, core.aengine.GLSL_VERSION),
                 null);
+
+        vertPath = vert != null ? vert : String.Empty;
+        fragPath = frag != null ? frag : String.Empty;
     }
 }

@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
+using aengine.graphics;
 using Jitter.Collision.Shapes;
 using Jitter.Dynamics;
 using Jitter.LinearMath;
@@ -19,6 +20,9 @@ namespace aengine.ecs {
         public BodyType type;
         public ShapeType shapeType;
         public bool debug = false;
+
+        public aModel model = new aModel();
+        public aTexture heightmap = new aTexture();
 
         private TransformComponent m_transform;
         private string m_name = "rb";
@@ -61,13 +65,13 @@ namespace aengine.ecs {
             body.EnableDebugDraw = true;
         }
         
-        public unsafe RigidBodyComponent(Entity entity, Model model, float mass = 1.0f, BodyType type = BodyType.DYNAMIC) {
+        public unsafe RigidBodyComponent(Entity entity, aModel model, float mass = 1.0f, BodyType type = BodyType.DYNAMIC) {
             this.type = type;
             
             List<JVector> vertices = new List<JVector>();
         
-            for (int i = 0; i < model.meshCount; i++) {
-                Mesh mesh = model.meshes[i];
+            for (int i = 0; i < model.data.meshCount; i++) {
+                Mesh mesh = model.data.meshes[i];
                 for (int j = 0; j < mesh.vertexCount; j += 3) {
                     float x = mesh.vertices[j];
                     float y = mesh.vertices[j + 1];
@@ -78,6 +82,8 @@ namespace aengine.ecs {
                     vertices.Add(vertex);
                 }
             }
+
+            this.model = model;
         
             shape = new ConvexHullShape(vertices);
             
@@ -171,11 +177,13 @@ namespace aengine.ecs {
         //     body.EnableDebugDraw = true;
         // }
         
-        public unsafe RigidBodyComponent(Entity entity, Texture heightmap, float mass = 1.0f, BodyType type = BodyType.DYNAMIC) {
+        public unsafe RigidBodyComponent(Entity entity, aTexture heightmap, float mass = 1.0f, BodyType type = BodyType.DYNAMIC) {
             this.type = type;
             shapeType = ShapeType.TERRAIN;
 
-            Image image = Raylib.LoadImageFromTexture(heightmap);
+            this.heightmap = heightmap;
+            
+            Image image = Raylib.LoadImageFromTexture(heightmap.data);
             float[] heights = new float[image.width * image.height];
 
             Color* imageData = Raylib.LoadImageColors(image);
@@ -323,6 +331,8 @@ namespace aengine.ecs {
         }
 
         public void dispose() {
+            model.dispose();
+            heightmap.dispose();
             World.world.RemoveBody(body);
         }
 

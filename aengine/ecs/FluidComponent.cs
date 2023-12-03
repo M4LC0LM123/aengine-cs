@@ -6,7 +6,7 @@ using System.Numerics;
 namespace aengine.ecs;
 
 public class FluidComponent : Component {
-    public Shader shader;
+    public aShader shader;
     public Texture texture;
     public Color color;
 
@@ -35,15 +35,15 @@ public class FluidComponent : Component {
 
     public unsafe FluidComponent(Entity entity, aShader shader, Texture texture, Color color) {
         this.texture = texture;
-        this.shader = shader.shader;
+        this.shader = shader;
 
-        _secondsLoc = GetShaderLocation(this.shader, "seconds");
-        _freqXLoc = GetShaderLocation(this.shader, "freqX");
-        _freqYLoc = GetShaderLocation(this.shader, "freqY");
-        _ampXLoc = GetShaderLocation(this.shader, "ampX");
-        _ampYLoc = GetShaderLocation(this.shader, "ampY");
-        _speedXLoc = GetShaderLocation(this.shader, "speedX");
-        _speedYLoc = GetShaderLocation(this.shader, "speedY");
+        _secondsLoc = GetShaderLocation(this.shader.shader, "seconds");
+        _freqXLoc = GetShaderLocation(this.shader.shader, "freqX");
+        _freqYLoc = GetShaderLocation(this.shader.shader, "freqY");
+        _ampXLoc = GetShaderLocation(this.shader.shader, "ampX");
+        _ampYLoc = GetShaderLocation(this.shader.shader, "ampY");
+        _speedXLoc = GetShaderLocation(this.shader.shader, "speedX");
+        _speedYLoc = GetShaderLocation(this.shader.shader, "speedY");
 
         freqX = 25.0f;
         freqY = 25.0f;
@@ -53,14 +53,14 @@ public class FluidComponent : Component {
         speedY = 8.0f;
 
         Vector2 screenSize = new(GetScreenWidth(), GetScreenHeight());
-        SetShaderValue(this.shader, GetShaderLocation(this.shader, "size"), &screenSize,
+        SetShaderValue(this.shader.shader, GetShaderLocation(this.shader.shader, "size"), &screenSize,
             ShaderUniformDataType.SHADER_UNIFORM_VEC2);
-        SetShaderValue(this.shader, _freqXLoc, freqX, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
-        SetShaderValue(this.shader, _freqYLoc, freqY, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
-        SetShaderValue(this.shader, _ampXLoc, ampX, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
-        SetShaderValue(this.shader, _ampYLoc, ampY, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
-        SetShaderValue(this.shader, _speedXLoc, speedX, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
-        SetShaderValue(this.shader, _speedYLoc, speedY, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
+        SetShaderValue(this.shader.shader, _freqXLoc, freqX, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
+        SetShaderValue(this.shader.shader, _freqYLoc, freqY, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
+        SetShaderValue(this.shader.shader, _ampXLoc, ampX, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
+        SetShaderValue(this.shader.shader, _ampYLoc, ampY, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
+        SetShaderValue(this.shader.shader, _speedXLoc, speedX, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
+        SetShaderValue(this.shader.shader, _speedYLoc, speedY, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
 
         seconds = 0f;
 
@@ -72,17 +72,17 @@ public class FluidComponent : Component {
     }
 
     public void resetValues() {
-        SetShaderValue(shader, _freqXLoc, freqX, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
-        SetShaderValue(shader, _freqYLoc, freqY, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
-        SetShaderValue(shader, _ampXLoc, ampX, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
-        SetShaderValue(shader, _ampYLoc, ampY, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
-        SetShaderValue(shader, _speedXLoc, speedX, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
-        SetShaderValue(shader, _speedYLoc, speedY, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
+        SetShaderValue(shader.shader, _freqXLoc, freqX, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
+        SetShaderValue(shader.shader, _freqYLoc, freqY, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
+        SetShaderValue(shader.shader, _ampXLoc, ampX, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
+        SetShaderValue(shader.shader, _ampYLoc, ampY, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
+        SetShaderValue(shader.shader, _speedXLoc, speedX, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
+        SetShaderValue(shader.shader, _speedYLoc, speedY, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
     }
 
     public void update(Entity entity) {
         seconds += GetFrameTime();
-        SetShaderValue(shader, _secondsLoc, seconds, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
+        SetShaderValue(shader.shader, _secondsLoc, seconds, ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
 
         position = entity.transform.position;
         scale = new Vector2(entity.transform.scale.X, entity.transform.scale.Z);
@@ -90,7 +90,7 @@ public class FluidComponent : Component {
     }
 
     public void render() {
-        BeginShaderMode(shader);
+        BeginShaderMode(shader.shader);
         Rendering.drawTexturedPlane(texture, position, scale.X, scale.Y, rotation, color);
         EndShaderMode();
     }

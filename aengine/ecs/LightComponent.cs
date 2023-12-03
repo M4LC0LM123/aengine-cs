@@ -8,7 +8,7 @@ namespace aengine.ecs;
 public class LightComponent : Component
 {
     public float intensity;
-    public Shader shader;
+    public aShader shader;
     
     public RLights.Light core;
     public bool enabled;
@@ -24,29 +24,29 @@ public class LightComponent : Component
         updateVector = new Vector3();
         intensity = 2.5f;
         enabled = true;
-        this.shader = shader.shader;
+        this.shader = shader;
         
-        this.shader.locs[(int)SHADER_LOC_MAP_DIFFUSE] = GetShaderLocation(this.shader, "viewPos");
+        this.shader.shader.locs[(int)SHADER_LOC_MAP_DIFFUSE] = GetShaderLocation(this.shader.shader, "viewPos");
 
         // Ambient light level (some basic lighting)
-        int ambientLoc = GetShaderLocation(this.shader, "ambient");
-        SetShaderValue(this.shader, ambientLoc, new Vector4(intensity, intensity, intensity, 1.0f), ShaderUniformDataType.SHADER_UNIFORM_VEC4);
+        int ambientLoc = GetShaderLocation(this.shader.shader, "ambient");
+        SetShaderValue(this.shader.shader, ambientLoc, new Vector4(intensity, intensity, intensity, 1.0f), ShaderUniformDataType.SHADER_UNIFORM_VEC4);
         
-        core = World.lights.CreateLight((RLights.LightType)type, entity.transform.position, Vector3.Zero, color, this.shader);
+        core = World.lights.CreateLight((RLights.LightType)type, entity.transform.position, Vector3.Zero, color, this.shader.shader);
 
         cube = LoadModelFromMesh(GenMeshCube(0.5f, 0.5f, 0.5f));
-        cube.materials[0].shader = this.shader;
+        cube.materials[0].shader = this.shader.shader;
     }
 
     public unsafe void update(Entity entity) {
         core.position = entity.transform.position;
         core.enabled = enabled;
         
-        SetShaderValue(shader, shader.locs[(int)SHADER_LOC_MAP_DIFFUSE], updateVector, ShaderUniformDataType.SHADER_UNIFORM_VEC4);
+        SetShaderValue(shader.shader, shader.shader.locs[(int)SHADER_LOC_MAP_DIFFUSE], updateVector, ShaderUniformDataType.SHADER_UNIFORM_VEC4);
 
         if (World.camera != null) updateVector = World.camera.position;
         
-        World.lights.UpdateLightValues(shader, core);
+        World.lights.UpdateLightValues(shader.shader, core);
     }
 
     public void render()
@@ -57,7 +57,7 @@ public class LightComponent : Component
 
     public void dispose()
     {
-        UnloadShader(shader);
+        UnloadShader(shader.shader);
     }
 
     public string fileName() {
@@ -76,8 +76,8 @@ public class LightComponent : Component
     public void setIntensity(float intensity)
     {
         this.intensity = intensity;
-        int ambientLoc = GetShaderLocation(this.shader, "ambient");
-        SetShaderValue(this.shader, ambientLoc, new Vector4(this.intensity, this.intensity, this.intensity, 1.0f), ShaderUniformDataType.SHADER_UNIFORM_VEC4);
+        int ambientLoc = GetShaderLocation(shader.shader, "ambient");
+        SetShaderValue(shader.shader, ambientLoc, new Vector4(this.intensity, this.intensity, this.intensity, 1.0f), ShaderUniformDataType.SHADER_UNIFORM_VEC4);
     }
     
 }

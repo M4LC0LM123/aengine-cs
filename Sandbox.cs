@@ -57,13 +57,14 @@ public static class Sandbox {
         body.transform.position.Y = 15;
         body.transform.scale = Vector3.One;
         body.addComponent(Prefab.loadComponent(body, "assets/data/player.od", "zombie_mesh"));
+        // body.addComponent(new MeshComponent(body, GenMeshCube(1, 1, 1), YELLOW, new aTexture("assets/albedo.png")));
         body.addComponent(Prefab.loadComponent(body, "assets/data/player.od", "zombie"));
 
         var body2 = new Entity();
         body2.transform.position.Y = 15;
         body2.transform.position.X = 2.5f;
         body2.transform.scale = Vector3.One;
-        body2.addComponent(new MeshComponent(body2, GenMeshCylinder(1, 1, 15), YELLOW, albedo));
+        body2.addComponent(new MeshComponent(body2, GenMeshCylinder(1, 1, 15), YELLOW, new aTexture("assets/albedo.png")));
         body2.addComponent(new RigidBodyComponent(body2, 1, BodyType.DYNAMIC, ShapeType.CYLINDER));
 
         var dummy = new Dummy();
@@ -74,7 +75,7 @@ public static class Sandbox {
 
         var ps = new ParticleSystem();
         var ps2 = new ParticleSystem();
-        ps2.addComponent(new SpatialAudioComponent(ps2, LoadSound("assets/at_dooms_gate.mp3")));
+        ps2.addComponent(new SpatialAudioComponent(ps2, new aSound("assets/at_dooms_gate.mp3")));
 
         var console = new Console();
  
@@ -86,7 +87,19 @@ public static class Sandbox {
             }
         }
         
-        Prefab.savePrefab("save_test.od", "SOME_SAVED_ENTITY", body2);
+        var light = new Entity();
+        light.addComponent(Prefab.loadComponent(light, "assets/data/player.od", "light"));
+        
+        foreach (var entity in World.entities)
+            if (entity.hasComponent<MeshComponent>()) {
+                if (entity.getComponent<MeshComponent>().isModel) {
+                    entity.getComponent<MeshComponent>().setShader(light.getComponent<LightComponent>().shader);
+                }
+            }
+
+        Entity water = Prefab.loadPrefab("assets/data/player.od", "water");
+        
+        Prefab.savePrefab("save_test.od", "SOME_SAVED_ENTITY", water);
         
         // var scenePrefab = new ScenePrefab("assets/maps/map3.json");
         //
@@ -165,6 +178,7 @@ public static class Sandbox {
         //             Image heightmap = LoadImage("assets/heightmap2.png");
         //             terrain.addComponent(new MeshComponent(terrain,
         //                 GenMeshHeightmap(heightmap, terrain.transform.scale), GREEN, albedo));
+        //             terrain.getComponent<MeshComponent>().terrainPath = "assets/heightmap2.png";
         //             terrain.addComponent(new RigidBodyComponent(terrain, LoadTextureFromImage(heightmap), 1, BodyType.STATIC));
         //             break;
         //         case 12:

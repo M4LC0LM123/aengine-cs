@@ -103,12 +103,12 @@ object water {
     string tag = "water";
 
     float x = 0;
-    float y = 0;
+    float y = -8.5;
     float z = 0;
 
-    float width = 0;
+    float width = 25;
     float height = 0;
-    float depth = 0;
+    float depth = 25;
 
     float rx = 0; // rotation x (pitch)
     float ry = 0; // rotation y (yaw)
