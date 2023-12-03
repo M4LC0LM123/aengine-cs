@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Runtime.InteropServices;
 using aengine_cs.aengine.parser;
 using aengine.graphics;
 using Raylib_CsLo;
@@ -16,7 +17,14 @@ public class Prefab {
         ParsedData data = Parser.parse(Parser.read(path));
         ParsedObject obj = data.getObject(name);
 
-        string newDir = prevDir + "\\" + Path.GetDirectoryName(path);
+        string newDir = String.Empty;
+        
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
+            newDir = prevDir + "/" + Path.GetDirectoryName(path);
+        } else {
+            newDir = prevDir + "\\" + Path.GetDirectoryName(path);  
+        }
+        
         string newPath = prevDir + "\\" + path.Replace("/", "\\");
         // Console.WriteLine("new dir " + newDir);
         // Console.WriteLine("new path " + newPath);
@@ -203,8 +211,20 @@ public class Prefab {
         ParsedData data = Parser.parse(Parser.read(path));
         ParsedObject obj = data.getObject(name);
 
-        string newDir = prevDir + "\\" + Path.GetDirectoryName(path);
-        string newPath = prevDir + "\\" + path.Replace("/", "\\");
+        string newDir = String.Empty;
+        string newPath = String.Empty;
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
+            newDir = prevDir + "/" + Path.GetDirectoryName(path).Replace("\\", "/");
+        } else {
+            newDir = prevDir + "\\" + Path.GetDirectoryName(path);
+        }
+        
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
+            newPath = prevDir + "/" + path.Replace("\\", "//");
+        } else {
+            newPath = prevDir + "\\" + path.Replace("/", "\\");
+        }
         // Console.WriteLine("new dir " + newDir);
         // Console.WriteLine("new path " + newPath);
         Directory.SetCurrentDirectory(newDir);
