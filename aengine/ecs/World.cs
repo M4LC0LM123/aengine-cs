@@ -31,9 +31,9 @@ namespace aengine.ecs
             entities.Remove(entity);
         }
 
-        public static void update()
+        public static void update(bool physics = true, bool multithread = false)
         {
-            world.Step(Raylib.GetFrameTime(), false);
+            if(physics) world.Step(Raylib.GetFrameTime(), multithread);
             
             int len = entities.Count;
             for (int i = 0; i < len; i++)

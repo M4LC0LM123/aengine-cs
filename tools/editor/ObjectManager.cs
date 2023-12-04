@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 using aengine.ecs;
 using aengine.graphics;
@@ -86,7 +87,7 @@ public class ObjectManager
         }
     }
 
-    public void save()
+    public void saveJson()
     {
         List<Dictionary<string, object>> jsonObjects = new List<Dictionary<string, object>>();
 
@@ -109,7 +110,7 @@ public class ObjectManager
         }
     }
 
-    public void load()
+    public void loadJson()
     {
         objects.Clear();
 
@@ -125,6 +126,26 @@ public class ObjectManager
         } else {
             Console.WriteLine("cancelled");  
         }
+    }
+
+    public void load(string name) {
+        World.entities.Clear();
+        
+        string prevDir = Directory.GetCurrentDirectory();
+        string path = Dialog.FileOpen().Path.Replace("\\", "/");
+        
+        string newDir = Path.GetDirectoryName(path);
+        
+        Directory.SetCurrentDirectory(newDir);
+        
+        Console.WriteLine(path);
+        if (path != null || path != String.Empty) {
+            Prefab.loadScene(path, name, false);
+        } else {
+            Console.WriteLine("cancelled");  
+        }
+        
+        Directory.SetCurrentDirectory(prevDir);
     }
 
 }

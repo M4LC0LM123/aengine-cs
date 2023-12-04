@@ -10,32 +10,35 @@ public class Prefab {
     private static string open = "{";
     private static string close = "}";
 
-    public static void loadScene(string path, string name) {
-        string prevDir = Directory.GetCurrentDirectory();
+    public static void loadScene(string path, string name, bool changeDir = true) {
+        string prevDir = String.Empty;
+        if (changeDir) prevDir = Directory.GetCurrentDirectory();
         // Console.WriteLine("prev dir: " + prevDir);
-
+        
         ParsedData data = Parser.parse(Parser.read(path));
         ParsedObject obj = data.getObject(name);
 
-        string newDir = String.Empty;
+        if (changeDir) {
+            string newDir = String.Empty;
         
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
-            newDir = prevDir + "/" + Path.GetDirectoryName(path);
-        } else {
-            newDir = prevDir + "\\" + Path.GetDirectoryName(path);  
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
+                newDir = prevDir + "/" + Path.GetDirectoryName(path);
+            } else {
+                newDir = prevDir + "\\" + Path.GetDirectoryName(path);  
+            }
+        
+            // string newPath = prevDir + "\\" + path.Replace("/", "\\");
+            // Console.WriteLine("new dir " + newDir);
+            // Console.WriteLine("new path " + newPath);
+            Directory.SetCurrentDirectory(newDir);
         }
         
-        string newPath = prevDir + "\\" + path.Replace("/", "\\");
-        // Console.WriteLine("new dir " + newDir);
-        // Console.WriteLine("new path " + newPath);
-        Directory.SetCurrentDirectory(newDir);
-
         foreach (string attribute in data.dataKeys(name)) {
             string entityPath = obj.getValue<string>(attribute);
-            World.entities.Add(loadPrefab(entityPath, attribute));
+            loadPrefab(entityPath, attribute);
         }
 
-        Directory.SetCurrentDirectory(prevDir);
+        if (changeDir) Directory.SetCurrentDirectory(prevDir);
     }
 
     public static void savePrefab(string path, string name, Entity entity) {

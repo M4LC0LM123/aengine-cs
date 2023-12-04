@@ -30,7 +30,7 @@ object player {
     float rz = 0; // rotation z (roll)
     
     // "list" of components format "component_name, component_name, component_name"
-    string components = "rb";
+    string components = "rb, zombie_mesh";
 }
 
 object rb {

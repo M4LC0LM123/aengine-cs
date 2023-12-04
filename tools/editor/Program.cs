@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using aengine_cs.aengine.windowing;
+using aengine.ecs;
 using aengine.graphics;
 using aengine.graphics;
 using Raylib_CsLo;
@@ -20,6 +21,7 @@ namespace Editor
             Window.renderHeight = 720;
             Window.width = 1280;
             Window.height = 720;
+            Window.traceLogLevel = TraceLogLevel.LOG_ALL;
             SetWindowIcon(LoadImage("assets/logo.png"));
 
             Camera camera = new Camera(Vector3.One, 90);
@@ -38,6 +40,7 @@ namespace Editor
             while (!WindowShouldClose()) // Detect window close button or ESC key
             {
                 Window.tick();
+                World.update(false);
                 manager.update(mover);
 
                 if (IsKeyPressed(KeyboardKey.KEY_ESCAPE))
@@ -146,10 +149,10 @@ namespace Editor
                     AxieMover.CURRENT_MODE = Mode.ROTATE;
                 
                 if (IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) && IsKeyPressed(KeyboardKey.KEY_L) && !isMouseLocked)
-                    manager.load();
+                    manager.load("scene");
                 
                 if (IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) && IsKeyPressed(KeyboardKey.KEY_S) && !isMouseLocked)
-                    manager.save();
+                    manager.saveJson();
 
                 if (IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) && IsKeyPressed(KeyboardKey.KEY_O) && !isMouseLocked)
                     manager.outlined = !manager.outlined;
@@ -207,6 +210,7 @@ namespace Editor
                 }
                 
                 manager.render();
+                World.render();
                 
                 if (AxieMover.IS_OBJ_ACTIVE)
                     mover.render();
@@ -228,7 +232,7 @@ namespace Editor
                     new Vector2(10, 50),
                     20,WHITE, infoWindow);
                 
-                Gui.GuiTextPro(GetFontDefault(), "objects: " + manager.objects.Count, new Vector2(10, 70), 20, WHITE, infoWindow);
+                Gui.GuiTextPro(GetFontDefault(), "entities: " + World.entities.Count, new Vector2(10, 70), 20, WHITE, infoWindow);
                 
                 textId.render(10, 95, 90, 30, infoWindow);
                 Int32.TryParse(textId.text, out AxieMover.CURRENT_ID);
