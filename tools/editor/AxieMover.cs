@@ -1,4 +1,5 @@
 using System.Numerics;
+using aengine.ecs;
 using aengine.graphics;
 using Raylib_CsLo;
 using static Raylib_CsLo.Raylib;
@@ -22,7 +23,7 @@ public class AxieMover
     public static float MOVE_SPEED = 1;
     public static int CURRENT_ID = 0;
     public static bool IS_OBJ_ACTIVE = false;
-    public static Object ACTIVE_OBJ = null;
+    public static Entity ACTIVE_ENT = null;
     public static Mode CURRENT_MODE = Mode.ROAM;
     public static CameraMode CAMERA_MODE = CameraMode.FPS;
 
@@ -88,44 +89,44 @@ public class AxieMover
                 if (CURRENT_MODE == Mode.SCALE)
                 {
                     if (IsKeyDown(KeyboardKey.KEY_A))
-                        ACTIVE_OBJ.scale.X -= MOVE_SPEED * GetFrameTime();
+                        ACTIVE_ENT.transform.scale.X -= MOVE_SPEED * GetFrameTime();
                     if (IsKeyDown(KeyboardKey.KEY_D))
-                        ACTIVE_OBJ.scale.X += MOVE_SPEED * GetFrameTime();
+                        ACTIVE_ENT.transform.scale.X += MOVE_SPEED * GetFrameTime();
                     if (IsKeyDown(KeyboardKey.KEY_W))
-                        ACTIVE_OBJ.scale.Z -= MOVE_SPEED * GetFrameTime();
+                        ACTIVE_ENT.transform.scale.Z -= MOVE_SPEED * GetFrameTime();
                     if (IsKeyDown(KeyboardKey.KEY_S))
-                        ACTIVE_OBJ.scale.Z += MOVE_SPEED * GetFrameTime();
+                        ACTIVE_ENT.transform.scale.Z += MOVE_SPEED * GetFrameTime();
                     if (IsKeyDown(KeyboardKey.KEY_PAGE_DOWN))
-                        ACTIVE_OBJ.scale.Y -= MOVE_SPEED * GetFrameTime();
+                        ACTIVE_ENT.transform.scale.Y -= MOVE_SPEED * GetFrameTime();
                     if (IsKeyDown(KeyboardKey.KEY_PAGE_UP))
-                        ACTIVE_OBJ.scale.Y += MOVE_SPEED * GetFrameTime();
+                        ACTIVE_ENT.transform.scale.Y += MOVE_SPEED * GetFrameTime();
                 }
                 
                 if (CURRENT_MODE == Mode.ROTATE)
                 {
                     if (IsKeyDown(KeyboardKey.KEY_A))
-                        ACTIVE_OBJ.rotation.X -= MOVE_SPEED * GetFrameTime();
+                        ACTIVE_ENT.transform.rotation.X -= MOVE_SPEED * GetFrameTime();
                     if (IsKeyDown(KeyboardKey.KEY_D))
-                        ACTIVE_OBJ.rotation.X += MOVE_SPEED * GetFrameTime();
+                        ACTIVE_ENT.transform.rotation.X += MOVE_SPEED * GetFrameTime();
                     if (IsKeyDown(KeyboardKey.KEY_W))
-                        ACTIVE_OBJ.rotation.Z -= MOVE_SPEED * GetFrameTime();
+                        ACTIVE_ENT.transform.rotation.Z -= MOVE_SPEED * GetFrameTime();
                     if (IsKeyDown(KeyboardKey.KEY_S))
-                        ACTIVE_OBJ.rotation.Z += MOVE_SPEED * GetFrameTime();
+                        ACTIVE_ENT.transform.rotation.Z += MOVE_SPEED * GetFrameTime();
                     if (IsKeyDown(KeyboardKey.KEY_PAGE_DOWN))
-                        ACTIVE_OBJ.rotation.Y -= MOVE_SPEED * GetFrameTime();
+                        ACTIVE_ENT.transform.rotation.Y -= MOVE_SPEED * GetFrameTime();
                     if (IsKeyDown(KeyboardKey.KEY_PAGE_UP))
-                        ACTIVE_OBJ.rotation.Y += MOVE_SPEED * GetFrameTime();
+                        ACTIVE_ENT.transform.rotation.Y += MOVE_SPEED * GetFrameTime();
                     
                     if (IsKeyPressed(KeyboardKey.KEY_R))
-                        ACTIVE_OBJ.rotation = Vector3.Zero;
+                        ACTIVE_ENT.transform.rotation = Vector3.Zero;
                 }
             }
 
-            if (ACTIVE_OBJ != null) lengthX = ACTIVE_OBJ.scale.X;
-            if (ACTIVE_OBJ != null) lengthY = ACTIVE_OBJ.scale.Y;
-            if (ACTIVE_OBJ != null) lengthZ = ACTIVE_OBJ.scale.Z;
+            if (ACTIVE_ENT != null) lengthX = ACTIVE_ENT.transform.scale.X;
+            if (ACTIVE_ENT != null) lengthY = ACTIVE_ENT.transform.scale.Y;
+            if (ACTIVE_ENT != null) lengthZ = ACTIVE_ENT.transform.scale.Z;
             
-            if (ACTIVE_OBJ != null) ACTIVE_OBJ.position = position;
+            if (ACTIVE_ENT != null) ACTIVE_ENT.transform.position = position;
         }
 
     }

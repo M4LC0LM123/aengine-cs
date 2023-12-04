@@ -164,22 +164,26 @@ namespace Editor
 
                 if (IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) && IsKeyPressed(KeyboardKey.KEY_SPACE)) {
                     if (AxieMover.CAMERA_MODE is CameraMode.FPS) {
-                        manager.addObject(AxieMover.CURRENT_ID, camera.position);
+                        Entity temp = new Entity();
+                        temp.transform.position = camera.position;
+                        temp.transform.scale = Vector3.One;
                     } else {
-                        manager.addObject(AxieMover.CURRENT_ID, camera.target);  
+                        Entity temp = new Entity();
+                        temp.transform.position = camera.target;
+                        temp.transform.scale = Vector3.One;  
                     }
                 }
 
                 if (AxieMover.IS_OBJ_ACTIVE) {
                     if (IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) && IsKeyPressed(KeyboardKey.KEY_D)) {
                         Object newObj = new Object(AxieMover.CURRENT_ID, Vector3.Zero);
-                        newObj.position = AxieMover.ACTIVE_OBJ.position with {
-                            X = AxieMover.ACTIVE_OBJ.position.X + 1.5f,
-                            Y = AxieMover.ACTIVE_OBJ.position.Y + 1.5f,
-                            Z = AxieMover.ACTIVE_OBJ.position.Z + 1.5f,
+                        newObj.position = AxieMover.ACTIVE_ENT.transform.position with {
+                            X = AxieMover.ACTIVE_ENT.transform.position.X + 1.5f,
+                            Y = AxieMover.ACTIVE_ENT.transform.position.Y + 1.5f,
+                            Z = AxieMover.ACTIVE_ENT.transform.position.Z + 1.5f,
                         };
-                        newObj.scale = AxieMover.ACTIVE_OBJ.scale;
-                        newObj.rotation = AxieMover.ACTIVE_OBJ.rotation;
+                        newObj.scale = AxieMover.ACTIVE_ENT.transform.scale;
+                        newObj.rotation = AxieMover.ACTIVE_ENT.transform.rotation;
                         
                         manager.objects.Add(newObj);
                     } 
@@ -243,20 +247,29 @@ namespace Editor
                 if (AxieMover.IS_OBJ_ACTIVE) {
                     entityDataWindow.render();
                     
-                    Gui.GuiTextPro(GetFontDefault(), "object id: " + AxieMover.ACTIVE_OBJ.id, 
+                    Gui.GuiTextPro(GetFontDefault(), "tag: " + AxieMover.ACTIVE_ENT.tag, 
                         new Vector2(10, 10), 
                         20, WHITE, entityDataWindow);
                     
-                    Gui.GuiTextPro(GetFontDefault(), "object position: " + Utils.roundVectorDecimals(AxieMover.ACTIVE_OBJ.position, 2), 
+                    Gui.GuiTextPro(GetFontDefault(), "position: " + Utils.roundVectorDecimals(AxieMover.ACTIVE_ENT.transform.position, 2), 
                         new Vector2(10, 30), 
                         20, WHITE, entityDataWindow);
                     
-                    Gui.GuiTextPro(GetFontDefault(), "object scale: " + AxieMover.ACTIVE_OBJ.scale, 
+                    Gui.GuiTextPro(GetFontDefault(), "scale: " + AxieMover.ACTIVE_ENT.transform.scale, 
                         new Vector2(10, 50),
                         20, WHITE, entityDataWindow);
                     
-                    Gui.GuiTextPro(GetFontDefault(), "object rotation: " + AxieMover.ACTIVE_OBJ.rotation, 
+                    Gui.GuiTextPro(GetFontDefault(), "rotation: " + AxieMover.ACTIVE_ENT.transform.rotation, 
                         new Vector2(10, 70), 
+                        20, WHITE, entityDataWindow);
+                    
+                    string components = String.Empty;
+                    foreach (Component component in AxieMover.ACTIVE_ENT.components) {
+                        components += component.fileName() + ", ";
+                    }
+                    
+                    Gui.GuiTextPro(GetFontDefault(), "components: " + components, 
+                        new Vector2(10, 90), 
                         20, WHITE, entityDataWindow);
                 }
                 

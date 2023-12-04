@@ -12,6 +12,8 @@ namespace aengine.ecs {
         public TransformComponent transform;
         public List<Component> components;
 
+        public bool selected = false; // editor stuff
+
         public Entity() {
             m_parent = null;
 

@@ -113,6 +113,13 @@ namespace aengine.ecs
             model.data.transform = RayMath.MatrixRotateXYZ(new Vector3(deg2Rad(rotation.X), deg2Rad(rotation.Y), deg2Rad(rotation.Z)));
         }
 
+        private void setTransform(Vector3 scale, Vector3 rotation) {
+            model.data.transform = RayMath.MatrixMultiply(
+                RayMath.MatrixScale(scale.X, scale.Y, scale.Z),
+                RayMath.MatrixRotateXYZ(new Vector3(deg2Rad(rotation.X), deg2Rad(rotation.Y), deg2Rad(rotation.Z)))
+            );
+        }
+
         public void update(Entity entity)
         {
             if (entity != null)
@@ -128,8 +135,9 @@ namespace aengine.ecs
                 } else {
                     transform = entity.transform;         
                 }
-                setScale(transform.scale);
-                setRotation(transform.rotation);
+                // setScale(transform.scale);
+                // setRotation(transform.rotation);
+                setTransform(transform.scale, transform.rotation);
             }
         }
 

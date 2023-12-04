@@ -36,21 +36,21 @@ public class ObjectManager
 
     public void update(AxieMover mover)
     {
-        foreach (var obj in objects)
-        {
-            obj.update();
+        foreach (var ent in World.entities) {
+            if (AxieMover.ACTIVE_ENT != ent)
+                ent.selected = false;
             
             AxieMover.collision = GetRayCollisionBox(AxieMover.MOUSE_RAY,
-                new BoundingBox(RayMath.Vector3Subtract(obj.position, obj.scale / 2),
-                    RayMath.Vector3Add(obj.position, obj.scale / 2)));
+                new BoundingBox(RayMath.Vector3Subtract(ent.transform.position, ent.transform.scale / 2),
+                    RayMath.Vector3Add(ent.transform.position, ent.transform.scale / 2)));
             
             if (IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT))
             {
                 if (AxieMover.collision.hit && AxieMover.CURRENT_MODE is Mode.ROAM)
                 {
-                    obj.selected = true;
-                    mover.position = obj.position;
-                    AxieMover.ACTIVE_OBJ = obj;
+                    ent.selected = true;
+                    mover.position = ent.transform.position;
+                    AxieMover.ACTIVE_ENT = ent;
                 }
             }
 
@@ -58,32 +58,32 @@ public class ObjectManager
             {
                 if (!AxieMover.collision.hit)
                 {
-                    obj.selected = false;
+                    ent.selected = false;
                     AxieMover.IS_OBJ_ACTIVE = false;
-                    AxieMover.ACTIVE_OBJ = null;
+                    AxieMover.ACTIVE_ENT = null;
                 }
             }
             
-            if (obj.selected)
+            if (ent.selected)
             {
                 AxieMover.IS_OBJ_ACTIVE = true;
-                AxieMover.ACTIVE_OBJ = obj;
+                AxieMover.ACTIVE_ENT = ent;
             }
         }
         
         if (IsKeyPressed(KeyboardKey.KEY_BACKSPACE) && AxieMover.IS_OBJ_ACTIVE)
         {
             AxieMover.IS_OBJ_ACTIVE = false;
-            removeObject(AxieMover.ACTIVE_OBJ);
-            AxieMover.ACTIVE_OBJ = null;
+            World.removeEntity(AxieMover.ACTIVE_ENT);
+            AxieMover.ACTIVE_ENT = null;
         }
     }
 
     public void render()
     {
-        foreach (var obj in objects)
+        foreach (var ent in World.entities)
         {
-            obj.render(outlined);
+            DrawCubeWiresV(ent.transform.position, ent.transform.scale, WHITE);
         }
     }
 

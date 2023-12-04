@@ -25,6 +25,7 @@ namespace aengine.ecs
         public static Camera camera = null;
         
         public static DebugRenderer debugRenderer = new DebugRenderer();
+        public static bool usePhysics = true;
 
         public static void removeEntity(Entity entity)
         {
@@ -34,6 +35,7 @@ namespace aengine.ecs
         public static void update(bool physics = true, bool multithread = false)
         {
             if(physics) world.Step(Raylib.GetFrameTime(), multithread);
+            usePhysics = physics;
             
             int len = entities.Count;
             for (int i = 0; i < len; i++)

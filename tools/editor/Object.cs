@@ -48,8 +48,8 @@ public class Object {
     }
 
     public void update() {
-        if (AxieMover.ACTIVE_OBJ != this)
-            selected = false;
+        // if (AxieMover.ACTIVE_ENT != this)
+        //     selected = false;
 
         model.transform = Matrix4x4.CreateFromYawPitchRoll(rotation.Y * RayMath.DEG2RAD, rotation.X * RayMath.DEG2RAD,
             rotation.Z * RayMath.DEG2RAD);

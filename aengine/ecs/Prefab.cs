@@ -378,19 +378,19 @@ public class Prefab {
         Model model = new Model();
 
         if (shape is ShapeType.BOX) {
-            mesh = Raylib.GenMeshCube(entity.transform.scale.X, entity.transform.scale.Y, entity.transform.scale.Z);
+            mesh = Raylib.GenMeshCube(1, 1, 1);
         }
         else if (shape is ShapeType.SPHERE) {
-            mesh = Raylib.GenMeshSphere(entity.transform.scale.X * 0.5f, 15, 15);
+            mesh = Raylib.GenMeshSphere(0.5f, 15, 15);
         }
         else if (shape is ShapeType.CYLINDER) {
-            mesh = Raylib.GenMeshCylinder(entity.transform.scale.X * 0.5f, entity.transform.scale.Y, 15);
+            mesh = Raylib.GenMeshCylinder(0.5f, 1, 15);
         }
         else if (shape is ShapeType.CONE) {
-            mesh = Raylib.GenMeshCone(entity.transform.scale.X * 0.5f, entity.transform.scale.Y, 15);
+            mesh = Raylib.GenMeshCone(0.5f, 1, 15);
         }
         else if (shape is ShapeType.TERRAIN) {
-            mesh = Raylib.GenMeshHeightmap(Raylib.LoadImageFromTexture(terrain), entity.transform.scale);
+            mesh = Raylib.GenMeshHeightmap(Raylib.LoadImageFromTexture(terrain), Vector3.One);
         }
 
         MeshComponent result = new MeshComponent(entity,

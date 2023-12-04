@@ -308,7 +308,7 @@ namespace aengine.ecs {
         }
 
         public void update(Entity entity) {
-            if (entity != null && entity.transform != null && body != null) {
+            if (entity != null && entity.transform != null && body != null && World.usePhysics) {
                 if (shapeType == ShapeType.CONE)
                     entity.transform.position = new Vector3(body.Position.X,
                         body.Position.Y - entity.transform.scale.Y / 2.675f, body.Position.Z);
