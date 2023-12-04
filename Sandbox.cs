@@ -272,7 +272,7 @@ public static class Sandbox {
                 PlaySound(shoot);
                 velocity.X = -camera.raycast.target.X / 5;
                 velocity.Z = -camera.raycast.target.Z / 5;
-                player.getComponent<RigidBodyComponent>().applyImpulse(-camera.raycast.target / 5);
+                player.getComponent<RigidBodyComponent>().applyImpulse(-camera.raycast.target / 4);
             }
 
             if (IsKeyPressed(KeyboardKey.KEY_GRAVE)) {
