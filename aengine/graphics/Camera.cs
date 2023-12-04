@@ -120,7 +120,7 @@ namespace aengine.graphics
                 {
                     position.Y += speed * GetFrameTime();
                 }
-                if (IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) && isMouseLocked)
+                if ((IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) || IsKeyDown(KeyboardKey.KEY_LEFT_SUPER)) && isMouseLocked)
                 {
                     position.Y -= speed * GetFrameTime();
                 }

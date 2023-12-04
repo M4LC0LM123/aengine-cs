@@ -147,14 +147,17 @@ namespace Editor
                     AxieMover.CURRENT_MODE = Mode.SCALE;
                 if (IsKeyPressed(KeyboardKey.KEY_F4))
                     AxieMover.CURRENT_MODE = Mode.ROTATE;
-                
-                if (IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) && IsKeyPressed(KeyboardKey.KEY_L) && !isMouseLocked)
+
+                if ((IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) || IsKeyDown(KeyboardKey.KEY_LEFT_SUPER)) &&
+                    IsKeyPressed(KeyboardKey.KEY_L) && !isMouseLocked)
                     manager.load("scene");
-                
-                if (IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) && IsKeyPressed(KeyboardKey.KEY_S) && !isMouseLocked)
+
+                if ((IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) || IsKeyDown(KeyboardKey.KEY_LEFT_SUPER)) &&
+                    IsKeyPressed(KeyboardKey.KEY_S) && !isMouseLocked)
                     manager.saveJson();
 
-                if (IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) && IsKeyPressed(KeyboardKey.KEY_O) && !isMouseLocked)
+                if ((IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) || IsKeyDown(KeyboardKey.KEY_LEFT_SUPER)) &&
+                    IsKeyPressed(KeyboardKey.KEY_O) && !isMouseLocked)
                     manager.outlined = !manager.outlined;
                 
                 mover.update(camera);
