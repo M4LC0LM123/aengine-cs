@@ -1,0 +1,137 @@
+object estrada {
+    str playa = "estrada.od";
+    str floor = "estrada.od";
+    str Entity2 = "estrada.od";
+    str Entity2 = "estrada.od";
+}
+
+object playa {
+    str tag = playa;
+    
+    f32 x = 0;
+    f32 y = 10;
+    f32 z = 0;
+
+    f32 width = 1;
+    f32 height = 1;
+    f32 depth = 1;
+
+    f32 rx = 0; // rotation x (pitch)
+    f32 ry = 0; // rotation y (yaw)
+    f32 rz = 0; // rotation z (roll)
+
+    str components = "playa_rb, playa_mesh";
+}
+object playa_mesh {
+    str type = "MeshComponent";
+
+    i32 shape = 6;
+
+    i32 r = 255;
+    i32 g = 255;
+    i32 b = 255;
+    i32 a = 255;
+
+    bool isModel = true;
+
+    str texture = "";
+    str model = "assets/models/zombie.glb";
+
+    str heightmap = "";
+
+    i32 scale = 1;    
+}
+object playa_rb {
+    str type = "RigidBodyComponent";
+    
+    f32 mass = 1;
+
+    i32 shape = 1;
+    i32 body_type = 0;
+
+    str model = "";
+
+    str heightmap = "";
+}
+object floor {
+    str tag = floor;
+    
+    f32 x = 0;
+    f32 y = -10;
+    f32 z = 0;
+
+    f32 width = 25;
+    f32 height = 2;
+    f32 depth = 25;
+
+    f32 rx = 0; // rotation x (pitch)
+    f32 ry = 0; // rotation y (yaw)
+    f32 rz = 0; // rotation z (roll)
+
+    str components = "floor_rb, floor_mesh";
+}
+object floor_mesh {
+    str type = "MeshComponent";
+
+    i32 shape = 0;
+
+    i32 r = 255;
+    i32 g = 255;
+    i32 b = 255;
+    i32 a = 255;
+
+    bool isModel = true;
+
+    str texture = "assets/albedo.png";
+    str model = "";
+
+    str heightmap = "";
+
+    i32 scale = 1;    
+}
+object floor_rb {
+    str type = "RigidBodyComponent";
+    
+    f32 mass = 1;
+
+    i32 shape = 0;
+    i32 body_type = 1;
+
+    str model = "";
+
+    str heightmap = "";
+}
+object Entity2 {
+    str tag = Entity2;
+    
+    f32 x = -11.990682;
+    f32 y = -4.0337167;
+    f32 z = -2.4926567;
+
+    f32 width = 1;
+    f32 height = 10.006065;
+    f32 depth = 17.369072;
+
+    f32 rx = 0; // rotation x (pitch)
+    f32 ry = 0; // rotation y (yaw)
+    f32 rz = 0; // rotation z (roll)
+
+    str components = "";
+}
+object Entity3 {
+    str tag = Entity3;
+    
+    f32 x = 11.973316;
+    f32 y = -4.002992;
+    f32 z = -1.0069005;
+
+    f32 width = 1;
+    f32 height = 10.006065;
+    f32 depth = 17.369072;
+
+    f32 rx = 0; // rotation x (pitch)
+    f32 ry = 0; // rotation y (yaw)
+    f32 rz = 0; // rotation z (roll)
+
+    str components = "";
+}

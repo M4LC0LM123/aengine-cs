@@ -1,0 +1,362 @@
+object SOME_SAVED_SCENE {
+    str Entity0 = "save_scene_test.od";
+    str Entity1 = "save_scene_test.od";
+    str Entity2 = "save_scene_test.od";
+    str Entity3 = "save_scene_test.od";
+    str Entity4 = "save_scene_test.od";
+    str Entity5 = "save_scene_test.od";
+    str playa = "save_scene_test.od";
+    str floor = "save_scene_test.od";
+    str Entity8 = "save_scene_test.od";
+    str water = "save_scene_test.od";
+}
+
+object Entity0 {
+    str tag = Entity0;
+    
+    f32 x = 0;
+    f32 y = 0;
+    f32 z = 0;
+
+    f32 width = 0;
+    f32 height = 0;
+    f32 depth = 0;
+
+    f32 rx = 0; // rotation x (pitch)
+    f32 ry = 0; // rotation y (yaw)
+    f32 rz = 0; // rotation z (roll)
+
+    str components = "";
+}
+object Entity1 {
+    str tag = Entity1;
+    
+    f32 x = 0;
+    f32 y = 15;
+    f32 z = 0;
+
+    f32 width = 1;
+    f32 height = 1;
+    f32 depth = 1;
+
+    f32 rx = 0; // rotation x (pitch)
+    f32 ry = 0; // rotation y (yaw)
+    f32 rz = 0; // rotation z (roll)
+
+    str components = "Entity1_mesh, Entity1_rb";
+}
+object Entity1_mesh {
+    str type = "MeshComponent";
+
+    i32 shape = 6;
+
+    i32 r = 255;
+    i32 g = 255;
+    i32 b = 255;
+    i32 a = 255;
+
+    bool isModel = true;
+
+    str texture = "";
+    str model = "assets/models/zombie.glb";
+
+    str heightmap = "";
+
+    i32 scale = 1;    
+}
+object Entity1_rb {
+    str type = "RigidBodyComponent";
+    
+    f32 mass = 1;
+
+    i32 shape = 6;
+    i32 body_type = 0;
+
+    str model = "assets/models/zombie.glb";
+
+    str heightmap = "";
+}
+object Entity2 {
+    str tag = Entity2;
+    
+    f32 x = 2.5;
+    f32 y = 15;
+    f32 z = 0;
+
+    f32 width = 1;
+    f32 height = 1;
+    f32 depth = 1;
+
+    f32 rx = 0; // rotation x (pitch)
+    f32 ry = 0; // rotation y (yaw)
+    f32 rz = 0; // rotation z (roll)
+
+    str components = "Entity2_mesh, Entity2_rb";
+}
+object Entity2_mesh {
+    str type = "MeshComponent";
+
+    i32 shape = 2;
+
+    i32 r = 253;
+    i32 g = 249;
+    i32 b = 0;
+    i32 a = 255;
+
+    bool isModel = true;
+
+    str texture = "assets/albedo.png";
+    str model = "";
+
+    str heightmap = "";
+
+    i32 scale = 1;    
+}
+object Entity2_rb {
+    str type = "RigidBodyComponent";
+    
+    f32 mass = 1;
+
+    i32 shape = 2;
+    i32 body_type = 0;
+
+    str model = "";
+
+    str heightmap = "";
+}
+object Entity3 {
+    str tag = Entity3;
+    
+    f32 x = 0;
+    f32 y = 0;
+    f32 z = 0;
+
+    f32 width = 0;
+    f32 height = 0;
+    f32 depth = 0;
+
+    f32 rx = 0; // rotation x (pitch)
+    f32 ry = 0; // rotation y (yaw)
+    f32 rz = 0; // rotation z (roll)
+
+    str components = "";
+}
+object Entity4 {
+    str tag = Entity4;
+    
+    f32 x = 0;
+    f32 y = 0;
+    f32 z = 0;
+
+    f32 width = 0;
+    f32 height = 0;
+    f32 depth = 0;
+
+    f32 rx = 0; // rotation x (pitch)
+    f32 ry = 0; // rotation y (yaw)
+    f32 rz = 0; // rotation z (roll)
+
+    str components = "";
+}
+object Entity5 {
+    str tag = Entity5;
+    
+    f32 x = 0;
+    f32 y = 0;
+    f32 z = 0;
+
+    f32 width = 0;
+    f32 height = 0;
+    f32 depth = 0;
+
+    f32 rx = 0; // rotation x (pitch)
+    f32 ry = 0; // rotation y (yaw)
+    f32 rz = 0; // rotation z (roll)
+
+    str components = "Entity5_audio";
+}
+object Entity5_audio {
+    str type = "SpatialAudioComponent";
+
+    str sound = "assets/at_dooms_gate.mp3";
+        
+    f32 strength = 1;
+        
+    bool can_play = true;
+}
+object playa {
+    str tag = playa;
+    
+    f32 x = 0;
+    f32 y = 10;
+    f32 z = 0;
+
+    f32 width = 1;
+    f32 height = 1;
+    f32 depth = 1;
+
+    f32 rx = 0; // rotation x (pitch)
+    f32 ry = 0; // rotation y (yaw)
+    f32 rz = 0; // rotation z (roll)
+
+    str components = "playa_rb, playa_mesh";
+}
+object playa_mesh {
+    str type = "MeshComponent";
+
+    i32 shape = 6;
+
+    i32 r = 255;
+    i32 g = 255;
+    i32 b = 255;
+    i32 a = 255;
+
+    bool isModel = true;
+
+    str texture = "";
+    str model = "assets/models/zombie.glb";
+
+    str heightmap = "";
+
+    i32 scale = 1;    
+}
+object playa_rb {
+    str type = "RigidBodyComponent";
+    
+    f32 mass = 1;
+
+    i32 shape = 1;
+    i32 body_type = 0;
+
+    str model = "";
+
+    str heightmap = "";
+}
+object floor {
+    str tag = floor;
+    
+    f32 x = 0;
+    f32 y = -10;
+    f32 z = 0;
+
+    f32 width = 25;
+    f32 height = 2;
+    f32 depth = 25;
+
+    f32 rx = 0; // rotation x (pitch)
+    f32 ry = 0; // rotation y (yaw)
+    f32 rz = 0; // rotation z (roll)
+
+    str components = "floor_rb, floor_mesh";
+}
+object floor_mesh {
+    str type = "MeshComponent";
+
+    i32 shape = 0;
+
+    i32 r = 255;
+    i32 g = 255;
+    i32 b = 255;
+    i32 a = 255;
+
+    bool isModel = true;
+
+    str texture = "assets/albedo.png";
+    str model = "";
+
+    str heightmap = "";
+
+    i32 scale = 1;    
+}
+object floor_rb {
+    str type = "RigidBodyComponent";
+    
+    f32 mass = 1;
+
+    i32 shape = 0;
+    i32 body_type = 1;
+
+    str model = "";
+
+    str heightmap = "";
+}
+object Entity8 {
+    str tag = Entity8;
+    
+    f32 x = 0;
+    f32 y = 0;
+    f32 z = 0;
+
+    f32 width = 0;
+    f32 height = 0;
+    f32 depth = 0;
+
+    f32 rx = 0; // rotation x (pitch)
+    f32 ry = 0; // rotation y (yaw)
+    f32 rz = 0; // rotation z (roll)
+
+    str components = "Entity8_light";
+}
+object Entity8_light {
+    string type = "LightComponent";
+        
+    f32 intensity = 2.5;
+
+    i32 r = 255;
+    i32 g = 255;
+    i32 b = 255;
+    i32 a = 255;
+
+    string shader_vert = "assets/shaders/light.vert";
+    string shader_frag = "assets/shaders/light.frag";
+
+    bool enabled = True;
+
+    i32 light_type = LIGHT_POINT;
+}
+object water {
+    str tag = water;
+    
+    f32 x = 0;
+    f32 y = -8.5;
+    f32 z = 0;
+
+    f32 width = 25;
+    f32 height = 0;
+    f32 depth = 25;
+
+    f32 rx = 0; // rotation x (pitch)
+    f32 ry = 0; // rotation y (yaw)
+    f32 rz = 0; // rotation z (roll)
+
+    str components = "water_fluid, water_audio";
+}
+object water_audio {
+    str type = "SpatialAudioComponent";
+
+    str sound = "assets/splash.wav";
+        
+    f32 strength = 1;
+        
+    bool can_play = true;
+}
+object water_fluid {
+    str type = "FluidComponent";
+
+    str shader_vert = "";
+    str shader_frag = "assets/wave.frag";
+
+    str texture = "assets/water.png";
+
+    i32 r = 255;
+    i32 g = 255;
+    i32 b = 255;
+    i32 a = 125;
+
+    f32 freqX = 25;
+    f32 freqY = 25;
+    f32 ampX = 5;
+    f32 ampY = 5;
+    f32 speedX = 8;
+    f32 speedY = 8;
+}

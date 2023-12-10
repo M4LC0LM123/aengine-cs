@@ -30,11 +30,13 @@ namespace Editor
             AxieMover mover = new AxieMover();
 
             ObjectManager manager = new ObjectManager();
-            GuiTextBox textId = new GuiTextBox();
-            textId.text = "0";
 
             GuiWindow infoWindow = new GuiWindow("Editor", 0, 0, 200, 130);
-            GuiWindow entityDataWindow = new GuiWindow("Entity data", 0, 100 + Gui.topBarHeight, 400, 300);
+            GuiWindow entityDataWindow = new GuiWindow("Entity data", 0, 110 + Gui.topBarHeight, 400, 300);
+            GuiWindow saveAndLoadWindow = new GuiWindow("Open or save", 0, 410 + Gui.topBarHeight, 150, 125);
+            saveAndLoadWindow.active = false;
+            GuiTextBox sceneName = new GuiTextBox();
+            sceneName.text = "scene";
             
             // Main game loop
             while (!WindowShouldClose()) // Detect window close button or ESC key
@@ -147,14 +149,15 @@ namespace Editor
                     AxieMover.CURRENT_MODE = Mode.SCALE;
                 if (IsKeyPressed(KeyboardKey.KEY_F4))
                     AxieMover.CURRENT_MODE = Mode.ROTATE;
-
+                
                 if ((IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) || IsKeyDown(KeyboardKey.KEY_LEFT_SUPER)) &&
-                    IsKeyPressed(KeyboardKey.KEY_L) && !isMouseLocked)
+                    IsKeyPressed(KeyboardKey.KEY_L) && !isMouseLocked) {
                     manager.load("scene");
+                }
 
                 if ((IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) || IsKeyDown(KeyboardKey.KEY_LEFT_SUPER)) &&
                     IsKeyPressed(KeyboardKey.KEY_S) && !isMouseLocked)
-                    manager.saveJson();
+                    manager.save("scene");
 
                 if ((IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) || IsKeyDown(KeyboardKey.KEY_LEFT_SUPER)) &&
                     IsKeyPressed(KeyboardKey.KEY_O) && !isMouseLocked)
@@ -176,16 +179,15 @@ namespace Editor
 
                 if (AxieMover.IS_OBJ_ACTIVE) {
                     if (IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) && IsKeyPressed(KeyboardKey.KEY_D)) {
-                        Object newObj = new Object(AxieMover.CURRENT_ID, Vector3.Zero);
-                        newObj.position = AxieMover.ACTIVE_ENT.transform.position with {
+                        Entity newEnt = new Entity();
+                        newEnt.transform.position = AxieMover.ACTIVE_ENT.transform.position with {
                             X = AxieMover.ACTIVE_ENT.transform.position.X + 1.5f,
                             Y = AxieMover.ACTIVE_ENT.transform.position.Y + 1.5f,
-                            Z = AxieMover.ACTIVE_ENT.transform.position.Z + 1.5f,
+                            Z = AxieMover.ACTIVE_ENT.transform.position.Z + 1.5f
                         };
-                        newObj.scale = AxieMover.ACTIVE_ENT.transform.scale;
-                        newObj.rotation = AxieMover.ACTIVE_ENT.transform.rotation;
-                        
-                        manager.objects.Add(newObj);
+                        newEnt.transform.scale = AxieMover.ACTIVE_ENT.transform.scale;
+                        newEnt.transform.rotation = AxieMover.ACTIVE_ENT.transform.rotation;
+                        newEnt.components = AxieMover.ACTIVE_ENT.components;
                     } 
                 }
 
@@ -235,14 +237,24 @@ namespace Editor
                     new Vector2(10, 30), 
                     20, WHITE, infoWindow);
                 
-                Gui.GuiTextPro(GetFontDefault(), "id: " + AxieMover.CURRENT_ID,
-                    new Vector2(10, 50),
-                    20,WHITE, infoWindow);
+                Gui.GuiTextPro(GetFontDefault(), "entities: " + World.entities.Count, new Vector2(10, 50), 20, WHITE, infoWindow);
+
+                if (Gui.GuiButton("Save/Load", 10, 80, 150, 30, infoWindow)) {
+                    saveAndLoadWindow.active = true;   
+                }
+
+                saveAndLoadWindow.render();
                 
-                Gui.GuiTextPro(GetFontDefault(), "entities: " + World.entities.Count, new Vector2(10, 70), 20, WHITE, infoWindow);
-                
-                textId.render(10, 95, 90, 30, infoWindow);
-                Int32.TryParse(textId.text, out AxieMover.CURRENT_ID);
+                if (saveAndLoadWindow.active) {
+                    sceneName.render(10, 10, 120, 25, saveAndLoadWindow);
+                    
+                    if (Gui.GuiButton("Save", 10, 45, 60, 25, saveAndLoadWindow)) {
+                        manager.save(sceneName.text);
+                    }
+                    if (Gui.GuiButton("Load", 10, 80, 60, 25, saveAndLoadWindow)) {
+                        manager.load(sceneName.text);
+                    }
+                }
                 
                 if (AxieMover.IS_OBJ_ACTIVE) {
                     entityDataWindow.render();

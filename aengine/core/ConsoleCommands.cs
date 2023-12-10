@@ -45,7 +45,7 @@ public class ConsoleCommands {
         Entity body = new Entity();
         body.transform.position = World.camera.position with { Y = World.camera.position.Y + 5 };
         body.transform.scale = Vector3.One;
-        body.addComponent(new MeshComponent(body, Raylib.GenMeshSphere(1, 15, 15), Rendering.getRandomColor(),
+        body.addComponent(new MeshComponent(body, ShapeType.SPHERE, Rendering.getRandomColor(),
             new aTexture(Raylib.LoadTextureFromImage(Raylib.GenImageColor(16, 16, Rendering.getRandomColor())))));
         body.addComponent(new RigidBodyComponent(body, 1.0f, BodyType.DYNAMIC, ShapeType.SPHERE));
 

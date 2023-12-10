@@ -128,6 +128,16 @@ public class ObjectManager
         }
     }
 
+    public void save(string name) {
+        string path = Dialog.FileSave().Path.Replace("\\", "/");
+        
+        if (path != null || path != String.Empty) {
+            Prefab.saveScene(path, name);
+        } else {
+            Console.WriteLine("cancelled");  
+        }
+    }
+
     public void load(string name) {
         World.entities.Clear();
         
@@ -138,7 +148,7 @@ public class ObjectManager
         
         Directory.SetCurrentDirectory(newDir);
         
-        Console.WriteLine(path);
+        // Console.WriteLine(path);
         if (path != null || path != String.Empty) {
             Prefab.loadScene(path, name, false);
         } else {

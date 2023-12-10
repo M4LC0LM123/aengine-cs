@@ -1,5 +1,6 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Text;
 using aengine_cs.aengine.parser;
 using aengine.graphics;
 using Raylib_CsLo;
@@ -41,49 +42,72 @@ public class Prefab {
         if (changeDir) Directory.SetCurrentDirectory(prevDir);
     }
 
-    public static void savePrefab(string path, string name, Entity entity) {
-        saveEntity(path, name, entity);
+    public static void saveScene(string path, string name) {
+        StringBuilder sceneContent = new StringBuilder();
+        
+        sceneContent.AppendLine("object " + name + " {");
+        
+        for (var i = 0; i < World.entities.Count; i++) {
+            sceneContent.AppendLine($"    str {World.entities[i].tag} = \"{Path.GetFileName(path)}\";");
+        }
+        sceneContent.AppendLine("}");
+        
+        sceneContent.AppendLine();
+
+        File.WriteAllText(path, sceneContent.ToString());
+        
+        for (var i = 0; i < World.entities.Count; i++) {
+            savePrefab(path, World.entities[i].tag, World.entities[i], false);
+        }
+    }
+
+    public static void savePrefab(string path, string name, Entity entity, bool clean = true) {
+        saveEntity(path, name, entity, clean);
 
         if (entity.hasComponent<MeshComponent>()) {
             using (StreamWriter sw = File.AppendText(path)) {
                 MeshComponent mesh = entity.getComponent<MeshComponent>(); 
-                sw.WriteLine(m_saveMeshComponent(mesh.fileName(), mesh));   
+                sw.WriteLine(m_saveMeshComponent(entity.tag + "_" + mesh.fileName(), mesh));   
             }
         }
         
         if (entity.hasComponent<RigidBodyComponent>()) {
             using (StreamWriter sw = File.AppendText(path)) {
                 RigidBodyComponent rb = entity.getComponent<RigidBodyComponent>();
-                sw.WriteLine(m_saveRigidBody(rb.fileName(), rb));   
+                sw.WriteLine(m_saveRigidBody(entity.tag + "_" + rb.fileName(), rb));   
             }
         }
         
         if (entity.hasComponent<SpatialAudioComponent>()) {
             using (StreamWriter sw = File.AppendText(path)) {
                 SpatialAudioComponent sa = entity.getComponent<SpatialAudioComponent>();
-                sw.WriteLine(m_saveSoundComponent(sa.fileName(), sa));   
+                sw.WriteLine(m_saveSoundComponent(entity.tag + "_" + sa.fileName(), sa));   
             }
         }
         
         if (entity.hasComponent<LightComponent>()) {
             using (StreamWriter sw = File.AppendText(path)) {
                 LightComponent l = entity.getComponent<LightComponent>();
-                sw.WriteLine(m_saveLightComponent(l.fileName(), l));   
+                sw.WriteLine(m_saveLightComponent(entity.tag + "_" + l.fileName(), l));   
             }
         }
         
         if (entity.hasComponent<FluidComponent>()) {
             using (StreamWriter sw = File.AppendText(path)) {
                 FluidComponent f = entity.getComponent<FluidComponent>();
-                sw.WriteLine(m_saveFluidComponent(f.fileName(), f));   
+                sw.WriteLine(m_saveFluidComponent(entity.tag + "_" + f.fileName(), f));   
             }
         }
     }
 
-    public static void saveEntity(string path, string name, Entity entity) {
+    public static void saveEntity(string path, string name, Entity entity, bool clean = true) {
         string components = String.Empty;
-        foreach (Component component in entity.components) {
-            components += component.fileName() + ", ";
+        
+        for (var i = 0; i < entity.components.Count; i++) {
+            components += entity.tag + "_" + entity.components[i].fileName();
+            if (i != entity.components.Count - 1) {
+                components += ", ";
+            }
         }
 
         string text = $@"object {name} {open}
@@ -93,9 +117,9 @@ public class Prefab {
     f32 y = {entity.transform.position.Y};
     f32 z = {entity.transform.position.Z};
 
-    f32 width  = {entity.transform.scale.X};
+    f32 width = {entity.transform.scale.X};
     f32 height = {entity.transform.scale.Y};
-    f32 depth  = {entity.transform.scale.Z};
+    f32 depth = {entity.transform.scale.Z};
 
     f32 rx = {entity.transform.rotation.X}; // rotation x (pitch)
     f32 ry = {entity.transform.rotation.Y}; // rotation y (yaw)
@@ -104,13 +128,20 @@ public class Prefab {
     str components = {core.aengine.QUOTE}{components}{core.aengine.QUOTE};
 {close}";
 
-        File.WriteAllText(path, text);
+        if (clean) File.WriteAllText(path, text);
+        else {
+            using (StreamWriter sw = File.AppendText(path)) {
+                sw.WriteLine(text);   
+            }   
+        }
     }
 
     private static string m_saveMeshComponent(string name, MeshComponent component) {
-        string text = $@"object {name} {open} // null reference exception here
+        string text = $@"object {name} {open}
     str type = {core.aengine.QUOTE}MeshComponent{core.aengine.QUOTE};
-    
+
+    i32 shape = {(int)component.shape};
+
     i32 r = {component.color.r};
     i32 g = {component.color.g};
     i32 b = {component.color.b};
@@ -135,7 +166,7 @@ public class Prefab {
     
     f32 mass = {component.body.Mass};
 
-    i32 shape = {component.shapeType};
+    i32 shape = {(int)component.shapeType};
     i32 body_type = {Convert.ToInt32(component.body.IsStatic)};
 
     str model = {core.aengine.QUOTE}{component.model.path}{core.aengine.QUOTE};
@@ -196,10 +227,10 @@ public class Prefab {
     i32 b = {component.color.b};
     i32 a = {component.color.a};
 
-    f32 freqX  = {component.freqX};
-    f32 freqY  = {component.freqY};
-    f32 ampX   = {component.ampX};
-    f32 ampY   = {component.ampY};
+    f32 freqX = {component.freqX};
+    f32 freqY = {component.freqY};
+    f32 ampX = {component.ampX};
+    f32 ampY = {component.ampY};
     f32 speedX = {component.speedX};
     f32 speedY = {component.speedY};
 {close}";
@@ -253,13 +284,15 @@ public class Prefab {
         result.transform.rotation = new Vector3(rx, ry, rz);
 
         string components = obj.getValue<string>("components");
-        char separator = ',';
+        
+        if (components != "") {
+            char separator = ',';
 
-        string[] componentNameArray = components.Split(separator, StringSplitOptions.TrimEntries);
-
-        foreach (string s in componentNameArray) {
-            // Console.WriteLine("comp path load: " + newPath);
-            result.addComponent(m_loadComponent(result, newPath, s));
+            string[] componentNameArray = components.Split(separator, StringSplitOptions.TrimEntries);
+            
+            foreach (string s in componentNameArray) {
+                result.addComponent(m_loadComponent(result, newPath, s));
+            }
         }
 
         Directory.SetCurrentDirectory(prevDir);
@@ -361,58 +394,39 @@ public class Prefab {
         ShapeType shape = (ShapeType)obj.getValue<int>("shape");
 
         string texturePath = obj.getValue<string>("texture");
-        string terrainPath = obj.getValue<string>("terrain");
 
         Texture texture = new Texture();
-        Texture terrain = new Texture();
 
         if (texturePath != "") {
             texture = Raylib.LoadTexture(texturePath);
         }
 
-        if (terrainPath != "") {
-            terrain = Raylib.LoadTexture(terrainPath);
-        }
-
-        Mesh mesh = new Mesh();
-        Model model = new Model();
-
-        if (shape is ShapeType.BOX) {
-            mesh = Raylib.GenMeshCube(1, 1, 1);
-        }
-        else if (shape is ShapeType.SPHERE) {
-            mesh = Raylib.GenMeshSphere(0.5f, 15, 15);
-        }
-        else if (shape is ShapeType.CYLINDER) {
-            mesh = Raylib.GenMeshCylinder(0.5f, 1, 15);
-        }
-        else if (shape is ShapeType.CONE) {
-            mesh = Raylib.GenMeshCone(0.5f, 1, 15);
-        }
-        else if (shape is ShapeType.TERRAIN) {
-            mesh = Raylib.GenMeshHeightmap(Raylib.LoadImageFromTexture(terrain), Vector3.One);
-        }
-
-        MeshComponent result = new MeshComponent(entity,
-            mesh,
-            color
-        );
+        MeshComponent result = null;
         
         if (shape is ShapeType.MODEL) {
             // Console.WriteLine(obj.getValue<string>("model"));
             // Console.WriteLine(Directory.GetCurrentDirectory());
             //
-            model = Raylib.LoadModel(obj.getValue<string>("model"));
-            result.model = new aModel(obj.getValue<string>("model"), model);
-        }
-        else {
-            model = Raylib.LoadModelFromMesh(mesh);
-            result.model = new aModel(obj.getValue<string>("model"), model);
+            result = new MeshComponent(entity,
+                new aModel(obj.getValue<string>("model"), Raylib.LoadModel(obj.getValue<string>("model"))),
+                color
+            );
+        } else if (shape is ShapeType.TERRAIN) {
+            result = new MeshComponent(entity,
+                new aTexture(obj.getValue<string>("heightmap"), Raylib.LoadTexture(obj.getValue<string>("terrain"))),
+                color,
+                new aTexture(obj.getValue<string>("heightmap"), Raylib.LoadTexture(obj.getValue<string>("texture")))
+            );
+        } else {
+            result = new MeshComponent(entity,
+                shape,
+                color
+            );  
         }
 
         result.scale = obj.getValue<int>("scale");
         
-        result.setTexture(texture);
+        result.setTexture(new aTexture(texturePath, texture));
 
         return result;
     }

@@ -5,16 +5,16 @@ object SOME_SAVED_ENTITY {
     f32 y = -8.5;
     f32 z = 0;
 
-    f32 width  = 25;
+    f32 width = 25;
     f32 height = 0;
-    f32 depth  = 25;
+    f32 depth = 25;
 
     f32 rx = 0; // rotation x (pitch)
     f32 ry = 0; // rotation y (yaw)
     f32 rz = 0; // rotation z (roll)
 
-    str components = "fluid, audio, ";
-}object audio {
+    str components = "water_fluid, water_audio";
+}object water_audio {
     str type = "SpatialAudioComponent";
 
     str sound = "assets/splash.wav";
@@ -23,7 +23,7 @@ object SOME_SAVED_ENTITY {
         
     bool can_play = true;
 }
-object fluid {
+object water_fluid {
     str type = "FluidComponent";
 
     str shader_vert = "";
@@ -36,10 +36,10 @@ object fluid {
     i32 b = 255;
     i32 a = 125;
 
-    f32 freqX  = 25;
-    f32 freqY  = 25;
-    f32 ampX   = 5;
-    f32 ampY   = 5;
+    f32 freqX = 25;
+    f32 freqY = 25;
+    f32 ampX = 5;
+    f32 ampY = 5;
     f32 speedX = 8;
     f32 speedY = 8;
 }

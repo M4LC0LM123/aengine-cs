@@ -63,7 +63,7 @@ public static class Sandbox {
         body2.transform.position.Y = 15;
         body2.transform.position.X = 2.5f;
         body2.transform.scale = Vector3.One;
-        body2.addComponent(new MeshComponent(body2, GenMeshCylinder(1, 1, 15), YELLOW, new aTexture("assets/albedo.png")));
+        body2.addComponent(new MeshComponent(body2, ShapeType.CYLINDER, YELLOW, new aTexture("assets/albedo.png")));
         body2.addComponent(new RigidBodyComponent(body2, 1, BodyType.DYNAMIC, ShapeType.CYLINDER));
 
         var dummy = new Dummy();
@@ -98,7 +98,9 @@ public static class Sandbox {
 
         Entity water = Prefab.loadPrefab("assets/data/player.od", "water");
         
-        Prefab.savePrefab("save_test.od", "SOME_SAVED_ENTITY", water);
+        Prefab.savePrefab("save_test.od", "SOME_SAVED_ENTITY", water, true);
+        
+        Prefab.saveScene("save_scene_test.od", "SOME_SAVED_SCENE");
         
         // var scenePrefab = new ScenePrefab("assets/maps/map3.json");
         //
