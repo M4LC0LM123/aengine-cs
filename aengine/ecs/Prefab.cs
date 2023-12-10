@@ -426,7 +426,7 @@ public class Prefab {
 
         result.scale = obj.getValue<int>("scale");
         
-        result.setTexture(new aTexture(texturePath, texture));
+        if (texturePath != "") result.setTexture(new aTexture(texturePath, texture));
 
         return result;
     }

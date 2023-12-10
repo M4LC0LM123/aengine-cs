@@ -32,11 +32,18 @@ namespace Editor
             ObjectManager manager = new ObjectManager();
 
             GuiWindow infoWindow = new GuiWindow("Editor", 0, 0, 200, 130);
+            
             GuiWindow entityDataWindow = new GuiWindow("Entity data", 0, 110 + Gui.topBarHeight, 400, 300);
             GuiWindow saveAndLoadWindow = new GuiWindow("Open or save", 0, 410 + Gui.topBarHeight, 150, 125);
             saveAndLoadWindow.active = false;
             GuiTextBox sceneName = new GuiTextBox();
             sceneName.text = "scene";
+
+            GuiWindow componentListWindow = new GuiWindow("Add component", 100, 10, 300, 210);
+            componentListWindow.active = false;
+            
+            GuiWindow componentWindow = new GuiWindow("Component info", 100, 230);
+            componentWindow.active = false;
             
             // Main game loop
             while (!WindowShouldClose()) // Detect window close button or ESC key
@@ -244,6 +251,8 @@ namespace Editor
                 }
 
                 saveAndLoadWindow.render();
+                componentListWindow.render();
+                componentWindow.render();
                 
                 if (saveAndLoadWindow.active) {
                     sceneName.render(10, 10, 120, 25, saveAndLoadWindow);
@@ -253,6 +262,24 @@ namespace Editor
                     }
                     if (Gui.GuiButton("Load", 10, 80, 60, 25, saveAndLoadWindow)) {
                         manager.load(sceneName.text);
+                    }
+                }
+
+                if (componentListWindow.active) {
+                    if (Gui.GuiButton("MeshComponent", 10, 10, 250, 30, componentListWindow, TextPositioning.LEFT)) {
+                        AxieMover.ACTIVE_ENT.addComponent(new MeshComponent(AxieMover.ACTIVE_ENT, ShapeType.BOX, WHITE));
+                    }
+                    if (Gui.GuiButton("RigidBodyComponent", 10, 50, 250, 30, componentListWindow, TextPositioning.LEFT)) {
+                        AxieMover.ACTIVE_ENT.addComponent(new RigidBodyComponent(AxieMover.ACTIVE_ENT));
+                    }
+                    if (Gui.GuiButton("LightComponent", 10, 90, 250, 30, componentListWindow, TextPositioning.LEFT)) {
+                        
+                    }
+                    if (Gui.GuiButton("FluidComponent", 10, 130, 250, 30, componentListWindow, TextPositioning.LEFT)) {
+                        
+                    }
+                    if (Gui.GuiButton("SpAudioComponent", 10, 170, 250, 30, componentListWindow, TextPositioning.LEFT)) {
+                        
                     }
                 }
                 
@@ -283,6 +310,19 @@ namespace Editor
                     Gui.GuiTextPro(GetFontDefault(), "components: " + components, 
                         new Vector2(10, 90), 
                         20, WHITE, entityDataWindow);
+
+                    for (var i = 0; i < AxieMover.ACTIVE_ENT.components.Count; i++) {
+                        if (Gui.GuiButton(AxieMover.ACTIVE_ENT.components[i].fileName(), 10, 115 + i * 35, 250, 30,
+                            entityDataWindow, TextPositioning.LEFT)) {
+                            componentWindow.active = true;
+                            componentWindow.title = AxieMover.ACTIVE_ENT.components[i].fileName();
+                        }
+                    }
+
+                    if (Gui.GuiButton("Add component", 10, 125 + AxieMover.ACTIVE_ENT.components.Count * 35, 175, 30,
+                            entityDataWindow)) {
+                        componentListWindow.active = true;
+                    }
                 }
                 
                 Window.endRender();

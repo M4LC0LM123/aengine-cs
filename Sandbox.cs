@@ -78,7 +78,7 @@ public static class Sandbox {
 
         var console = new Console();
  
-        Prefab.loadScene("assets/data/scene.od", "scene");
+        Prefab.loadScene("assets/data/estrada.od", "estrada");
 
         foreach (var entity in World.entities) {
             if (entity.tag == "playa") {
@@ -98,7 +98,7 @@ public static class Sandbox {
 
         Entity water = Prefab.loadPrefab("assets/data/player.od", "water");
         
-        Prefab.savePrefab("save_test.od", "SOME_SAVED_ENTITY", water, true);
+        Prefab.savePrefab("save_test.od", "SOME_SAVED_ENTITY", water);
         
         Prefab.saveScene("save_scene_test.od", "SOME_SAVED_SCENE");
         
