@@ -21,7 +21,7 @@ namespace Editor
             Window.renderHeight = 720;
             Window.width = 1280;
             Window.height = 720;
-            Window.traceLogLevel = TraceLogLevel.LOG_ALL;
+            Window.traceLogLevel = TraceLogLevel.LOG_NONE;
             SetWindowIcon(LoadImage("assets/logo.png"));
 
             Camera camera = new Camera(Vector3.One, 90);
@@ -282,6 +282,10 @@ namespace Editor
                         
                     }
                 }
+
+                if (componentWindow.active) {
+                    EditorComponentData.render(componentWindow);
+                }
                 
                 if (AxieMover.IS_OBJ_ACTIVE) {
                     entityDataWindow.render();
@@ -316,6 +320,7 @@ namespace Editor
                             entityDataWindow, TextPositioning.LEFT)) {
                             componentWindow.active = true;
                             componentWindow.title = AxieMover.ACTIVE_ENT.components[i].fileName();
+                            EditorComponentData.setComponent(AxieMover.ACTIVE_ENT.components[i]);
                         }
                     }
 

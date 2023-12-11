@@ -9,7 +9,8 @@ object SOME_SAVED_SCENE {
     str floor = "save_scene_test.od";
     str Entity2 = "save_scene_test.od";
     str Entity3 = "save_scene_test.od";
-    str Entity10 = "save_scene_test.od";
+    str Entity4 = "save_scene_test.od";
+    str Entity11 = "save_scene_test.od";
     str water = "save_scene_test.od";
 }
 
@@ -304,8 +305,8 @@ object Entity2_mesh {
 
     i32 shape = 0;
 
-    i32 r = 125;
-    i32 g = 255;
+    i32 r = 255;
+    i32 g = 0;
     i32 b = 255;
     i32 a = 255;
 
@@ -353,7 +354,7 @@ object Entity3_mesh {
     i32 shape = 0;
 
     i32 r = 255;
-    i32 g = 255;
+    i32 g = 0;
     i32 b = 255;
     i32 a = 255;
 
@@ -378,8 +379,44 @@ object Entity3_rb {
 
     str heightmap = "";
 }
-object Entity10 {
-    str tag = Entity10;
+object Entity4 {
+    str tag = Entity4;
+    
+    f32 x = 1;
+    f32 y = -0.05190561;
+    f32 z = -5.395238;
+
+    f32 width = 2.0176423;
+    f32 height = 9.2271805;
+    f32 depth = 2.017904;
+
+    f32 rx = 0; // rotation x (pitch)
+    f32 ry = 0; // rotation y (yaw)
+    f32 rz = -180.16873; // rotation z (roll)
+
+    str components = "Entity4_mesh";
+}
+object Entity4_mesh {
+    str type = "MeshComponent";
+
+    i32 shape = 4;
+
+    i32 r = 0;
+    i32 g = 0;
+    i32 b = 255;
+    i32 a = 255;
+
+    bool isModel = true;
+
+    str texture = "";
+    str model = "";
+
+    str heightmap = "";
+
+    i32 scale = 1;    
+}
+object Entity11 {
+    str tag = Entity11;
     
     f32 x = 0;
     f32 y = 0;
@@ -393,9 +430,9 @@ object Entity10 {
     f32 ry = 0; // rotation y (yaw)
     f32 rz = 0; // rotation z (roll)
 
-    str components = "Entity10_light";
+    str components = "Entity11_light";
 }
-object Entity10_light {
+object Entity11_light {
     string type = "LightComponent";
         
     f32 intensity = 2.5;

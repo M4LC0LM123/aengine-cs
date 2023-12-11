@@ -83,6 +83,62 @@ namespace aengine.graphics {
             rlSetTexture(0);
         }
 
+        public static void drawCubeWireframe(Vector3 position, Vector3 rotation, Vector3 scale, Color color) {
+            rlPushMatrix();
+            
+            rlTranslatef(position.X, position.Y, position.Z);
+            rlRotatef(rotation.X, 1, 0, 0);
+            rlRotatef(rotation.Y, 0, 1, 0);
+            rlRotatef(rotation.Z, 0, 0, 1);
+            rlScalef(scale.X, scale.Y, scale.Z);
+            
+            rlBegin(RL_LINES);
+            rlColor4ub(color.r, color.g, color.b, color.a);
+            
+            // botom face
+            rlVertex3f(-0.5f, -0.5f, -0.5f);
+            rlVertex3f(0.5f, -0.5f, -0.5f);
+
+            rlVertex3f(0.5f, -0.5f, -0.5f);
+            rlVertex3f(0.5f, -0.5f, 0.5f);
+
+            rlVertex3f(0.5f, -0.5f, 0.5f);
+            rlVertex3f(-0.5f, -0.5f, 0.5f);
+
+            rlVertex3f(-0.5f, -0.5f, 0.5f);
+            rlVertex3f(-0.5f, -0.5f, -0.5f);
+
+            // Top face
+            rlVertex3f(-0.5f, 0.5f, -0.5f);
+            rlVertex3f(0.5f, 0.5f, -0.5f);
+
+            rlVertex3f(0.5f, 0.5f, -0.5f);
+            rlVertex3f(0.5f, 0.5f, 0.5f);
+
+            rlVertex3f(0.5f, 0.5f, 0.5f);
+            rlVertex3f(-0.5f, 0.5f, 0.5f);
+
+            rlVertex3f(-0.5f, 0.5f, 0.5f);
+            rlVertex3f(-0.5f, 0.5f, -0.5f);
+
+            // Connecting lines
+            rlVertex3f(-0.5f, -0.5f, -0.5f);
+            rlVertex3f(-0.5f, 0.5f, -0.5f);
+
+            rlVertex3f(0.5f, -0.5f, -0.5f);
+            rlVertex3f(0.5f, 0.5f, -0.5f);
+
+            rlVertex3f(0.5f, -0.5f, 0.5f);
+            rlVertex3f(0.5f, 0.5f, 0.5f);
+
+            rlVertex3f(-0.5f, -0.5f, 0.5f);
+            rlVertex3f(-0.5f, 0.5f, 0.5f);
+            
+            rlEnd();
+            
+            rlPopMatrix();
+        }
+
         public static void drawTexturedPlane(Texture texture, Vector3 position, float width, float depth,
             float rotation, Color color) {
             float x = position.X;

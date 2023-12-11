@@ -63,14 +63,11 @@ namespace aengine.ecs
             if (shape is ShapeType.BOX) {
                 model = new aModel(LoadModelFromMesh(GenMeshCube(transform.scale.X, transform.scale.Y,
                     transform.scale.Z)));
-            }
-            else if (shape is ShapeType.SPHERE) {
+            } else if (shape is ShapeType.SPHERE) {
                 model = new aModel(LoadModelFromMesh(GenMeshSphere(transform.scale.X, 15, 15)));
-            }
-            else if (shape is ShapeType.CYLINDER) {
+            } else if (shape is ShapeType.CYLINDER) {
                 model = new aModel(LoadModelFromMesh(GenMeshCylinder(transform.scale.X, transform.scale.Y, 15)));
-            }
-            else if (shape is ShapeType.CONE) {
+            } else if (shape is ShapeType.CONE) {
                 model = new aModel(LoadModelFromMesh(GenMeshCone(transform.scale.X, transform.scale.Y, 15)));
             }
             scale = 1;
@@ -86,14 +83,11 @@ namespace aengine.ecs
             this.shape = shape;
             if (shape is ShapeType.BOX) {
                 model = new aModel(LoadModelFromMesh(GenMeshCube(1, 1, 1)));
-            }
-            else if (shape is ShapeType.SPHERE) {
+            } else if (shape is ShapeType.SPHERE) {
                 model = new aModel(LoadModelFromMesh(GenMeshSphere(0.5f, 15, 15)));
-            }
-            else if (shape is ShapeType.CYLINDER) {
+            } else if (shape is ShapeType.CYLINDER) {
                 model = new aModel(LoadModelFromMesh(GenMeshCylinder(0.5f, 1, 15)));
-            }
-            else if (shape is ShapeType.CONE) {
+            } else if (shape is ShapeType.CONE) {
                 model = new aModel(LoadModelFromMesh(GenMeshCone(0.5f, 1, 15)));
             }
             scale = 1;
@@ -148,6 +142,24 @@ namespace aengine.ecs
         public unsafe void setShader(aShader shader, int mat = 0)
         {
             model.data.materials[mat].shader = shader.shader;
+        }
+
+        public void setShape(ShapeType shape) {
+            this.shape = shape;
+            if (shape is ShapeType.BOX) {
+                model = new aModel(LoadModelFromMesh(GenMeshCube(1, 1, 1)));
+                if (texture.path != String.Empty) setTexture(texture);
+            } else if (shape is ShapeType.SPHERE) {
+                model = new aModel(LoadModelFromMesh(GenMeshSphere(0.5f, 15, 15)));
+                if (texture.path != String.Empty) setTexture(texture);
+            } else if (shape is ShapeType.CYLINDER) {
+                model = new aModel(LoadModelFromMesh(GenMeshCylinder(0.5f, 1, 15)));
+                if (texture.path != String.Empty) setTexture(texture);
+            } else if (shape is ShapeType.CONE) {
+                model = new aModel(LoadModelFromMesh(GenMeshCone(0.5f, 1, 15)));
+                if (texture.path != String.Empty) setTexture(texture);
+            }
+            isModel = true;
         }
 
         private void setScale(Vector3 scale)

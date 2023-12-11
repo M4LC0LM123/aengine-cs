@@ -54,14 +54,11 @@ public class ObjectManager
                 }
             }
 
-            if (IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT) && IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL))
+            if (IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_RIGHT))
             {
-                if (!AxieMover.collision.hit)
-                {
-                    ent.selected = false;
-                    AxieMover.IS_OBJ_ACTIVE = false;
-                    AxieMover.ACTIVE_ENT = null;
-                }
+                ent.selected = false;
+                AxieMover.IS_OBJ_ACTIVE = false;
+                AxieMover.ACTIVE_ENT = null;
             }
             
             if (ent.selected)
@@ -71,7 +68,7 @@ public class ObjectManager
             }
         }
         
-        if (IsKeyPressed(KeyboardKey.KEY_BACKSPACE) && AxieMover.IS_OBJ_ACTIVE)
+        if (IsKeyPressed(KeyboardKey.KEY_DELETE) && AxieMover.IS_OBJ_ACTIVE)
         {
             AxieMover.IS_OBJ_ACTIVE = false;
             World.removeEntity(AxieMover.ACTIVE_ENT);
@@ -83,7 +80,7 @@ public class ObjectManager
     {
         foreach (var ent in World.entities)
         {
-            DrawCubeWiresV(ent.transform.position, ent.transform.scale, WHITE);
+            Rendering.drawCubeWireframe(ent.transform.position, ent.transform.rotation, ent.transform.scale, WHITE);
         }
     }
 

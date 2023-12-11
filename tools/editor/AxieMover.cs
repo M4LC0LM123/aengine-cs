@@ -8,10 +8,10 @@ namespace Editor;
 
 public class AxieMover
 {
-    public Vector3 position;
-    public float lengthX;
-    public float lengthY;
-    public float lengthZ;
+    public Vector3 position = Vector3.Zero;
+    public float lengthX = 3;
+    public float lengthY = 3;
+    public float lengthZ = 3;
     
     public static Ray MOUSE_RAY;
     public static RayCollision collision = new RayCollision();
@@ -27,17 +27,6 @@ public class AxieMover
     public static Mode CURRENT_MODE = Mode.ROAM;
     public static CameraMode CAMERA_MODE = CameraMode.FPS;
 
-    public AxieMover()
-    {
-        position = Vector3.Zero;
-        lengthX = 3;
-        lengthY = 3;
-        lengthZ = 3;
-        
-        collisionX = new RayCollision();
-        collisionY = new RayCollision();
-        collisionZ = new RayCollision();
-    }
     public void update(Camera camera)
     {
         MOUSE_RAY = GetMouseRay(GetMousePosition(), camera.matrix);
@@ -62,24 +51,25 @@ public class AxieMover
                 }
             }
 
-            if (IsMouseButtonDown(MouseButton.MOUSE_BUTTON_MIDDLE)) {
+            if (IsMouseButtonDown(MouseButton.MOUSE_BUTTON_MIDDLE) || IsKeyDown(KeyboardKey.KEY_LEFT_ALT) ||
+                IsKeyDown(KeyboardKey.KEY_RIGHT_ALT)) {
                 MOVE_SPEED = 25;
             } else {
                 MOVE_SPEED = 1;
             }
             
-            if (IsKeyDown(KeyboardKey.KEY_LEFT_SHIFT))
+            if (IsKeyDown(KeyboardKey.KEY_LEFT_SHIFT) || IsKeyDown(KeyboardKey.KEY_RIGHT_SHIFT))
             {
                 if (CURRENT_MODE == Mode.MOVE)
                 {
                     if (IsKeyDown(KeyboardKey.KEY_A))
-                        position.X -= MOVE_SPEED * GetFrameTime();
-                    if (IsKeyDown(KeyboardKey.KEY_D))
-                        position.X += MOVE_SPEED * GetFrameTime();
-                    if (IsKeyDown(KeyboardKey.KEY_W))
                         position.Z -= MOVE_SPEED * GetFrameTime();
-                    if (IsKeyDown(KeyboardKey.KEY_S))
+                    if (IsKeyDown(KeyboardKey.KEY_D))
                         position.Z += MOVE_SPEED * GetFrameTime();
+                    if (IsKeyDown(KeyboardKey.KEY_W))
+                        position.X -= MOVE_SPEED * GetFrameTime();
+                    if (IsKeyDown(KeyboardKey.KEY_S))
+                        position.X += MOVE_SPEED * GetFrameTime();
                     if (IsKeyDown(KeyboardKey.KEY_PAGE_DOWN))
                         position.Y -= MOVE_SPEED * GetFrameTime();
                     if (IsKeyDown(KeyboardKey.KEY_PAGE_UP))
@@ -89,13 +79,13 @@ public class AxieMover
                 if (CURRENT_MODE == Mode.SCALE)
                 {
                     if (IsKeyDown(KeyboardKey.KEY_A))
-                        ACTIVE_ENT.transform.scale.X -= MOVE_SPEED * GetFrameTime();
-                    if (IsKeyDown(KeyboardKey.KEY_D))
-                        ACTIVE_ENT.transform.scale.X += MOVE_SPEED * GetFrameTime();
-                    if (IsKeyDown(KeyboardKey.KEY_W))
                         ACTIVE_ENT.transform.scale.Z -= MOVE_SPEED * GetFrameTime();
-                    if (IsKeyDown(KeyboardKey.KEY_S))
+                    if (IsKeyDown(KeyboardKey.KEY_D))
                         ACTIVE_ENT.transform.scale.Z += MOVE_SPEED * GetFrameTime();
+                    if (IsKeyDown(KeyboardKey.KEY_W))
+                        ACTIVE_ENT.transform.scale.X -= MOVE_SPEED * GetFrameTime();
+                    if (IsKeyDown(KeyboardKey.KEY_S))
+                        ACTIVE_ENT.transform.scale.X += MOVE_SPEED * GetFrameTime();
                     if (IsKeyDown(KeyboardKey.KEY_PAGE_DOWN))
                         ACTIVE_ENT.transform.scale.Y -= MOVE_SPEED * GetFrameTime();
                     if (IsKeyDown(KeyboardKey.KEY_PAGE_UP))

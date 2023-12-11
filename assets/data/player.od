@@ -63,7 +63,7 @@ object zombie_mesh {
     string texture = EMPTY;
     string model = "assets/models/zombie.glb";
 
-    string terrain = EMPTY;
+    string heightmap = EMPTY;
 
     int scale = 1;
 }
