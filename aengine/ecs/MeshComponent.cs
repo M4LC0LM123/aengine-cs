@@ -132,6 +132,20 @@ namespace aengine.ecs
             isModel = true;
         }
 
+        public void setTerrain(aTexture terrain) {
+            model = new aModel(LoadModelFromMesh(GenMeshHeightmap(LoadImageFromTexture(terrain.data), Vector3.One)));
+            shape = ShapeType.MODEL;
+            scale = 1;
+            isModel = true;
+        }
+        
+        public void setModel(aModel model) {
+            this.model = model;
+            shape = ShapeType.MODEL;
+            scale = 1;
+            isModel = true;
+        }
+
         public unsafe void setTexture(aTexture texture, int mat = 0, int map = 0)
         {
             this.texture.data = texture.data;

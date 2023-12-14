@@ -22,6 +22,8 @@ public class GuiWindow
 
     public int id;
 
+    public bool isMouseOver = false;
+
     public GuiWindow(string title = "GuiWindow", float x = 10, float y = 10, float width = 300, float height = 200)
     {
         topBar = new Rectangle(x, y, width, Gui.topBarHeight);
@@ -35,6 +37,8 @@ public class GuiWindow
         
         Gui.windowCount++;
         id = Gui.windowCount;
+        
+        Gui.windows.Add(this);
     }
 
     public void setPosition(Vector2 positon)
@@ -57,12 +61,20 @@ public class GuiWindow
     public void render(Console console = null)
     {
         if (active) {
-            if (IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(Window.mousePosition, topBar) && !Gui.GuiInteractiveRec(default, topBar.x + topBar.width - Gui.exitScale, topBar.y, Gui.exitScale, Gui.exitScale, IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT), null, false))
-            {
-                if (movable && Gui.activeWindowID == 0 || Gui.activeWindowID == id)
-                {
+            if (IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT) &&
+                CheckCollisionPointRec(Window.mousePosition, topBar) && !Gui.GuiInteractiveRec(default,
+                    topBar.x + topBar.width - Gui.exitScale, topBar.y, Gui.exitScale, Gui.exitScale,
+                    IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT), null, false)) {
+                if (movable && Gui.activeWindowID == 0 || Gui.activeWindowID == id) {
                     moving = true;
                 }
+            }
+
+            if (CheckCollisionPointRec(Window.mousePosition, topBar) ||
+                CheckCollisionPointRec(Window.mousePosition, rec)) {
+                isMouseOver = true;
+            } else {
+                isMouseOver = false;
             }
 
             if (moving)

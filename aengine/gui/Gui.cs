@@ -1,6 +1,7 @@
 using System;
 using System.Numerics;
 using aengine_cs.aengine.windowing;
+using aengine.graphics;
 using Raylib_CsLo;
 using static Raylib_CsLo.Raylib;
 
@@ -22,10 +23,27 @@ public class Gui {
     public static int windowCount = 0;
     public static int activeWindowID = 0;
 
+    public static List<GuiWindow> windows = new List<GuiWindow>();
+
+    public static bool isMouseOver() {
+        return windows.Any(window => window.isMouseOver && window.active);
+    }
+    
     public static void GuiText(string text, float x, float y, float size, Color color) {
         DrawText(text, x, y, size, color);
     }
 
+    public static void GuiTexture(float x, float y, float width, float height, aTexture texture, GuiWindow window = null) {
+        Vector2 rp = Vector2.Zero with {X = x, Y = y};
+
+        if (window != null) {
+            rp = new Vector2(x + window.rec.x, y + window.rec.y);
+        }
+        
+        DrawTexturePro(texture.data, new Rectangle(0, 0, texture.data.width, texture.data.height),
+            new Rectangle(rp.X, rp.Y, width, height), Vector2.Zero, 0, WHITE);
+    }
+    
     public static void GuiPlainRec(float x, float y, float width, float height) {
         DrawRectangle((int)(x - bezelSize), (int)(y - bezelSize), (int)(width + bezelSize * 2f),
             (int)(height + bezelSize * 2f), darkerColor);
@@ -48,6 +66,17 @@ public class Gui {
 
         if (window != null) {
             rp = new Vector2(position.X + window.rec.x, position.Y + window.rec.y);
+        }
+
+        DrawTextEx(Gui.font, text, rp, size, textSpacing, color);
+    }
+    
+    public static void GuiTextPro(Font font, string text, float x, float y, float size, Color color,
+        GuiWindow window = null) {
+        Vector2 rp = Vector2.Zero with {X = x, Y = y};
+
+        if (window != null) {
+            rp = new Vector2(x + window.rec.x, y + window.rec.y);
         }
 
         DrawTextEx(Gui.font, text, rp, size, textSpacing, color);

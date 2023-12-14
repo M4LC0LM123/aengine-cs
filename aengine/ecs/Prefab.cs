@@ -413,7 +413,7 @@ public class Prefab {
             );
         } else if (shape is ShapeType.TERRAIN) {
             result = new MeshComponent(entity,
-                new aTexture(obj.getValue<string>("heightmap"), Raylib.LoadTexture(obj.getValue<string>("terrain"))),
+                new aTexture(obj.getValue<string>("heightmap"), Raylib.LoadTexture(obj.getValue<string>("heightmap"))),
                 color,
                 new aTexture(obj.getValue<string>("heightmap"), Raylib.LoadTexture(obj.getValue<string>("texture")))
             );

@@ -42,7 +42,7 @@ namespace Editor
             GuiWindow componentListWindow = new GuiWindow("Add component", 100, 10, 300, 210);
             componentListWindow.active = false;
             
-            GuiWindow componentWindow = new GuiWindow("Component info", 100, 230);
+            GuiWindow componentWindow = new GuiWindow("Component info", 100, 230, 300, 250);
             componentWindow.active = false;
             
             // Main game loop
@@ -198,6 +198,8 @@ namespace Editor
                     } 
                 }
 
+                // Console.WriteLine($"{Gui.isMouseOver()}, {Gui.windows.Count}");
+                
                 Window.beginRender();
                 ClearBackground(BLACK);
                 BeginMode3D(camera.matrix);

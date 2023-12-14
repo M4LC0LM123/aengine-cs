@@ -10,7 +10,9 @@ object SOME_SAVED_SCENE {
     str Entity2 = "save_scene_test.od";
     str Entity3 = "save_scene_test.od";
     str Entity4 = "save_scene_test.od";
-    str Entity11 = "save_scene_test.od";
+    str Entity5 = "save_scene_test.od";
+    str Entity6 = "save_scene_test.od";
+    str Entity13 = "save_scene_test.od";
     str water = "save_scene_test.od";
 }
 
@@ -306,13 +308,13 @@ object Entity2_mesh {
     i32 shape = 0;
 
     i32 r = 255;
-    i32 g = 0;
+    i32 g = 255;
     i32 b = 255;
     i32 a = 255;
 
     bool isModel = true;
 
-    str texture = "";
+    str texture = "assets/orm.png";
     str model = "";
 
     str heightmap = "";
@@ -354,13 +356,13 @@ object Entity3_mesh {
     i32 shape = 0;
 
     i32 r = 255;
-    i32 g = 0;
+    i32 g = 255;
     i32 b = 255;
     i32 a = 255;
 
     bool isModel = true;
 
-    str texture = "";
+    str texture = "assets/normal.png";
     str model = "";
 
     str heightmap = "";
@@ -402,21 +404,93 @@ object Entity4_mesh {
     i32 shape = 4;
 
     i32 r = 0;
-    i32 g = 0;
+    i32 g = 255;
     i32 b = 255;
     i32 a = 255;
 
     bool isModel = true;
 
-    str texture = "";
+    str texture = "assets/orm.png";
     str model = "";
 
     str heightmap = "";
 
     i32 scale = 1;    
 }
-object Entity11 {
-    str tag = Entity11;
+object Entity5 {
+    str tag = Entity5;
+    
+    f32 x = 1.7291287;
+    f32 y = 1.1668978;
+    f32 z = 20.51;
+
+    f32 width = 11.382363;
+    f32 height = 11.657716;
+    f32 depth = 16.005005;
+
+    f32 rx = 0; // rotation x (pitch)
+    f32 ry = -90.37376; // rotation y (yaw)
+    f32 rz = 0; // rotation z (roll)
+
+    str components = "Entity5_mesh";
+}
+object Entity5_mesh {
+    str type = "MeshComponent";
+
+    i32 shape = 6;
+
+    i32 r = 0;
+    i32 g = 255;
+    i32 b = 0;
+    i32 a = 255;
+
+    bool isModel = true;
+
+    str texture = "";
+    str model = "assets/models/zombie.glb";
+
+    str heightmap = "";
+
+    i32 scale = 1;    
+}
+object Entity6 {
+    str tag = Entity6;
+    
+    f32 x = -15.875747;
+    f32 y = -11.86124;
+    f32 z = -35.94369;
+
+    f32 width = 32.077744;
+    f32 height = 18.455898;
+    f32 depth = 16.743908;
+
+    f32 rx = 0; // rotation x (pitch)
+    f32 ry = 0; // rotation y (yaw)
+    f32 rz = 0; // rotation z (roll)
+
+    str components = "Entity6_mesh";
+}
+object Entity6_mesh {
+    str type = "MeshComponent";
+
+    i32 shape = 6;
+
+    i32 r = 255;
+    i32 g = 255;
+    i32 b = 255;
+    i32 a = 255;
+
+    bool isModel = true;
+
+    str texture = "assets/normal.png";
+    str model = "";
+
+    str heightmap = "";
+
+    i32 scale = 1;    
+}
+object Entity13 {
+    str tag = Entity13;
     
     f32 x = 0;
     f32 y = 0;
@@ -430,9 +504,9 @@ object Entity11 {
     f32 ry = 0; // rotation y (yaw)
     f32 rz = 0; // rotation z (roll)
 
-    str components = "Entity11_light";
+    str components = "Entity13_light";
 }
-object Entity11_light {
+object Entity13_light {
     string type = "LightComponent";
         
     f32 intensity = 2.5;

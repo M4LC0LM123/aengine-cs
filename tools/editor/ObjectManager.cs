@@ -1,10 +1,12 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text.Json;
+using aengine_cs.aengine.windowing;
 using aengine.ecs;
 using aengine.graphics;
 using NativeFileDialogSharp;
 using Raylib_CsLo;
+using Sandbox.aengine.Gui;
 using static Raylib_CsLo.Raylib;
 
 namespace Editor;
@@ -44,7 +46,7 @@ public class ObjectManager
                 new BoundingBox(RayMath.Vector3Subtract(ent.transform.position, ent.transform.scale / 2),
                     RayMath.Vector3Add(ent.transform.position, ent.transform.scale / 2)));
             
-            if (IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT))
+            if (IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT) && !Gui.isMouseOver())
             {
                 if (AxieMover.collision.hit && AxieMover.CURRENT_MODE is Mode.ROAM)
                 {
