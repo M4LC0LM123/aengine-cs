@@ -290,45 +290,50 @@ namespace Editor
                 }
                 
                 if (AxieMover.IS_OBJ_ACTIVE) {
+                    if (!entityDataWindow.active) {
+                        entityDataWindow.active = true;
+                    }
                     entityDataWindow.render();
-                    
-                    Gui.GuiTextPro(GetFontDefault(), "tag: " + AxieMover.ACTIVE_ENT.tag, 
-                        new Vector2(10, 10), 
-                        20, WHITE, entityDataWindow);
-                    
-                    Gui.GuiTextPro(GetFontDefault(), "position: " + Utils.roundVectorDecimals(AxieMover.ACTIVE_ENT.transform.position, 2), 
-                        new Vector2(10, 30), 
-                        20, WHITE, entityDataWindow);
-                    
-                    Gui.GuiTextPro(GetFontDefault(), "scale: " + AxieMover.ACTIVE_ENT.transform.scale, 
-                        new Vector2(10, 50),
-                        20, WHITE, entityDataWindow);
-                    
-                    Gui.GuiTextPro(GetFontDefault(), "rotation: " + AxieMover.ACTIVE_ENT.transform.rotation, 
-                        new Vector2(10, 70), 
-                        20, WHITE, entityDataWindow);
-                    
-                    string components = String.Empty;
-                    foreach (Component component in AxieMover.ACTIVE_ENT.components) {
-                        components += component.fileName() + ", ";
-                    }
-                    
-                    Gui.GuiTextPro(GetFontDefault(), "components: " + components, 
-                        new Vector2(10, 90), 
-                        20, WHITE, entityDataWindow);
 
-                    for (var i = 0; i < AxieMover.ACTIVE_ENT.components.Count; i++) {
-                        if (Gui.GuiButton(AxieMover.ACTIVE_ENT.components[i].fileName(), 10, 115 + i * 35, 250, 30,
-                            entityDataWindow, TextPositioning.LEFT)) {
-                            componentWindow.active = true;
-                            componentWindow.title = AxieMover.ACTIVE_ENT.components[i].fileName();
-                            EditorComponentData.setComponent(AxieMover.ACTIVE_ENT.components[i]);
+                    if (entityDataWindow.active) {
+                        Gui.GuiTextPro(GetFontDefault(), "tag: " + AxieMover.ACTIVE_ENT.tag, 
+                            new Vector2(10, 10), 
+                            20, WHITE, entityDataWindow);
+                    
+                        Gui.GuiTextPro(GetFontDefault(), "position: " + Utils.roundVectorDecimals(AxieMover.ACTIVE_ENT.transform.position, 2), 
+                            new Vector2(10, 30), 
+                            20, WHITE, entityDataWindow);
+                        
+                        Gui.GuiTextPro(GetFontDefault(), "scale: " + AxieMover.ACTIVE_ENT.transform.scale, 
+                            new Vector2(10, 50),
+                            20, WHITE, entityDataWindow);
+                        
+                        Gui.GuiTextPro(GetFontDefault(), "rotation: " + AxieMover.ACTIVE_ENT.transform.rotation, 
+                            new Vector2(10, 70), 
+                            20, WHITE, entityDataWindow);
+                        
+                        string components = String.Empty;
+                        foreach (Component component in AxieMover.ACTIVE_ENT.components) {
+                            components += component.fileName() + ", ";
                         }
-                    }
+                        
+                        Gui.GuiTextPro(GetFontDefault(), "components: " + components, 
+                            new Vector2(10, 90), 
+                            20, WHITE, entityDataWindow);
 
-                    if (Gui.GuiButton("Add component", 10, 125 + AxieMover.ACTIVE_ENT.components.Count * 35, 175, 30,
-                            entityDataWindow)) {
-                        componentListWindow.active = true;
+                        for (var i = 0; i < AxieMover.ACTIVE_ENT.components.Count; i++) {
+                            if (Gui.GuiButton(AxieMover.ACTIVE_ENT.components[i].fileName(), 10, 115 + i * 35, 250, 30,
+                                entityDataWindow, TextPositioning.LEFT)) {
+                                componentWindow.active = true;
+                                componentWindow.title = AxieMover.ACTIVE_ENT.components[i].fileName();
+                                EditorComponentData.setComponent(AxieMover.ACTIVE_ENT.components[i]);
+                            }
+                        }
+
+                        if (Gui.GuiButton("Add component", 10, 125 + AxieMover.ACTIVE_ENT.components.Count * 35, 175, 30,
+                                entityDataWindow)) {
+                            componentListWindow.active = true;
+                        }
                     }
                 }
                 

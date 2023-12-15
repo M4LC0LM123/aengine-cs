@@ -243,6 +243,25 @@ namespace aengine.ecs {
             body.EnableDebugDraw = false;
         }
 
+        // public void resetBody(ShapeType shape) {
+        //     RigidBody prev = body;
+        //     prev.Shape.UpdateShape();
+        //     Shape bodyShape;
+        //     
+        //     if (shape == ShapeType.BOX) {
+        //         bodyShape = new BoxShape(new Jitter.LinearMath.JVector(entity.transform.scale.X,
+        //             entity.transform.scale.Y, entity.transform.scale.Z));
+        //     } else if (shape == ShapeType.SPHERE) {
+        //         bodyShape = new SphereShape(entity.transform.scale.X);
+        //     } else if (shape == ShapeType.CAPSULE) {
+        //         bodyShape = new CapsuleShape(entity.transform.scale.X, entity.transform.scale.Y);
+        //     } else if (shape == ShapeType.CYLINDER) {
+        //         bodyShape = new CylinderShape(entity.transform.scale.X, entity.transform.scale.Y);
+        //     } else if (shape == ShapeType.CONE) {
+        //         bodyShape = new ConeShape(entity.transform.scale.Y, entity.transform.scale.X);
+        //     }
+        // }
+        
         public void setLinearVelocity(Vector3 velocity) {
             body.LinearVelocity = new JVector(velocity.X, velocity.Y, velocity.Z);
         }

@@ -1,5 +1,6 @@
 using aengine.ecs;
 using aengine.graphics;
+using Jitter.Collision.Shapes;
 using NativeFileDialogSharp;
 using Raylib_CsLo;
 using Sandbox.aengine.Gui;
@@ -16,13 +17,6 @@ public class EditorComponentData {
     public static GuiTextBox aBox = new GuiTextBox(); // int
 
     public static GuiTextBox isModelBox = new GuiTextBox(); // bool
-
-    public static GuiTextBox textureBox = new GuiTextBox(); // string
-    public static GuiTextBox MmodelBox = new GuiTextBox(); // string
-
-    public static GuiTextBox MHeightmapBox = new GuiTextBox(); // string
-
-    public static GuiTextBox scaleBox = new GuiTextBox(); // int
     // _____________________ mesh component _______________________
 
     // _____________________ rb component _________________________
@@ -30,10 +24,6 @@ public class EditorComponentData {
 
     public static GuiTextBox RshapeBox = new GuiTextBox(); // ShapeType (int)
     public static GuiTextBox bodyTypeBox = new GuiTextBox(); // BodyType  (int)
-
-    public static GuiTextBox RModelBox = new GuiTextBox(); // string
-
-    public static GuiTextBox RHeightmapBox = new GuiTextBox(); // string
     // _____________________ rb component _________________________
 
     public static Component activeComponent = null;
@@ -121,6 +111,25 @@ public class EditorComponentData {
                 mc.terrainPath = loadPath;
                 mc.setTerrain(new aTexture(loadPath, Raylib.LoadTexture(path)));
             }
+        } else if (activeComponent.getType() == "RigidBodyComponent") {
+            RigidBodyComponent rb = (RigidBodyComponent)activeComponent;
+
+            massBox.render(10, 10, 50, 25, window);
+            Gui.GuiTextPro(Gui.font, "mass", 75, 10, 20, Raylib.WHITE, window);
+            if (massBox.text != String.Empty)
+                rb.body.SetMassProperties(rb.body.Inertia, float.Parse(massBox.text), false);
+            
+            RshapeBox.render(10, 45, 50, 25, window);
+            Gui.GuiTextPro(Gui.font, "shape", 75, 45, 20, Raylib.WHITE, window);
+            if (RshapeBox.text != String.Empty) {
+                // rb.body.Shape = new BoxShape();
+                // rb.body.Shape.UpdateShape();
+            }
+            
+            bodyTypeBox.render(10, 80, 50, 25, window);
+            Gui.GuiTextPro(Gui.font, "is static", 75, 80, 20, Raylib.WHITE, window);
+            if (bodyTypeBox.text == "true" || bodyTypeBox.text == "false")
+                rb.body.IsStatic = bool.Parse(bodyTypeBox.text);
         }
     }
 
