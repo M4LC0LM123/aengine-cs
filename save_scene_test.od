@@ -468,7 +468,7 @@ object Entity6 {
     f32 ry = 0; // rotation y (yaw)
     f32 rz = 0; // rotation z (roll)
 
-    str components = "Entity6_mesh";
+    str components = "Entity6_mesh, Entity6_rb";
 }
 object Entity6_mesh {
     str type = "MeshComponent";
@@ -488,6 +488,18 @@ object Entity6_mesh {
     str heightmap = "";
 
     i32 scale = 1;    
+}
+object Entity6_rb {
+    str type = "RigidBodyComponent";
+    
+    f32 mass = 9912.788;
+
+    i32 shape = 6;
+    i32 body_type = 1;
+
+    str model = "";
+
+    str heightmap = "assets/heightmap.png";
 }
 object Entity13 {
     str tag = Entity13;

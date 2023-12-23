@@ -319,7 +319,7 @@ public static class Sandbox {
                 window);
 
             if (Gui.GuiButton("Render Colliders", 10, 100, 240, 40, window, TextPositioning.LEFT))
-                World.RenderColliders = !World.RenderColliders;
+                World.renderColliders = !World.renderColliders;
 
             textBox.render(10, 150, 240, 40, window);
             slider.render(10, 200, 240, 40, window);

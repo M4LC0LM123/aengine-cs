@@ -82,6 +82,32 @@ public class Gui {
         DrawTextEx(Gui.font, text, rp, size, textSpacing, color);
     }
 
+    public static bool GuiTickBox(bool tick, float x, float y, float width, float height, GuiWindow window = null) {
+        Vector2 rp = Vector2.Zero with {
+            X = x,
+            Y = y
+        };
+
+        if (window != null) {
+            rp = new Vector2(x + window.rec.x, y + window.rec.y);
+        }
+        
+        GuiInverseRec(rp.X, rp.Y, width, height);
+        
+        Rectangle rec = new Rectangle(rp.X, rp.Y, width, height);
+        if (CheckCollisionPointRec(Window.mousePosition, rec) && IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT)) {
+            tick = !tick;
+        }
+
+        GuiIcon xIcon = new ExitIcon();
+        
+        if (tick) {
+            xIcon.render((int)rp.X, (int)rp.Y, (int)width, (int)height);
+        }
+
+        return tick;
+    }
+
     public static bool GuiButton(string text, float x, float y, float width, float height, GuiWindow window = null,
         TextPositioning textPositioning = TextPositioning.CENTER) {
         float rx = x;

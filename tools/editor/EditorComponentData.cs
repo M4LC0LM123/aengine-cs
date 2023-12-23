@@ -122,14 +122,35 @@ public class EditorComponentData {
             RshapeBox.render(10, 45, 50, 25, window);
             Gui.GuiTextPro(Gui.font, "shape", 75, 45, 20, Raylib.WHITE, window);
             if (RshapeBox.text != String.Empty) {
-                // rb.body.Shape = new BoxShape();
-                // rb.body.Shape.UpdateShape();
+                rb.setShape((ShapeType)int.Parse(RshapeBox.text));
             }
             
             bodyTypeBox.render(10, 80, 50, 25, window);
             Gui.GuiTextPro(Gui.font, "is static", 75, 80, 20, Raylib.WHITE, window);
             if (bodyTypeBox.text == "true" || bodyTypeBox.text == "false")
                 rb.body.IsStatic = bool.Parse(bodyTypeBox.text);
+            
+            if (Gui.GuiButton("Load model", 10, 125, 150, 25, window)) {
+                string path = Dialog.FileOpen().Path.Replace("\\", "/");
+                
+                // loads relative to the chosen scene file
+                string loadPath = getRelativePath(path, 
+                    Dialog.FolderPicker().Path.Replace("\\", "/"));
+
+                RshapeBox.text = "6";
+                rb.setModelShape(new aModel(loadPath, Raylib.LoadModel(path)));
+            }
+            
+            if (Gui.GuiButton("Load terrain", 10, 160, 150, 25, window)) {
+                string path = Dialog.FileOpen().Path.Replace("\\", "/");
+                
+                // loads relative to the chosen scene file
+                string loadPath = getRelativePath(path, 
+                    Dialog.FolderPicker().Path.Replace("\\", "/"));
+
+                RshapeBox.text = "5";
+                rb.setTerrainShape(new aTexture(loadPath, Raylib.LoadTexture(path)));
+            }
         }
     }
 

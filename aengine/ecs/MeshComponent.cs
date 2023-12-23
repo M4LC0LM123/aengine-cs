@@ -203,10 +203,22 @@ namespace aengine.ecs
                         transform.rotation = entity.transform.rotation with { X = entity.transform.rotation.X + 90 };
                         transform.scale = entity.transform.scale;
                     } else {
-                        transform = entity.transform;  
+                        if (shape == ShapeType.TERRAIN) {
+                            transform.position = entity.transform.position - entity.transform.scale / 2;
+                            transform.rotation = entity.transform.rotation;
+                            transform.scale = entity.transform.scale;
+                        } else {
+                            transform = entity.transform;  
+                        }
                     }
                 } else {
-                    transform = entity.transform;         
+                    if (shape == ShapeType.TERRAIN) {
+                        transform.position = entity.transform.position - entity.transform.scale / 2;
+                        transform.rotation = entity.transform.rotation;
+                        transform.scale = entity.transform.scale;
+                    } else {
+                        transform = entity.transform;  
+                    }      
                 }
                 // setScale(transform.scale);
                 // setRotation(transform.rotation);

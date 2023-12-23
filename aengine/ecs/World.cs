@@ -15,7 +15,8 @@ namespace aengine.ecs
     public class World 
     {
         public static List<Entity> entities = new List<Entity>();
-        public static bool RenderColliders = false;
+        public static bool debugRenderTerrain = false; // uses a lot of resources and makes the game slower
+        public static bool renderColliders = false;
 
         public static CollisionSystem collisionSystem = new CollisionSystemSAP();
         public static Jitter.World world = new Jitter.World(collisionSystem);
@@ -51,15 +52,15 @@ namespace aengine.ecs
                 
                 if (entities[i].hasComponent<RigidBodyComponent>())
                 {
-                    entities[i].getComponent<RigidBodyComponent>().debug = RenderColliders;
+                    entities[i].getComponent<RigidBodyComponent>().debug = renderColliders;
                 }
                 else if (entities[i].hasComponent<LightComponent>())
                 {
-                    entities[i].getComponent<LightComponent>().debug = RenderColliders;
+                    entities[i].getComponent<LightComponent>().debug = renderColliders;
                 } 
                 else if (entities[i].hasComponent<SpatialAudioComponent>())
                 {
-                    entities[i].getComponent<SpatialAudioComponent>().debug = RenderColliders;
+                    entities[i].getComponent<SpatialAudioComponent>().debug = renderColliders;
                 }
             }
         }

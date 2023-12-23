@@ -31,7 +31,7 @@ namespace Editor
 
             ObjectManager manager = new ObjectManager();
 
-            GuiWindow infoWindow = new GuiWindow("Editor", 0, 0, 200, 130);
+            GuiWindow infoWindow = new GuiWindow("Editor", 0, 0, 200, 200);
             
             GuiWindow entityDataWindow = new GuiWindow("Entity data", 0, 110 + Gui.topBarHeight, 400, 300);
             GuiWindow saveAndLoadWindow = new GuiWindow("Open or save", 0, 410 + Gui.topBarHeight, 150, 125);
@@ -236,20 +236,29 @@ namespace Editor
                 EndMode3D();
                 
                 infoWindow.render();
-                
-                Gui.GuiTextPro(GetFontDefault(), 
-                    "fps: " + GetFPS(), 
-                    new Vector2(10, 10),
-                    20, WHITE, infoWindow);
 
-                Gui.GuiTextPro(GetFontDefault(), "mode: " + AxieMover.CURRENT_MODE, 
-                    new Vector2(10, 30), 
-                    20, WHITE, infoWindow);
-                
-                Gui.GuiTextPro(GetFontDefault(), "entities: " + World.entities.Count, new Vector2(10, 50), 20, WHITE, infoWindow);
+                if (infoWindow.active) {
+                    Gui.GuiTextPro(GetFontDefault(), 
+                        "fps: " + GetFPS(), 
+                        new Vector2(10, 10),
+                        20, WHITE, infoWindow);
 
-                if (Gui.GuiButton("Save/Load", 10, 80, 150, 30, infoWindow)) {
-                    saveAndLoadWindow.active = true;   
+                    Gui.GuiTextPro(GetFontDefault(), "mode: " + AxieMover.CURRENT_MODE, 
+                        new Vector2(10, 30), 
+                        20, WHITE, infoWindow);
+                
+                    Gui.GuiTextPro(GetFontDefault(), "entities: " + World.entities.Count, new Vector2(10, 50), 20, WHITE, infoWindow);
+
+                    if (Gui.GuiButton("Save/Load", 10, 80, 150, 30, infoWindow)) {
+                        saveAndLoadWindow.active = true;   
+                    }
+
+                    if (Gui.GuiButton("Debug Render", 10, 120, 150, 30, infoWindow)) {
+                        World.renderColliders = !World.renderColliders;
+                    }
+
+                    World.debugRenderTerrain = Gui.GuiTickBox(World.debugRenderTerrain, 10, 160, 30, 30, infoWindow);
+                    // Console.WriteLine(World.debugRenderTerrain);
                 }
 
                 saveAndLoadWindow.render();

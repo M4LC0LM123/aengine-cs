@@ -89,6 +89,14 @@ namespace aengine.core
             return new Vector3(v1.X + v2.X * scalar, v1.Y + v2.Y * scalar, v1.Z + v2.Z * scalar);
         }
 
+        public static JVector vecToJVec(Vector3 vec) {
+            return JVector.Zero with {
+                X = vec.X,
+                Y = vec.Y,
+                Z = vec.Z
+            };
+        }
+
         public static float getAspectRatio(Matrix4x4 matrix)
         {
             return matrix.M11 / matrix.M22;

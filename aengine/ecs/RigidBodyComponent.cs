@@ -111,72 +111,6 @@ namespace aengine.ecs {
             body.EnableDebugDraw = true;
         }
         
-        // public unsafe RigidBodyComponent(Entity entity, Model model, float mass = 1.0f, BodyType type = BodyType.DYNAMIC) {
-        //     this.type = type;
-        //
-        //     // Create a list of convex shapes to represent the compound shape
-        //     List<CompoundShape.TransformedShape> convexShapes = new List<CompoundShape.TransformedShape>();
-        //     
-        //     for (int i = 0; i < model.meshCount; i++)
-        //     {
-        //         Mesh mesh = model.meshes[i];
-        //         
-        //         JVector position = calculatePosition(calculateBoundingBox(mesh));
-        //
-        //         List<JVector> vertices = new List<JVector>();
-        //         
-        //         for (int j = 0; j < mesh.vertexCount; j += 3) {
-        //             float x = mesh.vertices[j];
-        //             float y = mesh.vertices[j + 1];
-        //             float z = mesh.vertices[j + 2];
-        //
-        //             JVector vertex = new JVector(x, y, z);
-        //
-        //             vertices.Add(vertex);
-        //         }
-        //         
-        //         ConvexHullShape convexShape = new ConvexHullShape(vertices);
-        //         CompoundShape.TransformedShape transformedShape = new CompoundShape.TransformedShape(convexShape, JMatrix.Identity,
-        //             position);
-        //         // Console.WriteLine(transformedShape.BoundingBox.Max);
-        //
-        //         // Create a convex shape (e.g., a box) for each mesh
-        //         // ConvexHullShape convexShape = new BoxShape(width, height, depth);
-        //         // convexShape.Position = position;
-        //
-        //         // Add the convex shape to the list
-        //         convexShapes.Add(transformedShape);
-        //     }
-        //
-        //     // Console.WriteLine(convexShapes.Count);
-        //     
-        //     // Create a compound shape from the list of convex shapes
-        //     shape = new CompoundShape(convexShapes);
-        //     
-        //     body = new RigidBody(shape);
-        //     body.Position = new JVector(entity.transform.position.X, entity.transform.position.Y,
-        //         entity.transform.position.Z);
-        //     body.Orientation = JMatrix.CreateFromYawPitchRoll(entity.transform.rotation.Y * RayMath.DEG2RAD,
-        //         entity.transform.rotation.X * RayMath.DEG2RAD, entity.transform.rotation.Z * RayMath.DEG2RAD);
-        //     body.Mass = mass;
-        //     shapeType = ShapeType.MODEL;
-        //
-        //     switch (this.type) {
-        //         case BodyType.DYNAMIC:
-        //             body.IsStatic = false;
-        //             break;
-        //         case BodyType.STATIC:
-        //             body.IsStatic = true;
-        //             break;
-        //     }
-        //
-        //     m_transform = entity.transform;
-        //
-        //     World.world.AddBody(body);
-        //     
-        //     body.EnableDebugDraw = true;
-        // }
-        
         public unsafe RigidBodyComponent(Entity entity, aTexture heightmap, float mass = 1.0f, BodyType type = BodyType.DYNAMIC) {
             this.type = type;
             shapeType = ShapeType.TERRAIN;
@@ -240,27 +174,92 @@ namespace aengine.ecs {
 
             World.world.AddBody(body);
             
-            body.EnableDebugDraw = false;
+            body.EnableDebugDraw = true;
         }
 
-        // public void resetBody(ShapeType shape) {
-        //     RigidBody prev = body;
-        //     prev.Shape.UpdateShape();
-        //     Shape bodyShape;
-        //     
-        //     if (shape == ShapeType.BOX) {
-        //         bodyShape = new BoxShape(new Jitter.LinearMath.JVector(entity.transform.scale.X,
-        //             entity.transform.scale.Y, entity.transform.scale.Z));
-        //     } else if (shape == ShapeType.SPHERE) {
-        //         bodyShape = new SphereShape(entity.transform.scale.X);
-        //     } else if (shape == ShapeType.CAPSULE) {
-        //         bodyShape = new CapsuleShape(entity.transform.scale.X, entity.transform.scale.Y);
-        //     } else if (shape == ShapeType.CYLINDER) {
-        //         bodyShape = new CylinderShape(entity.transform.scale.X, entity.transform.scale.Y);
-        //     } else if (shape == ShapeType.CONE) {
-        //         bodyShape = new ConeShape(entity.transform.scale.Y, entity.transform.scale.X);
-        //     }
-        // }
+        // shape cannot be a model or a heightmap
+        public void setShape(ShapeType shape) {
+            if (shape is ShapeType.BOX) {
+                body.Shape = new BoxShape(vecToJVec(m_transform.scale));
+            } else if (shape is ShapeType.SPHERE) {
+                body.Shape = new SphereShape(m_transform.scale.X);
+            } else if (shape is ShapeType.CAPSULE) {
+                body.Shape = new CapsuleShape(m_transform.scale.X, m_transform.scale.Y);
+            } else if (shape is ShapeType.CYLINDER) {
+                body.Shape = new CylinderShape(m_transform.scale.X, m_transform.scale.Y);
+            } else if (shape is ShapeType.CONE) {
+                body.Shape = new ConeShape(m_transform.scale.X, m_transform.scale.Y);
+            }
+            
+            body.Shape.UpdateShape();
+            shapeType = shape;
+        }
+
+        public unsafe void setModelShape(aModel model) {
+            List<JVector> vertices = new List<JVector>();
+        
+            for (int i = 0; i < model.data.meshCount; i++) {
+                Mesh mesh = model.data.meshes[i];
+                for (int j = 0; j < mesh.vertexCount; j += 3) {
+                    float x = mesh.vertices[j];
+                    float y = mesh.vertices[j + 1];
+                    float z = mesh.vertices[j + 2];
+        
+                    JVector vertex = new JVector(x, y, z);
+                
+                    vertices.Add(vertex);
+                }
+            }
+
+            this.model = model;
+        
+            body.Shape = new ConvexHullShape(vertices);
+            body.Shape.UpdateShape();
+            shapeType = ShapeType.MODEL;
+        }
+
+        public unsafe void setTerrainShape(aTexture heightmap) {
+            this.heightmap = heightmap;
+            
+            Image image = Raylib.LoadImageFromTexture(heightmap.data);
+            float[] heights = new float[image.width * image.height];
+
+            Color* imageData = Raylib.LoadImageColors(image);
+            
+            for (int y = 0; y < image.height; y++)
+            {
+                for (int x = 0; x < image.width; x++)
+                {
+                    // Calculate the index for the current pixel
+                    int index = y * image.width + x;
+
+                    // Get the grayscale value from the pixel
+                    float grayscaleValue = imageData[index].r / 255.0f;
+
+                    // Store the grayscale value as a height (0 to 1)
+                    heights[index] = grayscaleValue;
+                }
+            }
+            
+            float[,] heights2d = new float[image.height, image.width];
+
+            // Populate the 2D array from the flat array
+            for (int y = 0; y < image.height; y++)
+            {
+                for (int x = 0; x < image.width; x++)
+                {
+                    // Assign the value to the 2D array
+                    heights2d[x, y] = heights[y * image.width + x] * m_transform.scale.Y;
+                }
+            }
+
+            shape = new TerrainShape(heights2d, m_transform.scale.X / image.width, m_transform.scale.Z / image.height);
+            
+            Raylib.UnloadImage(image);
+
+            body.Shape.UpdateShape();
+            shapeType = ShapeType.TERRAIN;
+        }
         
         public void setLinearVelocity(Vector3 velocity) {
             body.LinearVelocity = new JVector(velocity.X, velocity.Y, velocity.Z);
@@ -345,7 +344,13 @@ namespace aengine.ecs {
 
         public void render() {
             if (debug) {
-                if (shapeType != ShapeType.TERRAIN) body.DebugDraw(World.debugRenderer);
+                if (World.debugRenderTerrain) {
+                    body.DebugDraw(World.debugRenderer);
+                } else {
+                    if (shapeType != ShapeType.TERRAIN) {
+                        body.DebugDraw(World.debugRenderer);
+                    }  
+                }
             }
         }
 
