@@ -83,6 +83,11 @@ public class ObjectManager
         foreach (var ent in World.entities)
         {
             Rendering.drawCubeWireframe(ent.transform.position, ent.transform.rotation, ent.transform.scale, WHITE);
+            if (ent.hasComponent<RigidBodyComponent>()) {
+                RigidBodyComponent rb = ent.getComponent<RigidBodyComponent>();
+                rb.setPosition(ent.transform.position);
+                rb.setRotation(ent.transform.rotation);
+            }
         }
     }
 

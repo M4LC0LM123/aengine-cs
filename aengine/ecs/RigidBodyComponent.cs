@@ -314,11 +314,19 @@ namespace aengine.ecs {
         }
 
         public void setPosition(float x, float y, float z) {
-            body.Position = new JVector(x, y, z);
+            body.Position = JVector.Zero with {
+                X = x,
+                Y = y,
+                Z = z
+            };
         }
 
         public void setPosition(Vector3 position) {
             body.Position = new JVector(position.X, position.Y, position.Z);
+        }
+
+        public void setRotation(Vector3 rotation) {
+            body.Orientation = JMatrix.CreateFromYawPitchRoll(rotation.Y, rotation.X, rotation.Z);
         }
 
         public void affectedByGravity(bool affected) {
