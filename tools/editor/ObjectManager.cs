@@ -133,10 +133,15 @@ public class ObjectManager
     }
 
     public void save(string name) {
-        string path = Dialog.FileSave().Path.Replace("\\", "/");
+        DialogResult result = Dialog.FileOpen();
+        string path = String.Empty;
+
+        if (result.IsOk) {
+            if (result.Path != null) path = result.Path.Replace("\\", "/");
         
-        if (path != null || path != String.Empty) {
-            Prefab.saveScene(path, name);
+            if (path != null || path != String.Empty) {
+                Prefab.saveScene(path, name);
+            }
         } else {
             Console.WriteLine("cancelled");  
         }
@@ -145,16 +150,23 @@ public class ObjectManager
     public void load(string name) {
         World.entities.Clear();
         
-        string prevDir = Directory.GetCurrentDirectory();
-        string path = Dialog.FileOpen().Path.Replace("\\", "/");
+        string prevDir = String.Empty;
+        if (Directory.GetCurrentDirectory() != null) prevDir = Directory.GetCurrentDirectory();
+
+        DialogResult result = Dialog.FileOpen();
+        string path = String.Empty;
+        if (result.IsOk) {
+            if (result.Path != null) path = result.Path.Replace("\\", "/");
+            
+            string newDir = String.Empty;
+            if (path != null) newDir = Path.GetDirectoryName(path);
         
-        string newDir = Path.GetDirectoryName(path);
+            if (newDir != null) Directory.SetCurrentDirectory(newDir);
         
-        Directory.SetCurrentDirectory(newDir);
-        
-        // Console.WriteLine(path);
-        if (path != null || path != String.Empty) {
-            Prefab.loadScene(path, name, false);
+            // Console.WriteLine(path);
+            if (path != null || path != String.Empty) {
+                Prefab.loadScene(path, name, false);
+            }
         } else {
             Console.WriteLine("cancelled");  
         }

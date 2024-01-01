@@ -19,6 +19,11 @@ public class Prefab {
         ParsedData data = Parser.parse(Parser.read(path));
         ParsedObject obj = data.getObject(name);
 
+        if (obj.modifier != "scene") {
+            Console.WriteLine($"Object {name} isn't a scene");
+            return;
+        }
+
         if (changeDir) {
             string newDir = String.Empty;
         
@@ -45,6 +50,7 @@ public class Prefab {
     public static void saveScene(string path, string name) {
         StringBuilder sceneContent = new StringBuilder();
         
+        sceneContent.AppendLine("#mod scene");
         sceneContent.AppendLine("object " + name + " {");
         
         for (var i = 0; i < World.entities.Count; i++) {
@@ -62,6 +68,9 @@ public class Prefab {
     }
 
     public static void savePrefab(string path, string name, Entity entity, bool clean = true) {
+        using (StreamWriter sw = File.AppendText(path)) {
+            sw.WriteLine("#mod prefab");   
+        }
         saveEntity(path, name, entity, clean);
 
         if (entity.hasComponent<MeshComponent>()) {
@@ -238,65 +247,117 @@ public class Prefab {
         return text;
     }
 
-    public static Entity loadPrefab(string path, string name) {
-        string prevDir = Directory.GetCurrentDirectory();
-        // Console.WriteLine("prev dir: " + prevDir);
+    public static Entity loadPrefab(string path, string name, bool setDir = true) {
+        if (setDir) {
+            string prevDir = Directory.GetCurrentDirectory();
+            // Console.WriteLine("prev dir: " + prevDir);
 
-        ParsedData data = Parser.parse(Parser.read(path));
-        ParsedObject obj = data.getObject(name);
-
-        string newDir = String.Empty;
-        string newPath = String.Empty;
-
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
-            newDir = prevDir + "/" + Path.GetDirectoryName(path).Replace("\\", "/");
-        } else {
-            newDir = prevDir + "\\" + Path.GetDirectoryName(path);
-        }
-        
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
-            newPath = prevDir + "/" + path.Replace("\\", "//");
-        } else {
-            newPath = prevDir + "\\" + path.Replace("/", "\\");
-        }
-        // Console.WriteLine("new dir " + newDir);
-        // Console.WriteLine("new path " + newPath);
-        Directory.SetCurrentDirectory(newDir);
-
-        string tag = obj.getValue<string>("tag");
-
-        Entity result = new Entity(tag);
-
-        float x = obj.getValue<float>("x");
-        float y = obj.getValue<float>("y");
-        float z = obj.getValue<float>("z");
-
-        float width = obj.getValue<float>("width");
-        float height = obj.getValue<float>("height");
-        float depth = obj.getValue<float>("depth");
-
-        float rx = obj.getValue<float>("rx"); // pitch
-        float ry = obj.getValue<float>("ry"); // yaw
-        float rz = obj.getValue<float>("rz"); // roll
-
-        result.transform.position = new Vector3(x, y, z);
-        result.transform.scale = new Vector3(width, height, depth);
-        result.transform.rotation = new Vector3(rx, ry, rz);
-
-        string components = obj.getValue<string>("components");
-        
-        if (components != "") {
-            char separator = ',';
-
-            string[] componentNameArray = components.Split(separator, StringSplitOptions.TrimEntries);
+            ParsedData data = Parser.parse(Parser.read(path));
+            ParsedObject obj = data.getObject(name);
             
-            foreach (string s in componentNameArray) {
-                result.addComponent(m_loadComponent(result, newPath, s));
+            if (obj.modifier != "prefab") {
+                Console.WriteLine($"Object {name} isn't a prefab");
+                return null;
             }
-        }
 
-        Directory.SetCurrentDirectory(prevDir);
-        return result;
+            string newDir = String.Empty;
+            string newPath = String.Empty;
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
+                newDir = prevDir + "/" + Path.GetDirectoryName(path).Replace("\\", "/");
+            } else {
+                newDir = prevDir + "\\" + Path.GetDirectoryName(path);
+            }
+            
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
+                newPath = prevDir + "/" + path.Replace("\\", "//");
+            } else {
+                newPath = prevDir + "\\" + path.Replace("/", "\\");
+            }
+            // Console.WriteLine("new dir " + newDir);
+            // Console.WriteLine("new path " + newPath);
+            Directory.SetCurrentDirectory(newDir);
+
+            string tag = obj.getValue<string>("tag");
+
+            Entity result = new Entity(tag);
+
+            float x = obj.getValue<float>("x");
+            float y = obj.getValue<float>("y");
+            float z = obj.getValue<float>("z");
+
+            float width = obj.getValue<float>("width");
+            float height = obj.getValue<float>("height");
+            float depth = obj.getValue<float>("depth");
+
+            float rx = obj.getValue<float>("rx"); // pitch
+            float ry = obj.getValue<float>("ry"); // yaw
+            float rz = obj.getValue<float>("rz"); // roll
+
+            result.transform.position = new Vector3(x, y, z);
+            result.transform.scale = new Vector3(width, height, depth);
+            result.transform.rotation = new Vector3(rx, ry, rz);
+
+            string components = obj.getValue<string>("components");
+            
+            if (components != "") {
+                char separator = ',';
+
+                string[] componentNameArray = components.Split(separator, StringSplitOptions.TrimEntries);
+                
+                foreach (string s in componentNameArray) {
+                    result.addComponent(m_loadComponent(result, newPath, s));
+                }
+            }
+
+            Directory.SetCurrentDirectory(prevDir);
+            return result;
+        } else {
+
+            ParsedData data = Parser.parse(Parser.read(path));
+            ParsedObject obj = data.getObject(name);
+            
+            if (obj.modifier != "prefab") {
+                Console.WriteLine($"Object {name} isn't a prefab");
+                return null;
+            }
+
+            string tag = obj.getValue<string>("tag");
+
+            Entity result = new Entity(tag);
+
+            float x = obj.getValue<float>("x");
+            float y = obj.getValue<float>("y");
+            float z = obj.getValue<float>("z");
+
+            float width = obj.getValue<float>("width");
+            float height = obj.getValue<float>("height");
+            float depth = obj.getValue<float>("depth");
+
+            float rx = obj.getValue<float>("rx"); // pitch
+            float ry = obj.getValue<float>("ry"); // yaw
+            float rz = obj.getValue<float>("rz"); // roll
+
+            result.transform.position = new Vector3(x, y, z);
+            result.transform.scale = new Vector3(width, height, depth);
+            result.transform.rotation = new Vector3(rx, ry, rz);
+
+            string components = obj.getValue<string>("components");
+            
+            if (components != "") {
+                char separator = ',';
+
+                string[] componentNameArray = components.Split(separator, StringSplitOptions.TrimEntries);
+                
+                foreach (string s in componentNameArray) {
+                    result.addComponent(m_loadComponent(result, path, s));
+                }
+            }
+            
+            return result;
+        }
+        
+        return null;
     }
 
     public static Entity loadEntity(string path, string name) {

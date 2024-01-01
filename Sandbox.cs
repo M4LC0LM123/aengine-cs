@@ -197,6 +197,7 @@ public static class Sandbox {
         //     }
         
         // Main game loop
+        
         while (!WindowShouldClose()) // Detect window close button or ESC key
         {
             Window.tick();
@@ -272,9 +273,9 @@ public static class Sandbox {
 
             if (IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT) && isMouseLocked) {
                 PlaySound(shoot);
-                velocity.X = -camera.raycast.target.X / 5;
-                velocity.Z = -camera.raycast.target.Z / 5;
-                player.getComponent<RigidBodyComponent>().applyImpulse(-camera.raycast.target / 4);
+                velocity.X = -camera.raycast.target.X * 0.2f;
+                velocity.Z = -camera.raycast.target.Z * 0.2f;
+                player.getComponent<RigidBodyComponent>().applyImpulse(-camera.raycast.target * 0.25f);
             }
 
             if (IsKeyPressed(KeyboardKey.KEY_GRAVE)) {

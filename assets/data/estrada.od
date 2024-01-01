@@ -1,3 +1,4 @@
+#mod scene
 object estrada {
     str playa = "estrada.od";
     str floor = "estrada.od";
@@ -8,6 +9,7 @@ object estrada {
     str Entity6 = "estrada.od";
 }
 
+#mod prefab
 object playa {
     str tag = playa;
     
@@ -56,6 +58,7 @@ object playa_rb {
 
     str heightmap = "";
 }
+#mod prefab
 object floor {
     str tag = floor;
     
@@ -104,6 +107,7 @@ object floor_rb {
 
     str heightmap = "";
 }
+#mod prefab
 object Entity2 {
     str tag = Entity2;
     
@@ -152,6 +156,7 @@ object Entity2_rb {
 
     str heightmap = "";
 }
+#mod prefab
 object Entity3 {
     str tag = Entity3;
     
@@ -200,6 +205,7 @@ object Entity3_rb {
 
     str heightmap = "";
 }
+#mod prefab
 object Entity4 {
     str tag = Entity4;
     
@@ -236,6 +242,7 @@ object Entity4_mesh {
 
     i32 scale = 1;    
 }
+#mod prefab
 object Entity5 {
     str tag = Entity5;
     
@@ -272,6 +279,7 @@ object Entity5_mesh {
 
     i32 scale = 1;    
 }
+#mod prefab
 object Entity6 {
     str tag = Entity6;
     
@@ -311,9 +319,9 @@ object Entity6_mesh {
 object Entity6_rb {
     str type = "RigidBodyComponent";
     
-    f32 mass = 9912.788;
+    f32 mass = 1;
 
-    i32 shape = 6;
+    i32 shape = 5;
     i32 body_type = 1;
 
     str model = "";

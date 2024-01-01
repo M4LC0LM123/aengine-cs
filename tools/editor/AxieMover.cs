@@ -2,6 +2,7 @@ using System.Numerics;
 using aengine.ecs;
 using aengine.graphics;
 using Raylib_CsLo;
+using Sandbox.aengine.Gui;
 using static Raylib_CsLo.Raylib;
 
 namespace Editor;
@@ -27,6 +28,12 @@ public class AxieMover
     public static Mode CURRENT_MODE = Mode.ROAM;
     public static CameraMode CAMERA_MODE = CameraMode.FPS;
 
+    public static bool xMoving = false;
+    public static bool yMoving = false;
+    public static bool zMoving = false;
+    
+    private static Vector3 xColl = Vector3.Zero;
+
     public void update(Camera camera)
     {
         MOUSE_RAY = GetMouseRay(GetMousePosition(), camera.matrix);
@@ -36,7 +43,7 @@ public class AxieMover
 
         if (IS_OBJ_ACTIVE)
         {
-            if (IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT))
+            if (IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT) && !Gui.isMouseOver())
             {
                 if (collisionX.hit && CAMERA_MODE != CameraMode.ZY) {
                     if (CURRENT_MODE == Mode.MOVE) position.X = collisionX.point.X - lengthX;
@@ -123,7 +130,10 @@ public class AxieMover
 
     public void render()
     {
-        if (IS_OBJ_ACTIVE) Utils.drawAxiesArrows(position, lengthX, lengthY, lengthZ, AXIES_RADIUS);
+        if (IS_OBJ_ACTIVE && CURRENT_MODE is Mode.MOVE) 
+            Utils.drawAxiesArrows(position, lengthX, lengthY, lengthZ, AXIES_RADIUS);
+        if (IS_OBJ_ACTIVE) 
+            Rendering.drawCubeWireframe(ACTIVE_ENT.transform.position, ACTIVE_ENT.transform.rotation, ACTIVE_ENT.transform.scale, YELLOW);
     }
     
 }

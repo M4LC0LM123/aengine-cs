@@ -1,8 +1,10 @@
 ﻿using System.Numerics;
+using aengine_cs.aengine.parser;
 using aengine_cs.aengine.windowing;
 using aengine.ecs;
 using aengine.graphics;
 using aengine.graphics;
+using NativeFileDialogSharp;
 using Raylib_CsLo;
 using Sandbox.aengine.Gui;
 using static Raylib_CsLo.Raylib;
@@ -31,10 +33,10 @@ namespace Editor
 
             ObjectManager manager = new ObjectManager();
 
-            GuiWindow infoWindow = new GuiWindow("Editor", 0, 0, 200, 200);
+            GuiWindow infoWindow = new GuiWindow("Editor", 0, 0, 180, 300);
             
             GuiWindow entityDataWindow = new GuiWindow("Entity data", 0, 110 + Gui.topBarHeight, 400, 300);
-            GuiWindow saveAndLoadWindow = new GuiWindow("Open or save", 0, 410 + Gui.topBarHeight, 150, 125);
+            GuiWindow saveAndLoadWindow = new GuiWindow("Open or save", 0, 410 + Gui.topBarHeight, 150, 150);
             saveAndLoadWindow.active = false;
             GuiTextBox sceneName = new GuiTextBox();
             sceneName.text = "scene";
@@ -44,6 +46,10 @@ namespace Editor
             
             GuiWindow componentWindow = new GuiWindow("Component info", 100, 230, 300, 250);
             componentWindow.active = false;
+
+            GuiWindow prefabWindow = new GuiWindow("Prefabs", 100, 300, 300, 400);
+            prefabWindow.active = false;
+            string prefabDir = String.Empty;
             
             // Main game loop
             while (!WindowShouldClose()) // Detect window close button or ESC key
@@ -172,18 +178,6 @@ namespace Editor
                 
                 mover.update(camera);
 
-                if (IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) && IsKeyPressed(KeyboardKey.KEY_SPACE)) {
-                    if (AxieMover.CAMERA_MODE is CameraMode.FPS) {
-                        Entity temp = new Entity();
-                        temp.transform.position = camera.position;
-                        temp.transform.scale = Vector3.One;
-                    } else {
-                        Entity temp = new Entity();
-                        temp.transform.position = camera.target;
-                        temp.transform.scale = Vector3.One;  
-                    }
-                }
-
                 if (AxieMover.IS_OBJ_ACTIVE) {
                     if (IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) && IsKeyPressed(KeyboardKey.KEY_D)) {
                         Entity newEnt = new Entity();
@@ -194,11 +188,13 @@ namespace Editor
                         };
                         newEnt.transform.scale = AxieMover.ACTIVE_ENT.transform.scale;
                         newEnt.transform.rotation = AxieMover.ACTIVE_ENT.transform.rotation;
-                        newEnt.components = AxieMover.ACTIVE_ENT.components;
-                    } 
+                        newEnt.components = new List<Component>(AxieMover.ACTIVE_ENT.components);
+                        
+                        AxieMover.ACTIVE_ENT = newEnt;
+                    }
+                } else {
+                    EditorComponentData.activeComponent = null;
                 }
-
-                // Console.WriteLine($"{Gui.isMouseOver()}, {Gui.windows.Count}");
                 
                 Window.beginRender();
                 ClearBackground(BLACK);
@@ -234,9 +230,13 @@ namespace Editor
                     mover.render();
 
                 EndMode3D();
-                
-                infoWindow.render();
 
+                infoWindow.render();
+                saveAndLoadWindow.render();
+                componentListWindow.render();
+                componentWindow.render();
+                prefabWindow.render();
+                
                 if (infoWindow.active) {
                     Gui.GuiTextPro(GetFontDefault(), 
                         "fps: " + GetFPS(), 
@@ -249,7 +249,7 @@ namespace Editor
                 
                     Gui.GuiTextPro(GetFontDefault(), "entities: " + World.entities.Count, new Vector2(10, 50), 20, WHITE, infoWindow);
 
-                    if (Gui.GuiButton("Save/Load", 10, 80, 150, 30, infoWindow)) {
+                    if (Gui.GuiButton("Scene", 10, 80, 150, 30, infoWindow)) {
                         saveAndLoadWindow.active = true;   
                     }
 
@@ -258,12 +258,67 @@ namespace Editor
                     }
 
                     World.debugRenderTerrain = Gui.GuiTickBox(World.debugRenderTerrain, 10, 160, 30, 30, infoWindow);
-                    // Console.WriteLine(World.debugRenderTerrain);
+                    Gui.GuiTextPro(GetFontDefault(), "debug terrain", 50, 160, 15, WHITE, infoWindow);
+                    
+                    if (Gui.GuiButton("Add new", 10, 200, 150, 30, infoWindow)) {
+                        if (AxieMover.CAMERA_MODE is CameraMode.FPS) {
+                            Entity temp = new Entity();
+                            temp.transform.position = camera.position;
+                            temp.transform.scale = Vector3.One;
+                        } else {
+                            Entity temp = new Entity();
+                            temp.transform.position = camera.target;
+                            temp.transform.scale = Vector3.One;  
+                        }
+                    }
+
+                    if (Gui.GuiButton("Prefabs", 10, 240, 150, 30, infoWindow)) {
+                        prefabWindow.active = true;
+                    }
                 }
 
-                saveAndLoadWindow.render();
-                componentListWindow.render();
-                componentWindow.render();
+                if (prefabWindow.active) {
+                    if (Gui.GuiButton("Open directory", 10, 10, 280, 30, prefabWindow)) {
+                        DialogResult result = Dialog.FolderPicker();
+                        if (result.IsOk) {
+                            prefabDir = result.Path.Replace("\\", "/");
+                            // Console.WriteLine(path);
+                        } else {
+                            Console.WriteLine("cancelled");
+                        }
+                    }
+                    
+                    if (prefabDir != String.Empty) {
+                        string[] files = Directory.GetFiles(prefabDir);
+
+                        int columns = 9;
+                        
+                        int rows = (int)Math.Ceiling((double)files.Length / columns);
+                        int width = 25;
+                        int height = 25;
+
+                        for (int row = 0; row < rows; row++) {
+                            for (int col = 0; col < columns; col++) {
+                                int currentIndex = row * columns + col;
+                                if (currentIndex < files.Length) {
+                                    float x = 10 + col * (width + 10); // Adjust spacing between rectangles
+                                    float y = 50 + row * (height + 10); // Adjust spacing between rectangles
+                                    files[currentIndex] = files[currentIndex].Replace("\\", "/");
+                                    if (files[currentIndex].EndsWith(".od")) {
+                                        if (Gui.GuiButton("#", x, y, width, height, prefabWindow)) {
+                                            Console.WriteLine(files[currentIndex]);
+                                            ParsedData data = Parser.parse(Parser.read(files[currentIndex]));
+                                            
+                                            foreach (string name in data.data.Keys) {
+                                                Prefab.loadPrefab(files[currentIndex], name, false);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 
                 if (saveAndLoadWindow.active) {
                     sceneName.render(10, 10, 120, 25, saveAndLoadWindow);
@@ -271,8 +326,15 @@ namespace Editor
                     if (Gui.GuiButton("Save", 10, 45, 60, 25, saveAndLoadWindow)) {
                         manager.save(sceneName.text);
                     }
+                    
                     if (Gui.GuiButton("Load", 10, 80, 60, 25, saveAndLoadWindow)) {
                         manager.load(sceneName.text);
+                    }
+
+                    if (Gui.GuiButton("Clean", 10, 115, 60, 25, saveAndLoadWindow)) {
+                        World.entities.Clear();
+                        AxieMover.ACTIVE_ENT = null;
+                        AxieMover.IS_OBJ_ACTIVE = false;
                     }
                 }
 
@@ -336,6 +398,10 @@ namespace Editor
                                 componentWindow.active = true;
                                 componentWindow.title = AxieMover.ACTIVE_ENT.components[i].fileName();
                                 EditorComponentData.setComponent(AxieMover.ACTIVE_ENT.components[i]);
+                            }
+
+                            if (Gui.GuiInteractiveRec(new ExitIcon(), 270, 115 + i * 35, 30, 30, IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT), entityDataWindow)) {
+                                AxieMover.ACTIVE_ENT.components.RemoveAt(i);
                             }
                         }
 

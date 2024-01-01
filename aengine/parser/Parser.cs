@@ -16,15 +16,17 @@ public class Parser {
     private static string BOOL_CHAR          = "bool";
     
     public static ParsedData parse(string[] fileContent) {
-        var objects = new Dictionary<string, Dictionary<string, object>>();
+        var objects = new Dictionary<string, ParsedObject>();
         string currentObjectName = null;
-        Dictionary<string, object> currentObject = null;
+        ParsedObject currentObject = null;
         Dictionary<string, object> macros = new Dictionary<string, object>();
         bool isInComment = false;
         bool openingBraceFound = false;
         
         for (int i = 0; i < fileContent.Length; i++) {
             string trimmedLine = fileContent[i].Trim();
+            string lineBehind = String.Empty;
+            if (i - 1 > -1) lineBehind = fileContent[(i - 1) % fileContent.Length].Trim();
             string lineInFront = fileContent[(i + 1) % fileContent.Length].Trim();
 
             if (string.IsNullOrEmpty(trimmedLine) || 
@@ -80,8 +82,16 @@ public class Parser {
 
                 Match match = Regex.Match(trimmedLine, @"object (\w+)");
                 currentObjectName = match.Groups[1].Value;
-                currentObject = new Dictionary<string, object>();
+                currentObject = new ParsedObject(new Dictionary<string, object>(), String.Empty);
                 openingBraceFound = true;
+                
+                if (lineBehind.StartsWith("#mod ")) {
+                    Match match2 = Regex.Match(lineBehind, @"#mod (\w+)");
+                
+                    if (match2.Success) {
+                        currentObject.modifier = match2.Groups[1].Value;
+                    }
+                }
             } else if (trimmedLine == "}") {
                 if (!openingBraceFound) {
                     throw new Exception(
@@ -109,14 +119,14 @@ public class Parser {
                     }
                     
                     if (dataType == INT_CHAR || dataType == I32_CHAR) {
-                        currentObject[attribute] = int.Parse(value);
+                        currentObject.data[attribute] = int.Parse(value);
                     } else if (dataType == FLOAT_CHAR || dataType == F32_CHAR) {
-                        currentObject[attribute] = float.Parse(value, 
+                        currentObject.data[attribute] = float.Parse(value, 
                             CultureInfo.InvariantCulture);
                     } else if (dataType == BOOL_CHAR) {
-                        currentObject[attribute] = bool.Parse(value);
+                        currentObject.data[attribute] = bool.Parse(value);
                     } else if (dataType == STRING_CHAR || dataType == STR_CHAR) {
-                        currentObject[attribute] = value.Trim('"');
+                        currentObject.data[attribute] = value.Trim('"');
                     }
                 }
             }

@@ -159,7 +159,6 @@ namespace aengine.ecs {
             body.Orientation = JMatrix.CreateFromYawPitchRoll(entity.transform.rotation.Y * RayMath.DEG2RAD,
                 entity.transform.rotation.X * RayMath.DEG2RAD, entity.transform.rotation.Z * RayMath.DEG2RAD);
             body.Mass = mass;
-            shapeType = ShapeType.MODEL;
 
             switch (this.type) {
                 case BodyType.DYNAMIC:
