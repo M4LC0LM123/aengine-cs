@@ -82,7 +82,7 @@ public class Parser {
 
                 Match match = Regex.Match(trimmedLine, @"object (\w+)");
                 currentObjectName = match.Groups[1].Value;
-                currentObject = new ParsedObject(new Dictionary<string, object>(), String.Empty);
+                currentObject = new ParsedObject(new Dictionary<string, object>(), "default");
                 openingBraceFound = true;
                 
                 if (lineBehind.StartsWith("#mod ")) {

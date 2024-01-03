@@ -50,6 +50,10 @@ namespace Editor
             GuiWindow prefabWindow = new GuiWindow("Prefabs", 100, 300, 300, 400);
             prefabWindow.active = false;
             string prefabDir = String.Empty;
+
+            GuiWindow prefabSpawnWindow = new GuiWindow("Prefab properties", 150, 320);
+            prefabSpawnWindow.active = false;
+            string loadDir = String.Empty;
             
             // Main game loop
             while (!WindowShouldClose()) // Detect window close button or ESC key
@@ -236,6 +240,7 @@ namespace Editor
                 componentListWindow.render();
                 componentWindow.render();
                 prefabWindow.render();
+                prefabSpawnWindow.render();
                 
                 if (infoWindow.active) {
                     Gui.GuiTextPro(GetFontDefault(), 
@@ -306,16 +311,42 @@ namespace Editor
                                     files[currentIndex] = files[currentIndex].Replace("\\", "/");
                                     if (files[currentIndex].EndsWith(".od")) {
                                         if (Gui.GuiButton("#", x, y, width, height, prefabWindow)) {
-                                            Console.WriteLine(files[currentIndex]);
                                             ParsedData data = Parser.parse(Parser.read(files[currentIndex]));
                                             
                                             foreach (string name in data.data.Keys) {
-                                                Prefab.loadPrefab(files[currentIndex], name, false);
+                                                prefabSpawnWindow.active = true;
+                                                loadDir = files[currentIndex];
                                             }
                                         }
                                     }
                                 }
                             }
+                        }
+                    }
+                }
+
+                if (prefabSpawnWindow.active) {
+                    ParsedData data = Parser.parse(Parser.read(loadDir));
+                    
+                    for (var i = 0; i < data.data.Keys.Count; i++) {
+                        Gui.GuiTextPro(GetFontDefault(),
+                            data.data.Keys.ElementAt(i) + " - " +
+                            data.getObject(data.data.Keys.ElementAt(i)).modifier, 10, 10 + i * 30, 15, WHITE,
+                            prefabSpawnWindow);
+
+                        if (Gui.GuiButton("x", 10 + MeasureTextEx(GetFontDefault(), data.data.Keys.ElementAt(i) +
+                                    " - " +
+                                    data.getObject(data.data.Keys.ElementAt(i)).modifier, 15, 2.5f).X, 10 + i * 30, 15, 15,
+                                prefabSpawnWindow)) {
+                            Prefab.loadPrefab(loadDir, data.data.Keys.ElementAt(i), true, false);
+                        }
+                        
+                        prefabSpawnWindow.rec.height = i * 30 + 50;
+                    }
+
+                    if (Gui.GuiButton("Go", prefabSpawnWindow.rec.width - 50, 10, 40, 40, prefabSpawnWindow)) {
+                        foreach (string name in data.data.Keys) {
+                            Prefab.loadPrefab(loadDir, name, false, false);
                         }
                     }
                 }

@@ -247,7 +247,7 @@ public class Prefab {
         return text;
     }
 
-    public static Entity loadPrefab(string path, string name, bool setDir = true) {
+    public static Entity loadPrefab(string path, string name, bool posZero = false, bool setDir = true) {
         if (setDir) {
             string prevDir = Directory.GetCurrentDirectory();
             // Console.WriteLine("prev dir: " + prevDir);
@@ -282,9 +282,15 @@ public class Prefab {
 
             Entity result = new Entity(tag);
 
-            float x = obj.getValue<float>("x");
-            float y = obj.getValue<float>("y");
-            float z = obj.getValue<float>("z");
+            float x = 0;
+            float y = 0;
+            float z = 0;
+
+            if (!posZero) {
+                x = obj.getValue<float>("x");
+                y = obj.getValue<float>("y");
+                z = obj.getValue<float>("z");
+            }
 
             float width = obj.getValue<float>("width");
             float height = obj.getValue<float>("height");
@@ -325,10 +331,16 @@ public class Prefab {
             string tag = obj.getValue<string>("tag");
 
             Entity result = new Entity(tag);
+            
+            float x = 0;
+            float y = 0;
+            float z = 0;
 
-            float x = obj.getValue<float>("x");
-            float y = obj.getValue<float>("y");
-            float z = obj.getValue<float>("z");
+            if (!posZero) {
+                x = obj.getValue<float>("x");
+                y = obj.getValue<float>("y");
+                z = obj.getValue<float>("z");
+            }
 
             float width = obj.getValue<float>("width");
             float height = obj.getValue<float>("height");
