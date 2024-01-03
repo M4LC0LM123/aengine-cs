@@ -28,19 +28,34 @@ namespace aengine.ecs
         public static DebugRenderer debugRenderer = new DebugRenderer();
         public static bool usePhysics = true;
 
+        private static float fixedTimeStep = 1.0f / 60.0f;
+        private static float accumulator = 0.0f;
+
         public static void removeEntity(Entity entity)
         {
             entities.Remove(entity);
         }
 
-        public static void update(bool physics = true, bool multithread = false)
-        {
-            if(physics) world.Step(Raylib.GetFrameTime(), multithread);
-            usePhysics = physics;
+        public static void update(bool physics = true, bool multithread = false) {
+            fixedUpdate(physics, multithread);
             
             int len = entities.Count;
             for (int i = 0; i < len; i++)
                 entities[i].update();
+        }
+
+        private static void fixedUpdate(bool physics = true, bool multithread = false) {
+            float deltaTime = Raylib.GetFrameTime();
+            
+            accumulator += deltaTime;
+            
+            while (accumulator >= fixedTimeStep) {
+                world.Step(fixedTimeStep, multithread);
+                
+                accumulator -= fixedTimeStep;
+            }
+
+            usePhysics = physics;
         }
 
         public static void render()

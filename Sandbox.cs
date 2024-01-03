@@ -201,6 +201,7 @@ public static class Sandbox {
         while (!WindowShouldClose()) // Detect window close button or ESC key
         {
             Window.tick();
+            // World.fixedUpdate();
             World.update();
 
             if (IsKeyPressed(KeyboardKey.KEY_ESCAPE))

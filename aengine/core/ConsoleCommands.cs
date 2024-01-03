@@ -53,26 +53,50 @@ public class ConsoleCommands {
     }
 
     public static void setWidth(Console console, string[] args) {
-        if (Int32.TryParse(console.commandInput.text.Remove(0, 10), out int width)) {
+        if (Int32.TryParse(console.commandInput.text.Remove(0, 7), out int width)) {
             Raylib.SetWindowSize(width, Raylib.GetScreenHeight());
             
             console.print($"set the width to {width}");
         }
         else {
-            console.print(aengine.QUOTE + console.commandInput.text.Remove(0, 10) + aengine.QUOTE + "is not a number");
-            console.print($"example usage of {aengine.QUOTE}set_width{aengine.QUOTE}: set_width 800");
+            console.print(aengine.QUOTE + console.commandInput.text.Remove(0, 7) + aengine.QUOTE + "is not a number");
+            console.print($"example usage of {aengine.QUOTE}w_width{aengine.QUOTE}: w_width 800");
         }
     }
     
     public static void setHeight(Console console, string[] args) {
-        if (Int32.TryParse(console.commandInput.text.Remove(0, 11), out int height)) {
+        if (Int32.TryParse(console.commandInput.text.Remove(0, 8), out int height)) {
             Raylib.SetWindowSize(Raylib.GetScreenWidth(), height);
             
             console.print($"set the height to {height}");
         }
         else {
-            console.print(aengine.QUOTE + console.commandInput.text.Remove(0, 11) + aengine.QUOTE + "is not a number");
-            console.print($"example usage of {aengine.QUOTE}set_height{aengine.QUOTE}: set_height 600");
+            console.print(aengine.QUOTE + console.commandInput.text.Remove(0, 8) + aengine.QUOTE + "is not a number");
+            console.print($"example usage of {aengine.QUOTE}w_height{aengine.QUOTE}: w_height 600");
+        }
+    }
+    
+    public static void setRenderWidth(Console console, string[] args) {
+        if (Int32.TryParse(console.commandInput.text.Remove(0, 15), out int width)) {
+            Window.setResolution(width, Window.renderHeight);
+            
+            console.print($"set the width to {width}");
+        }
+        else {
+            console.print(aengine.QUOTE + console.commandInput.text.Remove(0, 15) + aengine.QUOTE + "is not a number");
+            console.print($"example usage of {aengine.QUOTE}w_render_width{aengine.QUOTE}: w_render_width 800");
+        }
+    }
+    
+    public static void setRenderHeight(Console console, string[] args) {
+        if (Int32.TryParse(console.commandInput.text.Remove(0, 16), out int height)) {
+            Window.setResolution(Window.renderWidth, height);
+            
+            console.print($"set the height to {height}");
+        }
+        else {
+            console.print(aengine.QUOTE + console.commandInput.text.Remove(0, 16) + aengine.QUOTE + "is not a number");
+            console.print($"example usage of {aengine.QUOTE}w_render_height{aengine.QUOTE}: w_render_height 600");
         }
     }
 

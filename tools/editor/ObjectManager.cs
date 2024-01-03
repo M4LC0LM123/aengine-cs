@@ -53,6 +53,17 @@ public class ObjectManager
                     ent.selected = true;
                     mover.position = ent.transform.position;
                     AxieMover.ACTIVE_ENT = ent;
+                    Editor.xPos.text = MathF.Round(ent.transform.position.X, 2).ToString();
+                    Editor.yPos.text = MathF.Round(ent.transform.position.Y, 2).ToString();
+                    Editor.zPos.text = MathF.Round(ent.transform.position.Z, 2).ToString();
+                    
+                    Editor.xScale.text = MathF.Round(ent.transform.scale.X, 2).ToString();
+                    Editor.yScale.text = MathF.Round(ent.transform.scale.Y, 2).ToString();
+                    Editor.zScale.text = MathF.Round(ent.transform.scale.Z, 2).ToString();
+                    
+                    Editor.xRot.text = MathF.Round(ent.transform.rotation.X, 2).ToString();
+                    Editor.yRot.text = MathF.Round(ent.transform.rotation.Y, 2).ToString();
+                    Editor.zRot.text = MathF.Round(ent.transform.rotation.Z, 2).ToString();
                 }
             }
 

@@ -7,6 +7,7 @@ object estrada {
     str Entity4 = "estrada.od";
     str Entity5 = "estrada.od";
     str Entity6 = "estrada.od";
+    str Entity7 = "estrada.od";
 }
 
 #mod prefab
@@ -286,10 +287,10 @@ object Entity6 {
     f32 x = -15.875747;
     f32 y = -11.86124;
     f32 z = -35.94369;
-
-    f32 width = 32.077744;
-    f32 height = 18.455898;
-    f32 depth = 16.743908;
+        
+    f32 width = 32.08;
+    f32 height = 18.46;
+    f32 depth = 16.74;
 
     f32 rx = 0; // rotation x (pitch)
     f32 ry = 0; // rotation y (yaw)
@@ -303,13 +304,13 @@ object Entity6_mesh {
     i32 shape = 5;
 
     i32 r = 255;
-    i32 g = 255;
+    i32 g = 0;
     i32 b = 255;
     i32 a = 255;
 
     bool isModel = true;
 
-    str texture = "assets/normal.png";
+    str texture = "../albedo.png";
     str model = "";
 
     str heightmap = "assets/heightmap.png";
@@ -327,4 +328,53 @@ object Entity6_rb {
     str model = "";
 
     str heightmap = "assets/heightmap.png";
+}
+#mod prefab
+object Entity7 {
+    str tag = Entity7;
+    
+    f32 x = 0.92;
+    f32 y = 10.17;
+    f32 z = 4.68;
+
+    f32 width = 1;
+    f32 height = 1;
+    f32 depth = 1;
+
+    f32 rx = 0; // rotation x (pitch)
+    f32 ry = 0; // rotation y (yaw)
+    f32 rz = 0; // rotation z (roll)
+
+    str components = "Entity7_mesh, Entity7_rb";
+}
+object Entity7_mesh {
+    str type = "MeshComponent";
+
+    i32 shape = 0;
+
+    i32 r = 255;
+    i32 g = 255;
+    i32 b = 255;
+    i32 a = 255;
+
+    bool isModel = true;
+
+    str texture = "assets/logo.png";
+    str model = "";
+
+    str heightmap = "";
+
+    i32 scale = 1;    
+}
+object Entity7_rb {
+    str type = "RigidBodyComponent";
+    
+    f32 mass = 1;
+
+    i32 shape = 0;
+    i32 body_type = 0;
+
+    str model = "";
+
+    str heightmap = "";
 }

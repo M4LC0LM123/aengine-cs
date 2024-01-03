@@ -281,6 +281,14 @@ public class Prefab {
             string tag = obj.getValue<string>("tag");
 
             Entity result = new Entity(tag);
+            
+            foreach (var entity in World.entities) {
+                if (result != entity) {
+                    if (result.tag == entity.tag) {
+                        result.tag += World.entities.Count;
+                    }
+                }
+            }
 
             float x = 0;
             float y = 0;
@@ -331,6 +339,14 @@ public class Prefab {
             string tag = obj.getValue<string>("tag");
 
             Entity result = new Entity(tag);
+            
+            foreach (var entity in World.entities) {
+                if (result != entity) {
+                    if (result.tag == entity.tag) {
+                        result.tag = result.tag + World.entities.Count;
+                    }
+                }
+            }
             
             float x = 0;
             float y = 0;

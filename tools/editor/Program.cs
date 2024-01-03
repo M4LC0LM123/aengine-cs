@@ -13,6 +13,18 @@ namespace Editor
 {
     public class Editor
     {
+        public static GuiTextBox xPos = new GuiTextBox();
+        public static GuiTextBox yPos = new GuiTextBox();
+        public static GuiTextBox zPos = new GuiTextBox();
+        
+        public static GuiTextBox xScale = new GuiTextBox();
+        public static GuiTextBox yScale = new GuiTextBox();
+        public static GuiTextBox zScale = new GuiTextBox();
+        
+        public static GuiTextBox xRot = new GuiTextBox();
+        public static GuiTextBox yRot = new GuiTextBox();
+        public static GuiTextBox zRot = new GuiTextBox();
+        
         public static void main()
         {
             Directory.SetCurrentDirectory("../../../");
@@ -54,7 +66,7 @@ namespace Editor
             GuiWindow prefabSpawnWindow = new GuiWindow("Prefab properties", 150, 320);
             prefabSpawnWindow.active = false;
             string loadDir = String.Empty;
-            
+
             // Main game loop
             while (!WindowShouldClose()) // Detect window close button or ESC key
             {
@@ -243,16 +255,16 @@ namespace Editor
                 prefabSpawnWindow.render();
                 
                 if (infoWindow.active) {
-                    Gui.GuiTextPro(GetFontDefault(), 
+                    Gui.GuiTextPro(Gui.font, 
                         "fps: " + GetFPS(), 
                         new Vector2(10, 10),
                         20, WHITE, infoWindow);
 
-                    Gui.GuiTextPro(GetFontDefault(), "mode: " + AxieMover.CURRENT_MODE, 
+                    Gui.GuiTextPro(Gui.font, "mode: " + AxieMover.CURRENT_MODE, 
                         new Vector2(10, 30), 
                         20, WHITE, infoWindow);
                 
-                    Gui.GuiTextPro(GetFontDefault(), "entities: " + World.entities.Count, new Vector2(10, 50), 20, WHITE, infoWindow);
+                    Gui.GuiTextPro(Gui.font, "entities: " + World.entities.Count, new Vector2(10, 50), 20, WHITE, infoWindow);
 
                     if (Gui.GuiButton("Scene", 10, 80, 150, 30, infoWindow)) {
                         saveAndLoadWindow.active = true;   
@@ -263,7 +275,7 @@ namespace Editor
                     }
 
                     World.debugRenderTerrain = Gui.GuiTickBox(World.debugRenderTerrain, 10, 160, 30, 30, infoWindow);
-                    Gui.GuiTextPro(GetFontDefault(), "debug terrain", 50, 160, 15, WHITE, infoWindow);
+                    Gui.GuiTextPro(Gui.font, "debug terrain", 50, 160, 15, WHITE, infoWindow);
                     
                     if (Gui.GuiButton("Add new", 10, 200, 150, 30, infoWindow)) {
                         if (AxieMover.CAMERA_MODE is CameraMode.FPS) {
@@ -329,12 +341,12 @@ namespace Editor
                     ParsedData data = Parser.parse(Parser.read(loadDir));
                     
                     for (var i = 0; i < data.data.Keys.Count; i++) {
-                        Gui.GuiTextPro(GetFontDefault(),
+                        Gui.GuiTextPro(Gui.font,
                             data.data.Keys.ElementAt(i) + " - " +
                             data.getObject(data.data.Keys.ElementAt(i)).modifier, 10, 10 + i * 30, 15, WHITE,
                             prefabSpawnWindow);
 
-                        if (Gui.GuiButton("x", 10 + MeasureTextEx(GetFontDefault(), data.data.Keys.ElementAt(i) +
+                        if (Gui.GuiButton("x", 10 + MeasureTextEx(Gui.font, data.data.Keys.ElementAt(i) +
                                     " - " +
                                     data.getObject(data.data.Keys.ElementAt(i)).modifier, 15, 2.5f).X, 10 + i * 30, 15, 15,
                                 prefabSpawnWindow)) {
@@ -371,10 +383,18 @@ namespace Editor
 
                 if (componentListWindow.active) {
                     if (Gui.GuiButton("MeshComponent", 10, 10, 250, 30, componentListWindow, TextPositioning.LEFT)) {
-                        AxieMover.ACTIVE_ENT.addComponent(new MeshComponent(AxieMover.ACTIVE_ENT, ShapeType.BOX, WHITE));
+                        if (!AxieMover.ACTIVE_ENT.hasComponent<MeshComponent>()) {
+                            AxieMover.ACTIVE_ENT.addComponent(new MeshComponent(AxieMover.ACTIVE_ENT, ShapeType.BOX, WHITE));
+                        } else {
+                            Console.WriteLine("Already has a mesh component");
+                        }
                     }
                     if (Gui.GuiButton("RigidBodyComponent", 10, 50, 250, 30, componentListWindow, TextPositioning.LEFT)) {
-                        AxieMover.ACTIVE_ENT.addComponent(new RigidBodyComponent(AxieMover.ACTIVE_ENT));
+                        if (!AxieMover.ACTIVE_ENT.hasComponent<RigidBodyComponent>()) {
+                            AxieMover.ACTIVE_ENT.addComponent(new RigidBodyComponent(AxieMover.ACTIVE_ENT));
+                        } else {
+                            Console.WriteLine("Already has a rigidbody component");
+                        }
                     }
                     if (Gui.GuiButton("LightComponent", 10, 90, 250, 30, componentListWindow, TextPositioning.LEFT)) {
                         
@@ -398,45 +418,74 @@ namespace Editor
                     entityDataWindow.render();
 
                     if (entityDataWindow.active) {
-                        Gui.GuiTextPro(GetFontDefault(), "tag: " + AxieMover.ACTIVE_ENT.tag, 
+                        Gui.GuiTextPro(Gui.font, "tag: " + AxieMover.ACTIVE_ENT.tag, 
                             new Vector2(10, 10), 
                             20, WHITE, entityDataWindow);
-                    
-                        Gui.GuiTextPro(GetFontDefault(), "position: " + Utils.roundVectorDecimals(AxieMover.ACTIVE_ENT.transform.position, 2), 
-                            new Vector2(10, 30), 
-                            20, WHITE, entityDataWindow);
+
+                        xPos.render(10, 40, 60, 20, entityDataWindow);
+                        yPos.render(85, 40, 60, 20, entityDataWindow);
+                        zPos.render(160, 40, 60, 20, entityDataWindow);
                         
-                        Gui.GuiTextPro(GetFontDefault(), "scale: " + AxieMover.ACTIVE_ENT.transform.scale, 
-                            new Vector2(10, 50),
-                            20, WHITE, entityDataWindow);
+                        xScale.render(10, 65, 60, 20, entityDataWindow);
+                        yScale.render(85, 65, 60, 20, entityDataWindow);
+                        zScale.render(160, 65, 60, 20, entityDataWindow);
                         
-                        Gui.GuiTextPro(GetFontDefault(), "rotation: " + AxieMover.ACTIVE_ENT.transform.rotation, 
-                            new Vector2(10, 70), 
-                            20, WHITE, entityDataWindow);
-                        
+                        xRot.render(10, 90, 60, 20, entityDataWindow);
+                        yRot.render(85, 90, 60, 20, entityDataWindow);
+                        zRot.render(160, 90, 60, 20, entityDataWindow);
+
+                        if (AxieMover.CURRENT_MODE != Mode.MOVE) {
+                            if (float.TryParse(xPos.text, out float x))
+                                AxieMover.ACTIVE_ENT.transform.position.X = x;
+                            if (float.TryParse(yPos.text, out float y))
+                                AxieMover.ACTIVE_ENT.transform.position.Y = y;
+                            if (float.TryParse(zPos.text, out float z))
+                                AxieMover.ACTIVE_ENT.transform.position.Z = z;
+                        }
+
+                        if (AxieMover.CURRENT_MODE != Mode.SCALE) {
+                            if (float.TryParse(xScale.text, out float w))
+                                AxieMover.ACTIVE_ENT.transform.scale.X = w;
+                            if (float.TryParse(yScale.text, out float h))
+                                AxieMover.ACTIVE_ENT.transform.scale.Y = h;
+                            if (float.TryParse(zScale.text, out float d))
+                                AxieMover.ACTIVE_ENT.transform.scale.Z = d;
+                        }
+
+                        if (AxieMover.CURRENT_MODE != Mode.ROTATE) {
+                            if (float.TryParse(xRot.text, out float rx))
+                                AxieMover.ACTIVE_ENT.transform.rotation.X = rx;
+                            if (float.TryParse(yRot.text, out float ry))
+                                AxieMover.ACTIVE_ENT.transform.rotation.Y = ry;
+                            if (float.TryParse(zRot.text, out float rz))
+                                AxieMover.ACTIVE_ENT.transform.rotation.Z = rz;
+                        }
+
                         string components = String.Empty;
                         foreach (Component component in AxieMover.ACTIVE_ENT.components) {
                             components += component.fileName() + ", ";
                         }
-                        
-                        Gui.GuiTextPro(GetFontDefault(), "components: " + components, 
-                            new Vector2(10, 90), 
+
+                        Gui.GuiTextPro(Gui.font, "components:\n" + components,
+                            new Vector2(
+                                235,
+                                10),
                             20, WHITE, entityDataWindow);
 
                         for (var i = 0; i < AxieMover.ACTIVE_ENT.components.Count; i++) {
-                            if (Gui.GuiButton(AxieMover.ACTIVE_ENT.components[i].fileName(), 10, 115 + i * 35, 250, 30,
+                            if (Gui.GuiButton(AxieMover.ACTIVE_ENT.components[i].fileName(), 10, 120 + i * 35, 250, 30,
                                 entityDataWindow, TextPositioning.LEFT)) {
                                 componentWindow.active = true;
                                 componentWindow.title = AxieMover.ACTIVE_ENT.components[i].fileName();
                                 EditorComponentData.setComponent(AxieMover.ACTIVE_ENT.components[i]);
                             }
 
-                            if (Gui.GuiInteractiveRec(new ExitIcon(), 270, 115 + i * 35, 30, 30, IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT), entityDataWindow)) {
+                            if (Gui.GuiInteractiveRec(new ExitIcon(), 270, 120 + i * 35, 30, 30, IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT), entityDataWindow)) {
                                 AxieMover.ACTIVE_ENT.components.RemoveAt(i);
                             }
                         }
 
-                        if (Gui.GuiButton("Add component", 10, 125 + AxieMover.ACTIVE_ENT.components.Count * 35, 175, 30,
+                        if (Gui.GuiButton("Add component", 10, 145 + AxieMover.ACTIVE_ENT.components.Count * 35, 175, 30,
                                 entityDataWindow)) {
                             componentListWindow.active = true;
                         }

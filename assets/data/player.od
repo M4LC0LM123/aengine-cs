@@ -99,6 +99,7 @@ object light {
     i32 light_type = POINT_LIGHT;
 }
 
+#mod prefab
 object water {
     string tag = "water";
 

@@ -1,33 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\aengine-cs.csproj": {}
+    "/home/lukamalovic/Documents/GitHub/aengine-cs/aengine-cs.csproj": {}
   },
   "projects": {
-    "C:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\aengine-cs.csproj": {
+    "/home/lukamalovic/Documents/GitHub/aengine-cs/aengine-cs.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\aengine-cs.csproj",
+        "projectUniqueName": "/home/lukamalovic/Documents/GitHub/aengine-cs/aengine-cs.csproj",
         "projectName": "aengine-cs",
-        "projectPath": "C:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\aengine-cs.csproj",
-        "packagesPath": "C:\\Users\\lukaa\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\obj\\",
+        "projectPath": "/home/lukamalovic/Documents/GitHub/aengine-cs/aengine-cs.csproj",
+        "packagesPath": "/home/lukamalovic/.nuget/packages/",
+        "outputPath": "/home/lukamalovic/Documents/GitHub/aengine-cs/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Users\\lukaa\\AppData\\Roaming\\Godot\\mono\\GodotNuGetFallbackFolder",
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\lukaa\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Users\\lukaa\\AppData\\Roaming\\NuGet\\config\\Godot.Offline.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/home/lukamalovic/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -65,35 +57,16 @@
             "net47",
             "net471",
             "net472",
-            "net48",
-            "net481"
+            "net48"
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[6.0.20, 6.0.20]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Host.win-x64",
-              "version": "[6.0.20, 6.0.20]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[6.0.20, 6.0.20]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[6.0.20, 6.0.20]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/6.0.125/RuntimeIdentifierGraph.json"
         }
       }
     }

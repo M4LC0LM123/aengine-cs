@@ -64,6 +64,20 @@ public class AxieMover
             } else {
                 MOVE_SPEED = 1;
             }
+
+            if (CURRENT_MODE == Mode.MOVE) {
+                Editor.xPos.text = MathF.Round(ACTIVE_ENT.transform.position.X, 2).ToString();
+                Editor.yPos.text = MathF.Round(ACTIVE_ENT.transform.position.Y, 2).ToString();
+                Editor.zPos.text = MathF.Round(ACTIVE_ENT.transform.position.Z, 2).ToString();
+            } else if (CURRENT_MODE == Mode.SCALE) {
+                Editor.xScale.text = MathF.Round(ACTIVE_ENT.transform.scale.X, 2).ToString();
+                Editor.yScale.text = MathF.Round(ACTIVE_ENT.transform.scale.Y, 2).ToString();
+                Editor.zScale.text = MathF.Round(ACTIVE_ENT.transform.scale.Z, 2).ToString();
+            } else if (CURRENT_MODE == Mode.ROTATE) {
+                Editor.xRot.text = MathF.Round(ACTIVE_ENT.transform.rotation.X, 2).ToString();
+                Editor.yRot.text = MathF.Round(ACTIVE_ENT.transform.rotation.Y, 2).ToString();
+                Editor.zRot.text = MathF.Round(ACTIVE_ENT.transform.rotation.Z, 2).ToString();
+            }
             
             if (IsKeyDown(KeyboardKey.KEY_LEFT_SHIFT) || IsKeyDown(KeyboardKey.KEY_RIGHT_SHIFT))
             {

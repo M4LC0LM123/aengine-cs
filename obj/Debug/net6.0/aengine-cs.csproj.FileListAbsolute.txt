@@ -93,3 +93,14 @@ C:/Users/lukaa/Documents/GitHub/aengine-cs/obj/Debug/net6.0/refint/aengine-cs.dl
 /Users/lukamalovic/Documents/GitHub/aengine-cs/bin/Debug/net6.0/runtimes/win-x86/native/nfd.exp
 /Users/lukamalovic/Documents/GitHub/aengine-cs/bin/Debug/net6.0/runtimes/win-x86/native/nfd.lib
 /Users/lukamalovic/Documents/GitHub/aengine-cs/bin/Debug/net6.0/runtimes/win-x86/native/nfd.pdb
+/home/lukamalovic/Documents/GitHub/aengine-cs/bin/Debug/net6.0/NativeFileDialogSharp.dll
+/home/lukamalovic/Documents/GitHub/aengine-cs/bin/Debug/net6.0/runtimes/linux-x64/native/libnfd.so
+/home/lukamalovic/Documents/GitHub/aengine-cs/bin/Debug/net6.0/runtimes/osx-x64/native/libnfd.dylib
+/home/lukamalovic/Documents/GitHub/aengine-cs/bin/Debug/net6.0/runtimes/win-x64/native/nfd.dll
+/home/lukamalovic/Documents/GitHub/aengine-cs/bin/Debug/net6.0/runtimes/win-x64/native/nfd.exp
+/home/lukamalovic/Documents/GitHub/aengine-cs/bin/Debug/net6.0/runtimes/win-x64/native/nfd.lib
+/home/lukamalovic/Documents/GitHub/aengine-cs/bin/Debug/net6.0/runtimes/win-x64/native/nfd.pdb
+/home/lukamalovic/Documents/GitHub/aengine-cs/bin/Debug/net6.0/runtimes/win-x86/native/nfd.dll
+/home/lukamalovic/Documents/GitHub/aengine-cs/bin/Debug/net6.0/runtimes/win-x86/native/nfd.exp
+/home/lukamalovic/Documents/GitHub/aengine-cs/bin/Debug/net6.0/runtimes/win-x86/native/nfd.lib
+/home/lukamalovic/Documents/GitHub/aengine-cs/bin/Debug/net6.0/runtimes/win-x86/native/nfd.pdb

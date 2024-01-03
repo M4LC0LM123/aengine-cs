@@ -35,6 +35,8 @@ public class Console
         registerCommand(new ConsoleCommand("f_add_body", "adds a spherical rigidbody", ConsoleCommands.newBody));
         registerCommand(new ConsoleCommand("w_width", "sets the width of window", ConsoleCommands.setWidth));
         registerCommand(new ConsoleCommand("w_height", "sets the height of window", ConsoleCommands.setHeight));
+        registerCommand(new ConsoleCommand("w_render_width", "sets the width of window", ConsoleCommands.setRenderWidth));
+        registerCommand(new ConsoleCommand("w_render_height", "sets the height of window", ConsoleCommands.setRenderHeight));
         registerCommand(new ConsoleCommand("w_close", "closes the window", ConsoleCommands.close));
     }
 

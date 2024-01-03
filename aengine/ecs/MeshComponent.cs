@@ -126,17 +126,19 @@ namespace aengine.ecs
             this.color = color;
             if (texture != null) this.texture = texture;
             model = new aModel(LoadModelFromMesh(GenMeshHeightmap(LoadImageFromTexture(terrain.data), Vector3.One)));
-            shape = ShapeType.MODEL;
+            shape = ShapeType.TERRAIN;
             scale = 1;
             model.data.materials[0].maps[(int)MATERIAL_MAP_DIFFUSE].texture = this.texture.data;
             isModel = true;
+            terrainPath = terrain.path;
         }
 
         public void setTerrain(aTexture terrain) {
             model = new aModel(LoadModelFromMesh(GenMeshHeightmap(LoadImageFromTexture(terrain.data), Vector3.One)));
-            shape = ShapeType.MODEL;
+            shape = ShapeType.TERRAIN;
             scale = 1;
             isModel = true;
+            terrainPath = terrain.path;
         }
         
         public void setModel(aModel model) {
