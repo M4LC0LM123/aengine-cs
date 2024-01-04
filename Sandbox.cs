@@ -80,11 +80,7 @@ public static class Sandbox {
  
         Prefab.loadScene("assets/data/estrada.od", "estrada");
 
-        foreach (var entity in World.entities) {
-            if (entity.tag == "playa") {
-                player = entity;
-            }
-        }
+        player = World.getEntity("playa");
         
         var light = new Entity();
         light.addComponent(Prefab.loadComponent(light, "assets/data/player.od", "light"));
@@ -101,107 +97,11 @@ public static class Sandbox {
         Prefab.savePrefab("save_test.od", "SOME_SAVED_ENTITY", water);
         
         Prefab.saveScene("save_scene_test.od", "SOME_SAVED_SCENE");
-        
-        // var scenePrefab = new ScenePrefab("assets/maps/map3.json");
-        //
-        // foreach (var obj in scenePrefab.data)
-        //     switch (obj.id) {
-        //         case 0:
-        //             var cube = new Entity();
-        //             cube.transform.position = new Vector3(obj.x, obj.y, obj.z);
-        //             cube.transform.scale = new Vector3(obj.w, obj.h, obj.d);
-        //             cube.transform.rotation = new Vector3(obj.rx, obj.ry, obj.rz);
-        //             cube.addComponent(new MeshComponent(cube, Rendering.getRandomColor(), albedo));
-        //             cube.addComponent(new RigidBodyComponent(cube));
-        //             break;
-        //         case 1:
-        //             var sphere = new Entity();
-        //             sphere.transform.position = new Vector3(obj.x, obj.y, obj.z);
-        //             sphere.transform.scale = new Vector3(obj.w, obj.h, obj.d);
-        //             sphere.transform.rotation = new Vector3(obj.rx, obj.ry, obj.rz);
-        //             sphere.addComponent(new MeshComponent(sphere, GenMeshSphere(sphere.transform.scale.X, 15, 15),
-        //                 Rendering.getRandomColor(), albedo));
-        //             sphere.addComponent(new RigidBodyComponent(sphere, 1, BodyType.DYNAMIC, ShapeType.SPHERE));
-        //             break;
-        //         case 2:
-        //             var wall = new Entity();
-        //             wall.transform.position = new Vector3(obj.x, obj.y, obj.z);
-        //             wall.transform.scale = new Vector3(obj.w, obj.h, obj.d);
-        //             wall.transform.rotation = new Vector3(obj.rx, obj.ry, obj.rz);
-        //             wall.addComponent(new MeshComponent(wall, Rendering.getRandomColor(), albedo));
-        //             wall.addComponent(new RigidBodyComponent(wall, 1.0f, BodyType.STATIC));
-        //             break;
-        //         case 3:
-        //             var model = new Entity();
-        //             model.setFromSceneObj(obj);
-        //             model.addComponent(Prefab.loadComponent(model, "assets/data/mesh.od", "mesh"));
-        //             break;
-        //         case 4:
-        //             var hehe = new Entity();
-        //             hehe.tag = "hehe";
-        //             hehe.transform.position = new Vector3(obj.x, obj.y, obj.z);
-        //             hehe.transform.scale = new Vector3(obj.w, obj.h, obj.d);
-        //             hehe.transform.rotation = new Vector3(obj.rx, obj.ry, obj.rz);
-        //             hehe.addComponent(new MeshComponent(hehe, WHITE, LoadTexture("assets/trollface.png"), false));
-        //             break;
-        //         case 5:
-        //             var billBoard = new Entity();
-        //             billBoard.transform.position = new Vector3(obj.x, obj.y, obj.z);
-        //             billBoard.transform.scale = new Vector3(obj.w, obj.h, obj.d);
-        //             billBoard.transform.rotation = new Vector3(obj.rx, obj.ry, obj.rz);
-        //             billBoard.addComponent(new MeshComponent(billBoard, WHITE, LoadTexture("assets/cacodemon.png"),
-        //                 false));
-        //             break;
-        //         case 6:
-        //             ps.setFromSceneObj(obj);
-        //             break;
-        //         case 7:
-        //             ps2.setFromSceneObj(obj);
-        //             break;
-        //         case 8:
-        //             dummy.setPosition(new Vector3(obj.x, obj.y, obj.z));
-        //             break;
-        //         case 9:
-        //             Entity fluid = Prefab.loadPrefab("assets/data/player.od", "water");
-        //             fluid.setFromSceneObj(obj);
-        //             break;
-        //         case 10:
-        //             var cone = new Entity();
-        //             cone.setFromSceneObj(obj);
-        //             cone.addComponent(new MeshComponent(cone,
-        //                 GenMeshCone(cone.transform.scale.X, cone.transform.scale.Y, 15), Rendering.getRandomColor(),
-        //                 albedo));
-        //             cone.addComponent(new RigidBodyComponent(cone, 1.0f, BodyType.STATIC, ShapeType.CONE));
-        //             break;
-        //         case 11:
-        //             var terrain = new Entity();
-        //             terrain.setFromSceneObj(obj);
-        //             Image heightmap = LoadImage("assets/heightmap2.png");
-        //             terrain.addComponent(new MeshComponent(terrain,
-        //                 GenMeshHeightmap(heightmap, terrain.transform.scale), GREEN, albedo));
-        //             terrain.getComponent<MeshComponent>().terrainPath = "assets/heightmap2.png";
-        //             terrain.addComponent(new RigidBodyComponent(terrain, LoadTextureFromImage(heightmap), 1, BodyType.STATIC));
-        //             break;
-        //         case 12:
-        //             var light = new Entity();
-        //             light.setFromSceneObj(obj);
-        //             light.addComponent(Prefab.loadComponent(light, "assets/data/player.od", "light"));
-        //             
-        //             foreach (var entity in World.entities)
-        //                 if (entity.hasComponent<MeshComponent>()) {
-        //                     if (entity.getComponent<MeshComponent>().isModel) {
-        //                         entity.getComponent<MeshComponent>().setShader(light.getComponent<LightComponent>().shader);
-        //                     }
-        //                 }
-        //             break;
-        //     }
-        
+
         // Main game loop
-        
         while (!WindowShouldClose()) // Detect window close button or ESC key
         {
             Window.tick();
-            // World.fixedUpdate();
             World.update();
 
             if (IsKeyPressed(KeyboardKey.KEY_ESCAPE))
@@ -238,8 +138,7 @@ public static class Sandbox {
             if (player.transform.position.Y <= -500)
                 player.getComponent<RigidBodyComponent>().setPosition(Vector3.UnitY * 5);
 
-            player.getComponent<RigidBodyComponent>().body.Orientation =
-                JMatrix.CreateFromQuaternion(new JQuaternion());
+            player.getComponent<RigidBodyComponent>().setRotation(Vector3.Zero);
             camera.position = player.transform.position;
             camera.setDefaultFPSControls(speed, isMouseLocked, true);
             camera.defaultFpsMatrix();

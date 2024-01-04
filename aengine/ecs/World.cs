@@ -80,6 +80,10 @@ namespace aengine.ecs
             }
         }
 
+        public static Entity getEntity(string tag) {
+            return entities.FirstOrDefault(entity => entity.tag == tag);
+        }
+
         public static void dispose()
         {
             int len = entities.Count;

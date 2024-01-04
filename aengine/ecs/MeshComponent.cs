@@ -157,7 +157,7 @@ namespace aengine.ecs
 
         public unsafe void setShader(aShader shader, int mat = 0)
         {
-            model.data.materials[mat].shader = shader.shader;
+            model.data.materials[mat].shader = shader.handle;
         }
 
         public void setShape(ShapeType shape) {
