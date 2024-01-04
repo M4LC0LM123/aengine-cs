@@ -45,7 +45,7 @@ namespace Editor
 
             ObjectManager manager = new ObjectManager();
 
-            GuiWindow infoWindow = new GuiWindow("Editor", 0, 0, 180, 300);
+            GuiWindow infoWindow = new GuiWindow("Editor", 0, 0, 180, 340);
             
             GuiWindow entityDataWindow = new GuiWindow("Entity data", 0, 110 + Gui.topBarHeight, 400, 300);
             GuiWindow saveAndLoadWindow = new GuiWindow("Open or save", 0, 410 + Gui.topBarHeight, 150, 150);
@@ -66,6 +66,10 @@ namespace Editor
             GuiWindow prefabSpawnWindow = new GuiWindow("Prefab properties", 150, 320);
             prefabSpawnWindow.active = false;
             string loadDir = String.Empty;
+
+            GuiWindow perspectiveWindow = new GuiWindow("Perspective", 300, 300);
+            GuiEmbeddedWindow perspective = new GuiEmbeddedWindow(280, 180);
+            perspectiveWindow.active = false;
 
             // Main game loop
             while (!WindowShouldClose()) // Detect window close button or ESC key
@@ -253,6 +257,7 @@ namespace Editor
                 componentWindow.render();
                 prefabWindow.render();
                 prefabSpawnWindow.render();
+                perspectiveWindow.render();
                 
                 if (infoWindow.active) {
                     Gui.GuiTextPro(Gui.font, 
@@ -291,6 +296,10 @@ namespace Editor
 
                     if (Gui.GuiButton("Prefabs", 10, 240, 150, 30, infoWindow)) {
                         prefabWindow.active = true;
+                    }
+                    
+                    if (Gui.GuiButton("Perspective", 10, 280, 150, 30, infoWindow)) {
+                        perspectiveWindow.active = true;
                     }
                 }
 
@@ -410,7 +419,7 @@ namespace Editor
                 if (componentWindow.active) {
                     EditorComponentData.render(componentWindow);
                 }
-                
+
                 if (AxieMover.IS_OBJ_ACTIVE) {
                     if (!entityDataWindow.active) {
                         entityDataWindow.active = true;
