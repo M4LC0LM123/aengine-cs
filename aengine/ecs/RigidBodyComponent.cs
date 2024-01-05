@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
 using aengine.graphics;
-using Jitter2.Collision.Shapes;
-using Jitter2.Dynamics;
-using Jitter2.LinearMath;
+using Jitter.Collision.Shapes;
+using Jitter.Dynamics;
+using Jitter.LinearMath;
 using Raylib_CsLo;
 using static aengine.core.aengine;
 using static Raylib_CsLo.RlGl;
@@ -30,7 +30,7 @@ namespace aengine.ecs {
         public RigidBodyComponent(Entity entity, float mass = 1.0f, BodyType type = BodyType.DYNAMIC, ShapeType shape = ShapeType.BOX) {
             this.type = type;
             if (shape == ShapeType.BOX) {
-                this.shape = new BoxShape(new Jitter2.LinearMath.JVector(entity.transform.scale.X,
+                this.shape = new BoxShape(new Jitter.LinearMath.JVector(entity.transform.scale.X,
                     entity.transform.scale.Y, entity.transform.scale.Z));
             } else if (shape == ShapeType.SPHERE) {
                 this.shape = new SphereShape(entity.transform.scale.X);
@@ -41,14 +41,13 @@ namespace aengine.ecs {
             } else if (shape == ShapeType.CONE) {
                 this.shape = new ConeShape(entity.transform.scale.Y, entity.transform.scale.X);
             }
-            
-            body = World.world.CreateRigidBody();
-            body.AddShape(this.shape);
+
+            body = new RigidBody(this.shape);
             body.Position = new JVector(entity.transform.position.X, entity.transform.position.Y,
                 entity.transform.position.Z);
             body.Orientation = JMatrix.CreateFromYawPitchRoll(entity.transform.rotation.Y * RayMath.DEG2RAD,
                 entity.transform.rotation.X * RayMath.DEG2RAD, entity.transform.rotation.Z * RayMath.DEG2RAD);
-            body.SetMassInertia(mass);
+            body.Mass = mass;
             shapeType = shape;
 
             switch (this.type) {
@@ -61,6 +60,9 @@ namespace aengine.ecs {
             }
 
             m_transform = entity.transform;
+            
+            World.world.AddBody(body);
+            body.EnableDebugDraw = true;
         }
         
         public unsafe RigidBodyComponent(Entity entity, aModel model, float mass = 1.0f, BodyType type = BodyType.DYNAMIC) {

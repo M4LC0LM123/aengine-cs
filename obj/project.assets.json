@@ -2,16 +2,16 @@
   "version": 3,
   "targets": {
     "net6.0": {
-      "Jitter2/2.2.0": {
+      "JitterPhysics/0.2.0.20": {
         "type": "package",
         "compile": {
-          "lib/net6.0/Jitter2.dll": {
-            "related": ".xml"
+          "lib/net4/Jitter.dll": {
+            "related": ".pdb;.xml"
           }
         },
         "runtime": {
-          "lib/net6.0/Jitter2.dll": {
-            "related": ".xml"
+          "lib/net4/Jitter.dll": {
+            "related": ".pdb;.xml"
           }
         }
       },
@@ -160,23 +160,21 @@
     }
   },
   "libraries": {
-    "Jitter2/2.2.0": {
-      "sha512": "O+OQuCWIetzu/7yIUF0TU6IkAyXIn/iLWtoefr4hJBs0OgY4mCNCH0Bmct+i5nxOjUGrNaXubYKHBMIPSvIoAw==",
+    "JitterPhysics/0.2.0.20": {
+      "sha512": "Kgju3DCxS6ot55LX5+tFcALVcEDEfQ7jFkhjY+FR1bOn8Dh1YitomA9E6ZWIFGdKXeYDW1SKhGvKOnqJYjz4gQ==",
       "type": "package",
-      "path": "jitter2/2.2.0",
+      "path": "jitterphysics/0.2.0.20",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "icon.png",
-        "jitter2.2.2.0.nupkg.sha512",
-        "jitter2.nuspec",
-        "lib/net6.0/Jitter2.dll",
-        "lib/net6.0/Jitter2.xml",
-        "lib/net7.0/Jitter2.dll",
-        "lib/net7.0/Jitter2.xml",
-        "lib/net8.0/Jitter2.dll",
-        "lib/net8.0/Jitter2.xml",
-        "readme.md"
+        "jitterphysics.0.2.0.20.nupkg.sha512",
+        "jitterphysics.nuspec",
+        "lib/net4/Jitter.dll",
+        "lib/net4/Jitter.pdb",
+        "lib/net4/Jitter.xml",
+        "lib/portable-net45+netcore45+wpa81+wp8/Jitter.dll",
+        "lib/portable-net45+netcore45+wpa81+wp8/Jitter.pdb",
+        "lib/portable-net45+netcore45+wpa81+wp8/Jitter.xml"
       ]
     },
     "Microsoft.Toolkit.HighPerformance/7.1.2": {
@@ -270,7 +268,7 @@
   },
   "projectFileDependencyGroups": {
     "net6.0": [
-      "Jitter2 >= 2.2.0",
+      "JitterPhysics >= 0.2.0.20",
       "NativeFileDialogSharp >= 0.5.0",
       "Raylib-CsLo >= 4.2.0.9"
     ]
@@ -312,9 +310,9 @@
       "net6.0": {
         "targetAlias": "net6.0",
         "dependencies": {
-          "Jitter2": {
+          "JitterPhysics": {
             "target": "Package",
-            "version": "[2.2.0, )"
+            "version": "[0.2.0.20, )"
           },
           "NativeFileDialogSharp": {
             "target": "Package",
@@ -343,5 +341,17 @@
         "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/6.0.125/RuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'JitterPhysics 0.2.0.20' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
+      "libraryId": "JitterPhysics",
+      "targetGraphs": [
+        "net6.0"
+      ]
+    }
+  ]
 }

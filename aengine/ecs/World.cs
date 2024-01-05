@@ -5,8 +5,8 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using aengine.core;
 using aengine.graphics;
-using Jitter2;
-using Jitter2.Collision;
+using Jitter;
+using Jitter.Collision;
 using Raylib_CsLo;
 using Console = System.Console;
 
@@ -17,8 +17,9 @@ namespace aengine.ecs
         public static Dictionary<string, Entity> entities = new Dictionary<string, Entity>();
         public static bool debugRenderTerrain = false; // uses a lot of resources and makes the game slower
         public static bool renderColliders = false;
-        
-        public static Jitter2.World world = new Jitter2.World();
+
+        public static CollisionSystem collisionSystem = new CollisionSystemSAP();
+        public static Jitter.World world = new Jitter.World(collisionSystem);
 
         public static RLights lights = new RLights();
 
