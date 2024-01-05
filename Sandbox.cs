@@ -66,8 +66,6 @@ public static class Sandbox {
         body2.addComponent(new MeshComponent(body2, ShapeType.CYLINDER, YELLOW, new aTexture("assets/albedo.png")));
         body2.addComponent(new RigidBodyComponent(body2, 1, BodyType.DYNAMIC, ShapeType.CYLINDER));
 
-        var dummy = new Dummy();
-
         var window = new GuiWindow("SUIIIIIIIII", 10, 10, 300, 250);
         var textBox = new GuiTextBox();
         var slider = new GuiSlider();
@@ -195,8 +193,6 @@ public static class Sandbox {
             ps2.addParticle(p2, ParticleSpawn.cube(8, 0, 0));
 
             ps2.getComponent<SpatialAudioComponent>().play();
-
-            dummy.transform.rotation.Y += 100 * GetFrameTime();
 
             Window.beginRender();
             ClearBackground(SKYBLUE);

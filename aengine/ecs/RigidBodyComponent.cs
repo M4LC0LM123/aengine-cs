@@ -333,18 +333,29 @@ namespace aengine.ecs {
         }
 
         public void update(Entity entity) {
-            if (entity != null && entity.transform != null && body != null && World.usePhysics) {
-                if (shapeType == ShapeType.CONE)
-                    entity.transform.position = new Vector3(body.Position.X,
-                        body.Position.Y - entity.transform.scale.Y / 2.675f, body.Position.Z);
-                else
-                    entity.transform.position = new Vector3(body.Position.X, body.Position.Y, body.Position.Z);
-                if (shapeType == ShapeType.CYLINDER)
-                    entity.transform.rotation = new Vector3(MatrixToEuler(body.Orientation).X - 90,
-                        MatrixToEuler(body.Orientation).Y - 90,
-                        MatrixToEuler(body.Orientation).Z);
-                else
-                    entity.transform.rotation = MatrixToEuler(body.Orientation);
+            if (entity != null && body != null && World.usePhysics) {
+                if (shapeType == ShapeType.CONE) {
+                    entity.transform.position = Vector3.Zero with {
+                        X = body.Position.X,
+                        Y = body.Position.Y - entity.transform.scale.Y / 2.675f,
+                        Z = body.Position.Z
+                    };
+                } else if (shapeType == ShapeType.CYLINDER) {
+                    entity.transform.position = Vector3.Zero with {
+                        X = body.Position.X,
+                        Y = body.Position.Y - entity.transform.scale.Y * 0.5f,
+                        Z = body.Position.Z
+                    };
+                } else {
+                    entity.transform.position = Vector3.Zero with {
+                        X = body.Position.X,
+                        Y = body.Position.Y,
+                        Z = body.Position.Z
+                    };
+                }
+
+                entity.transform.rotation = MatrixToEuler(body.Orientation);
+                
                 m_transform = entity.transform;
             }
         }

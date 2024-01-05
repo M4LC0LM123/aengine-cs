@@ -191,40 +191,23 @@ namespace aengine.ecs
         private void setTransform(Vector3 scale, Vector3 rotation) {
             model.data.transform = RayMath.MatrixMultiply(
                 RayMath.MatrixScale(scale.X, scale.Y, scale.Z),
-                RayMath.MatrixRotateXYZ(new Vector3(deg2Rad(rotation.X), deg2Rad(rotation.Y), deg2Rad(rotation.Z)))
+                RayMath.MatrixRotateXYZ(Vector3.Zero with { X = deg2Rad(rotation.X), Y = deg2Rad(rotation.Y), Z = deg2Rad(rotation.Z)})
             );
         }
 
         public void update(Entity entity)
         {
-            if (entity != null)
-            {
+            if (entity != null)  {
                 if (entity.hasComponent<RigidBodyComponent>()) {
-                    if (entity.getComponent<RigidBodyComponent>().shapeType == ShapeType.CYLINDER) {
-                        transform.position = entity.transform.position;
-                        transform.rotation = entity.transform.rotation with { X = entity.transform.rotation.X + 90 };
-                        transform.scale = entity.transform.scale;
-                    } else {
-                        if (shape == ShapeType.TERRAIN) {
-                            transform.position = entity.transform.position - entity.transform.scale / 2;
-                            transform.rotation = entity.transform.rotation;
-                            transform.scale = entity.transform.scale;
-                        } else {
-                            transform = entity.transform;  
-                        }
-                    }
+                    transform = entity.transform;
+                    model.data.transform = RayMath.MatrixMultiply(
+                        RayMath.MatrixScale(transform.scale.X, transform.scale.Y, transform.scale.Z),
+                        bodyMatrix(entity.getComponent<RigidBodyComponent>().body)
+                    );
                 } else {
-                    if (shape == ShapeType.TERRAIN) {
-                        transform.position = entity.transform.position - entity.transform.scale / 2;
-                        transform.rotation = entity.transform.rotation;
-                        transform.scale = entity.transform.scale;
-                    } else {
-                        transform = entity.transform;  
-                    }      
+                    transform = entity.transform;
+                    setTransform(transform.scale, transform.rotation);
                 }
-                // setScale(transform.scale);
-                // setRotation(transform.rotation);
-                setTransform(transform.scale, transform.rotation);
             }
         }
 

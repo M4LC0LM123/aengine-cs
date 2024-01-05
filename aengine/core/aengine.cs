@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
 using aengine.ecs;
+using Jitter.Dynamics;
 using Jitter.LinearMath;
 
 namespace aengine.core
@@ -22,6 +23,16 @@ namespace aengine.core
         public static float rad2Deg(float radians)
         {
             return radians * 180 / (float) Math.PI;
+        }
+        
+        public static Matrix4x4 bodyMatrix(RigidBody body)
+        {
+            JMatrix ori = body.Orientation;
+
+            return new Matrix4x4(ori.M11, ori.M12, ori.M13, 0,
+                ori.M21, ori.M22, ori.M23, 0.0f,
+                ori.M31, ori.M32, ori.M33, 0.0f,
+                0, 0, 0, 1.0f);
         }
 
         public static Vector3 QuaternionToEulerAngles(Quaternion q)
@@ -55,8 +66,12 @@ namespace aengine.core
             pitch = rad2Deg(pitch);
             yaw = rad2Deg(yaw);
             roll = rad2Deg(roll);
-
-            return new Vector3(pitch, yaw, roll);
+            
+            return Vector3.Zero with {
+                X = pitch,
+                Y = yaw,
+                Z = roll
+            };
         }
 
         public static bool CheckCollisionAABB(AABB one, AABB two)
