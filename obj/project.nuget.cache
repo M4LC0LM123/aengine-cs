@@ -1,24 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "Mb3gKHZarc6Ywqfl8STDxfbPiaJfZfK0BrX21yk6RxoE1d8VDUsO5tiQzyqG+kG7jqSFDvQbGdjeJEphdTJ1sQ==",
+  "dgSpecHash": "Dz2HETXozH2HvPP+g/90fLX/ox2M+RNgT2eda2jtknVaGGTst/RVj7yq3WIevrQ3A58CHACZyJ56ZDN8rFgAXQ==",
   "success": true,
   "projectFilePath": "/home/lukamalovic/Documents/GitHub/aengine-cs/aengine-cs.csproj",
   "expectedPackageFiles": [
-    "/home/lukamalovic/.nuget/packages/jitterphysics/0.2.0.20/jitterphysics.0.2.0.20.nupkg.sha512",
+    "/home/lukamalovic/.nuget/packages/jitter2/2.2.0/jitter2.2.2.0.nupkg.sha512",
     "/home/lukamalovic/.nuget/packages/microsoft.toolkit.highperformance/7.1.2/microsoft.toolkit.highperformance.7.1.2.nupkg.sha512",
     "/home/lukamalovic/.nuget/packages/nativefiledialogsharp/0.5.0/nativefiledialogsharp.0.5.0.nupkg.sha512",
     "/home/lukamalovic/.nuget/packages/raylib-cslo/4.2.0.9/raylib-cslo.4.2.0.9.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'JitterPhysics 0.2.0.20' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
-      "libraryId": "JitterPhysics",
-      "targetGraphs": [
-        "net6.0"
-      ]
-    }
-  ]
+  "logs": []
 }
