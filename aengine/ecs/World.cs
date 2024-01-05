@@ -14,7 +14,7 @@ namespace aengine.ecs
 {
     public class World 
     {
-        public static List<Entity> entities = new List<Entity>();
+        public static Dictionary<string, Entity> entities = new Dictionary<string, Entity>();
         public static bool debugRenderTerrain = false; // uses a lot of resources and makes the game slower
         public static bool renderColliders = false;
 
@@ -31,17 +31,20 @@ namespace aengine.ecs
         private static float fixedTimeStep = 1.0f / 60.0f;
         private static float accumulator = 0.0f;
 
-        public static void removeEntity(Entity entity)
-        {
-            entities.Remove(entity);
+        public static void removeEntity(Entity entity)  {
+            entities.Remove(entity.tag);
+        }
+        
+        public static void removeEntity(string tag)  {
+            entities.Remove(tag);
         }
 
         public static void update(bool physics = true, bool multithread = false) {
             fixedUpdate(physics, multithread);
-            
-            int len = entities.Count;
-            for (int i = 0; i < len; i++)
-                entities[i].update();
+
+            foreach (var entity in entities.Values) {
+                entity.update();
+            }
         }
 
         private static void fixedUpdate(bool physics = true, bool multithread = false) {
@@ -58,37 +61,38 @@ namespace aengine.ecs
             usePhysics = physics;
         }
 
-        public static void render()
-        {
-            int len = entities.Count;
-            for (int i = 0; i < len; i++)
-            {
-                entities[i].render();
-                
-                if (entities[i].hasComponent<RigidBodyComponent>())
-                {
-                    entities[i].getComponent<RigidBodyComponent>().debug = renderColliders;
+        public static void render() {
+            foreach (var entity in entities.Values) {
+                entity.render();
+
+                if (entity.hasComponent<RigidBodyComponent>()) {
+                    entity.getComponent<RigidBodyComponent>().debug = renderColliders;
                 }
-                else if (entities[i].hasComponent<LightComponent>())
-                {
-                    entities[i].getComponent<LightComponent>().debug = renderColliders;
-                } 
-                else if (entities[i].hasComponent<SpatialAudioComponent>())
-                {
-                    entities[i].getComponent<SpatialAudioComponent>().debug = renderColliders;
+                else if (entity.hasComponent<LightComponent>()) {
+                    entity.getComponent<LightComponent>().debug = renderColliders;
+                }
+                else if (entity.hasComponent<SpatialAudioComponent>()) {
+                    entity.getComponent<SpatialAudioComponent>().debug = renderColliders;
                 }
             }
         }
 
         public static Entity getEntity(string tag) {
-            return entities.FirstOrDefault(entity => entity.tag == tag);
+            if (entities.TryGetValue(tag, out Entity result)) {
+                return result;
+            }
+
+            return null;
         }
 
-        public static void dispose()
-        {
-            int len = entities.Count;
-            for (int i = 0; i < len; i++)
-                entities[i].dispose();
+        public static bool hasTag(string tag) {
+            return entities.ContainsKey(tag);
+        }
+
+        public static void dispose()  {
+            foreach (var entity in entities.Values) {
+                entity.dispose();
+            }
         }
 
     }

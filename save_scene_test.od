@@ -8,10 +8,10 @@ object SOME_SAVED_SCENE {
     str Entity5 = "save_scene_test.od";
     str playa = "save_scene_test.od";
     str floor = "save_scene_test.od";
-    str Entity29 = "save_scene_test.od";
-    str Entity310 = "save_scene_test.od";
-    str Entity411 = "save_scene_test.od";
-    str Entity512 = "save_scene_test.od";
+    str Entity28 = "save_scene_test.od";
+    str Entity39 = "save_scene_test.od";
+    str Entity410 = "save_scene_test.od";
+    str Entity511 = "save_scene_test.od";
     str Entity6 = "save_scene_test.od";
     str Entity7 = "save_scene_test.od";
     str Entity14 = "save_scene_test.od";
@@ -296,8 +296,8 @@ object floor_rb {
     str heightmap = "";
 }
 #mod prefab
-object Entity29 {
-    str tag = Entity29;
+object Entity28 {
+    str tag = Entity2;
     
     f32 x = -11.990682;
     f32 y = -4.0337167;
@@ -311,9 +311,9 @@ object Entity29 {
     f32 ry = 0; // rotation y (yaw)
     f32 rz = 0; // rotation z (roll)
 
-    str components = "Entity29_mesh, Entity29_rb";
+    str components = "Entity2_mesh, Entity2_rb";
 }
-object Entity29_mesh {
+object Entity2_mesh {
     str type = "MeshComponent";
 
     i32 shape = 0;
@@ -332,7 +332,7 @@ object Entity29_mesh {
 
     i32 scale = 1;    
 }
-object Entity29_rb {
+object Entity2_rb {
     str type = "RigidBodyComponent";
     
     f32 mass = 1;
@@ -345,8 +345,8 @@ object Entity29_rb {
     str heightmap = "";
 }
 #mod prefab
-object Entity310 {
-    str tag = Entity310;
+object Entity39 {
+    str tag = Entity3;
     
     f32 x = 11.973316;
     f32 y = -4.002992;
@@ -360,9 +360,9 @@ object Entity310 {
     f32 ry = 0; // rotation y (yaw)
     f32 rz = 0; // rotation z (roll)
 
-    str components = "Entity310_mesh, Entity310_rb";
+    str components = "Entity3_mesh, Entity3_rb";
 }
-object Entity310_mesh {
+object Entity3_mesh {
     str type = "MeshComponent";
 
     i32 shape = 0;
@@ -381,7 +381,7 @@ object Entity310_mesh {
 
     i32 scale = 1;    
 }
-object Entity310_rb {
+object Entity3_rb {
     str type = "RigidBodyComponent";
     
     f32 mass = 1;
@@ -394,8 +394,8 @@ object Entity310_rb {
     str heightmap = "";
 }
 #mod prefab
-object Entity411 {
-    str tag = Entity411;
+object Entity410 {
+    str tag = Entity4;
     
     f32 x = 1;
     f32 y = -0.05190561;
@@ -409,9 +409,9 @@ object Entity411 {
     f32 ry = 0; // rotation y (yaw)
     f32 rz = -180.16873; // rotation z (roll)
 
-    str components = "Entity411_mesh";
+    str components = "Entity4_mesh";
 }
-object Entity411_mesh {
+object Entity4_mesh {
     str type = "MeshComponent";
 
     i32 shape = 4;
@@ -431,8 +431,8 @@ object Entity411_mesh {
     i32 scale = 1;    
 }
 #mod prefab
-object Entity512 {
-    str tag = Entity512;
+object Entity511 {
+    str tag = Entity5;
     
     f32 x = 1.7291287;
     f32 y = 1.1668978;
@@ -446,9 +446,9 @@ object Entity512 {
     f32 ry = -90.37376; // rotation y (yaw)
     f32 rz = 0; // rotation z (roll)
 
-    str components = "Entity512_mesh";
+    str components = "Entity5_mesh";
 }
-object Entity512_mesh {
+object Entity5_mesh {
     str type = "MeshComponent";
 
     i32 shape = 6;

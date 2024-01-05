@@ -85,7 +85,7 @@ public static class Sandbox {
         var light = new Entity();
         light.addComponent(Prefab.loadComponent(light, "assets/data/player.od", "light"));
         
-        foreach (var entity in World.entities)
+        foreach (var entity in World.entities.Values)
             if (entity.hasComponent<MeshComponent>()) {
                 if (entity.getComponent<MeshComponent>().isModel) {
                     entity.getComponent<MeshComponent>().setShader(light.getComponent<LightComponent>().shader);
@@ -144,7 +144,7 @@ public static class Sandbox {
             camera.defaultFpsMatrix();
             camera.update();
 
-            foreach (var entity in World.entities) {
+            foreach (var entity in World.entities.Values) {
                 if (entity.hasComponent<MeshComponent>()) {
                     if (!entity.getComponent<MeshComponent>().isModel)
                         entity.transform.rotation.X =

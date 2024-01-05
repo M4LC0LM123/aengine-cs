@@ -18,11 +18,16 @@ namespace aengine.ecs {
             m_parent = null;
 
             id = World.entities.Count;
-            tag = "Entity" + World.entities.Count;
+            tag = "Entity" + id;
             transform = new TransformComponent(this);
             m_rootTransform = transform;
             components = new List<Component>();
-            World.entities.Add(this);
+            
+            if (World.hasTag(tag)) {
+                tag += id;
+            }
+            
+            World.entities.Add(tag, this);
         }
 
         public Entity(string tag) {
@@ -31,7 +36,12 @@ namespace aengine.ecs {
             transform = new TransformComponent(this);
             m_rootTransform = transform;
             components = new List<Component>();
-            World.entities.Add(this);
+            
+            if (World.hasTag(tag)) {
+                tag += id;
+            }
+            
+            World.entities.Add(tag, this);
         }
 
         public virtual void setParent<T>(T parent) where T : Entity {

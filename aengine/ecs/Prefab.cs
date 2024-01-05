@@ -52,18 +52,19 @@ public class Prefab {
         
         sceneContent.AppendLine("#mod scene");
         sceneContent.AppendLine("object " + name + " {");
-        
-        for (var i = 0; i < World.entities.Count; i++) {
-            sceneContent.AppendLine($"    str {World.entities[i].tag} = \"{Path.GetFileName(path)}\";");
+
+        foreach (var entity in World.entities.Values) {
+            sceneContent.AppendLine($"    str {entity.tag} = \"{Path.GetFileName(path)}\";");
         }
+        
         sceneContent.AppendLine("}");
         
         sceneContent.AppendLine();
 
         File.WriteAllText(path, sceneContent.ToString());
-        
-        for (var i = 0; i < World.entities.Count; i++) {
-            savePrefab(path, World.entities[i].tag, World.entities[i], false);
+
+        foreach (var entity in World.entities.Values) {
+            savePrefab(path, entity.tag, entity, false);
         }
     }
 
@@ -281,14 +282,6 @@ public class Prefab {
             string tag = obj.getValue<string>("tag");
 
             Entity result = new Entity(tag);
-            
-            foreach (var entity in World.entities) {
-                if (result != entity) {
-                    if (result.tag == entity.tag) {
-                        result.tag += World.entities.Count;
-                    }
-                }
-            }
 
             float x = 0;
             float y = 0;
@@ -339,15 +332,7 @@ public class Prefab {
             string tag = obj.getValue<string>("tag");
 
             Entity result = new Entity(tag);
-            
-            foreach (var entity in World.entities) {
-                if (result != entity) {
-                    if (result.tag == entity.tag) {
-                        result.tag = result.tag + World.entities.Count;
-                    }
-                }
-            }
-            
+
             float x = 0;
             float y = 0;
             float z = 0;

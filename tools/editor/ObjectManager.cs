@@ -38,7 +38,7 @@ public class ObjectManager
 
     public void update(AxieMover mover)
     {
-        foreach (var ent in World.entities) {
+        foreach (var ent in World.entities.Values) {
             if (AxieMover.ACTIVE_ENT != ent)
                 ent.selected = false;
             
@@ -91,7 +91,7 @@ public class ObjectManager
 
     public void render()
     {
-        foreach (var ent in World.entities)
+        foreach (var ent in World.entities.Values)
         {
             Rendering.drawCubeWireframe(ent.transform.position, ent.transform.rotation, ent.transform.scale, WHITE);
             if (ent.hasComponent<RigidBodyComponent>()) {
