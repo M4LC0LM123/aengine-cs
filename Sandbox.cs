@@ -178,7 +178,7 @@ public static class Sandbox {
 
             if (IsKeyPressed(KeyboardKey.KEY_GRAVE)) {
                 console.window.setPosition(10, 10);
-                console.active = !console.active;
+                console.toggleActive();
             }
 
             var p = new ParticleComponent(new ParticleBehaviour(false, 5f), WHITE, particle, Vector2.One / 2, 25);
@@ -211,15 +211,19 @@ public static class Sandbox {
 
             window.render();
 
-            Gui.GuiTextPro(Gui.font, "FPS: " + GetFPS(), new Vector2(10, 10), Gui.font.baseSize, WHITE, window);
-            Gui.GuiTextPro(Gui.font, "Entities: " + World.entities.Count, new Vector2(10, 50), Gui.font.baseSize, WHITE,
-                window);
+            if (window.active) {
+                Gui.GuiTextPro(Gui.font, "FPS: " + GetFPS(), new Vector2(10, 10), Gui.font.baseSize, WHITE, window);
+                Gui.GuiTextPro(Gui.font, "Entities: " + World.entities.Count, new Vector2(10, 50), Gui.font.baseSize, WHITE,
+                    window);
 
-            if (Gui.GuiButton("Render Colliders", 10, 100, 240, 40, window, TextPositioning.LEFT))
-                World.renderColliders = !World.renderColliders;
+                if (Gui.GuiButton("Render Colliders", 10, 100, 240, 40, window, TextPositioning.LEFT))
+                    World.renderColliders = !World.renderColliders;
 
-            textBox.render(10, 150, 240, 40, window);
-            slider.render(10, 200, 240, 40, window);
+                textBox.render(10, 150, 240, 40, window);
+                slider.render(10, 200, 240, 40, window);
+            }
+
+            System.Console.WriteLine(slider.value);
 
             console.render();
 

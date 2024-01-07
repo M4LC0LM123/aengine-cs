@@ -12,6 +12,7 @@ public class Gui {
     public static Color accentColor = new Color(63, 105, 135, 255);
     public static Color darkerColor = new Color(41, 59, 68, 255);
     public static Color lighterColor = new Color(119, 169, 191, 255);
+    public static Color sliderColor = new Color(255, 255, 255, 255);
 
     public static float bezelSize = 2.5f;
     public static float textSpacing = 2;

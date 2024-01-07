@@ -22,15 +22,14 @@ public class GuiEmbeddedWindow {
 
     public void beginRender() {
         BeginTextureMode(target);
-        
-        mousePosition.X = Window.mousePosition.X - x;
-        mousePosition.Y = Window.mousePosition.Y - y;
     }
     
-    public void endRender(float x, float y, GuiWindow window = null) {
+    public void endRender() {
         EndTextureMode();
-        
-        BeginDrawing();
+    }
+
+    public void finalRender(float x, float y, bool newBuffer = true, GuiWindow window = null) {
+        if (newBuffer) BeginDrawing();
 
         this.x = x;
         this.y = y;
@@ -43,10 +42,15 @@ public class GuiEmbeddedWindow {
             ry = window.rec.y + this.y;
         }
         
+        mousePosition.X = Window.mousePosition.X - rx;
+        mousePosition.Y = Window.mousePosition.Y - ry;
+        
         DrawTexturePro(target.texture, new Rectangle(0, 0, target.texture.width, -target.texture.height), 
             new Rectangle(rx, ry, width, height), Vector2.Zero, 0, WHITE);
         
-        EndDrawing();
+        // DrawPixelV(mousePosition, WHITE);
+        
+        if (newBuffer) EndDrawing();
     }
     
     public void setWidth(int width) {

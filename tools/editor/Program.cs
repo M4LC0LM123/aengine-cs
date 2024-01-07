@@ -66,10 +66,8 @@ namespace Editor
             GuiWindow prefabSpawnWindow = new GuiWindow("Prefab properties", 150, 320);
             prefabSpawnWindow.active = false;
             string loadDir = String.Empty;
-
-            GuiWindow perspectiveWindow = new GuiWindow("Perspective", 300, 300);
-            GuiEmbeddedWindow perspective = new GuiEmbeddedWindow(280, 180);
-            perspectiveWindow.active = false;
+            
+            PerspectiveWindow.init();
 
             // Main game loop
             while (!WindowShouldClose()) // Detect window close button or ESC key
@@ -216,6 +214,10 @@ namespace Editor
                     EditorComponentData.activeComponent = null;
                 }
                 
+                // 2d perspective render and update
+                PerspectiveWindow.update();
+                PerspectiveWindow.render();
+                
                 Window.beginRender();
                 ClearBackground(BLACK);
                 BeginMode3D(camera.matrix);
@@ -257,7 +259,7 @@ namespace Editor
                 componentWindow.render();
                 prefabWindow.render();
                 prefabSpawnWindow.render();
-                perspectiveWindow.render();
+                PerspectiveWindow.window.render();
                 
                 if (infoWindow.active) {
                     Gui.GuiTextPro(Gui.font, 
@@ -299,7 +301,7 @@ namespace Editor
                     }
                     
                     if (Gui.GuiButton("Perspective", 10, 280, 150, 30, infoWindow)) {
-                        perspectiveWindow.active = true;
+                        PerspectiveWindow.window.active = true;
                     }
                 }
 
@@ -387,6 +389,17 @@ namespace Editor
                         World.entities.Clear();
                         AxieMover.ACTIVE_ENT = null;
                         AxieMover.IS_OBJ_ACTIVE = false;
+                    }
+                }
+                
+                if (PerspectiveWindow.window.active) {
+                    PerspectiveWindow.perspective.finalRender(10, 10, false, PerspectiveWindow.window);
+                    
+                    if (PerspectiveWindow.window.finishedResizing()) {
+                        PerspectiveWindow.perspective.setWidth((int)(PerspectiveWindow.window.rec.width - 20));
+                        PerspectiveWindow.perspective.setHeight((int)(PerspectiveWindow.window.rec.height - 20));
+                        PerspectiveWindow.perspective.reloadTarget();
+                        PerspectiveWindow.reload();
                     }
                 }
 

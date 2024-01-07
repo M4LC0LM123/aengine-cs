@@ -18,6 +18,7 @@ public class Console
     public Console()
     {
         window = new GuiWindow("Console", 10, 10, 500, 400);
+        window.active = false;
         commandInput = new GuiTextBox();
         active = false;
         commands = new List<ConsoleCommand>();
@@ -80,10 +81,11 @@ public class Console
 
     public void render()
     {
-        if (active)
+        window.render();
+        active = window.active;
+        
+        if (active && window.active)
         {
-            window.render(this);
-            
             Gui.GuiInverseRec(2.5f + window.rec.x, 2.5f + window.rec.y, window.rec.width - 5f, window.rec.height - 50);
 
             for (int i = 0; i < consoleLines.Count; i++)
@@ -104,6 +106,11 @@ public class Console
                 commandInput.text = String.Empty;
             }
         }
+    }
+
+    public bool toggleActive() {
+        window.active = !window.active;
+        return active;
     }
     
 }

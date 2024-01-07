@@ -17,6 +17,8 @@ public class GuiWindow
     public bool active;
     
     private bool resizing;
+    private int res;
+    private int prevRes;
     private Vector2 defaultScale;
     private bool moving;
 
@@ -34,6 +36,10 @@ public class GuiWindow
         active = true;
         this.title = title;
         titleSize = Gui.font.baseSize;
+
+        resizing = false;
+        res = 0;
+        prevRes = 0;
         
         Gui.windowCount++;
         id = Gui.windowCount;
@@ -58,7 +64,7 @@ public class GuiWindow
         return new Vector2(topBar.x, topBar.y);
     }
     
-    public void render(Console console = null)
+    public void render()
     {
         if (active) {
             if (IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT) &&
@@ -97,11 +103,6 @@ public class GuiWindow
 
             if (Gui.GuiInteractiveRec(new ExitIcon(), topBar.x + topBar.width - Gui.exitScale, topBar.y, Gui.exitScale, Gui.exitScale, IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT))) {
                 active = false;
-
-                if (console != null) {
-                    console.active = false;
-                }
-                
             }
             
             Gui.GuiTextPro(Gui.font, title, new Vector2(topBar.x + 5, topBar.y), titleSize, WHITE);
@@ -114,10 +115,13 @@ public class GuiWindow
                 }
             }
 
-            if (resizing)
-            {
-                if (IsMouseButtonReleased(MouseButton.MOUSE_BUTTON_LEFT))
+            if (resizing) {
+                prevRes = res;
+
+                if (IsMouseButtonReleased(MouseButton.MOUSE_BUTTON_LEFT)) {
                     resizing = false;
+                    res++;
+                }
                 
                 rec.width = Window.mousePosition.X - rec.x + 7.5f;
                 rec.height = Window.mousePosition.Y - rec.y + 7.5f;
@@ -127,6 +131,19 @@ public class GuiWindow
 
             topBar.width = rec.width;
         }
+    }
+
+    public bool isResizing() {
+        return resizing;
+    }
+
+    public bool finishedResizing() {
+        if (prevRes != res) {
+            prevRes = res;
+            return true;
+        }
+        
+        return false;
     }
 
 }
