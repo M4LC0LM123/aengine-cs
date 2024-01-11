@@ -66,6 +66,11 @@ namespace Editor
             GuiWindow prefabSpawnWindow = new GuiWindow("Prefab properties", 150, 320);
             prefabSpawnWindow.active = false;
             string loadDir = String.Empty;
+
+            GuiWindow loadSceneWindow = new GuiWindow("Load scene", 200, 320);
+            loadSceneWindow.active = false;
+            string sceneDir = String.Empty;
+            Dictionary<string, ParsedObject> objs = new Dictionary<string, ParsedObject>();
             
             PerspectiveWindow.init();
 
@@ -259,6 +264,7 @@ namespace Editor
                 componentWindow.render();
                 prefabWindow.render();
                 prefabSpawnWindow.render();
+                loadSceneWindow.render();
                 PerspectiveWindow.window.render();
                 
                 if (infoWindow.active) {
@@ -382,13 +388,56 @@ namespace Editor
                     }
                     
                     if (Gui.GuiButton("Load", 10, 80, 60, 25, saveAndLoadWindow)) {
-                        manager.load(sceneName.text);
+                        loadSceneWindow.active = true;
+                        // manager.load(sceneName.text);
                     }
 
                     if (Gui.GuiButton("Clean", 10, 115, 60, 25, saveAndLoadWindow)) {
                         World.entities.Clear();
                         AxieMover.ACTIVE_ENT = null;
                         AxieMover.IS_OBJ_ACTIVE = false;
+                    }
+                }
+
+                if (loadSceneWindow.active) {
+                    if (Gui.GuiButton("Find", 10, 10, loadSceneWindow.rec.width - 20, 30, loadSceneWindow)) {
+                        DialogResult result = Dialog.FileOpen();
+                        if (result.IsOk) {
+                            if (result.Path != null) sceneDir = result.Path.Replace("\\", "/");
+                        } else {
+                            Console.WriteLine("cancelled");  
+                        }
+                    }
+
+                    if (sceneDir != String.Empty) {
+                        ParsedData data = Parser.parse(Parser.read(sceneDir));
+                        
+                        for (var i = 0; i < data.data.Keys.Count; i++) {
+                            string name = data.data.Keys.ElementAt(i);
+                            ParsedObject obj = data.getObject(name);
+
+                            if (obj.modifier == "scene" && !objs.ContainsKey(name)) {
+                                objs.Add(name, obj);
+                            }
+                        }
+                        
+                        for (var i = 0; i < objs.Count; i++) {
+                            KeyValuePair<string, ParsedObject> pair = objs.ElementAt(i);
+                            
+                            Gui.GuiTextPro(Gui.font,
+                                pair.Key + " - " +
+                                pair.Value.modifier, 10, 60 + i * 30, 15, WHITE,
+                                loadSceneWindow);
+
+                            if (Gui.GuiButton("x", 10 + MeasureTextEx(Gui.font, pair.Key + " - " +
+                                        pair.Value.modifier, 15, 2.5f).X, 60 + i * 30, 15, 15,
+                                    loadSceneWindow)) {
+                                Prefab.loadScene(sceneDir, pair.Key, true, true);
+                                // manager.load(pair.Key);
+                            }
+
+                            loadSceneWindow.rec.height = i * 30 + 100;
+                        }
                     }
                 }
                 

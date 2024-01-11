@@ -43,7 +43,7 @@ public class PerspectiveWindow {
             }
 
             if (IsMouseButtonDown(MouseButton.MOUSE_BUTTON_MIDDLE)) {
-                if (delta != Vector2.Zero) {
+                if (Utils.roundVector2Decimals(delta, 0) != Vector2.Zero) {
                     camera.target = GetScreenToWorld2D(Vector2.Add(camera.offset, delta), camera);
                 } 
             }
@@ -51,33 +51,35 @@ public class PerspectiveWindow {
     }
     
     public static void render() {
-        if (window.active) {
-            perspective.beginRender();
-            ClearBackground(BLACK);
-            
-            // for (int x = -perspective.width; x < perspective.width * 2; x += gridSpacing) {
-            //     DrawLine(x - ((int)camera.target.X % gridSpacing), -perspective.height, x - ((int)camera.target.X % gridSpacing),
-            //         perspective.height * 2, LIGHTGRAY);
-            // }
-            //
-            // for (int y = -perspective.height; y < perspective.height * 2; y += gridSpacing) {
-            //     DrawLine(-perspective.width, y - ((int)camera.target.Y % gridSpacing), perspective.width * 2,
-            //         y - ((int)camera.target.Y % gridSpacing), LIGHTGRAY);
-            // }
-            
-            BeginMode2D(camera);
-            
-            foreach (Entity ent in World.entities.Values) {
-                DrawRectangleLines(
-                    (int)(ent.transform.position.X - ent.transform.scale.X * 0.5f) * renderScalar,
-                    (int)(ent.transform.position.Z - ent.transform.scale.Z * 0.5f) * renderScalar,
-                    (int)ent.transform.scale.X * renderScalar,
-                    (int)ent.transform.scale.Z * renderScalar, WHITE);
-            }
-                    
-            EndMode2D();
-            perspective.endRender();
+        if (!window.active) {
+            return;
         }
+        
+        perspective.beginRender();
+        ClearBackground(BLACK);
+            
+        // for (int x = -perspective.width; x < perspective.width * 2; x += gridSpacing) {
+        //     DrawLine(x - ((int)camera.target.X % gridSpacing), -perspective.height, x - ((int)camera.target.X % gridSpacing),
+        //         perspective.height * 2, LIGHTGRAY);
+        // }
+        //
+        // for (int y = -perspective.height; y < perspective.height * 2; y += gridSpacing) {
+        //     DrawLine(-perspective.width, y - ((int)camera.target.Y % gridSpacing), perspective.width * 2,
+        //         y - ((int)camera.target.Y % gridSpacing), LIGHTGRAY);
+        // }
+            
+        BeginMode2D(camera);
+            
+        foreach (Entity ent in World.entities.Values) {
+            DrawRectangleLines(
+                (int)(ent.transform.position.X - ent.transform.scale.X * 0.5f) * renderScalar,
+                (int)(ent.transform.position.Z - ent.transform.scale.Z * 0.5f) * renderScalar,
+                (int)ent.transform.scale.X * renderScalar,
+                (int)ent.transform.scale.Z * renderScalar, WHITE);
+        }
+                    
+        EndMode2D();
+        perspective.endRender();
     }
 
     public static void reload() {

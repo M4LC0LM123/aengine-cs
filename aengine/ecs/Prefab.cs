@@ -11,7 +11,7 @@ public class Prefab {
     private static string open = "{";
     private static string close = "}";
 
-    public static void loadScene(string path, string name, bool changeDir = true) {
+    public static void loadScene(string path, string name, bool changeDir = true, bool editor = false) {
         string prevDir = String.Empty;
         if (changeDir) prevDir = Directory.GetCurrentDirectory();
         // Console.WriteLine("prev dir: " + prevDir);
@@ -28,9 +28,17 @@ public class Prefab {
             string newDir = String.Empty;
         
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
-                newDir = prevDir + "/" + Path.GetDirectoryName(path);
+                if (editor) {
+                    newDir = Path.GetDirectoryName(path);
+                } else {
+                    newDir = prevDir + "/" + Path.GetDirectoryName(path);
+                }
             } else {
-                newDir = prevDir + "\\" + Path.GetDirectoryName(path);  
+                if (editor) {
+                    newDir = Path.GetDirectoryName(path);
+                } else {
+                    newDir = prevDir + "\\" + Path.GetDirectoryName(path);
+                }
             }
         
             // string newPath = prevDir + "\\" + path.Replace("/", "\\");

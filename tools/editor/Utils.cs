@@ -20,6 +20,13 @@ public class Utils
         };
     }
     
+    public static Vector2 roundVector2Decimals(Vector2 vector, int decimalCount) {
+        return vector with {
+            X = (float) Math.Round(vector.X, decimalCount), 
+            Y = (float) Math.Round(vector.Y, decimalCount)
+        };
+    }
+    
     public static void drawAxisLine(Axis axis, Vector3 start, float length, float thickness, Color color)
     {
         Model model = LoadModelFromMesh(GenMeshCylinder(thickness, length, 15));

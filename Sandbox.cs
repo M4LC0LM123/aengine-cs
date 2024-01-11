@@ -223,8 +223,6 @@ public static class Sandbox {
                 slider.render(10, 200, 240, 40, window);
             }
 
-            System.Console.WriteLine(slider.value);
-
             console.render();
 
             Window.endRender();
