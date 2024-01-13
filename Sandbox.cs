@@ -97,9 +97,8 @@ public static class Sandbox {
         Prefab.saveScene("save_scene_test.od", "SOME_SAVED_SCENE");
 
         // Main game loop
-        while (!WindowShouldClose()) // Detect window close button or ESC key
+        while (Window.tick()) // Detect window close button or ESC key
         {
-            Window.tick();
             World.update();
 
             if (IsKeyPressed(KeyboardKey.KEY_ESCAPE))

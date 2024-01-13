@@ -80,9 +80,8 @@ namespace Editor
             PerspectiveWindow.init();
 
             // Main game loop
-            while (!WindowShouldClose()) // Detect window close button or ESC key
+            while (Window.tick()) // Detect window close button or ESC key
             {
-                Window.tick();
                 World.update(false);
                 manager.update(mover);
                 infoWindow.active = true;

@@ -112,7 +112,7 @@ public class Window {
         }
     }
 
-    public static void tick() {
+    public static bool tick() {
         if (IsWindowResized()) {
             m_width = GetScreenWidth();
             m_height = GetScreenHeight();
@@ -120,6 +120,8 @@ public class Window {
         
         mousePosition.X = GetMouseX() * ((float)renderWidth / width);
         mousePosition.Y = GetMouseY() * ((float)renderHeight / height);
+
+        return !WindowShouldClose();
     }
     
     public static void beginRender() {
