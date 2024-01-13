@@ -25,7 +25,6 @@ namespace aengine.ecs {
             
             if (World.hasTag(tag)) {
                 tag += id;
-                Console.WriteLine(tag);
             }
             
             World.entities.Add(tag, this);
@@ -40,7 +39,6 @@ namespace aengine.ecs {
             
             if (World.hasTag(tag)) {
                 tag += id;
-                Console.WriteLine(tag);
             }
             
             World.entities.Add(tag, this);

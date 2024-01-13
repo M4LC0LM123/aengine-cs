@@ -42,7 +42,8 @@ namespace aengine.ecs
         public static void update(bool physics = true, bool multithread = false) {
             fixedUpdate(physics, multithread);
 
-            foreach (var entity in entities.Values) {
+            foreach (var (tag, entity) in entities) {
+                entity.tag = tag;
                 entity.update();
             }
         }

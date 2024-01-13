@@ -9,6 +9,8 @@ using Raylib_CsLo;
 using Sandbox.aengine.Gui;
 using static Raylib_CsLo.Raylib;
 
+using ae_Console = aengine.core.Console;
+
 namespace Editor
 {
     public class Editor
@@ -72,6 +74,8 @@ namespace Editor
             loadSceneWindow.active = false;
             string sceneDir = String.Empty;
             Dictionary<string, ParsedObject> objs = new Dictionary<string, ParsedObject>();
+
+            ae_Console console = new ae_Console();
             
             PerspectiveWindow.init();
 
@@ -81,9 +85,15 @@ namespace Editor
                 Window.tick();
                 World.update(false);
                 manager.update(mover);
+                infoWindow.active = true;
 
                 if (IsKeyPressed(KeyboardKey.KEY_ESCAPE))
                     isMouseLocked = !isMouseLocked;
+
+                if (IsKeyPressed(KeyboardKey.KEY_GRAVE)) {
+                    console.window.setPosition(10, 10);
+                    console.toggleActive();
+                }
 
                 if (IsKeyPressed(KeyboardKey.KEY_RIGHT_ALT)) {
                     AxieMover.CAMERA_MODE++;
@@ -313,7 +323,7 @@ namespace Editor
                 }
 
                 if (prefabWindow.active) {
-                    if (Gui.GuiButton("Open directory", 10, 10, 280, 15, prefabWindow)) {
+                    if (Gui.GuiButton("Open directory", 10, 10, 280, 25, prefabWindow)) {
                         DialogResult result = Dialog.FolderPicker();
                         if (result.IsOk) {
                             prefabDir = result.Path.Replace("\\", "/");
@@ -324,13 +334,13 @@ namespace Editor
                         defaultPrefabs = false;
                     }
                     
-                    if (Gui.GuiButton("Load Default", 10, 25, 280, 15, prefabWindow)) {
+                    if (Gui.GuiButton("Load Default", 10, 40, 280, 25, prefabWindow)) {
                         prefabDir = String.Empty;
                         defaultPrefabs = true;
                     }
 
                     if (defaultPrefabs) {
-                        if (Gui.GuiButton("#", 10, 50, 25, 25, prefabWindow)) {
+                        if (Gui.GuiButton("#", 10, 75, 25, 25, prefabWindow)) {
                             prefabSpawnWindow.active = true;
                         }
                     }
@@ -349,7 +359,7 @@ namespace Editor
                                 int currentIndex = row * columns + col;
                                 if (currentIndex < files.Length) {
                                     float x = 10 + col * (width + 10); // Adjust spacing between rectangles
-                                    float y = 50 + row * (height + 10); // Adjust spacing between rectangles
+                                    float y = 75 + row * (height + 10); // Adjust spacing between rectangles
                                     files[currentIndex] = files[currentIndex].Replace("\\", "/");
                                     if (files[currentIndex].EndsWith(".od")) {
                                         if (Gui.GuiButton("#", x, y, width, height, prefabWindow)) {
@@ -601,6 +611,8 @@ namespace Editor
                         }
                     }
                 }
+                
+                console.render();
                 
                 Window.endRender();
             }
