@@ -62,6 +62,7 @@ namespace Editor
             GuiWindow prefabWindow = new GuiWindow("Prefabs", 100, 300, 300, 400);
             prefabWindow.active = false;
             string prefabDir = String.Empty;
+            bool defaultPrefabs = true;
 
             GuiWindow prefabSpawnWindow = new GuiWindow("Prefab properties", 150, 320);
             prefabSpawnWindow.active = false;
@@ -312,17 +313,29 @@ namespace Editor
                 }
 
                 if (prefabWindow.active) {
-                    if (Gui.GuiButton("Open directory", 10, 10, 280, 30, prefabWindow)) {
+                    if (Gui.GuiButton("Open directory", 10, 10, 280, 15, prefabWindow)) {
                         DialogResult result = Dialog.FolderPicker();
                         if (result.IsOk) {
                             prefabDir = result.Path.Replace("\\", "/");
-                            // Console.WriteLine(path);
                         } else {
                             Console.WriteLine("cancelled");
                         }
+                        
+                        defaultPrefabs = false;
                     }
                     
-                    if (prefabDir != String.Empty) {
+                    if (Gui.GuiButton("Load Default", 10, 25, 280, 15, prefabWindow)) {
+                        prefabDir = String.Empty;
+                        defaultPrefabs = true;
+                    }
+
+                    if (defaultPrefabs) {
+                        if (Gui.GuiButton("#", 10, 50, 25, 25, prefabWindow)) {
+                            prefabSpawnWindow.active = true;
+                        }
+                    }
+                    
+                    if (!defaultPrefabs && prefabDir != String.Empty) {
                         string[] files = Directory.GetFiles(prefabDir);
 
                         int columns = 9;
@@ -354,7 +367,7 @@ namespace Editor
                     }
                 }
 
-                if (prefabSpawnWindow.active) {
+                if (prefabSpawnWindow.active && !defaultPrefabs) {
                     ParsedData data = Parser.parse(Parser.read(loadDir));
                     
                     for (var i = 0; i < data.data.Keys.Count; i++) {
@@ -368,6 +381,32 @@ namespace Editor
                                     data.getObject(data.data.Keys.ElementAt(i)).modifier, 15, 2.5f).X, 10 + i * 30, 15, 15,
                                 prefabSpawnWindow)) {
                             Prefab.loadPrefab(loadDir, data.data.Keys.ElementAt(i), true, false);
+                        }
+                        
+                        prefabSpawnWindow.rec.height = i * 30 + 50;
+                    }
+
+                    if (Gui.GuiButton("Go", prefabSpawnWindow.rec.width - 50, 10, 40, 40, prefabSpawnWindow)) {
+                        foreach (string name in data.data.Keys) {
+                            Prefab.loadPrefab(loadDir, name, false, false);
+                        }
+                    }
+                }
+
+                if (prefabSpawnWindow.active && defaultPrefabs) {
+                    ParsedData data = Parser.parse(Prefabs.PREFABS_CONTENT);
+                    
+                    for (var i = 0; i < data.data.Keys.Count; i++) {
+                        Gui.GuiTextPro(Gui.font,
+                            data.data.Keys.ElementAt(i) + " - " +
+                            data.getObject(data.data.Keys.ElementAt(i)).modifier, 10, 10 + i * 30, 15, WHITE,
+                            prefabSpawnWindow);
+
+                        if (Gui.GuiButton("x", 10 + MeasureTextEx(Gui.font, data.data.Keys.ElementAt(i) +
+                                                                            " - " +
+                                                                            data.getObject(data.data.Keys.ElementAt(i)).modifier, 15, 2.5f).X, 10 + i * 30, 15, 15,
+                                prefabSpawnWindow)) {
+                            Prefab.loadPrefab(Prefabs.PREFABS_CONTENT, data.data.Keys.ElementAt(i), true);
                         }
                         
                         prefabSpawnWindow.rec.height = i * 30 + 50;

@@ -288,7 +288,11 @@ public class Prefab {
             Directory.SetCurrentDirectory(newDir);
 
             string tag = obj.getValue<string>("tag");
-
+            //
+            // if (World.hasTag(tag)) {
+            //     tag += World.entities.cou
+            // }
+            
             Entity result = new Entity(tag);
 
             float x = 0;
@@ -381,6 +385,56 @@ public class Prefab {
         return null;
     }
 
+    public static Entity loadPrefab(string[] content, string name, bool posZero = false) {
+        ParsedData data = Parser.parse(content);
+        ParsedObject obj = data.getObject(name);
+
+        if (obj.modifier != "prefab") {
+            Console.WriteLine($"Object {name} isn't a prefab");
+            return null;
+        }
+
+        string tag = obj.getValue<string>("tag");
+
+        Entity result = new Entity(tag);
+
+        float x = 0;
+        float y = 0;
+        float z = 0;
+
+        if (!posZero) {
+            x = obj.getValue<float>("x");
+            y = obj.getValue<float>("y");
+            z = obj.getValue<float>("z");
+        }
+
+        float width = obj.getValue<float>("width");
+        float height = obj.getValue<float>("height");
+        float depth = obj.getValue<float>("depth");
+
+        float rx = obj.getValue<float>("rx"); // pitch
+        float ry = obj.getValue<float>("ry"); // yaw
+        float rz = obj.getValue<float>("rz"); // roll
+
+        result.transform.position = new Vector3(x, y, z);
+        result.transform.scale = new Vector3(width, height, depth);
+        result.transform.rotation = new Vector3(rx, ry, rz);
+
+        string components = obj.getValue<string>("components");
+
+        if (components != "") {
+            char separator = ',';
+
+            string[] componentNameArray = components.Split(separator, StringSplitOptions.TrimEntries);
+
+            foreach (string s in componentNameArray) {
+                result.addComponent(m_loadComponent(result, content, s));
+            }
+        }
+
+        return result;
+    }
+
     public static Entity loadEntity(string path, string name) {
         ParsedData data = Parser.parse(Parser.read(path));
         ParsedObject obj = data.getObject(name);
@@ -410,6 +464,35 @@ public class Prefab {
 
     public static Component loadComponent(Entity entity, string path, string name) {
         ParsedData data = Parser.parse(Parser.read(path));
+        ParsedObject obj = data.getObject(name);
+
+        string type = obj.getValue<string>("type");
+
+        if (type == "MeshComponent" || type == "Mesh") {
+            return loadMeshComponent(entity, obj);
+        }
+
+        if (type == "RigidBodyComponent" || type == "RigidBody") {
+            return loadRigidBodyComponent(entity, obj);
+        }
+
+        if (type == "LightComponent" || type == "Light") {
+            return loadLightComponent(entity, obj);
+        }
+
+        if (type == "SpatialAudioComponent" || type == "SpatialAudio" || type == "Sound") {
+            return loadSpatialAudioComponent(entity, obj);
+        }
+
+        if (type == "FluidComponent" || type == "Fluid") {
+            return loadFluidComponent(entity, obj);
+        }
+
+        return null;
+    }
+    
+    private static Component m_loadComponent(Entity entity, string[] content, string name) {
+        ParsedData data = Parser.parse(content);
         ParsedObject obj = data.getObject(name);
 
         string type = obj.getValue<string>("type");

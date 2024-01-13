@@ -13,34 +13,14 @@ namespace Editor;
 
 public class ObjectManager
 {
-    public List<Object> objects;
     public bool outlined = false;
-
-    public ObjectManager()
-    {
-        objects = new List<Object>();
-    }
-    
-    public void addOBject(int id)
-    {
-        objects.Add(new Object(id));
-    }
-
-    public void addObject(int id, Vector3 position)
-    {
-        objects.Add(new Object(id, position));
-    }
-
-    public void removeObject(Object obj)
-    {
-        objects.Remove(obj);
-    }
 
     public void update(AxieMover mover)
     {
         foreach (var ent in World.entities.Values) {
-            if (AxieMover.ACTIVE_ENT != ent)
+            if (AxieMover.ACTIVE_ENT != ent) {
                 ent.selected = false;
+            }
             
             AxieMover.collision = GetRayCollisionBox(AxieMover.MOUSE_RAY,
                 new BoundingBox(RayMath.Vector3Subtract(ent.transform.position, ent.transform.scale / 2),
@@ -98,47 +78,6 @@ public class ObjectManager
                 rb.setPosition(ent.transform.position);
                 rb.setRotation(ent.transform.rotation);
             }
-        }
-    }
-
-    public void saveJson()
-    {
-        List<Dictionary<string, object>> jsonObjects = new List<Dictionary<string, object>>();
-
-        foreach (var obj in objects)
-        {
-            jsonObjects.Add(obj.ToDictionary());
-        }
-
-        var options = new JsonSerializerOptions
-        {
-            WriteIndented = true
-        };
-
-        string json = JsonSerializer.Serialize(jsonObjects, options);
-
-        if (Dialog.FileSave().Path != null) {
-            File.WriteAllText(Dialog.FileSave().Path, json);   
-        } else {
-            Console.WriteLine("cancelled");  
-        }
-    }
-
-    public void loadJson()
-    {
-        objects.Clear();
-
-        if (Dialog.FileOpen().Path != null) {
-            List<SceneObject> data = JsonSerializer.Deserialize<List<SceneObject>>(File.ReadAllText(Dialog.FileOpen().Path));
-            foreach (var obj in data)
-            {
-                Object new_object = new Object(obj.id, new Vector3(obj.x, obj.y, obj.z));
-                new_object.rotation = new Vector3(obj.rx, obj.ry, obj.rz);
-                new_object.scale = new Vector3(obj.w, obj.h, obj.d);
-                objects.Add(new_object);
-            }   
-        } else {
-            Console.WriteLine("cancelled");  
         }
     }
 

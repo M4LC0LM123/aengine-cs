@@ -17,7 +17,7 @@ namespace aengine.ecs {
         public Entity() {
             m_parent = null;
 
-            id = World.entities.Count;
+            id = World.entities.Values.Count;
             tag = "Entity" + id;
             transform = new TransformComponent(this);
             m_rootTransform = transform;
@@ -25,13 +25,14 @@ namespace aengine.ecs {
             
             if (World.hasTag(tag)) {
                 tag += id;
+                Console.WriteLine(tag);
             }
             
             World.entities.Add(tag, this);
         }
 
         public Entity(string tag) {
-            id = World.entities.Count;
+            id = World.entities.Values.Count;
             this.tag = tag;
             transform = new TransformComponent(this);
             m_rootTransform = transform;
@@ -39,6 +40,7 @@ namespace aengine.ecs {
             
             if (World.hasTag(tag)) {
                 tag += id;
+                Console.WriteLine(tag);
             }
             
             World.entities.Add(tag, this);
