@@ -14,7 +14,7 @@ namespace aengine.ecs
         {
             position = new Vector3();
             rotation = new Vector3();
-            scale = new Vector3();
+            scale = Vector3.One;
         }
 
         public AABB getBoundingBox()

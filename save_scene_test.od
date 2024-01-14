@@ -25,9 +25,9 @@ object Entity0 {
     f32 y = 0;
     f32 z = 0;
 
-    f32 width = 0;
-    f32 height = 0;
-    f32 depth = 0;
+    f32 width = 1;
+    f32 height = 1;
+    f32 depth = 1;
 
     f32 rx = 0; // rotation x (pitch)
     f32 ry = 0; // rotation y (yaw)
@@ -141,9 +141,9 @@ object Entity3 {
     f32 y = 0;
     f32 z = 0;
 
-    f32 width = 0;
-    f32 height = 0;
-    f32 depth = 0;
+    f32 width = 1;
+    f32 height = 1;
+    f32 depth = 1;
 
     f32 rx = 0; // rotation x (pitch)
     f32 ry = 0; // rotation y (yaw)
@@ -159,9 +159,9 @@ object Entity4 {
     f32 y = 0;
     f32 z = 0;
 
-    f32 width = 0;
-    f32 height = 0;
-    f32 depth = 0;
+    f32 width = 1;
+    f32 height = 1;
+    f32 depth = 1;
 
     f32 rx = 0; // rotation x (pitch)
     f32 ry = 0; // rotation y (yaw)
@@ -554,9 +554,9 @@ object Entity13 {
     f32 y = 0;
     f32 z = 0;
 
-    f32 width = 0;
-    f32 height = 0;
-    f32 depth = 0;
+    f32 width = 1;
+    f32 height = 1;
+    f32 depth = 1;
 
     f32 rx = 0; // rotation x (pitch)
     f32 ry = 0; // rotation y (yaw)

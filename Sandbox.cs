@@ -96,6 +96,14 @@ public static class Sandbox {
         
         Prefab.saveScene("save_scene_test.od", "SOME_SAVED_SCENE");
 
+        Entity slayer = new Entity("slayer");
+        slayer.transform.position.X = 10;
+        slayer.transform.rotation.X = 90;
+        slayer.addComponent(new MeshComponent(slayer, new aModel("assets/models/guy.iqm"), WHITE, new aTexture("assets/models/guytex.png")));
+        
+        ModelAnimation[] anims = LoadModelAnimations("assets/models/guyanim.iqm");
+        int animFrameCounter = 0;
+
         // Main game loop
         while (Window.tick()) // Detect window close button or ESC key
         {
@@ -193,6 +201,13 @@ public static class Sandbox {
 
             ps2.getComponent<SpatialAudioComponent>().play();
             
+            // animation
+            if (IsKeyDown(KeyboardKey.KEY_ENTER)) {
+                animFrameCounter++;
+                UpdateModelAnimation(slayer.getComponent<MeshComponent>().model.data, anims[0], animFrameCounter);
+                if (animFrameCounter >= anims[0].frameCount) animFrameCounter = 0;
+            }
+            
             Window.beginRender();
             ClearBackground(SKYBLUE);
 
@@ -202,7 +217,7 @@ public static class Sandbox {
 
             Rendering.drawDebugAxies();
             Rendering.drawArrow(Vector3.Zero, Vector3.One, GREEN);
-
+            
             EndMode3D();
             Rendering.drawCrosshair(WHITE);
             DrawTexturePro(gun, new Rectangle(0, 0, gun.width, gun.height),
