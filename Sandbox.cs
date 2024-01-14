@@ -98,10 +98,11 @@ public static class Sandbox {
 
         Entity slayer = new Entity("slayer");
         slayer.transform.position.X = 10;
-        slayer.transform.rotation.X = 90;
-        slayer.addComponent(new MeshComponent(slayer, new aModel("assets/models/guy.iqm"), WHITE, new aTexture("assets/models/guytex.png")));
+        slayer.transform.scale = Vector3.One * 5;
+        slayer.addComponent(new MeshComponent(slayer, new aModel("assets/models/nathan.iqm"), WHITE, new aTexture("assets/models/guytex.png")));
         
-        ModelAnimation[] anims = LoadModelAnimations("assets/models/guyanim.iqm");
+        ModelAnimation[] anims = LoadModelAnimations("assets/models/nathan.iqm");
+        System.Console.WriteLine(anims.Length);
         int animFrameCounter = 0;
 
         // Main game loop
@@ -203,7 +204,7 @@ public static class Sandbox {
             
             // animation
             if (IsKeyDown(KeyboardKey.KEY_ENTER)) {
-                animFrameCounter++;
+                animFrameCounter += (int)(150 * GetFrameTime());
                 UpdateModelAnimation(slayer.getComponent<MeshComponent>().model.data, anims[0], animFrameCounter);
                 if (animFrameCounter >= anims[0].frameCount) animFrameCounter = 0;
             }
