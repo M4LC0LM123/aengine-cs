@@ -13,7 +13,7 @@ using ae_Console = aengine.core.Console;
 
 namespace Editor
 {
-    public class Editor
+    public unsafe class Editor
     {
         public static GuiTextBox xPos = new GuiTextBox();
         public static GuiTextBox yPos = new GuiTextBox();

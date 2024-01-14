@@ -22,7 +22,6 @@ public class AxieMover
 
     public static float AXIES_RADIUS = 1f;
     public static float MOVE_SPEED = 1;
-    public static int CURRENT_ID = 0;
     public static bool IS_OBJ_ACTIVE = false;
     public static Entity ACTIVE_ENT = null;
     public static Mode CURRENT_MODE = Mode.ROAM;

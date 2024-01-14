@@ -7,7 +7,7 @@ using static Raylib_CsLo.Raylib;
 
 namespace Sandbox.aengine.Gui;
 
-public class Gui {
+public static class Gui {
     public static Color mainColor = new Color(99, 141, 160, 255);
     public static Color accentColor = new Color(63, 105, 135, 255);
     public static Color darkerColor = new Color(41, 59, 68, 255);

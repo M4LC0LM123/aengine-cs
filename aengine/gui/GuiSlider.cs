@@ -29,7 +29,7 @@ public class GuiSlider
         }
 
         float ey = ry + height * 0.5f;
-        DrawLine((int)rx - max, (int)ey, (int)(rx - max * 1.25f + width), (int)ey,WHITE);
+        DrawLine((int)rx - max, (int)ey, (int)(rx - max * 1.25f + width), (int)ey,Gui.sliderColor);
 
         Rectangle rec = new Rectangle(rx + value, ry, 15, height);
         if (CheckCollisionPointRec(Window.mousePosition, rec) && IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT))
