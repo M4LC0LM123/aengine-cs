@@ -99,9 +99,9 @@ public static class Sandbox {
         Entity slayer = new Entity("slayer");
         slayer.transform.position.X = 10;
         slayer.transform.scale = Vector3.One * 5;
-        slayer.addComponent(new MeshComponent(slayer, new aModel("assets/models/nathan.iqm"), WHITE, new aTexture("assets/models/guytex.png")));
+        slayer.addComponent(new MeshComponent(slayer, new aModel("assets/models/cesium_man.m3d"), WHITE, new aTexture("assets/models/guytex.png")));
         
-        ModelAnimation[] anims = LoadModelAnimations("assets/models/nathan.iqm");
+        ModelAnimation[] anims = LoadModelAnimations("assets/models/cesium_man.m3d");
         System.Console.WriteLine(anims.Length);
         int animFrameCounter = 0;
 
