@@ -8,6 +8,10 @@ object estrada {
     str Entity5 = "estrada.od";
     str Entity6 = "estrada.od";
     str Entity7 = "estrada.od";
+    str Entity8 = "estrada.od";
+    str block = "estrada.od";
+    str block10 = "estrada.od";
+    str block11 = "estrada.od";
 }
 
 #mod prefab
@@ -26,26 +30,7 @@ object playa {
     f32 ry = 0; // rotation y (yaw)
     f32 rz = 0; // rotation z (roll)
 
-    str components = "playa_rb, playa_mesh";
-}
-object playa_mesh {
-    str type = "MeshComponent";
-
-    i32 shape = 6;
-
-    i32 r = 255;
-    i32 g = 255;
-    i32 b = 255;
-    i32 a = 255;
-
-    bool isModel = true;
-
-    str texture = "";
-    str model = "assets/models/zombie.glb";
-
-    str heightmap = "";
-
-    i32 scale = 1;    
+    str components = "playa_rb";
 }
 object playa_rb {
     str type = "RigidBodyComponent";
@@ -287,7 +272,7 @@ object Entity6 {
     f32 x = -15.875747;
     f32 y = -11.86124;
     f32 z = -35.94369;
-        
+
     f32 width = 32.08;
     f32 height = 18.46;
     f32 depth = 16.74;
@@ -373,6 +358,190 @@ object Entity7_rb {
 
     i32 shape = 0;
     i32 body_type = 0;
+
+    str model = "";
+
+    str heightmap = "";
+}
+#mod prefab
+object Entity8 {
+    str tag = Entity8;
+    
+    f32 x = -18.45;
+    f32 y = -2.4;
+    f32 z = -37.99;
+
+    f32 width = 5;
+    f32 height = 5;
+    f32 depth = 5;
+
+    f32 rx = 0; // rotation x (pitch)
+    f32 ry = 0; // rotation y (yaw)
+    f32 rz = 0; // rotation z (roll)
+
+    str components = "Entity8_mesh";
+}
+object Entity8_mesh {
+    str type = "MeshComponent";
+
+    i32 shape = 6;
+
+    i32 r = 255;
+    i32 g = 255;
+    i32 b = 255;
+    i32 a = 255;
+
+    bool isModel = true;
+
+    str texture = "";
+    str model = "assets/models/swat.m3d";
+
+    str heightmap = "";
+
+    i32 scale = 1;    
+}
+#mod prefab
+object block {
+    str tag = block;
+    
+    f32 x = -8.04;
+    f32 y = -6.69;
+    f32 z = -16.593193;
+
+    f32 width = 5;
+    f32 height = 1;
+    f32 depth = 10;
+
+    f32 rx = -35; // rotation x (pitch)
+    f32 ry = 0; // rotation y (yaw)
+    f32 rz = 0; // rotation z (roll)
+
+    str components = "block_mesh, block_rb";
+}
+object block_mesh {
+    str type = "MeshComponent";
+
+    i32 shape = 0;
+
+    i32 r = 255;
+    i32 g = 255;
+    i32 b = 255;
+    i32 a = 255;
+
+    bool isModel = true;
+
+    str texture = "assets/albedo.png";
+    str model = "";
+
+    str heightmap = "";
+
+    i32 scale = 1;    
+}
+object block_rb {
+    str type = "RigidBodyComponent";
+    
+    f32 mass = 1;
+
+    i32 shape = 0;
+    i32 body_type = 1;
+
+    str model = "";
+
+    str heightmap = "";
+}
+#mod prefab
+object block10 {
+    str tag = block10;
+    
+    f32 x = -13.01;
+    f32 y = -3.91;
+    f32 z = -22.9;
+
+    f32 width = 15;
+    f32 height = 1;
+    f32 depth = 5;
+
+    f32 rx = 0; // rotation x (pitch)
+    f32 ry = 0; // rotation y (yaw)
+    f32 rz = 0; // rotation z (roll)
+
+    str components = "block10_mesh, block10_rb";
+}
+object block10_mesh {
+    str type = "MeshComponent";
+
+    i32 shape = 0;
+
+    i32 r = 255;
+    i32 g = 255;
+    i32 b = 255;
+    i32 a = 255;
+
+    bool isModel = true;
+
+    str texture = "assets/albedo.png";
+    str model = "";
+
+    str heightmap = "";
+
+    i32 scale = 1;    
+}
+object block10_rb {
+    str type = "RigidBodyComponent";
+    
+    f32 mass = 1;
+
+    i32 shape = 0;
+    i32 body_type = 1;
+
+    str model = "";
+
+    str heightmap = "";
+}
+#mod prefab
+object block11 {
+    str tag = block11;
+    
+    f32 x = -18.02;
+    f32 y = -3.91;
+    f32 z = -30.13;
+
+    f32 width = 5;
+    f32 height = 1;
+    f32 depth = 10;
+
+    f32 rx = 0; // rotation x (pitch)
+    f32 ry = 0; // rotation y (yaw)
+    f32 rz = 0; // rotation z (roll)
+
+    str components = "block11_mesh, block11_rb";
+}
+object block11_mesh {
+    str type = "MeshComponent";
+
+    i32 shape = 0;
+
+    i32 r = 255;
+    i32 g = 255;
+    i32 b = 255;
+    i32 a = 255;
+
+    bool isModel = true;
+
+    str texture = "assets/albedo.png";
+    str model = "";
+
+    str heightmap = "";
+
+    i32 scale = 1;    
+}
+object block11_rb {
+    str type = "RigidBodyComponent";
+    
+    f32 mass = 1;
+
+    i32 shape = 0;
+    i32 body_type = 1;
 
     str model = "";
 

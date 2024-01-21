@@ -14,6 +14,7 @@ public class Window {
     private static TraceLogLevel m_traceLogLevel = TraceLogLevel.LOG_NONE;
     private static KeyboardKey m_exitKey = KeyboardKey.KEY_NULL;
     private static int m_targetFps = 60;
+    private static bool m_isEditor = false;
     public static Vector2 mousePosition = Vector2.Zero;
     public static RenderTexture target;
 
@@ -27,7 +28,7 @@ public class Window {
 
         target = LoadRenderTexture(m_renderWidth, m_renderHeight);
     }
-
+    
     public static int renderWidth {
         get => m_renderWidth;
         set {
@@ -110,6 +111,11 @@ public class Window {
             m_targetFps = value;
             SetTargetFPS(m_targetFps);
         }
+    }
+
+    public static bool isEditor {
+        get => m_isEditor;
+        set => m_isEditor = value;
     }
 
     public static bool tick() {

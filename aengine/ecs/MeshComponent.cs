@@ -6,6 +6,8 @@ using aengine.graphics;
 using System.Diagnostics;
 using System.Numerics;
 using aengine_cs.aengine.parser;
+using aengine_cs.aengine.windowing;
+using Jitter.Collision.Shapes;
 using Raylib_CsLo;
 using static Raylib_CsLo.Raylib;
 using static Raylib_CsLo.RlGl;
@@ -69,6 +71,8 @@ namespace aengine.ecs
                 model = new aModel(LoadModelFromMesh(GenMeshCylinder(transform.scale.X, transform.scale.Y, 15)));
             } else if (shape is ShapeType.CONE) {
                 model = new aModel(LoadModelFromMesh(GenMeshCone(transform.scale.X, transform.scale.Y, 15)));
+            } else if (shape is ShapeType.CAPSULE) {
+                model = new aModel(LoadModelFromMesh(Rendering.genMeshCapsule(0.5f, 1, 15, 15)));
             }
             scale = 1;
             model.data.materials[0].maps[(int)MATERIAL_MAP_DIFFUSE].texture = texture.data;
@@ -89,6 +93,8 @@ namespace aengine.ecs
                 model = new aModel(LoadModelFromMesh(GenMeshCylinder(0.5f, 1, 15)));
             } else if (shape is ShapeType.CONE) {
                 model = new aModel(LoadModelFromMesh(GenMeshCone(0.5f, 1, 15)));
+            } else if (shape is ShapeType.CAPSULE) {
+                model = new aModel(LoadModelFromMesh(Rendering.genMeshCapsule(0.5f, 1, 15, 15)));
             }
             scale = 1;
             isModel = true;
@@ -160,8 +166,13 @@ namespace aengine.ecs
             model.data.materials[mat].shader = shader.handle;
         }
 
+        public unsafe void setColor(Color color) {
+            model.data.materials[0].maps[(int)MATERIAL_MAP_DIFFUSE].color = color;
+        }
+
         public void setShape(ShapeType shape) {
             this.shape = shape;
+            isModel = true;
             if (shape is ShapeType.BOX) {
                 model = new aModel(LoadModelFromMesh(GenMeshCube(1, 1, 1)));
                 if (texture.path != String.Empty) setTexture(texture);
@@ -174,8 +185,35 @@ namespace aengine.ecs
             } else if (shape is ShapeType.CONE) {
                 model = new aModel(LoadModelFromMesh(GenMeshCone(0.5f, 1, 15)));
                 if (texture.path != String.Empty) setTexture(texture);
+            } else if (shape is ShapeType.CAPSULE) {
+                model = new aModel(LoadModelFromMesh(Rendering.genMeshCapsule(0.5f, 1, 15, 15)));
+                if (texture.path != String.Empty) setTexture(texture);
+            } else if (shape is ShapeType.SPRITE) {
+                isModel = false;
             }
-            isModel = true;
+        }
+
+        public void applyAnimation(ModelArmature anim, int id) {
+            if (id > anim.animations.Length || id < 0) {
+                Console.WriteLine("id has to be less than the animation amount or greater than zero");
+                return;
+            }
+            
+            anim.frameCounter += (int)(anim.getSpeed() * GetFrameTime());
+            UpdateModelAnimation(model.data, anim.animations[id], anim.frameCounter);
+            if (anim.frameCounter >= anim.animations[id].frameCount) anim.frameCounter = 0;
+        }
+        
+        public void applyAnimation(ModelArmature anim, int id, float speed = 100) {
+            if (id > anim.animations.Length || id < 0) {
+                Console.WriteLine("id has to be less than the animation amount or greater than zero");
+                return;
+            }
+            
+            anim.setSpeed(speed);
+            anim.frameCounter += (int)(anim.getSpeed() * GetFrameTime());
+            UpdateModelAnimation(model.data, anim.animations[id], anim.frameCounter);
+            if (anim.frameCounter >= anim.animations[id].frameCount) anim.frameCounter = 0;
         }
 
         private void setScale(Vector3 scale)
@@ -190,30 +228,24 @@ namespace aengine.ecs
 
         private void setTransform(Vector3 scale, Vector3 rotation) {
             model.data.transform = RayMath.MatrixMultiply(
-                RayMath.MatrixScale(scale.X, scale.Y, scale.Z),
-                RayMath.MatrixRotateXYZ(Vector3.Zero with { X = deg2Rad(rotation.X), Y = deg2Rad(rotation.Y), Z = deg2Rad(rotation.Z)})
+                RayMath.MatrixRotateXYZ(Vector3.Zero with { X = deg2Rad(rotation.X), Y = deg2Rad(rotation.Y), Z = deg2Rad(rotation.Z)}),
+                RayMath.MatrixScale(scale.X, scale.Y, scale.Z)
             );
         }
 
         public void update(Entity entity)
         {
             if (entity != null)  {
-                if (entity.hasComponent<RigidBodyComponent>()) {
-                    transform = entity.transform;
-                    model.data.transform = RayMath.MatrixMultiply(
-                        RayMath.MatrixScale(transform.scale.X, transform.scale.Y, transform.scale.Z),
-                        bodyMatrix(entity.getComponent<RigidBodyComponent>().body)
-                    );
-                } else {
-                    transform = entity.transform;
-                    setTransform(transform.scale, transform.rotation);
-                }
+                transform = entity.transform;
+                setTransform(transform.scale, transform.rotation);
             }
         }
 
         public void render()
         {
-            if (isModel) DrawModel(model.data, transform.position, scale, color);
+            if (!Window.isEditor && isModel) DrawModel(model.data, transform.position, scale, color);
+            else if (Window.isEditor && isModel && shape is ShapeType.TERRAIN) DrawModel(model.data, transform.position - transform.scale * 0.5f, scale, color);
+            else if (Window.isEditor && isModel) DrawModel(model.data, transform.position, scale, color);
             else Rendering.drawSprite3D(texture.data, transform.position, transform.scale.X, transform.scale.Y, transform.rotation.X, transform.rotation.Y, color);
         }
 

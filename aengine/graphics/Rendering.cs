@@ -6,6 +6,7 @@ using aengine.ecs;
 using Raylib_CsLo;
 using static Raylib_CsLo.Raylib;
 using static Raylib_CsLo.RlGl;
+using static Raylib_CsLo.RayMath;
 
 namespace aengine.graphics {
     public class Rendering {
@@ -43,19 +44,18 @@ namespace aengine.graphics {
 
         public static void drawSprite3D(Texture texture, Vector3 position, float width, float height, float rotation,
             float rotationY, Color color) {
-            
             float x = position.X;
             float y = position.Y;
             float z = position.Z;
-            
+
             rlSetTexture(texture.id);
-            
+
             rlPushMatrix();
             rlTranslatef(x, y, z);
             rlRotatef(rotation, 0.0f, 1.0f, 0.0f);
             rlRotatef(rotationY, 1.0f, 0.0f, 0.0f);
             rlTranslatef(-x, -y, -z);
-            
+
             rlBegin(RL_QUADS);
             rlColor4ub(color.r, color.g, color.b, color.a);
             rlNormal3f(0.0f, 0.0f, 1.0f); // Normal Pointing Towards Viewer
@@ -67,7 +67,7 @@ namespace aengine.graphics {
             rlVertex3f(x + width / 2, y + height / 2, z);
             rlTexCoord2f(1.0f, 0.0f);
             rlVertex3f(x - width / 2, y + height / 2, z);
-            
+
             rlNormal3f(0.0f, 0.0f, 1.0f); // Normal Pointing Towards Viewer
             rlTexCoord2f(1.0f, 1.0f);
             rlVertex3f(x + width / 2, y - height / 2, z);
@@ -79,22 +79,22 @@ namespace aengine.graphics {
             rlVertex3f(x + width / 2, y + height / 2, z);
             rlEnd();
             rlPopMatrix();
-            
+
             rlSetTexture(0);
         }
 
         public static void drawCubeWireframe(Vector3 position, Vector3 rotation, Vector3 scale, Color color) {
             rlPushMatrix();
-            
+
             rlTranslatef(position.X, position.Y, position.Z);
             rlRotatef(rotation.X, 1, 0, 0);
             rlRotatef(rotation.Y, 0, 1, 0);
             rlRotatef(rotation.Z, 0, 0, 1);
             rlScalef(scale.X, scale.Y, scale.Z);
-            
+
             rlBegin(RL_LINES);
             rlColor4ub(color.r, color.g, color.b, color.a);
-            
+
             // botom face
             rlVertex3f(-0.5f, -0.5f, -0.5f);
             rlVertex3f(0.5f, -0.5f, -0.5f);
@@ -133,9 +133,9 @@ namespace aengine.graphics {
 
             rlVertex3f(-0.5f, -0.5f, 0.5f);
             rlVertex3f(-0.5f, 0.5f, 0.5f);
-            
+
             rlEnd();
-            
+
             rlPopMatrix();
         }
 
@@ -187,57 +187,126 @@ namespace aengine.graphics {
                 new Vector2(Window.renderWidth / 2, Window.renderHeight / 2 + size / 2), thickness, color);
         }
 
-        public static unsafe Mesh genMeshCapsule(float radius, float height, int rings, int slices) {
-            Mesh mesh = new Mesh();
+        public static unsafe void allocateMeshData(Mesh* mesh, int triangleCount) {
+            mesh->vertexCount = triangleCount * 3;
+            mesh->triangleCount = triangleCount;
 
-            int numVertices = (rings + 1) * (slices + 1);
-            int numIndices = rings * slices * 6;
+            mesh->vertices = (float*)MemAlloc((uint)(mesh->vertexCount * 3 * sizeof(float)));
+            mesh->texcoords = (float*)MemAlloc((uint)(mesh->vertexCount * 2 * sizeof(float)));
+            mesh->normals = (float*)MemAlloc((uint)(mesh->vertexCount * 3 * sizeof(float)));
+        }
 
-            mesh.vertexCount = numVertices;
-            mesh.triangleCount = numIndices / 3;
+        private static unsafe Mesh genMeshCapsule(Vector3 startPos, Vector3 endPos, float radius, int slices,
+            int rings) {
+            Mesh mesh = new();
+            int verticalSegments = rings * 2;
+            int horizontalSegments = slices;
 
-            mesh.vertices = (float*)MemAlloc((uint)(numVertices * 3 * sizeof(float)));
-            mesh.texcoords = (float*)MemAlloc((uint)(numVertices * 2 * sizeof(float)));
-            mesh.indices = (ushort*)MemAlloc((uint)(numIndices * sizeof(ushort)));
+            allocateMeshData(&mesh, verticalSegments * horizontalSegments * 2);
+
+            Vector3 direction = Vector3Subtract(endPos, startPos);
+            Vector3 b0 = Vector3Normalize(direction);
+            Vector3 b1 = Vector3Normalize(Vector3CrossProduct(b0, Vector3.UnitY));
+            Vector3 b2 = Vector3Normalize(Vector3CrossProduct(b1, b0));
+            Vector3 capCenter = endPos;
+
+            float baseSliceAngle = (2.0f * PI) / slices;
+            float baseRingAngle = PI * 0.5f / rings;
 
             int vertexIndex = 0;
-            int indexIndex = 0;
 
-            for (int i = 0; i <= rings; i++) {
-                for (int j = 0; j <= slices; j++) {
-                    float theta = (float)(i * Math.PI / rings);
-                    float phi = (float)(j * 2 * Math.PI / slices);
+            for (int c = 0; c < 2; c++) {
+                for (int i = 0; i < rings; i++) {
+                    for (int j = 0; j < slices; j++) {
+                        float ringSin1 = MathF.Sin(baseSliceAngle * j) * MathF.Cos(baseRingAngle * i);
+                        float ringCos1 = MathF.Cos(baseSliceAngle * j) * MathF.Cos(baseRingAngle * i);
+                        Vector3 w1 = Vector3Add(Vector3Add(Vector3Scale(b0, capCenter.X), Vector3Scale(b1, ringSin1)),
+                            Vector3Scale(b2, ringCos1));
+                        w1 = Vector3Scale(w1, radius);
 
-                    float x = (float)(Math.Sin(theta) * Math.Cos(phi));
-                    float y = (float)(Math.Cos(theta));
-                    float z = (float)(Math.Sin(theta) * Math.Sin(phi));
+                        float ringSin2 = MathF.Sin(baseSliceAngle * (j + 1)) * MathF.Cos(baseRingAngle * i);
+                        float ringCos2 = MathF.Cos(baseSliceAngle * (j + 1)) * MathF.Cos(baseRingAngle * i);
+                        Vector3 w2 = Vector3Add(Vector3Add(Vector3Scale(b0, capCenter.X), Vector3Scale(b1, ringSin2)),
+                            Vector3Scale(b2, ringCos2));
+                        w2 = Vector3Scale(w2, radius);
 
-                    mesh.vertices[vertexIndex] = x * radius;
-                    mesh.vertices[vertexIndex + 1] = y * radius + height * 0.5f;
-                    mesh.vertices[vertexIndex + 2] = z * radius;
+                        float ringSin3 = MathF.Sin(baseSliceAngle * j) * MathF.Cos(baseRingAngle * (i + 1));
+                        float ringCos3 = MathF.Cos(baseSliceAngle * j) * MathF.Cos(baseRingAngle * (i + 1));
+                        Vector3 w3 = Vector3Add(Vector3Add(Vector3Scale(b0, capCenter.X), Vector3Scale(b1, ringSin3)),
+                            Vector3Scale(b2, ringCos3));
+                        w3 = Vector3Scale(w3, radius);
 
-                    mesh.texcoords[vertexIndex] = (float)j / slices;
-                    mesh.texcoords[vertexIndex + 1] = (float)i / rings;
+                        float ringSin4 = MathF.Sin(baseSliceAngle * (j + 1)) * MathF.Cos(baseRingAngle * (i + 1));
+                        float ringCos4 = MathF.Cos(baseSliceAngle * (j + 1)) * MathF.Cos(baseRingAngle * (i + 1));
+                        Vector3 w4 = Vector3Add(Vector3Add(Vector3Scale(b0, capCenter.X), Vector3Scale(b1, ringSin4)),
+                            Vector3Scale(b2, ringCos4));
+                        w4 = Vector3Scale(w4, radius);
 
-                    if (i < rings && j < slices) {
-                        mesh.indices[indexIndex] = (ushort)vertexIndex;
-                        mesh.indices[indexIndex + 1] = (ushort)(vertexIndex + slices + 1);
-                        mesh.indices[indexIndex + 2] = (ushort)(vertexIndex + slices);
+                        // Make sure cap triangle normals are facing outwards
+                        if (c == 0) {
+                            mesh.vertices[vertexIndex * 3] = w1.X;
+                            mesh.vertices[vertexIndex * 3 + 1] = w1.Y;
+                            mesh.vertices[vertexIndex * 3 + 2] = w1.Z;
 
-                        mesh.indices[indexIndex + 3] = (ushort)(vertexIndex + slices + 1);
-                        mesh.indices[indexIndex + 4] = (ushort)vertexIndex;
-                        mesh.indices[indexIndex + 5] = (ushort)(vertexIndex + 1);
+                            mesh.vertices[(vertexIndex + 1) * 3] = w2.X;
+                            mesh.vertices[(vertexIndex + 1) * 3 + 1] = w2.Y;
+                            mesh.vertices[(vertexIndex + 1) * 3 + 2] = w2.Z;
 
-                        indexIndex += 6;
+                            mesh.vertices[(vertexIndex + 2) * 3] = w3.X;
+                            mesh.vertices[(vertexIndex + 2) * 3 + 1] = w3.Y;
+                            mesh.vertices[(vertexIndex + 2) * 3 + 2] = w3.Z;
+
+                            mesh.vertices[(vertexIndex + 3) * 3] = w2.X;
+                            mesh.vertices[(vertexIndex + 3) * 3 + 1] = w2.Y;
+                            mesh.vertices[(vertexIndex + 3) * 3 + 2] = w2.Z;
+
+                            mesh.vertices[(vertexIndex + 4) * 3] = w4.X;
+                            mesh.vertices[(vertexIndex + 4) * 3 + 1] = w4.Y;
+                            mesh.vertices[(vertexIndex + 4) * 3 + 2] = w4.Z;
+
+                            vertexIndex += 6;
+                        }
+                        else {
+                            mesh.vertices[vertexIndex * 3] = w1.X;
+                            mesh.vertices[vertexIndex * 3 + 1] = w1.Y;
+                            mesh.vertices[vertexIndex * 3 + 2] = w1.Z;
+
+                            mesh.vertices[(vertexIndex + 1) * 3] = w3.X;
+                            mesh.vertices[(vertexIndex + 1) * 3 + 1] = w3.Y;
+                            mesh.vertices[(vertexIndex + 1) * 3 + 2] = w3.Z;
+
+                            mesh.vertices[(vertexIndex + 2) * 3] = w2.X;
+                            mesh.vertices[(vertexIndex + 2) * 3 + 1] = w2.Y;
+                            mesh.vertices[(vertexIndex + 2) * 3 + 2] = w2.Z;
+
+                            mesh.vertices[(vertexIndex + 3) * 3] = w2.X;
+                            mesh.vertices[(vertexIndex + 3) * 3 + 1] = w2.Y;
+                            mesh.vertices[(vertexIndex + 3) * 3 + 2] = w2.Z;
+
+                            mesh.vertices[(vertexIndex + 4) * 3] = w3.X;
+                            mesh.vertices[(vertexIndex + 4) * 3 + 1] = w3.Y;
+                            mesh.vertices[(vertexIndex + 4) * 3 + 2] = w3.Z;
+
+                            mesh.vertices[(vertexIndex + 5) * 3] = w4.X;
+                            mesh.vertices[(vertexIndex + 5) * 3 + 1] = w4.Y;
+                            mesh.vertices[(vertexIndex + 5) * 3 + 2] = w4.Z;
+
+                            vertexIndex += 6;
+                        }
                     }
-
-                    vertexIndex += 3;
                 }
+
+                capCenter = startPos;
+                b0 = Vector3Scale(b0, -1.0f);
             }
 
             UploadMesh(&mesh, false);
 
             return mesh;
+        }
+
+        public static Mesh genMeshCapsule(float radius, float height, int rings, int slices) {
+            return genMeshCapsule(Vector3.Zero, Vector3AddValue(Vector3.Zero, height), radius, rings, slices);
         }
     }
 }

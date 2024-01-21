@@ -15,8 +15,8 @@ public class EditorComponentData {
     public static GuiTextBox gBox = new GuiTextBox(); // int
     public static GuiTextBox bBox = new GuiTextBox(); // int
     public static GuiTextBox aBox = new GuiTextBox(); // int
-
-    public static GuiTextBox isModelBox = new GuiTextBox(); // bool
+    
+    public static GuiTextBox scaleBox = new GuiTextBox();   // float
     // _____________________ mesh component _______________________
 
     // _____________________ rb component _________________________
@@ -37,6 +37,7 @@ public class EditorComponentData {
             gBox.text = mc.color.g.ToString();
             bBox.text = mc.color.b.ToString();
             aBox.text = mc.color.a.ToString();
+            scaleBox.text = mc.scale.ToString();
         } else if (activeComponent.getType() == "RigidBodyComponent") {
             RigidBodyComponent rb = (RigidBodyComponent)activeComponent;
             massBox.text = rb.body.Mass.ToString();
@@ -66,10 +67,8 @@ public class EditorComponentData {
             if (bBox.text != String.Empty) mc.color.b = (byte)int.Parse(bBox.text);
             if (aBox.text != String.Empty) mc.color.a = (byte)int.Parse(aBox.text);
 
-            isModelBox.render(10, 80, 60, 25, window);
-            Gui.GuiTextPro(Gui.font, "is model", 85, 80, 20, Raylib.WHITE, window);
-
-            if (isModelBox.text == "true" || isModelBox.text == "false") mc.isModel = bool.Parse(isModelBox.text);
+            Gui.GuiTextPro(Gui.font, "is model", 50, 80, 20, Raylib.WHITE, window);
+            mc.isModel = Gui.GuiTickBox(mc.isModel, 10, 80, 25, 25, window);
 
             if (Gui.GuiButton("Load texture", 10, 115, 150, 25, window)) {
                 DialogResult result = Dialog.FileOpen();
@@ -128,6 +127,12 @@ public class EditorComponentData {
                     Console.WriteLine("cancelled");  
                 }
             }
+            
+            scaleBox.render(10, 220, 50, 25, window);
+            Gui.GuiTextPro(Gui.font, "scale", 75, 220, 20, Raylib.WHITE, window);
+            
+            if (scaleBox.text != String.Empty) mc.scale = float.Parse(scaleBox.text);
+            
         } else if (activeComponent.getType() == "RigidBodyComponent") {
             RigidBodyComponent rb = (RigidBodyComponent)activeComponent;
 

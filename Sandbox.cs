@@ -17,7 +17,7 @@ using World = aengine.ecs.World;
 namespace Sandbox; 
 
 public static class Sandbox {
-    public static unsafe async Task Main(string[] args) {
+    public static async Task Main(string[] args) {
         // use only in ides like visual studio and rider,
         // the final build should have the assets folder in the same directory as the exe so remove this line below then
         Directory.SetCurrentDirectory("../../../");
@@ -95,15 +95,8 @@ public static class Sandbox {
         Prefab.savePrefab("save_test.od", "SOME_SAVED_ENTITY", water);
         
         Prefab.saveScene("save_scene_test.od", "SOME_SAVED_SCENE");
-
-        Entity slayer = new Entity("slayer");
-        slayer.transform.position.X = 10;
-        slayer.transform.scale = Vector3.One * 5;
-        slayer.addComponent(new MeshComponent(slayer, new aModel("assets/models/cesium_man.m3d"), WHITE, new aTexture("assets/models/guytex.png")));
         
-        ModelAnimation[] anims = LoadModelAnimations("assets/models/cesium_man.m3d");
-        System.Console.WriteLine(anims.Length);
-        int animFrameCounter = 0;
+        ModelArmature armature = new ModelArmature("assets/models/swat.m3d");
 
         // Main game loop
         while (Window.tick()) // Detect window close button or ESC key
@@ -189,7 +182,7 @@ public static class Sandbox {
                 console.toggleActive();
             }
 
-            var p = new ParticleComponent(new ParticleBehaviour(false, 5f), WHITE, particle, Vector2.One / 2, 25);
+            var p = new ParticleComponent(new ParticleBehaviour(false, 5f), WHITE, particle, Vector2.One * 0.5f, 25);
             p.addBehaviour(new DecayBehaviour());
 
             var p2 = new ParticleComponent(new RandomSideBehaviour(-5f), RED, 20);
@@ -203,11 +196,7 @@ public static class Sandbox {
             ps2.getComponent<SpatialAudioComponent>().play();
             
             // animation
-            if (IsKeyDown(KeyboardKey.KEY_ENTER)) {
-                animFrameCounter += (int)(150 * GetFrameTime());
-                UpdateModelAnimation(slayer.getComponent<MeshComponent>().model.data, anims[0], animFrameCounter);
-                if (animFrameCounter >= anims[0].frameCount) animFrameCounter = 0;
-            }
+            World.getEntity("Entity8").getComponent<MeshComponent>().applyAnimation(armature, 22, 150);
             
             Window.beginRender();
             ClearBackground(SKYBLUE);

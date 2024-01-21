@@ -38,6 +38,7 @@ namespace Editor
             Window.width = 1280;
             Window.height = 720;
             Window.traceLogLevel = TraceLogLevel.LOG_NONE;
+            Window.isEditor = true;
             SetWindowIcon(LoadImage("assets/logo.png"));
 
             Camera camera = new Camera(Vector3.One, 90);
@@ -389,7 +390,7 @@ namespace Editor
                                     " - " +
                                     data.getObject(data.data.Keys.ElementAt(i)).modifier, 15, 2.5f).X, 10 + i * 30, 15, 15,
                                 prefabSpawnWindow)) {
-                            Prefab.loadPrefab(loadDir, data.data.Keys.ElementAt(i), true, false);
+                            Prefab.loadPrefab(loadDir, data.data.Keys.ElementAt(i), false, false);
                         }
                         
                         prefabSpawnWindow.rec.height = i * 30 + 50;
@@ -415,7 +416,7 @@ namespace Editor
                                                                             " - " +
                                                                             data.getObject(data.data.Keys.ElementAt(i)).modifier, 15, 2.5f).X, 10 + i * 30, 15, 15,
                                 prefabSpawnWindow)) {
-                            Prefab.loadPrefab(Prefabs.PREFABS_CONTENT, data.data.Keys.ElementAt(i), true);
+                            Prefab.loadPrefab(Prefabs.PREFABS_CONTENT, data.data.Keys.ElementAt(i), false).transform.position = camera.position;
                         }
                         
                         prefabSpawnWindow.rec.height = i * 30 + 50;

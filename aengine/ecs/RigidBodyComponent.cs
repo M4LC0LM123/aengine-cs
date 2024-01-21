@@ -45,8 +45,8 @@ namespace aengine.ecs {
             body = new RigidBody(this.shape);
             body.Position = new JVector(entity.transform.position.X, entity.transform.position.Y,
                 entity.transform.position.Z);
-            body.Orientation = JMatrix.CreateFromYawPitchRoll(entity.transform.rotation.Y * RayMath.DEG2RAD,
-                entity.transform.rotation.X * RayMath.DEG2RAD, entity.transform.rotation.Z * RayMath.DEG2RAD);
+            body.Orientation = JMatrix.CreateFromYawPitchRoll(-entity.transform.rotation.Y * RayMath.DEG2RAD,
+                -entity.transform.rotation.X * RayMath.DEG2RAD, -entity.transform.rotation.Z * RayMath.DEG2RAD);
             body.Mass = mass;
             shapeType = shape;
 
@@ -90,8 +90,8 @@ namespace aengine.ecs {
             body = new RigidBody(shape);
             body.Position = new JVector(entity.transform.position.X, entity.transform.position.Y,
                 entity.transform.position.Z);
-            body.Orientation = JMatrix.CreateFromYawPitchRoll(entity.transform.rotation.Y * RayMath.DEG2RAD,
-                entity.transform.rotation.X * RayMath.DEG2RAD, entity.transform.rotation.Z * RayMath.DEG2RAD);
+            body.Orientation = JMatrix.CreateFromYawPitchRoll(-entity.transform.rotation.Y * RayMath.DEG2RAD,
+                -entity.transform.rotation.X * RayMath.DEG2RAD, -entity.transform.rotation.Z * RayMath.DEG2RAD);
             body.Mass = mass;
             shapeType = ShapeType.MODEL;
         
@@ -156,8 +156,8 @@ namespace aengine.ecs {
             body = new RigidBody(shape);
             body.Position = new JVector(entity.transform.position.X - entity.transform.scale.X/2, entity.transform.position.Y  - entity.transform.scale.Y/2,
                 entity.transform.position.Z - entity.transform.scale.Z/2);
-            body.Orientation = JMatrix.CreateFromYawPitchRoll(entity.transform.rotation.Y * RayMath.DEG2RAD,
-                entity.transform.rotation.X * RayMath.DEG2RAD, entity.transform.rotation.Z * RayMath.DEG2RAD);
+            body.Orientation = JMatrix.CreateFromYawPitchRoll(-entity.transform.rotation.Y * RayMath.DEG2RAD,
+                -entity.transform.rotation.X * RayMath.DEG2RAD, -entity.transform.rotation.Z * RayMath.DEG2RAD);
             body.Mass = mass;
 
             switch (this.type) {
@@ -325,7 +325,7 @@ namespace aengine.ecs {
         }
 
         public void setRotation(Vector3 rotation) {
-            body.Orientation = JMatrix.CreateFromYawPitchRoll(rotation.Y, rotation.X, rotation.Z);
+            body.Orientation = JMatrix.CreateFromYawPitchRoll(-rotation.Y, -rotation.X, -rotation.Z);
         }
 
         public void affectedByGravity(bool affected) {
