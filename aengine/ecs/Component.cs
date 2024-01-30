@@ -10,4 +10,10 @@ public interface Component {
 
     public string fileName();
     public string getType();
+
+    
+    // TODO: add copy methods to every component, can be used for anything
+    public Component copy() {
+        throw new NotImplementedException();
+    }
 }

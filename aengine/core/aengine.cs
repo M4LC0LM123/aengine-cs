@@ -143,6 +143,10 @@ namespace aengine.core
             return System.Convert.ToBoolean(getRandomInt(0, 2));
         }
 
+        public static float distance(Vector3 v1, Vector3 v2) {
+            return MathF.Sqrt(MathF.Pow((v1.X - v2.X), 2) + MathF.Pow((v1.Y - v2.Y), 2) + MathF.Pow((v1.Z - v2.Z), 2));
+        }
+
     }
 
 }

@@ -33,7 +33,7 @@ namespace aengine.ecs {
                 this.shape = new BoxShape(new Jitter.LinearMath.JVector(entity.transform.scale.X,
                     entity.transform.scale.Y, entity.transform.scale.Z));
             } else if (shape == ShapeType.SPHERE) {
-                this.shape = new SphereShape(entity.transform.scale.X);
+                this.shape = new SphereShape(entity.transform.scale.X * 0.5f);
             } else if (shape == ShapeType.CAPSULE) {
                 this.shape = new CapsuleShape(entity.transform.scale.X, entity.transform.scale.Y);
             } else if (shape == ShapeType.CYLINDER) {
@@ -181,7 +181,7 @@ namespace aengine.ecs {
             if (shape is ShapeType.BOX) {
                 body.Shape = new BoxShape(vecToJVec(m_transform.scale));
             } else if (shape is ShapeType.SPHERE) {
-                body.Shape = new SphereShape(m_transform.scale.X);
+                body.Shape = new SphereShape(m_transform.scale.X * 0.5f);
             } else if (shape is ShapeType.CAPSULE) {
                 body.Shape = new CapsuleShape(m_transform.scale.X, m_transform.scale.Y);
             } else if (shape is ShapeType.CYLINDER) {
@@ -328,6 +328,22 @@ namespace aengine.ecs {
             body.Orientation = JMatrix.CreateFromYawPitchRoll(-rotation.Y, -rotation.X, -rotation.Z);
         }
 
+        public void setScale(Vector3 scale) {
+            if (shapeType is ShapeType.BOX) {
+                body.Shape = new BoxShape(vecToJVec(scale));
+            } else if (shapeType is ShapeType.SPHERE) {
+                body.Shape = new SphereShape(scale.X * 0.5f);
+            } else if (shapeType is ShapeType.CAPSULE) {
+                body.Shape = new CapsuleShape(scale.X, scale.Y);
+            } else if (shapeType is ShapeType.CYLINDER) {
+                body.Shape = new CylinderShape(scale.X, scale.Y);
+            } else if (shapeType is ShapeType.CONE) {
+                body.Shape = new ConeShape(scale.X, scale.Y);
+            }
+            
+            body.Shape.UpdateShape();
+        }
+
         public void affectedByGravity(bool affected) {
             body.AffectedByGravity = affected;
         }
@@ -415,6 +431,35 @@ namespace aengine.ecs {
 
             return new JVector(centerX, centerY, centerZ);
         }
+
+        // public Shape shape;
+        // public RigidBody body;
+        // public BodyType type;
+        // public ShapeType shapeType;
+        // public bool debug = false;
+        //
+        // public aModel model = new aModel();
+        // public aTexture heightmap = new aTexture();
+        //
+        // private TransformComponent m_transform;
+        // private string m_name = "rb";
         
+        public Component copy() {
+            RigidBodyComponent copy;
+
+            if (shape.GetType() == typeof(ConvexHullShape)) {
+                copy = new RigidBodyComponent(null, model, body.Mass, type);
+            } else if (shape.GetType() == typeof(TerrainShape)) {
+                copy = new RigidBodyComponent(null, heightmap, body.Mass, type);
+            } else {
+                copy = new RigidBodyComponent(null, body.Mass, type, shapeType);
+            }
+            
+            copy.setPosition(m_transform.position);
+            copy.setRotation(m_transform.rotation);
+            copy.setScale(m_transform.scale);
+
+            return copy;
+        }
     }
 }

@@ -33,10 +33,9 @@ namespace Editor
             
             Window.create();
             Window.title = "aengine-editor";
-            Window.renderWidth = 1280;
-            Window.renderHeight = 720;
-            Window.width = 1280;
-            Window.height = 720;
+            Window.renderWidth = GetMonitorWidth(GetCurrentMonitor());
+            Window.renderHeight = GetMonitorHeight(GetCurrentMonitor());
+            MaximizeWindow();
             Window.traceLogLevel = TraceLogLevel.LOG_NONE;
             Window.isEditor = true;
             SetWindowIcon(LoadImage("assets/logo.png"));
@@ -86,6 +85,11 @@ namespace Editor
                 World.update(false);
                 manager.update(mover);
                 infoWindow.active = true;
+
+                if (IsWindowResized()) {
+                    Window.renderWidth = Window.width;
+                    Window.renderHeight = Window.height;
+                }
 
                 if (IsKeyPressed(KeyboardKey.KEY_ESCAPE))
                     isMouseLocked = !isMouseLocked;

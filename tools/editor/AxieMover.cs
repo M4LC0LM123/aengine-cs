@@ -146,7 +146,7 @@ public class AxieMover
         if (IS_OBJ_ACTIVE && CURRENT_MODE is Mode.MOVE) 
             Utils.drawAxiesArrows(position, lengthX, lengthY, lengthZ, AXIES_RADIUS);
         if (IS_OBJ_ACTIVE) 
-            Rendering.drawCubeWireframe(ACTIVE_ENT.transform.position, ACTIVE_ENT.transform.rotation, ACTIVE_ENT.transform.scale, YELLOW);
+            Rendering.drawCubeWireframe(ACTIVE_ENT.transform.position, -ACTIVE_ENT.transform.rotation, ACTIVE_ENT.transform.scale, YELLOW);
     }
     
 }

@@ -129,6 +129,17 @@ namespace aengine.ecs {
                 transform.position.Z - transform.scale.Z / 2, transform.scale.X, transform.scale.Y, transform.scale.Z);
         }
 
+        public virtual Entity copy() {
+            Entity copy = new Entity(tag);
+            copy.transform = transform;
+            
+            foreach (Component component in components) {
+                copy.addComponent(component.copy());
+            }
+            
+            return null;
+        }
+
         public virtual void update() {
             foreach (Component component in components) {
                 component.update(this);

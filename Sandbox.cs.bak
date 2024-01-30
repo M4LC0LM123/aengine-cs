@@ -44,8 +44,6 @@ public static class Sandbox {
             LoadTexture("assets/skybox/top.png"),
             LoadTexture("assets/skybox/bottom.png")
         };
-			
-		
 
         var camera = new Camera(Vector3.Zero, 90);
         float speed = 10;
