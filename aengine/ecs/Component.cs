@@ -14,6 +14,8 @@ public interface Component {
     
     // TODO: add copy methods to every component, can be used for anything
     public Component copy() {
-        throw new NotImplementedException();
+        // throw new NotImplementedException();
+        Console.WriteLine("Not implemented for: " + getType());
+        return null;
     }
 }

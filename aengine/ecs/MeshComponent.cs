@@ -139,6 +139,16 @@ namespace aengine.ecs
             terrainPath = terrain.path;
         }
 
+        private MeshComponent() {
+            transform = new TransformComponent(null);
+            color = WHITE;
+            texture = new aTexture();
+            model = new aModel();
+            shape = ShapeType.BOX;
+            scale = 1;
+            isModel = true;
+        }
+
         public void setTerrain(aTexture terrain) {
             model = new aModel(LoadModelFromMesh(GenMeshHeightmap(LoadImageFromTexture(terrain.data), Vector3.One)));
             shape = ShapeType.TERRAIN;
@@ -261,6 +271,28 @@ namespace aengine.ecs
 
         public string getType() {
             return "MeshComponent";
+        }
+        
+        public Component copy() {
+            MeshComponent copy = new MeshComponent();
+
+            copy.transform.position = transform.position;
+            copy.transform.rotation = transform.rotation;
+            copy.transform.scale = transform.scale;
+
+            copy.color = color;
+            
+            copy.model.data = model.data;
+            copy.model.path = model.path;
+
+            copy.texture.data = texture.data;
+            copy.texture.path = texture.path;
+            copy.scale = scale;
+
+            copy.terrainPath = terrainPath;
+            copy.shape = shape;
+
+            return copy;
         }
         
     }

@@ -29,24 +29,28 @@ namespace aengine.ecs {
 
         public RigidBodyComponent(Entity entity, float mass = 1.0f, BodyType type = BodyType.DYNAMIC, ShapeType shape = ShapeType.BOX) {
             this.type = type;
+
+            TransformComponent entTrans = new TransformComponent(null);
+            if (entity != null) entTrans = entity.transform;
+            
             if (shape == ShapeType.BOX) {
-                this.shape = new BoxShape(new Jitter.LinearMath.JVector(entity.transform.scale.X,
-                    entity.transform.scale.Y, entity.transform.scale.Z));
+                this.shape = new BoxShape(new Jitter.LinearMath.JVector(entTrans.scale.X,
+                    entTrans.scale.Y, entTrans.scale.Z));
             } else if (shape == ShapeType.SPHERE) {
-                this.shape = new SphereShape(entity.transform.scale.X * 0.5f);
+                this.shape = new SphereShape(entTrans.scale.X * 0.5f);
             } else if (shape == ShapeType.CAPSULE) {
-                this.shape = new CapsuleShape(entity.transform.scale.X, entity.transform.scale.Y);
+                this.shape = new CapsuleShape(entTrans.scale.X, entTrans.scale.Y);
             } else if (shape == ShapeType.CYLINDER) {
-                this.shape = new CylinderShape(entity.transform.scale.X, entity.transform.scale.Y);
+                this.shape = new CylinderShape(entTrans.scale.X, entTrans.scale.Y);
             } else if (shape == ShapeType.CONE) {
-                this.shape = new ConeShape(entity.transform.scale.Y, entity.transform.scale.X);
+                this.shape = new ConeShape(entTrans.scale.Y, entTrans.scale.X);
             }
 
             body = new RigidBody(this.shape);
-            body.Position = new JVector(entity.transform.position.X, entity.transform.position.Y,
-                entity.transform.position.Z);
-            body.Orientation = JMatrix.CreateFromYawPitchRoll(-entity.transform.rotation.Y * RayMath.DEG2RAD,
-                -entity.transform.rotation.X * RayMath.DEG2RAD, -entity.transform.rotation.Z * RayMath.DEG2RAD);
+            body.Position = new JVector(entTrans.position.X, entTrans.position.Y,
+                entTrans.position.Z);
+            body.Orientation = JMatrix.CreateFromYawPitchRoll(-entTrans.rotation.Y * RayMath.DEG2RAD,
+                -entTrans.rotation.X * RayMath.DEG2RAD, -entTrans.rotation.Z * RayMath.DEG2RAD);
             body.Mass = mass;
             shapeType = shape;
 
@@ -59,7 +63,7 @@ namespace aengine.ecs {
                     break;
             }
 
-            m_transform = entity.transform;
+            m_transform = entTrans;
             
             World.world.AddBody(body);
             body.EnableDebugDraw = true;
@@ -67,6 +71,9 @@ namespace aengine.ecs {
         
         public unsafe RigidBodyComponent(Entity entity, aModel model, float mass = 1.0f, BodyType type = BodyType.DYNAMIC) {
             this.type = type;
+            
+            TransformComponent entTrans = new TransformComponent(null);
+            if (entity != null) entTrans = entity.transform;
             
             List<JVector> vertices = new List<JVector>();
         
@@ -87,11 +94,11 @@ namespace aengine.ecs {
         
             shape = new ConvexHullShape(vertices);
             
-            body = new RigidBody(shape);
-            body.Position = new JVector(entity.transform.position.X, entity.transform.position.Y,
-                entity.transform.position.Z);
-            body.Orientation = JMatrix.CreateFromYawPitchRoll(-entity.transform.rotation.Y * RayMath.DEG2RAD,
-                -entity.transform.rotation.X * RayMath.DEG2RAD, -entity.transform.rotation.Z * RayMath.DEG2RAD);
+            body = new RigidBody(this.shape);
+            body.Position = new JVector(entTrans.position.X, entTrans.position.Y,
+                entTrans.position.Z);
+            body.Orientation = JMatrix.CreateFromYawPitchRoll(-entTrans.rotation.Y * RayMath.DEG2RAD,
+                -entTrans.rotation.X * RayMath.DEG2RAD, -entTrans.rotation.Z * RayMath.DEG2RAD);
             body.Mass = mass;
             shapeType = ShapeType.MODEL;
         
@@ -104,7 +111,7 @@ namespace aengine.ecs {
                     break;
             }
         
-            m_transform = entity.transform;
+            m_transform = entTrans;
         
             World.world.AddBody(body);
             
@@ -114,6 +121,9 @@ namespace aengine.ecs {
         public unsafe RigidBodyComponent(Entity entity, aTexture heightmap, float mass = 1.0f, BodyType type = BodyType.DYNAMIC) {
             this.type = type;
             shapeType = ShapeType.TERRAIN;
+            
+            TransformComponent entTrans = new TransformComponent(null);
+            if (entity != null) entTrans = entity.transform;
 
             this.heightmap = heightmap;
             
@@ -145,19 +155,19 @@ namespace aengine.ecs {
                 for (int x = 0; x < image.width; x++)
                 {
                     // Assign the value to the 2D array
-                    heights2d[x, y] = heights[y * image.width + x] * entity.transform.scale.Y;
+                    heights2d[x, y] = heights[y * image.width + x] * entTrans.scale.Y;
                 }
             }
 
-            shape = new TerrainShape(heights2d, entity.transform.scale.X / image.width, entity.transform.scale.Z / image.height);
+            shape = new TerrainShape(heights2d, entTrans.scale.X / image.width, entTrans.scale.Z / image.height);
             
             Raylib.UnloadImage(image);
             
-            body = new RigidBody(shape);
-            body.Position = new JVector(entity.transform.position.X - entity.transform.scale.X/2, entity.transform.position.Y  - entity.transform.scale.Y/2,
-                entity.transform.position.Z - entity.transform.scale.Z/2);
-            body.Orientation = JMatrix.CreateFromYawPitchRoll(-entity.transform.rotation.Y * RayMath.DEG2RAD,
-                -entity.transform.rotation.X * RayMath.DEG2RAD, -entity.transform.rotation.Z * RayMath.DEG2RAD);
+            body = new RigidBody(this.shape);
+            body.Position = new JVector(entTrans.position.X, entTrans.position.Y,
+                entTrans.position.Z);
+            body.Orientation = JMatrix.CreateFromYawPitchRoll(-entTrans.rotation.Y * RayMath.DEG2RAD,
+                -entTrans.rotation.X * RayMath.DEG2RAD, -entTrans.rotation.Z * RayMath.DEG2RAD);
             body.Mass = mass;
 
             switch (this.type) {
@@ -169,7 +179,7 @@ namespace aengine.ecs {
                     break;
             }
 
-            m_transform = entity.transform;
+            m_transform = entTrans;
 
             World.world.AddBody(body);
             
@@ -431,18 +441,6 @@ namespace aengine.ecs {
 
             return new JVector(centerX, centerY, centerZ);
         }
-
-        // public Shape shape;
-        // public RigidBody body;
-        // public BodyType type;
-        // public ShapeType shapeType;
-        // public bool debug = false;
-        //
-        // public aModel model = new aModel();
-        // public aTexture heightmap = new aTexture();
-        //
-        // private TransformComponent m_transform;
-        // private string m_name = "rb";
         
         public Component copy() {
             RigidBodyComponent copy;
