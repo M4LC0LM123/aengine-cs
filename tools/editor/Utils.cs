@@ -13,6 +13,8 @@ public class Utils
 
     public static Color semiWhite = new Color(255, 255, 255, 127);
 
+    public static Model cone = LoadModelFromMesh(GenMeshCone(0.25f, 0.5f, 15));
+
     public static Vector3 roundVectorDecimals(Vector3 vector, int decimalCount) {
         return vector with {
             X = (float) Math.Round(vector.X, decimalCount), Y = (float) Math.Round(vector.Y, decimalCount),
@@ -54,15 +56,15 @@ public class Utils
     public static void drawAxiesArrows(Vector3 start, float lengthX, float lengthY, float lengthZ, float radius)
     {
         drawAxisLine(Axis.X, start, lengthX, 0.05f, BLUE);
-        DrawSphere(start with { X = start.X + lengthX}, 0.25f, BLUE);
+        DrawModelEx(cone, start with { X = start.X + lengthX}, Vector3.UnitZ, -90, Vector3.One, BLUE);
         DrawSphereWires(start with { X = start.X + lengthX}, radius, 15, 15, transBlue);
         
         drawAxisLine(Axis.Y, start, lengthY, 0.05f, RED);
-        DrawSphere(start with { Y = start.Y + lengthY}, 0.25f, RED);
+        DrawModelEx(cone, start with { Y = start.Y + lengthY}, Vector3.Zero, 0, Vector3.One, RED);
         DrawSphereWires(start with { Y = start.Y + lengthY}, radius, 15, 15, transRed);
         
         drawAxisLine(Axis.Z, start, lengthZ, 0.05f, GREEN);
-        DrawSphere(start with { Z = start.Z + lengthZ}, 0.25f, GREEN);
+        DrawModelEx(cone, start with { Z = start.Z + lengthZ}, Vector3.UnitX, 90, Vector3.One, GREEN);
         DrawSphereWires(start with { Z = start.Z + lengthZ}, radius, 15, 15, transGreen);
     }
     

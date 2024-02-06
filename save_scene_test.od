@@ -20,7 +20,8 @@ object SOME_SAVED_SCENE {
     str block12 = "save_scene_test.od";
     str block13 = "save_scene_test.od";
     str block14 = "save_scene_test.od";
-    str Entity20 = "save_scene_test.od";
+    str Entity15 = "save_scene_test.od";
+    str Entity21 = "save_scene_test.od";
     str water = "save_scene_test.od";
 }
 
@@ -440,9 +441,9 @@ object Entity5_mesh {
 object Entity6 {
     str tag = Entity6;
     
-    f32 x = -15.875747;
-    f32 y = -11.86124;
-    f32 z = -35.94369;
+    f32 x = -31.915749;
+    f32 y = -21.09124;
+    f32 z = -44.31369;
 
     f32 width = 32.08;
     f32 height = 18.46;
@@ -866,8 +867,45 @@ object block14_rb {
     str heightmap = "";
 }
 #mod prefab
-object Entity20 {
-    str tag = Entity20;
+object Entity15 {
+    str tag = Entity15;
+    
+    f32 x = -25.840034;
+    f32 y = 0.33331603;
+    f32 z = -4.3828416;
+
+    f32 width = 1;
+    f32 height = 1;
+    f32 depth = 1;
+
+    f32 rx = 0; // rotation x (pitch)
+    f32 ry = -135; // rotation y (yaw)
+    f32 rz = 0; // rotation z (roll)
+
+    str components = "Entity15_mesh";
+}
+object Entity15_mesh {
+    str type = "MeshComponent";
+
+    i32 shape = 6;
+
+    i32 r = 255;
+    i32 g = 255;
+    i32 b = 255;
+    i32 a = 255;
+
+    bool isModel = true;
+
+    str texture = "assets/orm.png";
+    str model = "assets/models/walking.m3d";
+
+    str heightmap = "";
+
+    i32 scale = 3;    
+}
+#mod prefab
+object Entity21 {
+    str tag = Entity21;
     
     f32 x = 0;
     f32 y = 0;
@@ -881,9 +919,9 @@ object Entity20 {
     f32 ry = 0; // rotation y (yaw)
     f32 rz = 0; // rotation z (roll)
 
-    str components = "Entity20_light";
+    str components = "Entity21_light";
 }
-object Entity20_light {
+object Entity21_light {
     string type = "LightComponent";
         
     f32 intensity = 2.5;

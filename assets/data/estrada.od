@@ -15,6 +15,7 @@ object estrada {
     str block12 = "estrada.od";
     str block13 = "estrada.od";
     str block14 = "estrada.od";
+    str Entity15 = "estrada.od";
 }
 
 #mod prefab
@@ -696,4 +697,41 @@ object block14_rb {
     str model = "";
 
     str heightmap = "";
+}
+#mod prefab
+object Entity15 {
+    str tag = Entity15;
+    
+    f32 x = -25.840034;
+    f32 y = 0.33331603;
+    f32 z = -4.3828416;
+
+    f32 width = 1;
+    f32 height = 1;
+    f32 depth = 1;
+
+    f32 rx = 0; // rotation x (pitch)
+    f32 ry = -135; // rotation y (yaw)
+    f32 rz = 0; // rotation z (roll)
+
+    str components = "Entity15_mesh";
+}
+object Entity15_mesh {
+    str type = "MeshComponent";
+
+    i32 shape = 6;
+
+    i32 r = 255;
+    i32 g = 255;
+    i32 b = 255;
+    i32 a = 255;
+
+    bool isModel = true;
+
+    str texture = "assets/orm.png";
+    str model = "assets/models/walking.m3d";
+
+    str heightmap = "";
+
+    i32 scale = 3;    
 }

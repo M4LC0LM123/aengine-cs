@@ -7,7 +7,7 @@ using static Raylib_CsLo.Raylib;
 
 namespace Editor;
 
-public class AxieMover
+public class TransformGizmo
 {
     public Vector3 position = Vector3.Zero;
     public float lengthX = 3;
@@ -44,16 +44,31 @@ public class AxieMover
         {
             if (IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT) && !Gui.isMouseOver())
             {
-                if (collisionX.hit && CAMERA_MODE != CameraMode.ZY) {
-                    if (CURRENT_MODE == Mode.MOVE) position.X = collisionX.point.X - lengthX;
+                if (collisionX.hit && CAMERA_MODE != CameraMode.ZY && !(yMoving || zMoving)) {
+                    if (CURRENT_MODE == Mode.MOVE) {
+                        position.X = collisionX.point.X - lengthX;
+                        xMoving = true;
+                    }
+                } else {
+                    xMoving = false;
                 }
 
-                if (collisionY.hit && CAMERA_MODE != CameraMode.XZ) {
-                    if (CURRENT_MODE == Mode.MOVE) position.Y = collisionY.point.Y - lengthY;
+                if (collisionY.hit && CAMERA_MODE != CameraMode.XZ && !(xMoving || zMoving)) {
+                    if (CURRENT_MODE == Mode.MOVE) {
+                        position.Y = collisionY.point.Y - lengthY;
+                        yMoving = true;
+                    }
+                } else {
+                    yMoving = false;
                 }
 
-                if (collisionZ.hit && CAMERA_MODE != CameraMode.XY) {
-                    if (CURRENT_MODE == Mode.MOVE) position.Z = collisionZ.point.Z - lengthZ;
+                if (collisionZ.hit && CAMERA_MODE != CameraMode.XY && !(xMoving || yMoving)) {
+                    if (CURRENT_MODE == Mode.MOVE) {
+                        position.Z = collisionZ.point.Z - lengthZ;
+                        zMoving = true;
+                    }
+                } else {
+                    zMoving = false;
                 }
             }
 

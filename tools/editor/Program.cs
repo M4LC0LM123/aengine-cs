@@ -39,7 +39,7 @@ namespace Editor {
             Camera camera = new Camera(Vector3.One, 90);
             bool isMouseLocked = false;
 
-            AxieMover mover = new AxieMover();
+            TransformGizmo mover = new TransformGizmo();
 
             ObjectManager manager = new ObjectManager();
 
@@ -96,23 +96,23 @@ namespace Editor {
                 }
 
                 if (IsKeyPressed(KeyboardKey.KEY_RIGHT_ALT)) {
-                    AxieMover.CAMERA_MODE++;
+                    TransformGizmo.CAMERA_MODE++;
 
-                    if (AxieMover.CAMERA_MODE == CameraMode.XY) {
+                    if (TransformGizmo.CAMERA_MODE == CameraMode.XY) {
                         camera.target.Z = 0;
                         camera.front = Vector3.UnitZ;
                         camera.up = Vector3.UnitY;
                         camera.position = Vector3.Zero with { Z = 10 };
                         camera.rotation = Vector3.Zero;
                     }
-                    else if (AxieMover.CAMERA_MODE == CameraMode.ZY) {
+                    else if (TransformGizmo.CAMERA_MODE == CameraMode.ZY) {
                         camera.target.X = 0;
                         camera.front = Vector3.UnitX;
                         camera.up = Vector3.UnitY;
                         camera.position = Vector3.Zero with { X = -10 };
                         camera.rotation = Vector3.Zero;
                     }
-                    else if (AxieMover.CAMERA_MODE == CameraMode.XZ) {
+                    else if (TransformGizmo.CAMERA_MODE == CameraMode.XZ) {
                         camera.target.Y = 0;
                         camera.front = Vector3.UnitY;
                         camera.up = Vector3.UnitZ;
@@ -120,17 +120,18 @@ namespace Editor {
                         camera.rotation = Vector3.Zero;
                     }
 
-                    if ((int)AxieMover.CAMERA_MODE > 3) {
-                        AxieMover.CAMERA_MODE = CameraMode.FPS;
+                    if ((int)TransformGizmo.CAMERA_MODE > 3) {
+                        TransformGizmo.CAMERA_MODE = CameraMode.FPS;
+                        camera.matrix.projection = (int)CameraProjection.CAMERA_PERSPECTIVE;
                     }
                 }
 
-                if (AxieMover.CAMERA_MODE is CameraMode.FPS) {
+                if (TransformGizmo.CAMERA_MODE is CameraMode.FPS) {
                     camera.setFirstPerson(0.1f, isMouseLocked);
                     camera.setDefaultFPSControls(10, isMouseLocked, true);
                     camera.defaultFpsMatrix();
                 }
-                else if (AxieMover.CAMERA_MODE is CameraMode.XY) {
+                else if (TransformGizmo.CAMERA_MODE is CameraMode.XY) {
                     if (IsKeyDown(KeyboardKey.KEY_LEFT)) {
                         camera.position.X -= 10 * GetFrameTime();
                     }
@@ -153,7 +154,7 @@ namespace Editor {
                     camera.target.X = camera.position.X;
                     camera.target.Y = camera.position.Y;
                 }
-                else if (AxieMover.CAMERA_MODE is CameraMode.ZY) {
+                else if (TransformGizmo.CAMERA_MODE is CameraMode.ZY) {
                     if (IsKeyDown(KeyboardKey.KEY_LEFT)) {
                         camera.position.Z -= 10 * GetFrameTime();
                     }
@@ -176,7 +177,7 @@ namespace Editor {
                     camera.target.Z = camera.position.Z;
                     camera.target.Y = camera.position.Y;
                 }
-                else if (AxieMover.CAMERA_MODE is CameraMode.XZ) {
+                else if (TransformGizmo.CAMERA_MODE is CameraMode.XZ) {
                     if (IsKeyDown(KeyboardKey.KEY_LEFT)) {
                         camera.position.X += 10 * GetFrameTime();
                     }
@@ -203,13 +204,13 @@ namespace Editor {
                 camera.update();
 
                 if (IsKeyPressed(KeyboardKey.KEY_F1))
-                    AxieMover.CURRENT_MODE = Mode.ROAM;
+                    TransformGizmo.CURRENT_MODE = Mode.ROAM;
                 if (IsKeyPressed(KeyboardKey.KEY_F2))
-                    AxieMover.CURRENT_MODE = Mode.MOVE;
+                    TransformGizmo.CURRENT_MODE = Mode.MOVE;
                 if (IsKeyPressed(KeyboardKey.KEY_F3))
-                    AxieMover.CURRENT_MODE = Mode.SCALE;
+                    TransformGizmo.CURRENT_MODE = Mode.SCALE;
                 if (IsKeyPressed(KeyboardKey.KEY_F4))
-                    AxieMover.CURRENT_MODE = Mode.ROTATE;
+                    TransformGizmo.CURRENT_MODE = Mode.ROTATE;
 
                 if ((IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) || IsKeyDown(KeyboardKey.KEY_LEFT_SUPER)) &&
                     IsKeyPressed(KeyboardKey.KEY_L) && !isMouseLocked) {
@@ -226,24 +227,24 @@ namespace Editor {
 
                 mover.update(camera);
 
-                if (AxieMover.IS_OBJ_ACTIVE) {
+                if (TransformGizmo.IS_OBJ_ACTIVE) {
                     if (IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) && IsKeyDown(KeyboardKey.KEY_LEFT_ALT) &&
                         IsKeyPressed(KeyboardKey.KEY_D)) {
                         Entity newEnt = new Entity();
-                        newEnt.transform.position = AxieMover.ACTIVE_ENT.transform.position with {
-                            X = AxieMover.ACTIVE_ENT.transform.position.X + 1.5f,
-                            Y = AxieMover.ACTIVE_ENT.transform.position.Y + 1.5f,
-                            Z = AxieMover.ACTIVE_ENT.transform.position.Z + 1.5f
+                        newEnt.transform.position = TransformGizmo.ACTIVE_ENT.transform.position with {
+                            X = TransformGizmo.ACTIVE_ENT.transform.position.X + 1.5f,
+                            Y = TransformGizmo.ACTIVE_ENT.transform.position.Y + 1.5f,
+                            Z = TransformGizmo.ACTIVE_ENT.transform.position.Z + 1.5f
                         };
-                        newEnt.transform.scale = AxieMover.ACTIVE_ENT.transform.scale;
-                        newEnt.transform.rotation = AxieMover.ACTIVE_ENT.transform.rotation;
+                        newEnt.transform.scale = TransformGizmo.ACTIVE_ENT.transform.scale;
+                        newEnt.transform.rotation = TransformGizmo.ACTIVE_ENT.transform.rotation;
 
-                        foreach (Component component in AxieMover.ACTIVE_ENT.components) {
+                        foreach (Component component in TransformGizmo.ACTIVE_ENT.components) {
                             Component copy = component.copy();
                             if (copy != null) newEnt.addComponent(copy);
                         }
 
-                        AxieMover.ACTIVE_ENT = newEnt;
+                        TransformGizmo.ACTIVE_ENT = newEnt;
                     }
                 }
                 else {
@@ -261,7 +262,7 @@ namespace Editor {
                 Rendering.drawDebugAxies(100);
                 Rendering.drawDebugAxies(-100);
 
-                if (AxieMover.CAMERA_MODE is CameraMode.XY) {
+                if (TransformGizmo.CAMERA_MODE is CameraMode.XY) {
                     for (int i = 0; i < 100; i++) {
                         for (int j = 0; j < 100; j++) {
                             DrawCubeWiresV(Vector3.Zero with { X = j - 50, Y = i - 50 }, Vector3.One with { Z = 0 },
@@ -269,7 +270,7 @@ namespace Editor {
                         }
                     }
                 }
-                else if (AxieMover.CAMERA_MODE is CameraMode.ZY) {
+                else if (TransformGizmo.CAMERA_MODE is CameraMode.ZY) {
                     for (int i = 0; i < 100; i++) {
                         for (int j = 0; j < 100; j++) {
                             DrawCubeWiresV(Vector3.Zero with { Z = j - 50, Y = i - 50 }, Vector3.One with { X = 0 },
@@ -277,7 +278,7 @@ namespace Editor {
                         }
                     }
                 }
-                else if (AxieMover.CAMERA_MODE is CameraMode.XZ) {
+                else if (TransformGizmo.CAMERA_MODE is CameraMode.XZ) {
                     for (int i = 0; i < 100; i++) {
                         for (int j = 0; j < 100; j++) {
                             DrawCubeWiresV(Vector3.Zero with { X = j - 50, Z = i - 50 }, Vector3.One with { Y = 0 },
@@ -289,7 +290,7 @@ namespace Editor {
                 manager.render();
                 World.render();
 
-                if (AxieMover.IS_OBJ_ACTIVE)
+                if (TransformGizmo.IS_OBJ_ACTIVE)
                     mover.render();
 
                 EndMode3D();
@@ -309,7 +310,7 @@ namespace Editor {
                         new Vector2(10, 10),
                         20, WHITE, infoWindow);
 
-                    Gui.GuiTextPro(Gui.font, "mode: " + AxieMover.CURRENT_MODE,
+                    Gui.GuiTextPro(Gui.font, "mode: " + TransformGizmo.CURRENT_MODE,
                         new Vector2(10, 30),
                         20, WHITE, infoWindow);
 
@@ -328,7 +329,7 @@ namespace Editor {
                     Gui.GuiTextPro(Gui.font, "debug terrain", 50, 160, 15, WHITE, infoWindow);
 
                     if (Gui.GuiButton("Add new", 10, 200, 150, 30, infoWindow)) {
-                        if (AxieMover.CAMERA_MODE is CameraMode.FPS) {
+                        if (TransformGizmo.CAMERA_MODE is CameraMode.FPS) {
                             Entity temp = new Entity();
                             temp.transform.position = camera.position;
                             temp.transform.scale = Vector3.One;
@@ -476,8 +477,8 @@ namespace Editor {
 
                     if (Gui.GuiButton("Clean", 10, 115, 60, 25, saveAndLoadWindow)) {
                         World.entities.Clear();
-                        AxieMover.ACTIVE_ENT = null;
-                        AxieMover.IS_OBJ_ACTIVE = false;
+                        TransformGizmo.ACTIVE_ENT = null;
+                        TransformGizmo.IS_OBJ_ACTIVE = false;
                     }
                 }
 
@@ -537,8 +538,8 @@ namespace Editor {
 
                 if (componentListWindow.active) {
                     if (Gui.GuiButton("MeshComponent", 10, 10, 250, 30, componentListWindow, TextPositioning.LEFT)) {
-                        if (!AxieMover.ACTIVE_ENT.hasComponent<MeshComponent>()) {
-                            AxieMover.ACTIVE_ENT.addComponent(new MeshComponent(AxieMover.ACTIVE_ENT, ShapeType.BOX,
+                        if (!TransformGizmo.ACTIVE_ENT.hasComponent<MeshComponent>()) {
+                            TransformGizmo.ACTIVE_ENT.addComponent(new MeshComponent(TransformGizmo.ACTIVE_ENT, ShapeType.BOX,
                                 WHITE));
                         }
                         else {
@@ -548,8 +549,8 @@ namespace Editor {
 
                     if (Gui.GuiButton("RigidBodyComponent", 10, 50, 250, 30, componentListWindow,
                             TextPositioning.LEFT)) {
-                        if (!AxieMover.ACTIVE_ENT.hasComponent<RigidBodyComponent>()) {
-                            AxieMover.ACTIVE_ENT.addComponent(new RigidBodyComponent(AxieMover.ACTIVE_ENT));
+                        if (!TransformGizmo.ACTIVE_ENT.hasComponent<RigidBodyComponent>()) {
+                            TransformGizmo.ACTIVE_ENT.addComponent(new RigidBodyComponent(TransformGizmo.ACTIVE_ENT));
                         }
                         else {
                             Console.WriteLine("Already has a rigidbody component");
@@ -571,7 +572,7 @@ namespace Editor {
                     EditorComponentData.render(componentWindow);
                 }
 
-                if (AxieMover.IS_OBJ_ACTIVE) {
+                if (TransformGizmo.IS_OBJ_ACTIVE) {
                     if (!entityDataWindow.active) {
                         entityDataWindow.active = true;
                     }
@@ -579,7 +580,7 @@ namespace Editor {
                     entityDataWindow.render();
 
                     if (entityDataWindow.active) {
-                        Gui.GuiTextPro(Gui.font, "tag: " + AxieMover.ACTIVE_ENT.tag,
+                        Gui.GuiTextPro(Gui.font, "tag: " + TransformGizmo.ACTIVE_ENT.tag,
                             new Vector2(10, 10),
                             20, WHITE, entityDataWindow);
 
@@ -595,35 +596,35 @@ namespace Editor {
                         yRot.render(85, 90, 60, 20, entityDataWindow);
                         zRot.render(160, 90, 60, 20, entityDataWindow);
 
-                        if (AxieMover.CURRENT_MODE != Mode.MOVE) {
+                        if (TransformGizmo.CURRENT_MODE != Mode.MOVE) {
                             if (float.TryParse(xPos.text, out float x))
-                                AxieMover.ACTIVE_ENT.transform.position.X = x;
+                                TransformGizmo.ACTIVE_ENT.transform.position.X = x;
                             if (float.TryParse(yPos.text, out float y))
-                                AxieMover.ACTIVE_ENT.transform.position.Y = y;
+                                TransformGizmo.ACTIVE_ENT.transform.position.Y = y;
                             if (float.TryParse(zPos.text, out float z))
-                                AxieMover.ACTIVE_ENT.transform.position.Z = z;
+                                TransformGizmo.ACTIVE_ENT.transform.position.Z = z;
                         }
 
-                        if (AxieMover.CURRENT_MODE != Mode.SCALE) {
+                        if (TransformGizmo.CURRENT_MODE != Mode.SCALE) {
                             if (float.TryParse(xScale.text, out float w))
-                                AxieMover.ACTIVE_ENT.transform.scale.X = w;
+                                TransformGizmo.ACTIVE_ENT.transform.scale.X = w;
                             if (float.TryParse(yScale.text, out float h))
-                                AxieMover.ACTIVE_ENT.transform.scale.Y = h;
+                                TransformGizmo.ACTIVE_ENT.transform.scale.Y = h;
                             if (float.TryParse(zScale.text, out float d))
-                                AxieMover.ACTIVE_ENT.transform.scale.Z = d;
+                                TransformGizmo.ACTIVE_ENT.transform.scale.Z = d;
                         }
 
-                        if (AxieMover.CURRENT_MODE != Mode.ROTATE) {
+                        if (TransformGizmo.CURRENT_MODE != Mode.ROTATE) {
                             if (float.TryParse(xRot.text, out float rx))
-                                AxieMover.ACTIVE_ENT.transform.rotation.X = rx;
+                                TransformGizmo.ACTIVE_ENT.transform.rotation.X = rx;
                             if (float.TryParse(yRot.text, out float ry))
-                                AxieMover.ACTIVE_ENT.transform.rotation.Y = ry;
+                                TransformGizmo.ACTIVE_ENT.transform.rotation.Y = ry;
                             if (float.TryParse(zRot.text, out float rz))
-                                AxieMover.ACTIVE_ENT.transform.rotation.Z = rz;
+                                TransformGizmo.ACTIVE_ENT.transform.rotation.Z = rz;
                         }
 
                         string components = String.Empty;
-                        foreach (Component component in AxieMover.ACTIVE_ENT.components) {
+                        foreach (Component component in TransformGizmo.ACTIVE_ENT.components) {
                             components += component.fileName() + ", ";
                         }
 
@@ -633,21 +634,21 @@ namespace Editor {
                                 10),
                             20, WHITE, entityDataWindow);
 
-                        for (var i = 0; i < AxieMover.ACTIVE_ENT.components.Count; i++) {
-                            if (Gui.GuiButton(AxieMover.ACTIVE_ENT.components[i].fileName(), 10, 120 + i * 35, 250, 30,
+                        for (var i = 0; i < TransformGizmo.ACTIVE_ENT.components.Count; i++) {
+                            if (Gui.GuiButton(TransformGizmo.ACTIVE_ENT.components[i].fileName(), 10, 120 + i * 35, 250, 30,
                                     entityDataWindow, TextPositioning.LEFT)) {
                                 componentWindow.active = true;
-                                componentWindow.title = AxieMover.ACTIVE_ENT.components[i].fileName();
-                                EditorComponentData.setComponent(AxieMover.ACTIVE_ENT.components[i]);
+                                componentWindow.title = TransformGizmo.ACTIVE_ENT.components[i].fileName();
+                                EditorComponentData.setComponent(TransformGizmo.ACTIVE_ENT.components[i]);
                             }
 
                             if (Gui.GuiInteractiveRec(new ExitIcon(), 270, 120 + i * 35, 30, 30,
                                     IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT), entityDataWindow)) {
-                                AxieMover.ACTIVE_ENT.components.RemoveAt(i);
+                                TransformGizmo.ACTIVE_ENT.components.RemoveAt(i);
                             }
                         }
 
-                        if (Gui.GuiButton("Add component", 10, 145 + AxieMover.ACTIVE_ENT.components.Count * 35, 175,
+                        if (Gui.GuiButton("Add component", 10, 145 + TransformGizmo.ACTIVE_ENT.components.Count * 35, 175,
                                 30,
                                 entityDataWindow)) {
                             componentListWindow.active = true;

@@ -44,8 +44,6 @@ public static class Sandbox {
             LoadTexture("assets/skybox/top.png"),
             LoadTexture("assets/skybox/bottom.png")
         };
-			
-		
 
         var camera = new Camera(Vector3.Zero, 90);
         float speed = 10;
@@ -100,6 +98,7 @@ public static class Sandbox {
         Prefab.saveScene("save_scene_test.od", "SOME_SAVED_SCENE");
         
         ModelArmature armature = new ModelArmature("assets/models/swat.m3d");
+        ModelArmature armature2 = new ModelArmature("assets/data/assets/models/walking.m3d");
 
         List<Vector3> poses = new List<Vector3>();
         List<Raycast> rays = new List<Raycast>();
@@ -214,6 +213,7 @@ public static class Sandbox {
             
             // animation
             World.getEntity("Entity8").getComponent<MeshComponent>().applyAnimation(armature, 22, 150);
+            World.getEntity("Entity15").getComponent<MeshComponent>().applyAnimation(armature2, 0, 75);
             
             Window.beginRender();
             ClearBackground(SKYBLUE);

@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
+using aengine_cs.aengine.windowing;
 using aengine.graphics;
 using Jitter.Collision.Shapes;
 using Jitter.Dynamics;
@@ -123,7 +124,10 @@ namespace aengine.ecs {
             shapeType = ShapeType.TERRAIN;
             
             TransformComponent entTrans = new TransformComponent(null);
-            if (entity != null) entTrans = entity.transform;
+            if (entity != null) {
+                entTrans = entity.transform;
+                if (!Window.isEditor) entTrans.position -= entTrans.scale * 0.5f;
+            }
 
             this.heightmap = heightmap;
             

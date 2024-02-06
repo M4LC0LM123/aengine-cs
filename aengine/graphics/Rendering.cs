@@ -34,12 +34,15 @@ namespace aengine.graphics {
 
         public static void drawSkyBox(Texture[] textures, Color tint, int scale = 200) {
             float fix = 0.5f;
-            DrawCubeTexture(textures[0], new Vector3(0, 0, scale / 2), scale, -scale, 0, tint); // front
-            DrawCubeTexture(textures[1], new Vector3(0, 0, -scale / 2), scale, -scale, 0, tint); // back
-            DrawCubeTexture(textures[2], new Vector3(-scale / 2, 0, 0), 0, -scale, scale, tint); // left
-            DrawCubeTexture(textures[3], new Vector3(scale / 2, 0, 0), 0, -scale, scale, tint); // right
-            DrawCubeTexture(textures[4], new Vector3(0, scale / 2, 0), -scale, 0, -scale, tint); // top
-            DrawCubeTexture(textures[5], new Vector3(0, -scale / 2, 0), -scale, 0, scale, tint); // bottom
+            rlPushMatrix();
+            rlTranslatef(World.camera.position.X, World.camera.position.Y, World.camera.position.Z);
+            DrawCubeTexture(textures[0], new Vector3(0, 0, scale * 0.5f), scale, -scale, 0, tint); // front
+            DrawCubeTexture(textures[1], new Vector3(0, 0, -scale * 0.5f), scale, -scale, 0, tint); // back
+            DrawCubeTexture(textures[2], new Vector3(-scale * 0.5f, 0, 0), 0, -scale, scale, tint); // left
+            DrawCubeTexture(textures[3], new Vector3(scale * 0.5f, 0, 0), 0, -scale, scale, tint); // right
+            DrawCubeTexture(textures[4], new Vector3(0, scale * 0.5f, 0), -scale, 0, -scale, tint); // top
+            DrawCubeTexture(textures[5], new Vector3(0, -scale * 0.5f, 0), -scale, 0, scale, tint); // bottom
+            rlPopMatrix();
         }
 
         public static void drawSprite3D(Texture texture, Vector3 position, float width, float height, float rotation,
