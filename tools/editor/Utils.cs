@@ -57,15 +57,15 @@ public class Utils
     {
         drawAxisLine(Axis.X, start, lengthX, 0.05f, BLUE);
         DrawModelEx(cone, start with { X = start.X + lengthX}, Vector3.UnitZ, -90, Vector3.One, BLUE);
-        DrawSphereWires(start with { X = start.X + lengthX}, radius, 15, 15, transBlue);
+        // DrawSphereWires(start with { X = start.X + lengthX}, radius, 15, 15, transBlue);
         
         drawAxisLine(Axis.Y, start, lengthY, 0.05f, RED);
         DrawModelEx(cone, start with { Y = start.Y + lengthY}, Vector3.Zero, 0, Vector3.One, RED);
-        DrawSphereWires(start with { Y = start.Y + lengthY}, radius, 15, 15, transRed);
+        // DrawSphereWires(start with { Y = start.Y + lengthY}, radius, 15, 15, transRed);
         
         drawAxisLine(Axis.Z, start, lengthZ, 0.05f, GREEN);
         DrawModelEx(cone, start with { Z = start.Z + lengthZ}, Vector3.UnitX, 90, Vector3.One, GREEN);
-        DrawSphereWires(start with { Z = start.Z + lengthZ}, radius, 15, 15, transGreen);
+        // DrawSphereWires(start with { Z = start.Z + lengthZ}, radius, 15, 15, transGreen);
     }
     
     public static unsafe bool IsNaN (float f)
