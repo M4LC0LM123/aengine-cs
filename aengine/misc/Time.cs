@@ -1,15 +1,19 @@
-using System.Diagnostics;
+using static Raylib_CsLo.Raylib;
 
 namespace aengine_cs.aengine.misc; 
 
 public static class Time {
-    private static Stopwatch m_stopwatch = new Stopwatch();
+    private static double prevTime = 0.0f;
+    
+    // do something at an interval in seconds
+    public static bool interval(float interval) {
+        double currTime = GetTime();
 
-    public static void init() {
-        m_stopwatch.Start();
-    }
+        if (currTime - prevTime >= interval) {
+            prevTime = currTime;
+            return true;
+        }
 
-    public static bool every() {
         return false;
     }
 }

@@ -92,8 +92,8 @@ public class GuiWindow
                     Gui.activeWindowID = 0;
                 }
 
-                topBar.x = Window.mousePosition.X - topBar.width/2;
-                topBar.y = Window.mousePosition.Y - topBar.height/2;
+                topBar.x = Window.mousePosition.X - topBar.width * 0.5f;
+                topBar.y = Window.mousePosition.Y - topBar.height * 0.5f;
             }
 
             rec.x = topBar.x;

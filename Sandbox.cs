@@ -1,6 +1,7 @@
 ﻿using Raylib_CsLo;
 using static Raylib_CsLo.Raylib;
 using System.Numerics;
+using aengine_cs.aengine.misc;
 using aengine_cs.aengine.windowing;
 using aengine.core;
 using aengine.graphics;
@@ -26,6 +27,7 @@ public static class Sandbox {
         Window.create();
         Window.traceLogLevel = TraceLogLevel.LOG_NONE;
         Window.title = "aengine";
+        Window.configFlags = (uint)ConfigFlags.FLAG_MSAA_4X_HINT;
         SetWindowIcon(LoadImage("assets/logo.png"));
 
         var jump = LoadSound("assets/jump.mp3");
@@ -44,6 +46,8 @@ public static class Sandbox {
             LoadTexture("assets/skybox/top.png"),
             LoadTexture("assets/skybox/bottom.png")
         };
+        
+        Rendering.setSkyBoxTextureFiltering(skybox);
 
         var camera = new Camera(Vector3.Zero, 90);
         float speed = 10;

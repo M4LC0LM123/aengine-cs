@@ -12,6 +12,14 @@ namespace aengine.graphics {
     public class Rendering {
         private static float linePointSizeDivisor = 3;
 
+        public static void setSkyBoxTextureFiltering(Texture[] skybox) {
+            for (var i = 0; i < skybox.Length; i++) {
+                RlGl.rlTextureParameters(skybox[i].id, RlGl.RL_TEXTURE_MAG_FILTER, RlGl.RL_TEXTURE_FILTER_LINEAR);
+                RlGl.rlTextureParameters(skybox[i].id, RlGl.RL_TEXTURE_WRAP_S, RlGl.RL_TEXTURE_WRAP_CLAMP);
+                RlGl.rlTextureParameters(skybox[i].id, RlGl.RL_TEXTURE_WRAP_T, RlGl.RL_TEXTURE_WRAP_CLAMP);
+            }
+        }
+
         public static void drawDebugAxies(float length = 4) {
             DrawLine3D(Vector3.Zero, new Vector3(length, 0, 0), BLUE);
             DrawLine3D(Vector3.Zero, new Vector3(0, length, 0), RED);
