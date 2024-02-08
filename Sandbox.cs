@@ -37,14 +37,14 @@ public static class Sandbox {
         var gun = LoadTexture("assets/hlpistol.png");
         var particle = LoadTexture("assets/particle.png");
         Gui.font = LoadFont("assets/fonts/font.ttf");
-
-        var skybox = new[] {
-            LoadTexture("assets/skybox/front.png"),
-            LoadTexture("assets/skybox/back.png"),
-            LoadTexture("assets/skybox/left.png"),
-            LoadTexture("assets/skybox/right.png"),
-            LoadTexture("assets/skybox/top.png"),
-            LoadTexture("assets/skybox/bottom.png")
+        
+        aTexture[] skybox = {
+            new aTexture("assets/skybox/frontx.png"),
+            new aTexture("assets/skybox/backx.png"),
+            new aTexture("assets/skybox/leftx.png"),
+            new aTexture("assets/skybox/rightx.png"),
+            new aTexture("assets/skybox/topx.png"),
+            new aTexture("assets/skybox/bottomx.png")
         };
         
         Rendering.setSkyBoxTextureFiltering(skybox);
@@ -103,7 +103,7 @@ public static class Sandbox {
         
         ModelArmature armature = new ModelArmature("assets/models/swat.m3d");
         ModelArmature armature2 = new ModelArmature("assets/data/assets/models/walking.m3d");
-
+        
         List<Vector3> poses = new List<Vector3>();
         List<Raycast> rays = new List<Raycast>();
         

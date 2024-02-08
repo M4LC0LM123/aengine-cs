@@ -21,6 +21,8 @@ public static class Gui {
 
     public static Font font = GetFontDefault();
 
+    public static char cursorShape = '|';
+
     public static int windowCount = 0;
     public static int activeWindowID = 0;
 

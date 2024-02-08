@@ -147,6 +147,17 @@ namespace aengine.core
             return MathF.Sqrt(MathF.Pow((v1.X - v2.X), 2) + MathF.Pow((v1.Y - v2.Y), 2) + MathF.Pow((v1.Z - v2.Z), 2));
         }
 
+        public static string changeCharAtIndex(string str, int index, char @char) {
+            if (index < 0 || index >= str.Length)
+            {
+                throw new IndexOutOfRangeException("Index is out of range");
+            }
+
+            char[] charArray = str.ToCharArray(); // Convert string to char array
+            charArray[index] = @char; // Modify character at index
+            return new string(charArray); // Convert char array back to string
+        }
+
     }
 
 }

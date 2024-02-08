@@ -12,11 +12,11 @@ namespace aengine.graphics {
     public class Rendering {
         private static float linePointSizeDivisor = 3;
 
-        public static void setSkyBoxTextureFiltering(Texture[] skybox) {
+        public static void setSkyBoxTextureFiltering(aTexture[] skybox) {
             for (var i = 0; i < skybox.Length; i++) {
-                RlGl.rlTextureParameters(skybox[i].id, RlGl.RL_TEXTURE_MAG_FILTER, RlGl.RL_TEXTURE_FILTER_LINEAR);
-                RlGl.rlTextureParameters(skybox[i].id, RlGl.RL_TEXTURE_WRAP_S, RlGl.RL_TEXTURE_WRAP_CLAMP);
-                RlGl.rlTextureParameters(skybox[i].id, RlGl.RL_TEXTURE_WRAP_T, RlGl.RL_TEXTURE_WRAP_CLAMP);
+                rlTextureParameters(skybox[i].data.id, RL_TEXTURE_MAG_FILTER, RL_TEXTURE_FILTER_LINEAR);
+                rlTextureParameters(skybox[i].data.id, RL_TEXTURE_WRAP_S, RL_TEXTURE_WRAP_CLAMP);
+                rlTextureParameters(skybox[i].data.id, RL_TEXTURE_WRAP_T, RL_TEXTURE_WRAP_CLAMP);
             }
         }
 
@@ -40,16 +40,16 @@ namespace aengine.graphics {
             DrawCube(cubePos, cubeWidth, cubeHeight, cubeLength, color);
         }
 
-        public static void drawSkyBox(Texture[] textures, Color tint, int scale = 200) {
+        public static void drawSkyBox(aTexture[] textures, Color tint, int scale = 200) {
             float fix = 0.5f;
             rlPushMatrix();
             rlTranslatef(World.camera.position.X, World.camera.position.Y, World.camera.position.Z);
-            DrawCubeTexture(textures[0], new Vector3(0, 0, scale * 0.5f), scale, -scale, 0, tint); // front
-            DrawCubeTexture(textures[1], new Vector3(0, 0, -scale * 0.5f), scale, -scale, 0, tint); // back
-            DrawCubeTexture(textures[2], new Vector3(-scale * 0.5f, 0, 0), 0, -scale, scale, tint); // left
-            DrawCubeTexture(textures[3], new Vector3(scale * 0.5f, 0, 0), 0, -scale, scale, tint); // right
-            DrawCubeTexture(textures[4], new Vector3(0, scale * 0.5f, 0), -scale, 0, -scale, tint); // top
-            DrawCubeTexture(textures[5], new Vector3(0, -scale * 0.5f, 0), -scale, 0, scale, tint); // bottom
+            DrawCubeTexture(textures[0].data, new Vector3(0, 0, scale * 0.5f), scale, -scale, 0, tint); // front
+            DrawCubeTexture(textures[1].data, new Vector3(0, 0, -scale * 0.5f), scale, -scale, 0, tint); // back
+            DrawCubeTexture(textures[2].data, new Vector3(-scale * 0.5f, 0, 0), 0, -scale, scale, tint); // left
+            DrawCubeTexture(textures[3].data, new Vector3(scale * 0.5f, 0, 0), 0, -scale, scale, tint); // right
+            DrawCubeTexture(textures[4].data, new Vector3(0, scale * 0.5f, 0), -scale, 0, -scale, tint); // top
+            DrawCubeTexture(textures[5].data, new Vector3(0, -scale * 0.5f, 0), -scale, 0, scale, tint); // bottom
             rlPopMatrix();
         }
 
