@@ -42,14 +42,16 @@ public class GuiTextBox {
         Gui.GuiTextPro(Gui.font, text, new Vector2(textX, textY), Gui.font.baseSize * textScale, WHITE);
         
         // cursor
-        float charLen = 0;
-        float textLen = MeasureTextEx(Gui.font, text, Gui.font.baseSize * textScale, 2).X;
-        if (text.Length != 0) charLen = MeasureTextEx(Gui.font, text[(text.Length - pos - 1) % text.Length].ToString(),
-            Gui.font.baseSize, 2).X;
-        float curX = textX + (textLen - pos * charLen);
-        Gui.GuiTextPro(Gui.font, Gui.cursorShape.ToString(),
-            new Vector2(curX, textY),
-            Gui.font.baseSize * textScale, WHITE);
+        if (active) {
+            float charLen = 0;
+            float textLen = MeasureTextEx(Gui.font, text, Gui.font.baseSize * textScale, 2).X;
+            if (text.Length != 0) charLen = MeasureTextEx(Gui.font, text[(text.Length - pos - 1) % text.Length].ToString(),
+                Gui.font.baseSize, 2).X;
+            float curX = textX + (textLen - pos * charLen);
+            Gui.GuiTextPro(Gui.font, Gui.cursorShape.ToString(),
+                new Vector2(curX, textY),
+                Gui.font.baseSize * textScale, WHITE);
+        }
         
         EndScissorMode();
 

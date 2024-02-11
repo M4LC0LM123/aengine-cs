@@ -7,7 +7,7 @@ namespace aengine.ecs;
 
 public class FluidComponent : Component {
     public aShader shader;
-    public Texture texture;
+    public aTexture texture;
     public Color color;
 
     public float freqX;
@@ -30,10 +30,12 @@ public class FluidComponent : Component {
     public Vector3 position;
     public Vector2 scale;
     public float rotation;
+
+    public OpticalTransparency opticalTransparency = OpticalTransparency.OPAQUE;
     
     private string m_name = "fluid";
 
-    public unsafe FluidComponent(Entity entity, aShader shader, Texture texture, Color color) {
+    public unsafe FluidComponent(Entity entity, aShader shader, aTexture texture, Color color) {
         this.texture = texture;
         this.shader = shader;
 
@@ -69,6 +71,15 @@ public class FluidComponent : Component {
         rotation = entity.transform.rotation.Y;
 
         this.color = color;
+        
+        World.renderable.Add(entity);
+        
+        opticalTransparency = Rendering.textureTransparency(texture);
+            
+        if (this.color.a < 255 && opticalTransparency != OpticalTransparency.TRANSPARENT) {
+            if (this.color.a <= 0) opticalTransparency = OpticalTransparency.TRANSPARENT;
+            else opticalTransparency = OpticalTransparency.TRANSLUCENT;
+        }
     }
 
     public void resetValues() {
@@ -91,12 +102,12 @@ public class FluidComponent : Component {
 
     public void render() {
         BeginShaderMode(shader.handle);
-        Rendering.drawTexturedPlane(texture, position, scale.X, scale.Y, rotation, color);
+        Rendering.drawTexturedPlane(texture.data, position, scale.X, scale.Y, rotation, color);
         EndShaderMode();
     }
 
     public void dispose() {
-        UnloadTexture(texture);
+        UnloadTexture(texture.data);
     }
 
     public string fileName() {

@@ -1,5 +1,8 @@
 using System.Numerics;
+using aengine.ecs;
+using aengine.graphics;
 using Raylib_CsLo;
+using Sandbox.aengine.Gui;
 using static Raylib_CsLo.Raylib;
 
 namespace aengine_cs.aengine.windowing; 
@@ -16,6 +19,8 @@ public class Window {
     private static int m_targetFps = 60;
     private static bool m_isEditor = false;
     public static Vector2 mousePosition = Vector2.Zero;
+    public static bool sortTransparentEntities = true;
+    public static bool debugStats = false;
     public static RenderTexture target;
 
     public static void create() {
@@ -135,6 +140,17 @@ public class Window {
     }
 
     public static void endRender() {
+        // debug stats
+        if (debugStats) {
+            Gui.GuiTextPro(Gui.font, "fps: " + GetFPS(), 10, 10, 16, YELLOW);
+            Gui.GuiTextPro(Gui.font, "dt: " + GetFrameTime(), 10, 30, 16, YELLOW);
+            Gui.GuiTextPro(Gui.font, "time: " + GetTime(), 10, 50, 16, YELLOW);
+            Gui.GuiTextPro(Gui.font, "ents: " + World.entities.Count, 10, 70, 16, YELLOW);
+            Gui.GuiTextPro(Gui.font, "rendered: " + World.renderable.Count, 10, 90, 16, YELLOW);
+            Gui.GuiTextPro(Gui.font, "rbs: " + World.world.RigidBodies.Count, 10, 110, 16, YELLOW);
+            Gui.GuiTextPro(Gui.font, "lights: " + World.lights.lightsCount, 10, 130, 16, YELLOW);
+        }
+        
         EndTextureMode();
         
         BeginDrawing();

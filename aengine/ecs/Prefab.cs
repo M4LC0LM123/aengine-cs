@@ -692,10 +692,10 @@ public class Prefab {
 
         string texturePath = obj.getValue<string>("texture");
 
-        Texture texture = new Texture();
+        aTexture texture = new aTexture();
 
         if (texturePath != "")
-            texture = Raylib.LoadTexture(texturePath);
+            texture = new aTexture(texturePath);
 
         int r = obj.getValue<int>("r");
         int g = obj.getValue<int>("g");

@@ -81,8 +81,7 @@ public class ConsoleCommands {
             Window.setResolution(width, Window.renderHeight);
             
             console.print($"set the width to {width}");
-        }
-        else {
+        } else {
             console.print(aengine.QUOTE + console.commandInput.text.Remove(0, 15) + aengine.QUOTE + "is not a number");
             console.print($"example usage of {aengine.QUOTE}w_render_width{aengine.QUOTE}: w_render_width 800");
         }
@@ -93,10 +92,24 @@ public class ConsoleCommands {
             Window.setResolution(Window.renderWidth, height);
             
             console.print($"set the height to {height}");
-        }
-        else {
+        } else {
             console.print(aengine.QUOTE + console.commandInput.text.Remove(0, 16) + aengine.QUOTE + "is not a number");
             console.print($"example usage of {aengine.QUOTE}w_render_height{aengine.QUOTE}: w_render_height 600");
+        }
+    }
+
+    public static void debugStats(Console console, string[] args) {
+        if (Int32.TryParse(console.commandInput.text.Remove(0, 8), out int draw)) {
+            if (draw == 1) Window.debugStats = true;
+            else if (draw == 0) Window.debugStats = false;
+            else {
+                console.print(aengine.QUOTE + console.commandInput.text.Remove(0, 8) + aengine.QUOTE + "has to be 0 or 1");
+            }
+            
+            console.print($"set the draw stats to {draw}");
+        } else {
+            console.print(aengine.QUOTE + console.commandInput.text.Remove(0, 8) + aengine.QUOTE + "is not a number");
+            console.print($"example usage of {aengine.QUOTE}w_stats{aengine.QUOTE}: w_stats 1");
         }
     }
 

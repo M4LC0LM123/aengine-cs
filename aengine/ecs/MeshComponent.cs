@@ -8,6 +8,8 @@ using System.Numerics;
 using aengine_cs.aengine.parser;
 using aengine_cs.aengine.windowing;
 using Jitter.Collision.Shapes;
+using Jitter.Dynamics;
+using Jitter.LinearMath;
 using Raylib_CsLo;
 using static Raylib_CsLo.Raylib;
 using static Raylib_CsLo.RlGl;
@@ -24,6 +26,7 @@ namespace aengine.ecs
         public float scale;
         public string terrainPath = "";
         public ShapeType shape;
+        public OpticalTransparency opticalTransparency = OpticalTransparency.OPAQUE;
         
         private string m_name = "mesh";
 
@@ -40,6 +43,8 @@ namespace aengine.ecs
             scale = 1;
             model.data.materials[0].maps[(int)MATERIAL_MAP_DIFFUSE].texture = texture.data;
             isModel = true;
+            if (entity != null) World.renderable.Add(entity);
+            handleTransparency();
         }
         
         public MeshComponent(Entity entity, Color color, aTexture texture, bool model)
@@ -52,6 +57,8 @@ namespace aengine.ecs
             scale = 1;
             this.texture = texture;
             isModel = model;
+            if (entity != null) World.renderable.Add(entity);
+            handleTransparency();
         }
         
         // ShapeType shape cannot be terrain here
@@ -77,6 +84,8 @@ namespace aengine.ecs
             scale = 1;
             model.data.materials[0].maps[(int)MATERIAL_MAP_DIFFUSE].texture = texture.data;
             isModel = true;
+            if (entity != null) World.renderable.Add(entity);
+            handleTransparency();
         }
         
         public MeshComponent(Entity entity, ShapeType shape, Color color)
@@ -98,6 +107,8 @@ namespace aengine.ecs
             }
             scale = 1;
             isModel = true;
+            if (entity != null) World.renderable.Add(entity);
+            handleTransparency();
         }
         
         // aModel model has to be a model not a primitive generated shape here
@@ -112,6 +123,8 @@ namespace aengine.ecs
             scale = 1;
             model.data.materials[0].maps[(int)MATERIAL_MAP_DIFFUSE].texture = texture.data;
             isModel = true;
+            if (entity != null) World.renderable.Add(entity);
+            handleTransparency();
         }
         
         // aModel model has to be a model not a primitive generated shape here
@@ -124,6 +137,8 @@ namespace aengine.ecs
             shape = ShapeType.MODEL;
             scale = 1;
             isModel = true;
+            if (entity != null) World.renderable.Add(entity);
+            handleTransparency();
         }
 
         public unsafe MeshComponent(Entity entity, aTexture terrain, Color color, aTexture texture) {
@@ -137,6 +152,8 @@ namespace aengine.ecs
             model.data.materials[0].maps[(int)MATERIAL_MAP_DIFFUSE].texture = this.texture.data;
             isModel = true;
             terrainPath = terrain.path;
+            if (entity != null) World.renderable.Add(entity);
+            handleTransparency();
         }
 
         private MeshComponent() {
@@ -147,6 +164,15 @@ namespace aengine.ecs
             shape = ShapeType.BOX;
             scale = 1;
             isModel = true;
+        }
+
+        private void handleTransparency() {
+            opticalTransparency = Rendering.textureTransparency(texture);
+            
+            if (color.a < 255 && opticalTransparency != OpticalTransparency.TRANSPARENT) {
+                if (color.a <= 0) opticalTransparency = OpticalTransparency.TRANSPARENT;
+                else opticalTransparency = OpticalTransparency.TRANSLUCENT;
+            }
         }
 
         public void setTerrain(aTexture terrain) {

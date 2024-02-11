@@ -9,11 +9,13 @@ namespace aengine.ecs;
 public class ParticleSystem : Entity
 {
     public List<ParticleComponent> particles;
+    public OpticalTransparency opticalTransparency = OpticalTransparency.TRANSPARENT;
     private Camera m_camera;
 
     public ParticleSystem()
     {
         particles = new List<ParticleComponent>();
+        World.renderable.Add(this);
     }
 
     public void setCamera(Camera camera)
@@ -86,6 +88,7 @@ public class ParticleSystem : Entity
     {
         base.render();
         int len = particles.Count;
+        
         for (int i = 0; i < len; i++)
         {
             particles[i].setCamera(m_camera);

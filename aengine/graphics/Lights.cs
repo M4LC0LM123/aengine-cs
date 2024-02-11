@@ -104,7 +104,7 @@ public unsafe class RLights
 	//----------------------------------------------------------------------------------
 	// Global Variables Definition
 	//----------------------------------------------------------------------------------
-	private int lightsCount = 0;    // Current amount of created lights
+	public int lightsCount = 0;    // Current amount of created lights
 
 	//----------------------------------------------------------------------------------
 	// Module specific Functions Declaration

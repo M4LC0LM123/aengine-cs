@@ -12,6 +12,21 @@ namespace aengine.graphics {
     public class Rendering {
         private static float linePointSizeDivisor = 3;
 
+        public static unsafe OpticalTransparency textureTransparency(aTexture texture) {
+            Color* pixels = LoadImageColors(LoadImageFromTexture(texture.data));
+
+            int len = texture.data.width * texture.data.height;
+            for (int i = 0; i < len; i++) {
+                if (pixels[i % len].a < 255) {
+                    if (pixels[i % len].a <= 0) return OpticalTransparency.TRANSPARENT;
+                    
+                    return OpticalTransparency.TRANSLUCENT;
+                }
+            }
+
+            return OpticalTransparency.OPAQUE;
+        }
+
         public static void setSkyBoxTextureFiltering(aTexture[] skybox) {
             for (var i = 0; i < skybox.Length; i++) {
                 rlTextureParameters(skybox[i].data.id, RL_TEXTURE_MAG_FILTER, RL_TEXTURE_FILTER_LINEAR);
@@ -58,7 +73,7 @@ namespace aengine.graphics {
             float x = position.X;
             float y = position.Y;
             float z = position.Z;
-
+            
             rlSetTexture(texture.id);
 
             rlPushMatrix();
@@ -66,7 +81,7 @@ namespace aengine.graphics {
             rlRotatef(rotation, 0.0f, 1.0f, 0.0f);
             rlRotatef(rotationY, 1.0f, 0.0f, 0.0f);
             rlTranslatef(-x, -y, -z);
-
+            
             rlBegin(RL_QUADS);
             rlColor4ub(color.r, color.g, color.b, color.a);
             rlNormal3f(0.0f, 0.0f, 1.0f); // Normal Pointing Towards Viewer

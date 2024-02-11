@@ -38,6 +38,7 @@ public class Console
         registerCommand(new ConsoleCommand("w_height", "sets the height of window", ConsoleCommands.setHeight));
         registerCommand(new ConsoleCommand("w_render_width", "sets the width of window", ConsoleCommands.setRenderWidth));
         registerCommand(new ConsoleCommand("w_render_height", "sets the height of window", ConsoleCommands.setRenderHeight));
+        registerCommand(new ConsoleCommand("w_stats", "show debug stats", ConsoleCommands.debugStats));
         registerCommand(new ConsoleCommand("w_close", "closes the window", ConsoleCommands.close));
     }
 
