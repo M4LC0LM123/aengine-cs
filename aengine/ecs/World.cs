@@ -18,10 +18,11 @@ namespace aengine.ecs {
         public static bool debugRenderTerrain = false; // uses a lot of resources and makes the game slower
         public static bool renderColliders = false;
 
-        public static CollisionSystem collisionSystem = new CollisionSystemSAP();
+        private static CollisionSystem collisionSystem = new CollisionSystemSAP();
         public static Jitter.World world = new Jitter.World(collisionSystem);
 
         public static RLights lights = new RLights();
+        public static bool LAE = false; // lights affect everything if there is not lights everything is black
 
         public static Camera camera = null;
 
@@ -100,7 +101,7 @@ namespace aengine.ecs {
         }
 
         public static void render() {
-            if (Window.sortTransparentEntities)
+            if (Window.sortTransparentEntities && World.entities.Count >= 2)
                 renderable.Sort((a, b) => {
                     int comp = compare(a, b);
                     if (comp != null) return comp;

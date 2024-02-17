@@ -47,6 +47,16 @@ public static class Gui {
             new Rectangle(rp.X, rp.Y, width, height), Vector2.Zero, 0, WHITE);
     }
     
+    public static void GuiRec(float x, float y, float width, float height, Color color, GuiWindow window = null) {
+        Vector2 rp = Vector2.Zero with {X = x, Y = y};
+
+        if (window != null) {
+            rp = new Vector2(x + window.rec.x, y + window.rec.y);
+        }
+        
+        DrawRectangle((int)rp.X, (int)rp.Y, (int)width, (int)height, color);
+    }
+    
     public static void GuiPlainRec(float x, float y, float width, float height) {
         DrawRectangle((int)(x - bezelSize), (int)(y - bezelSize), (int)(width + bezelSize * 2f),
             (int)(height + bezelSize * 2f), darkerColor);

@@ -19,23 +19,27 @@ public class LightComponent : Component
     private Model cube;
     private string m_name = "light";
     
-    public unsafe LightComponent(Entity entity, aShader shader, Color color, LightType type = LightType.POINT)
+    public unsafe LightComponent(Entity entity, Color color, LightType type = LightType.POINT)
     {
         updateVector = new Vector3();
         intensity = 2.5f;
         enabled = true;
-        this.shader = shader;
+        shader = LightShader.DEFAULT_LIGHT;
         
-        this.shader.handle.locs[(int)SHADER_LOC_MAP_DIFFUSE] = GetShaderLocation(this.shader.handle, "viewPos");
+        shader.handle.locs[(int)SHADER_LOC_MAP_DIFFUSE] = GetShaderLocation(shader.handle, "viewPos");
 
         // Ambient light level (some basic lighting)
-        int ambientLoc = GetShaderLocation(this.shader.handle, "ambient");
-        SetShaderValue(this.shader.handle, ambientLoc, new Vector4(intensity, intensity, intensity, 1.0f), ShaderUniformDataType.SHADER_UNIFORM_VEC4);
+        int ambientLoc = GetShaderLocation(shader.handle, "ambient");
+        SetShaderValue(shader.handle, ambientLoc, new Vector4(intensity, intensity, intensity, 1.0f), ShaderUniformDataType.SHADER_UNIFORM_VEC4);
         
-        core = World.lights.CreateLight((RLights.LightType)type, entity.transform.position, Vector3.Zero, color, this.shader.handle);
+        core = World.lights.CreateLight((RLights.LightType)type, entity.transform.position, Vector3.Zero, color, shader.handle);
 
         cube = LoadModelFromMesh(GenMeshCube(0.5f, 0.5f, 0.5f));
-        cube.materials[0].shader = this.shader.handle;
+        cube.materials[0].shader = shader.handle;
+    }
+
+    public void setColor(Color color) {
+        core.color = color;
     }
 
     public unsafe void update(Entity entity) {

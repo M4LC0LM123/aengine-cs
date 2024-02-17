@@ -16,6 +16,7 @@ object estrada {
     str block13 = "estrada.od";
     str block14 = "estrada.od";
     str Entity15 = "estrada.od";
+    str light = "estrada.od";
 }
 
 #mod prefab
@@ -734,4 +735,36 @@ object Entity15_mesh {
     str heightmap = "";
 
     i32 scale = 3;    
+}
+#mod prefab
+object light {
+    str tag = light;
+    
+    f32 x = 0.6252134;
+    f32 y = -2.0017655;
+    f32 z = -0.5210097;
+
+    f32 width = 0.5;
+    f32 height = 0.5;
+    f32 depth = 0.5;
+
+    f32 rx = 0; // rotation x (pitch)
+    f32 ry = 0; // rotation y (yaw)
+    f32 rz = 0; // rotation z (roll)
+
+    str components = "light_light";
+}
+object light_light {
+    string type = "LightComponent";
+        
+    f32 intensity = 2.5;
+
+    i32 r = 255;
+    i32 g = 127;
+    i32 b = 80;
+    i32 a = 255;
+
+    bool enabled = True;
+
+    i32 light_type = 1;
 }

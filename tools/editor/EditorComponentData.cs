@@ -24,6 +24,15 @@ public class EditorComponentData {
 
     public static GuiTextBox RshapeBox = new GuiTextBox(); // ShapeType (int)
     // _____________________ rb component _________________________
+    
+    // _____________________ light component ______________________
+    public static GuiTextBox intenseBox = new GuiTextBox(); // float
+    
+    public static GuiTextBox lcrBox = new GuiTextBox(); // int
+    public static GuiTextBox lcgBox = new GuiTextBox(); // int
+    public static GuiTextBox lcbBox = new GuiTextBox(); // int
+    public static GuiTextBox lcaBox = new GuiTextBox(); // int
+    // _____________________ light component ______________________
 
     public static Component activeComponent = null;
 
@@ -42,6 +51,13 @@ public class EditorComponentData {
             RigidBodyComponent rb = (RigidBodyComponent)activeComponent;
             massBox.text = rb.body.Mass.ToString();
             RshapeBox.text = ((int)rb.shapeType).ToString();
+        } else if (activeComponent.getType() == "LightComponent") {
+            LightComponent lc = (LightComponent)activeComponent;
+            intenseBox.text = lc.intensity.ToString();
+            lcrBox.text = lc.core.color.r.ToString();
+            lcgBox.text = lc.core.color.g.ToString();
+            lcbBox.text = lc.core.color.b.ToString();
+            lcaBox.text = lc.core.color.a.ToString();
         }
     }
 
@@ -60,7 +76,7 @@ public class EditorComponentData {
             gBox.render(65, 45, 50, 25, window);
             bBox.render(120, 45, 50, 25, window);
             aBox.render(175, 45, 50, 25, window);
-            Gui.GuiTextPro(Gui.font, "color", 235, 45, 20, Raylib.WHITE, window);
+            Gui.GuiRec(235, 45, 20, 20, mc.color, window);
 
             if (rBox.text != String.Empty) mc.color.r = (byte)int.Parse(rBox.text);
             if (gBox.text != String.Empty) mc.color.g = (byte)int.Parse(gBox.text);
@@ -187,6 +203,28 @@ public class EditorComponentData {
                     Console.WriteLine("cancelled");  
                 }
             }
+        } else if (activeComponent.getType() == "LightComponent") {
+            LightComponent lc = (LightComponent)activeComponent;
+            
+            intenseBox.render(10, 10, 50, 25, window);
+            Gui.GuiTextPro(Gui.font, "intensity", 75, 10, 20, Raylib.WHITE, window);
+            if (intenseBox.text != null && intenseBox.text != String.Empty) {
+                lc.setIntensity(float.Parse(intenseBox.text));
+            }
+            
+            lcrBox.render(10, 45, 50, 25, window);
+            lcgBox.render(65, 45, 50, 25, window);
+            lcbBox.render(120, 45, 50, 25, window);
+            lcaBox.render(175, 45, 50, 25, window);
+            Gui.GuiRec(235, 45, 20, 20, lc.core.color, window);
+            
+            if (lcrBox.text != String.Empty) lc.core.color.r = (byte)int.Parse(lcrBox.text);
+            if (lcgBox.text != String.Empty) lc.core.color.g = (byte)int.Parse(lcgBox.text);
+            if (lcbBox.text != String.Empty) lc.core.color.b = (byte)int.Parse(lcbBox.text);
+            if (lcaBox.text != String.Empty) lc.core.color.a = (byte)int.Parse(lcaBox.text);
+            
+            Gui.GuiTextPro(Gui.font, "enabled", 50, 80, 20, Raylib.WHITE, window);
+            lc.enabled = Gui.GuiTickBox(lc.enabled, 10, 80, 25, 25, window);
         }
     }
 

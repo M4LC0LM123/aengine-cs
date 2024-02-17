@@ -220,12 +220,9 @@ public class Prefab {
     i32 b = {component.core.color.b};
     i32 a = {component.core.color.a};
 
-    string shader_vert = {core.aengine.QUOTE}{component.shader.vertPath}{core.aengine.QUOTE};
-    string shader_frag = {core.aengine.QUOTE}{component.shader.fragPath}{core.aengine.QUOTE};
-
     bool enabled = {component.enabled};
 
-    i32 light_type = {component.core.type};
+    i32 light_type = {(int)component.core.type};
 {close}";
 
         return text;
@@ -238,7 +235,7 @@ public class Prefab {
     str shader_vert = {core.aengine.QUOTE}{component.shader.vertPath}{core.aengine.QUOTE};
     str shader_frag = {core.aengine.QUOTE}{component.shader.fragPath}{core.aengine.QUOTE};
 
-    str texture = {core.aengine.QUOTE}assets/water.png{core.aengine.QUOTE};
+    str texture = {core.aengine.QUOTE}{component.texture.path}{core.aengine.QUOTE};
 
     i32 r = {component.color.r};
     i32 g = {component.color.g};
@@ -636,21 +633,11 @@ public class Prefab {
         int a = obj.getValue<int>("a");
         Color color = new Color(r, g, b, a);
 
-        string vertShaderPath = obj.getValue<string>("shader_vert");
-        string fragShaderPath = obj.getValue<string>("shader_frag");
-
-        if (vertShaderPath == "")
-            vertShaderPath = null;
-
-        if (fragShaderPath == "")
-            fragShaderPath = null;
-
         bool enabled = obj.getValue<bool>("enabled");
 
         LightType type = obj.getValue<LightType>("light_type");
 
         LightComponent result = new LightComponent(entity,
-            new aShader(vertShaderPath, fragShaderPath),
             color,
             type
         );

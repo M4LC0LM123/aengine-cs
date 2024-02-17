@@ -21,7 +21,7 @@ object SOME_SAVED_SCENE {
     str block13 = "save_scene_test.od";
     str block14 = "save_scene_test.od";
     str Entity15 = "save_scene_test.od";
-    str Entity21 = "save_scene_test.od";
+    str light = "save_scene_test.od";
     str water = "save_scene_test.od";
 }
 
@@ -904,35 +904,32 @@ object Entity15_mesh {
     i32 scale = 3;    
 }
 #mod prefab
-object Entity21 {
-    str tag = Entity21;
+object light {
+    str tag = light;
     
-    f32 x = 0;
-    f32 y = 0;
-    f32 z = 0;
+    f32 x = 0.6252134;
+    f32 y = -2.0017655;
+    f32 z = -0.5210097;
 
-    f32 width = 1;
-    f32 height = 1;
-    f32 depth = 1;
+    f32 width = 0.5;
+    f32 height = 0.5;
+    f32 depth = 0.5;
 
     f32 rx = 0; // rotation x (pitch)
     f32 ry = 0; // rotation y (yaw)
     f32 rz = 0; // rotation z (roll)
 
-    str components = "Entity21_light";
+    str components = "light_light";
 }
-object Entity21_light {
+object light_light {
     string type = "LightComponent";
         
     f32 intensity = 2.5;
 
     i32 r = 255;
-    i32 g = 255;
-    i32 b = 255;
+    i32 g = 127;
+    i32 b = 80;
     i32 a = 255;
-
-    string shader_vert = "assets/shaders/light.vert";
-    string shader_frag = "assets/shaders/light.frag";
 
     bool enabled = True;
 

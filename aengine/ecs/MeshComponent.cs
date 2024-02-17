@@ -45,6 +45,7 @@ namespace aengine.ecs
             isModel = true;
             if (entity != null) World.renderable.Add(entity);
             handleTransparency();
+            if (World.LAE) setShader(LightShader.DEFAULT_LIGHT);
         }
         
         public MeshComponent(Entity entity, Color color, aTexture texture, bool model)
@@ -59,6 +60,7 @@ namespace aengine.ecs
             isModel = model;
             if (entity != null) World.renderable.Add(entity);
             handleTransparency();
+            if (World.LAE) setShader(LightShader.DEFAULT_LIGHT);
         }
         
         // ShapeType shape cannot be terrain here
@@ -86,6 +88,7 @@ namespace aengine.ecs
             isModel = true;
             if (entity != null) World.renderable.Add(entity);
             handleTransparency();
+            if (World.LAE) setShader(LightShader.DEFAULT_LIGHT);
         }
         
         public MeshComponent(Entity entity, ShapeType shape, Color color)
@@ -109,6 +112,7 @@ namespace aengine.ecs
             isModel = true;
             if (entity != null) World.renderable.Add(entity);
             handleTransparency();
+            if (World.LAE) setShader(LightShader.DEFAULT_LIGHT);
         }
         
         // aModel model has to be a model not a primitive generated shape here
@@ -125,6 +129,7 @@ namespace aengine.ecs
             isModel = true;
             if (entity != null) World.renderable.Add(entity);
             handleTransparency();
+            if (World.LAE) setShader(LightShader.DEFAULT_LIGHT);
         }
         
         // aModel model has to be a model not a primitive generated shape here
@@ -139,6 +144,7 @@ namespace aengine.ecs
             isModel = true;
             if (entity != null) World.renderable.Add(entity);
             handleTransparency();
+            if (World.LAE) setShader(LightShader.DEFAULT_LIGHT);
         }
 
         public unsafe MeshComponent(Entity entity, aTexture terrain, Color color, aTexture texture) {
@@ -154,6 +160,7 @@ namespace aengine.ecs
             terrainPath = terrain.path;
             if (entity != null) World.renderable.Add(entity);
             handleTransparency();
+            if (World.LAE) setShader(LightShader.DEFAULT_LIGHT);
         }
 
         private MeshComponent() {
@@ -164,6 +171,7 @@ namespace aengine.ecs
             shape = ShapeType.BOX;
             scale = 1;
             isModel = true;
+            if (World.LAE) setShader(LightShader.DEFAULT_LIGHT);
         }
 
         private void handleTransparency() {
@@ -181,6 +189,7 @@ namespace aengine.ecs
             scale = 1;
             isModel = true;
             terrainPath = terrain.path;
+            if (World.LAE) setShader(LightShader.DEFAULT_LIGHT);
         }
         
         public void setModel(aModel model) {
@@ -188,6 +197,7 @@ namespace aengine.ecs
             shape = ShapeType.MODEL;
             scale = 1;
             isModel = true;
+            if (World.LAE) setShader(LightShader.DEFAULT_LIGHT);
         }
 
         public unsafe void setTexture(aTexture texture, int mat = 0, int map = 0)
@@ -227,6 +237,7 @@ namespace aengine.ecs
             } else if (shape is ShapeType.SPRITE) {
                 isModel = false;
             }
+            if (World.LAE) setShader(LightShader.DEFAULT_LIGHT);
         }
 
         public void applyAnimation(ModelArmature anim, int id) {

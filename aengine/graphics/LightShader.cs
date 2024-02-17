@@ -1,7 +1,9 @@
+using static Raylib_CsLo.Raylib;
+
 namespace aengine.graphics; 
 
 public class LightShader {
-    public static string DEFAULT_VERT = @"
+    private static readonly string DEFAULT_VERT = @"
 #version 330
 
 // Input vertex attributes
@@ -36,7 +38,7 @@ void main()
 }
 ";
     
-    public static string DEFAULT_FRAG = @"
+    private static readonly string DEFAULT_FRAG = @"
 #version 330
 
 // Input vertex attributes (from vertex shader)
@@ -125,4 +127,14 @@ void main()
     finalColor = mix(fogColor, finalColor, fogFactor);
 }
 ";
+
+    public static aShader DEFAULT_LIGHT = aShader.loadFromMemory(DEFAULT_VERT, DEFAULT_FRAG);
+
+    public string getLightVertCode() {
+        return DEFAULT_VERT;
+    }
+    
+    public string getLightFragCode() {
+        return DEFAULT_FRAG;
+    }
 }

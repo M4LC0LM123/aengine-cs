@@ -31,6 +31,7 @@ namespace Editor {
             Window.title = "aengine-editor";
             Window.renderWidth = GetMonitorWidth(GetCurrentMonitor());
             Window.renderHeight = GetMonitorHeight(GetCurrentMonitor());
+            Window.sortTransparentEntities = false;
             MaximizeWindow();
             Window.traceLogLevel = TraceLogLevel.LOG_NONE;
             Window.isEditor = true;
@@ -558,6 +559,12 @@ namespace Editor {
                     }
 
                     if (Gui.GuiButton("LightComponent", 10, 90, 250, 30, componentListWindow, TextPositioning.LEFT)) {
+                        if (!TransformGizmo.ACTIVE_ENT.hasComponent<LightComponent>()) {
+                            TransformGizmo.ACTIVE_ENT.addComponent(new LightComponent(TransformGizmo.ACTIVE_ENT, WHITE));
+                        }
+                        else {
+                            Console.WriteLine("Already has a light component");
+                        }
                     }
 
                     if (Gui.GuiButton("FluidComponent", 10, 130, 250, 30, componentListWindow, TextPositioning.LEFT)) {

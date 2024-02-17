@@ -28,6 +28,7 @@ public static class Sandbox {
         Window.traceLogLevel = TraceLogLevel.LOG_NONE;
         Window.title = "aengine";
         Window.configFlags = (uint)ConfigFlags.FLAG_MSAA_4X_HINT;
+        World.LAE = true;
         SetWindowIcon(LoadImage("assets/logo.png"));
 
         var jump = LoadSound("assets/jump.mp3");
@@ -80,20 +81,13 @@ public static class Sandbox {
         ps2.addComponent(new SpatialAudioComponent(ps2, new aSound("assets/at_dooms_gate.mp3")));
 
         var console = new Console();
- 
+        
         Prefab.loadScene("assets/data/estrada.od", "estrada");
 
         player = World.getEntity("playa");
         
-        var light = new Entity();
-        light.addComponent(Prefab.loadComponent(light, "assets/data/player.od", "light"));
-        
-        foreach (var entity in World.entities.Values)
-            if (entity.hasComponent<MeshComponent>()) {
-                if (entity.getComponent<MeshComponent>().isModel) {
-                    entity.getComponent<MeshComponent>().setShader(light.getComponent<LightComponent>().shader);
-                }
-            }
+        // var light = new Entity();
+        // light.addComponent(Prefab.loadComponent(light, "assets/data/player.od", "light"));
 
         Entity water = Prefab.loadPrefab("assets/data/player.od", "water");
         
