@@ -933,7 +933,7 @@ object light_light {
 
     bool enabled = True;
 
-    i32 light_type = LIGHT_POINT;
+    i32 light_type = 1;
 }
 #mod prefab
 object water {

@@ -99,6 +99,8 @@ public class ConsoleCommands {
     }
 
     public static void debugStats(Console console, string[] args) {
+        if (console.commandInput.text.Length < 8) return;
+        
         if (Int32.TryParse(console.commandInput.text.Remove(0, 8), out int draw)) {
             if (draw == 1) Window.debugStats = true;
             else if (draw == 0) Window.debugStats = false;
