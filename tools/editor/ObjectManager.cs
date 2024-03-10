@@ -15,7 +15,7 @@ public class ObjectManager
 {
     public bool outlined = false;
 
-    public void update(TransformGizmo mover)
+    public void update(TransformGizmo gizmo)
     {
         foreach (var ent in World.entities.Values) {
             if (TransformGizmo.ACTIVE_ENT != ent) {
@@ -31,7 +31,7 @@ public class ObjectManager
                 if (TransformGizmo.collision.hit && TransformGizmo.CURRENT_MODE is Mode.ROAM)
                 {
                     ent.selected = true;
-                    mover.position = ent.transform.position;
+                    gizmo.position = ent.transform.position;
                     TransformGizmo.ACTIVE_ENT = ent;
                     Editor.xPos.text = MathF.Round(ent.transform.position.X, 2).ToString();
                     Editor.yPos.text = MathF.Round(ent.transform.position.Y, 2).ToString();

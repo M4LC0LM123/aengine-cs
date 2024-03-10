@@ -11,7 +11,7 @@ using static Raylib_CsLo.Raylib;
 using ae_Console = aengine.core.Console;
 
 namespace Editor {
-    public unsafe class Editor {
+    public class Editor {
         public static GuiTextBox xPos = new GuiTextBox();
         public static GuiTextBox yPos = new GuiTextBox();
         public static GuiTextBox zPos = new GuiTextBox();
@@ -40,9 +40,11 @@ namespace Editor {
             Camera camera = new Camera(Vector3.One, 90);
             bool isMouseLocked = false;
 
-            TransformGizmo mover = new TransformGizmo();
+            TransformGizmo gizmo = new TransformGizmo();
 
             ObjectManager manager = new ObjectManager();
+
+            ConvexHullManager chManager = new ConvexHullManager();
 
             GuiWindow infoWindow = new GuiWindow("Editor", 0, 0, 180, 340);
 
@@ -80,7 +82,7 @@ namespace Editor {
             while (Window.tick()) // Detect window close button or ESC key
             {
                 World.update(false);
-                manager.update(mover);
+                manager.update(gizmo);
                 infoWindow.active = true;
 
                 if (IsWindowResized()) {
@@ -226,7 +228,7 @@ namespace Editor {
                     IsKeyPressed(KeyboardKey.KEY_O) && !isMouseLocked)
                     manager.outlined = !manager.outlined;
 
-                mover.update(camera);
+                gizmo.update(camera);
 
                 if (TransformGizmo.IS_OBJ_ACTIVE) {
                     if (IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) && IsKeyDown(KeyboardKey.KEY_LEFT_ALT) &&
@@ -251,6 +253,9 @@ namespace Editor {
                 else {
                     EditorComponentData.activeComponent = null;
                 }
+
+                // update convex hulls
+                chManager.update(gizmo);
 
                 // 2d perspective render and update
                 PerspectiveWindow.update();
@@ -290,9 +295,12 @@ namespace Editor {
 
                 manager.render();
                 World.render();
+                
+                // render convex hull
+                chManager.render();
 
                 if (TransformGizmo.IS_OBJ_ACTIVE)
-                    mover.render();
+                    gizmo.render();
 
                 EndMode3D();
 
