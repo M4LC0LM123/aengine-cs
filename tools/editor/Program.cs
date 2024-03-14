@@ -257,9 +257,21 @@ namespace Editor {
                 // update convex hulls
                 chManager.update(gizmo);
 
+                if (IsKeyDown(KeyboardKey.KEY_LEFT)) {
+                    chManager.convexHulls[0].setVertexPos(0, chManager.convexHulls[0].getVertexPos(0) with {
+                        X = chManager.convexHulls[0].getVertexPos(0).X + 1
+                    });
+                }
+                
+                if (IsKeyDown(KeyboardKey.KEY_UP)) {
+                    chManager.convexHulls[0].setVertexPos(0, chManager.convexHulls[0].getVertexPos(0) with {
+                        Y = chManager.convexHulls[0].getVertexPos(0).Y + 1
+                    });
+                }
+
                 // 2d perspective render and update
                 PerspectiveWindow.update();
-                PerspectiveWindow.render();
+                PerspectiveWindow.render(chManager);
 
                 Window.beginRender();
                 ClearBackground(BLACK);

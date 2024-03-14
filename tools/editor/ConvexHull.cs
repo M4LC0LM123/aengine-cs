@@ -56,17 +56,17 @@ public class ConvexHull {
     }
 
     public void setVertexPos(int id, Vector3 pos) {
+        if (id > vertexGrabbers.Count - 1 || id < 0) return;
+        
         vertexGrabbers[id] = pos;
         
         updateVertices(id);
     }
 
     private void updateVertices(int id) {
-        if (id > vertices.Length - 1 || id < 0) return;
-        
-        vertices[id] = vertexGrabbers[id].X;
-        vertices[(id + 1) % vertices.Length] = vertexGrabbers[id].Y;
-        vertices[(id + 2) % vertices.Length] = vertexGrabbers[id].Z;
+        vertices[id * 3] = vertexGrabbers[id].X;
+        vertices[id * 3 + 1] = vertexGrabbers[id].Y;
+        vertices[id * 3 + 2] = vertexGrabbers[id].Z;
     }
 
     public void render(Color color) {
@@ -88,10 +88,45 @@ public class ConvexHull {
 
         rlEnd();
         
+        Console.WriteLine(vertexGrabbers.Count);
+        
         foreach (Vector3 vertexGrabber in vertexGrabbers) {
             DrawSphereWires(vertexGrabber, 0.25f, 16, 16, RED);
         }
         
         rlPopMatrix();
+    }
+
+    public void renderXZ(Color color) {
+        rlPushMatrix();
+        
+        rlTranslatef(position.X, position.Z, 0);
+        rlRotatef(rotation.Y, 0, 0, 1);
+        rlScalef(scale.X * 25, scale.Z * 25, 0);
+        
+        rlBegin(RL_LINES);
+        rlColor4ub(color.r, color.g, color.b, color.a);
+        
+        for (int i = 0; i < indices.Length; i += 2) {
+            rlVertex2f(vertices[3 * indices[i]], vertices[3 * indices[i] + 2]);
+            rlVertex2f(vertices[3 * indices[i + 1]], vertices[3 * indices[i + 1] + 2]);
+        }
+
+        rlEnd();
+        
+        foreach (Vector3 vertexGrabber in vertexGrabbers) {
+            DrawCircleLines((int)vertexGrabber.X, (int)vertexGrabber.Z, 0.25f, RED);
+        }
+        
+        rlPopMatrix();
+    }
+
+    public ConvexHull copy() {
+        ConvexHull res = new ConvexHull(vertices, indices);
+        res.position = RayMath.Vector3AddValue(position, 0.5f);
+        res.rotation = rotation;
+        res.scale = scale;
+
+        return res;
     }
 }

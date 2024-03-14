@@ -7,7 +7,7 @@ using static Raylib_CsLo.Raylib;
 
 namespace Editor;
 
-public class TransformGizmo {
+public unsafe class TransformGizmo {
     public Vector3 position = Vector3.Zero;
     public float lengthX = 3;
     public float lengthY = 3;
@@ -29,13 +29,16 @@ public class TransformGizmo {
     public static bool xMoving = false;
     public static bool yMoving = false;
     public static bool zMoving = false;
+    public static bool pMoving = false;
+    public static ConvexHull currHull = null;
+    public static int currVertex = -1;
 
     public void update(Camera camera) {
         MOUSE_RAY = GetMouseRay(GetMousePosition(), camera.matrix);
         collisionX = GetRayCollisionSphere(MOUSE_RAY, position with { X = position.X + lengthX }, AXIES_RADIUS);
         collisionY = GetRayCollisionSphere(MOUSE_RAY, position with { Y = position.Y + lengthY }, AXIES_RADIUS);
         collisionZ = GetRayCollisionSphere(MOUSE_RAY, position with { Z = position.Z + lengthZ }, AXIES_RADIUS);
-
+        
         if (IS_OBJ_ACTIVE) {
             if (IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT) && !Gui.isMouseOver()) {
                 if (collisionX.hit && CAMERA_MODE != CameraMode.ZY && !yMoving && !zMoving) xMoving = true;
