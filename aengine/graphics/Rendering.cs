@@ -35,6 +35,22 @@ namespace aengine.graphics {
             }
         }
 
+        public static void drawGrid2D(int slices, int spacing, Color color) {
+            rlPushMatrix();
+            
+            rlTranslatef(-slices * spacing * 0.5f, -slices * spacing * 0.5f, 0);
+            
+            for (int i = 0; i <= slices; i++) {
+                int y = i * spacing;
+                DrawLine(0, y, slices * spacing, y, color);
+                
+                int x = i * spacing;
+                DrawLine(x, 0, x, slices * spacing, color);
+            }
+            
+            rlPopMatrix();
+        }
+
         public static void drawDebugAxies(float length = 4) {
             DrawLine3D(Vector3.Zero, new Vector3(length, 0, 0), BLUE);
             DrawLine3D(Vector3.Zero, new Vector3(0, length, 0), RED);

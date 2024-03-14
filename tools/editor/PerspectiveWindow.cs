@@ -1,9 +1,11 @@
 using System.Numerics;
 using aengine_cs.aengine.windowing;
 using aengine.ecs;
+using aengine.graphics;
 using Raylib_CsLo;
 using Sandbox.aengine.Gui;
 using static Raylib_CsLo.Raylib;
+using static Raylib_CsLo.RlGl;
 
 namespace Editor;
 
@@ -11,9 +13,10 @@ public class PerspectiveWindow {
     public static GuiWindow window = new GuiWindow("Perspective", 300, 300);
     public static GuiEmbeddedWindow perspective = new GuiEmbeddedWindow(280, 180);
     public static Camera2D camera = new Camera2D();
+    public static int renderScalar = 25;
 
-    private static int gridSpacing = 20;
-    private static int renderScalar = 25;
+    private static int gridSpacing = 25;
+    private static Color gridColor = new Color(255, 255, 255, 125);
     private static Vector2 prevMP = GetMousePosition();
 
     public static void init() {
@@ -28,14 +31,19 @@ public class PerspectiveWindow {
     public static void update() {
         if (window.active) {
             perspective.mousePosition = GetScreenToWorld2D(perspective.mousePosition, camera);
-
-            Vector2 delta = Vector2.Subtract(prevMP, perspective.mousePosition);
+    
             prevMP = perspective.mousePosition;
 
             float newZoom = camera.zoom + GetMouseWheelMoveV().Y * 0.01f;
             if (newZoom <= 0)
                 newZoom = 0.01f;
+            
+            float zoomFactor = newZoom / camera.zoom;
 
+            camera.offset = RayMath.Vector2Subtract(camera.offset,
+                RayMath.Vector2Scale(RayMath.Vector2Subtract(perspective.mousePosition, camera.target),
+                    zoomFactor - 1.0f));
+            
             camera.zoom = newZoom;
 
             if (IsKeyPressed(KeyboardKey.KEY_SPACE)) {
@@ -43,9 +51,10 @@ public class PerspectiveWindow {
             }
 
             if (IsMouseButtonDown(MouseButton.MOUSE_BUTTON_MIDDLE)) {
-                if (Utils.roundVector2Decimals(delta, 0) != Vector2.Zero) {
-                    camera.target = GetScreenToWorld2D(Vector2.Add(camera.offset, delta), camera);
-                }
+                Vector2 delta = GetMouseDelta();
+                delta = RayMath.Vector2Scale(delta, -1.0f / camera.zoom);
+
+                camera.target = RayMath.Vector2Add(camera.target, delta);
             }
         }
     }
@@ -58,25 +67,10 @@ public class PerspectiveWindow {
         perspective.beginRender();
         ClearBackground(BLACK);
 
-        // for (int x = -perspective.width; x < perspective.width * 2; x += gridSpacing) {
-        //     DrawLine(x - ((int)camera.target.X % gridSpacing), -perspective.height, x - ((int)camera.target.X % gridSpacing),
-        //         perspective.height * 2, LIGHTGRAY);
-        // }
-        //
-        // for (int y = -perspective.height; y < perspective.height * 2; y += gridSpacing) {
-        //     DrawLine(-perspective.width, y - ((int)camera.target.Y % gridSpacing), perspective.width * 2,
-        //         y - ((int)camera.target.Y % gridSpacing), LIGHTGRAY);
-        // }
-
         BeginMode2D(camera);
-
-        // foreach (Entity ent in World.entities.Values) {
-        //     DrawRectangleLines(
-        //         (int)(ent.transform.position.X - ent.transform.scale.X * 0.5f) * renderScalar,
-        //         (int)(ent.transform.position.Z - ent.transform.scale.Z * 0.5f) * renderScalar,
-        //         (int)ent.transform.scale.X * renderScalar,
-        //         (int)ent.transform.scale.Z * renderScalar, WHITE);
-        // }
+        
+        Rendering.drawGrid2D(100, gridSpacing, gridColor);
+        DrawCircleV(Vector2.Zero, 5, WHITE);
         
         if (TransformGizmo.pMoving) {
             if (IsMouseButtonReleased(MouseButton.MOUSE_BUTTON_LEFT)) {
@@ -86,10 +80,13 @@ public class PerspectiveWindow {
             }
 
             if (TransformGizmo.currHull != null && TransformGizmo.currVertex != -1) {
+                float snappedX = (float)Math.Round(perspective.mousePosition.X / gridSpacing) * gridSpacing;
+                float snappedY = (float)Math.Round(perspective.mousePosition.Y / gridSpacing) * gridSpacing;
+                
                 Vector3 res = Vector3.Zero with {
-                    X = perspective.mousePosition.X / renderScalar,
+                    X = snappedX / renderScalar,
                     Y = TransformGizmo.currHull.getVertexPos(TransformGizmo.currVertex).Y,
-                    Z = perspective.mousePosition.Y / renderScalar
+                    Z = snappedY / renderScalar
                 };
                 TransformGizmo.currHull.setVertexPos(TransformGizmo.currVertex, res);
             }
@@ -115,8 +112,8 @@ public class PerspectiveWindow {
                         Y = chVertexB.Z * renderScalar
                     };
                 
-                    if (CheckCollisionPointCircle(perspective.mousePosition, posA, 0.25f * 25f) &&
-                        CheckCollisionPointCircle(perspective.mousePosition, posB, 0.25f * 25f)) {
+                    if (CheckCollisionPointCircle(perspective.mousePosition, posA, 0.25f * renderScalar) &&
+                        CheckCollisionPointCircle(perspective.mousePosition, posB, 0.25f * renderScalar)) {
                         if (chVertexB.Y > chVertexA.Y) {
                             pos = posB;
                             id = j;
@@ -137,7 +134,7 @@ public class PerspectiveWindow {
                 }
             }
             
-            ch.renderXZ(WHITE);
+            ch.renderXZ(YELLOW);
         }
 
         EndMode2D();

@@ -13,7 +13,7 @@ public class ConvexHull {
     public Vector3 scale;
 
     public ConvexHull() {
-        vertices = Shapes.CUBE_VERTICES;
+        vertices = Shapes.cubeVertices();
         indices = Shapes.CUBE_INDICES;
         
         position = Vector3.Zero;
@@ -60,7 +60,7 @@ public class ConvexHull {
         rlEnd();
         
         foreach (Vector3 vertex in vertices) {
-            DrawSphereWires(vertex, 0.25f, 16, 16, RED);
+            DrawSphereWires(vertex, 0.1f, 16, 16, RED);
         }
         
         rlPopMatrix();
@@ -71,7 +71,7 @@ public class ConvexHull {
         
         rlTranslatef(position.X, position.Z, 0);
         rlRotatef(rotation.Y, 0, 0, 1);
-        rlScalef(scale.X * 25, scale.Z * 25, 0);
+        rlScalef(scale.X * PerspectiveWindow.renderScalar, scale.Z * PerspectiveWindow.renderScalar, 0);
         
         rlBegin(RL_LINES);
         rlColor4ub(color.r, color.g, color.b, color.a);
@@ -82,10 +82,6 @@ public class ConvexHull {
         }
 
         rlEnd();
-        
-        // foreach (Vector3 vertex in vertices) {
-        //     DrawCircleLines((int)vertex.X, (int)vertex.Z, 0.25f, RED);
-        // }
         
         rlPopMatrix();
     }
