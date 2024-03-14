@@ -1,16 +1,18 @@
+using System.Numerics;
+
 namespace Editor;
 
 // shapes in float[] vertices
 public static class Shapes {
-    public static float[] CUBE_VERTICES = new float[] {
-        1, -1, -1,
-        1, 1, -1,
-        -1, 1, -1,
-        -1, -1, -1,
-        1, -1, 1,
-        1, 1, 1,
-        -1, -1, 1,
-        -1, 1, 1
+    public static Vector3[] CUBE_VERTICES = new Vector3[] {
+        new Vector3(1, -1, -1),
+        new Vector3(1, 1, -1),
+        new Vector3(-1, 1, -1),
+        new Vector3(-1, -1, -1),
+        new Vector3(1, -1, 1),
+        new Vector3(1, 1, 1),
+        new Vector3(-1, -1, 1),
+        new Vector3(-1, 1, 1)
     };
 
     public static uint[] CUBE_INDICES = new uint[] {

@@ -13,7 +13,7 @@ public class ConvexHullManager {
         }
 
         foreach (ConvexHull ch in convexHulls) {
-            for (var i = 0; i < ch.vertexGrabbers.Count; i++) {
+            for (var i = 0; i < ch.vertices.Length; i++) {
                 RayCollision collision = GetRayCollisionSphere(TransformGizmo.MOUSE_RAY, ch.getVertexPos(i), 0.25f);
                 if (IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT) && !Gui.isMouseOver()) {
                     if (collision.hit) {

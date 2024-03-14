@@ -96,8 +96,8 @@ public class PerspectiveWindow {
         }
 
         foreach (ConvexHull ch in manager.convexHulls) {
-            for (var i = 0; i < ch.vertexGrabbers.Count - 1; i++) {
-                Vector3 chVertexA = ch.vertexGrabbers[i];
+            for (var i = 0; i < ch.vertices.Length; i++) {
+                Vector3 chVertexA = ch.vertices[i];
 
                 Vector2 posA = Vector2.Zero with {
                     X = chVertexA.X * renderScalar,
@@ -107,8 +107,8 @@ public class PerspectiveWindow {
                 Vector2 pos = posA;
                 int id = i;
                 
-                for (var j = i + 1; j < ch.vertexGrabbers.Count; j++) {
-                    Vector3 chVertexB = ch.vertexGrabbers[j];
+                for (var j = i + 1; j < ch.vertices.Length; j++) {
+                    Vector3 chVertexB = ch.vertices[j];
                 
                     Vector2 posB = Vector2.Zero with {
                         X = chVertexB.X * renderScalar,
@@ -123,6 +123,8 @@ public class PerspectiveWindow {
                         }
                     }
                 }
+                
+                DrawCircleLines((int)pos.X, (int)pos.Y, 0.25f * renderScalar, RED);
                 
                 if (CheckCollisionPointCircle(perspective.mousePosition, pos, 0.25f * renderScalar)) {
                     DrawCircleV(pos, 0.25f * renderScalar, GREEN);
