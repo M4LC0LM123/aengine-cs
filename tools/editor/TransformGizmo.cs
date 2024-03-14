@@ -7,7 +7,7 @@ using static Raylib_CsLo.Raylib;
 
 namespace Editor;
 
-public unsafe class TransformGizmo {
+public class TransformGizmo {
     public Vector3 position = Vector3.Zero;
     public float lengthX = 3;
     public float lengthY = 3;
@@ -26,12 +26,17 @@ public unsafe class TransformGizmo {
     public static Mode CURRENT_MODE = Mode.ROAM;
     public static CameraMode CAMERA_MODE = CameraMode.FPS;
 
+    public enum vID {
+        EMPTY = -1,
+        POSITION = -2
+    }
+    
     public static bool xMoving = false;
     public static bool yMoving = false;
     public static bool zMoving = false;
     public static bool pMoving = false;
     public static ConvexHull currHull = null;
-    public static int currVertex = -1;
+    public static int currVertex = (int)vID.EMPTY; // -1 if empty, -2 if position
 
     public void update(Camera camera) {
         MOUSE_RAY = GetMouseRay(GetMousePosition(), camera.matrix);

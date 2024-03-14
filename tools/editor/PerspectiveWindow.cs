@@ -15,7 +15,7 @@ public class PerspectiveWindow {
     public static Camera2D camera = new Camera2D();
     public static int renderScalar = 25;
 
-    private static int gridSpacing = 25;
+    public static int gridSpacing = 25;
     private static Color gridColor = new Color(255, 255, 255, 125);
     private static Vector2 prevMP = GetMousePosition();
 
@@ -76,29 +76,57 @@ public class PerspectiveWindow {
             if (IsMouseButtonReleased(MouseButton.MOUSE_BUTTON_LEFT)) {
                 TransformGizmo.pMoving = false;
                 TransformGizmo.currHull = null;
-                TransformGizmo.currVertex = -1;
+                TransformGizmo.currVertex = (int)TransformGizmo.vID.EMPTY;
             }
 
-            if (TransformGizmo.currHull != null && TransformGizmo.currVertex != -1) {
+            if (TransformGizmo.currHull != null && TransformGizmo.currVertex != (int)TransformGizmo.vID.EMPTY &&
+                TransformGizmo.currVertex != (int)TransformGizmo.vID.POSITION) {
                 float snappedX = (float)Math.Round(perspective.mousePosition.X / gridSpacing) * gridSpacing;
                 float snappedY = (float)Math.Round(perspective.mousePosition.Y / gridSpacing) * gridSpacing;
                 
                 Vector3 res = Vector3.Zero with {
-                    X = snappedX / renderScalar,
+                    X = snappedX / renderScalar - TransformGizmo.currHull.position.X,
                     Y = TransformGizmo.currHull.getVertexPos(TransformGizmo.currVertex).Y,
-                    Z = snappedY / renderScalar
+                    Z = snappedY / renderScalar - TransformGizmo.currHull.position.Z
                 };
                 TransformGizmo.currHull.setVertexPos(TransformGizmo.currVertex, res);
+            } else if (TransformGizmo.currHull != null &&
+                       TransformGizmo.currVertex == (int)TransformGizmo.vID.POSITION) {
+                float snappedX = (float)Math.Round(perspective.mousePosition.X / gridSpacing) * gridSpacing - gridSpacing * 0.5f;
+                float snappedY = (float)Math.Round(perspective.mousePosition.Y / gridSpacing) * gridSpacing - gridSpacing * 0.5f;
+                
+                TransformGizmo.currHull.position = Vector3.Zero with {
+                    X = snappedX / renderScalar,
+                    Y = TransformGizmo.currHull.position.Y,
+                    Z = snappedY / renderScalar
+                };
             }
         }
 
         foreach (ConvexHull ch in manager.convexHulls) {
+            Vector2 col = Vector2.Zero with {
+                X = ch.position.X * renderScalar,
+                Y = ch.position.Z * renderScalar
+            };
+            
+            DrawCircleLines((int)col.X, (int)col.Y, 0.25f * renderScalar, BLUE);
+            
+            if (CheckCollisionPointCircle(perspective.mousePosition, col, 0.25f * renderScalar)) {
+                DrawCircleV(col, 0.25f * renderScalar, GREEN);
+                DrawPixelV(perspective.mousePosition, WHITE);
+                if (IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT) && !TransformGizmo.pMoving) {
+                    TransformGizmo.pMoving = true;
+                    TransformGizmo.currHull = ch;
+                    TransformGizmo.currVertex = (int)TransformGizmo.vID.POSITION;
+                }
+            }
+            
             for (var i = 0; i < ch.vertices.Length; i++) {
                 Vector3 chVertexA = ch.vertices[i];
 
                 Vector2 posA = Vector2.Zero with {
-                    X = chVertexA.X * renderScalar,
-                    Y = chVertexA.Z * renderScalar
+                    X = (chVertexA.X + ch.position.X) * renderScalar,
+                    Y = (chVertexA.Z + ch.position.Z) * renderScalar
                 };
 
                 Vector2 pos = posA;
@@ -108,8 +136,8 @@ public class PerspectiveWindow {
                     Vector3 chVertexB = ch.vertices[j];
                 
                     Vector2 posB = Vector2.Zero with {
-                        X = chVertexB.X * renderScalar,
-                        Y = chVertexB.Z * renderScalar
+                        X = (chVertexB.X + ch.position.X) * renderScalar,
+                        Y = (chVertexB.Z + ch.position.Z) * renderScalar
                     };
                 
                     if (CheckCollisionPointCircle(perspective.mousePosition, posA, 0.25f * renderScalar) &&
@@ -120,7 +148,7 @@ public class PerspectiveWindow {
                         }
                     }
                 }
-                
+
                 DrawCircleLines((int)pos.X, (int)pos.Y, 0.25f * renderScalar, RED);
                 
                 if (CheckCollisionPointCircle(perspective.mousePosition, pos, 0.25f * renderScalar)) {
