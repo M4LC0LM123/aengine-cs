@@ -238,6 +238,22 @@ namespace aengine.graphics {
             mesh->normals = (float*)MemAlloc((uint)(mesh->vertexCount * 3 * sizeof(float)));
         }
 
+        public static unsafe Mesh genMeshCustom(Vector3[] vertices) {
+            Mesh mesh = new Mesh();
+            
+            allocateMeshData(&mesh, vertices.Length);
+            
+            for (var i = 0; i < vertices.Length; i++) {
+                mesh.vertices[i * 3] = vertices[i].X;
+                mesh.vertices[i * 3 + 1] = vertices[i].Y;
+                mesh.vertices[i * 3 + 2] = vertices[i].Z;
+            }
+            
+            UploadMesh(&mesh, false);
+
+            return mesh;
+        }
+
         private static unsafe Mesh genMeshCapsule(Vector3 startPos, Vector3 endPos, float radius, int slices,
             int rings) {
             Mesh mesh = new();

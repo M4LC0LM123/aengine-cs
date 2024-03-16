@@ -1,8 +1,11 @@
+using System.Globalization;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text;
 using aengine_cs.aengine.parser;
+using aengine_cs.aengine.windowing;
 using aengine.graphics;
+using Editor;
 using Raylib_CsLo;
 
 namespace aengine.ecs;
@@ -57,6 +60,20 @@ public class Prefab {
 
     public static void saveScene(string path, string name) {
         StringBuilder sceneContent = new StringBuilder();
+        
+        if (Window.isEditor) {
+            foreach (ConvexHull ch in Editor.Editor.chManager.convexHulls) {
+                Entity entity = new Entity();
+                entity.transform.position = ch.position;
+                entity.transform.rotation = ch.rotation;
+                entity.transform.scale = ch.scale;
+                entity.addComponent(new MeshComponent(entity,
+                    new aModel("ConvexHull", Raylib.LoadModelFromMesh(Rendering.genMeshCustom(ch.vertices))),
+                    Raylib.WHITE));
+                entity.addComponent(new RigidBodyComponent(entity, 1, BodyType.STATIC));
+                entity.getComponent<RigidBodyComponent>().setVertexShape(ch.vertices);
+            }
+        }
         
         sceneContent.AppendLine("#mod scene");
         sceneContent.AppendLine("object " + name + " {");
@@ -178,7 +195,15 @@ public class Prefab {
         return text;
     }
 
-    private static string m_saveRigidBody(string name, RigidBodyComponent component) {
+    private static unsafe string m_saveRigidBody(string name, RigidBodyComponent component) {
+        string vertices = String.Empty;
+
+        if (component.model.path == "ConvexHull") {
+            for (int i = 0; i < component.model.data.meshes[0].vertexCount; i++) {
+                vertices += component.model.data.meshes[0].vertices[i] + ", ";
+            }
+        }
+        
         string text = $@"object {name} {open}
     str type = {core.aengine.QUOTE}RigidBodyComponent{core.aengine.QUOTE};
     
@@ -188,6 +213,7 @@ public class Prefab {
     i32 body_type = {Convert.ToInt32(component.body.IsStatic)};
 
     str model = {core.aengine.QUOTE}{component.model.path}{core.aengine.QUOTE};
+    str vertices = {core.aengine.QUOTE}{vertices}{core.aengine.QUOTE};
 
     str heightmap = {core.aengine.QUOTE}{component.heightmap.path}{core.aengine.QUOTE};
 {close}";
@@ -602,11 +628,37 @@ public class Prefab {
         string heightmapPath = obj.getValue<string>("heightmap");
 
         if (modelPath != "") {
-            aModel model = new aModel(modelPath);
+            if (modelPath != "ConvexHull") {
+                aModel model = new aModel(modelPath);
 
-            return new RigidBodyComponent(entity,
-                model, mass, bodyType
+                return new RigidBodyComponent(entity,
+                    model, mass, bodyType
+                );
+            }
+
+            RigidBodyComponent res = new RigidBodyComponent(entity,
+                mass, bodyType
             );
+            
+            string verticesText = obj.getValue<string>("vertices");
+
+            string[] parts = verticesText.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+            Vector3[] vertices = new Vector3[parts.Length / 3];
+
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                float x = float.Parse(parts[i * 3], CultureInfo.InvariantCulture);
+                float y = float.Parse(parts[i * 3 + 1], CultureInfo.InvariantCulture);
+                float z = float.Parse(parts[i * 3 + 2], CultureInfo.InvariantCulture);
+
+                vertices[i] = new Vector3(x, y, z);
+            }
+
+            res.setVertexShape(vertices);
+
+            return res;
+            
         }
 
         if (heightmapPath != "") {

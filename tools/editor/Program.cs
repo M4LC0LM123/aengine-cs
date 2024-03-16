@@ -23,6 +23,8 @@ namespace Editor {
         public static GuiTextBox xRot = new GuiTextBox();
         public static GuiTextBox yRot = new GuiTextBox();
         public static GuiTextBox zRot = new GuiTextBox();
+        
+        public static ConvexHullManager chManager = new ConvexHullManager();
 
         public static void main() {
             Directory.SetCurrentDirectory("../../../");
@@ -43,8 +45,6 @@ namespace Editor {
             TransformGizmo gizmo = new TransformGizmo();
 
             ObjectManager manager = new ObjectManager();
-
-            ConvexHullManager chManager = new ConvexHullManager();
 
             GuiWindow infoWindow = new GuiWindow("Editor", 0, 0, 180, 340);
 

@@ -7,6 +7,7 @@ using System.Runtime.Versioning;
 using System.Text;
 using aengine_cs.aengine.windowing;
 using aengine.graphics;
+using Editor;
 using Jitter.Collision.Shapes;
 using Jitter.Dynamics;
 using Jitter.LinearMath;
@@ -229,6 +230,22 @@ namespace aengine.ecs {
             body.Shape = new ConvexHullShape(vertices);
             body.Shape.UpdateShape();
             shapeType = ShapeType.MODEL;
+        }
+        
+        public void setVertexShape(Vector3[] vertices) {
+            List<JVector> jVertices = new List<JVector>();
+        
+            for (var i = 0; i < vertices.Length; i++) {
+                jVertices.Add(vecToJVec(vertices[i]));
+            }
+
+            model = new aModel("ConvexHull", Raylib.LoadModelFromMesh(Rendering.genMeshCustom(vertices)));
+        
+            body.Shape = new ConvexHullShape(jVertices);
+            body.Shape.UpdateShape();
+            shapeType = ShapeType.MODEL;
+
+            body.EnableDebugDraw = true;
         }
 
         public unsafe void setTerrainShape(aTexture heightmap) {

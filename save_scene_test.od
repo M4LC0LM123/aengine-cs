@@ -22,6 +22,7 @@ object SOME_SAVED_SCENE {
     str block14 = "save_scene_test.od";
     str Entity15 = "save_scene_test.od";
     str light = "save_scene_test.od";
+    str Entity17 = "save_scene_test.od";
     str water = "save_scene_test.od";
 }
 
@@ -89,6 +90,7 @@ object Entity1_rb {
     i32 body_type = 0;
 
     str model = "assets/models/zombie.glb";
+    str vertices = "";
 
     str heightmap = "";
 }
@@ -138,6 +140,7 @@ object Entity2_rb {
     i32 body_type = 0;
 
     str model = "";
+    str vertices = "";
 
     str heightmap = "";
 }
@@ -213,6 +216,7 @@ object playa_rb {
     i32 body_type = 0;
 
     str model = "";
+    str vertices = "";
 
     str heightmap = "";
 }
@@ -262,6 +266,7 @@ object floor_rb {
     i32 body_type = 1;
 
     str model = "";
+    str vertices = "";
 
     str heightmap = "";
 }
@@ -311,6 +316,7 @@ object Entity2_rb {
     i32 body_type = 1;
 
     str model = "";
+    str vertices = "";
 
     str heightmap = "";
 }
@@ -360,6 +366,7 @@ object Entity3_rb {
     i32 body_type = 1;
 
     str model = "";
+    str vertices = "";
 
     str heightmap = "";
 }
@@ -483,6 +490,7 @@ object Entity6_rb {
     i32 body_type = 1;
 
     str model = "";
+    str vertices = "";
 
     str heightmap = "assets/heightmap.png";
 }
@@ -532,6 +540,7 @@ object Entity7_rb {
     i32 body_type = 0;
 
     str model = "";
+    str vertices = "";
 
     str heightmap = "";
 }
@@ -618,6 +627,7 @@ object block_rb {
     i32 body_type = 1;
 
     str model = "";
+    str vertices = "";
 
     str heightmap = "";
 }
@@ -667,6 +677,7 @@ object block10_rb {
     i32 body_type = 1;
 
     str model = "";
+    str vertices = "";
 
     str heightmap = "";
 }
@@ -716,6 +727,7 @@ object block11_rb {
     i32 body_type = 1;
 
     str model = "";
+    str vertices = "";
 
     str heightmap = "";
 }
@@ -765,6 +777,7 @@ object block12_rb {
     i32 body_type = 1;
 
     str model = "";
+    str vertices = "";
 
     str heightmap = "";
 }
@@ -814,6 +827,7 @@ object block13_rb {
     i32 body_type = 1;
 
     str model = "";
+    str vertices = "";
 
     str heightmap = "";
 }
@@ -863,6 +877,7 @@ object block14_rb {
     i32 body_type = 1;
 
     str model = "";
+    str vertices = "";
 
     str heightmap = "";
 }
@@ -934,6 +949,37 @@ object light_light {
     bool enabled = True;
 
     i32 light_type = 1;
+}
+#mod prefab
+object Entity17 {
+    str tag = Entity17;
+    
+    f32 x = 13.5;
+    f32 y = 1.5;
+    f32 z = -0.5;
+
+    f32 width = 1;
+    f32 height = 1;
+    f32 depth = 1;
+
+    f32 rx = 0; // rotation x (pitch)
+    f32 ry = 0; // rotation y (yaw)
+    f32 rz = 0; // rotation z (roll)
+
+    str components = "Entity17_rb";
+}
+object Entity17_rb {
+    str type = "RigidBodyComponent";
+    
+    f32 mass = 117.00002;
+
+    i32 shape = 6;
+    i32 body_type = 1;
+
+    str model = "ConvexHull";
+    str vertices = "8.5, -0.5, -6.5, 8.5, 0.5, -6.5, 0.5, 0.5, -6.5, -1.5, -0.5, -6.5, 8.5, -0.5, 6.5, 8.5, 0.5, 6.5, -1.5, -0.5, 6.5, 0.5, 0.5, 6.5, ";
+
+    str heightmap = "";
 }
 #mod prefab
 object water {
