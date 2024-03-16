@@ -88,6 +88,26 @@ public class ConvexHull {
         rlPopMatrix();
     }
 
+    public void renderXY(Color color) {
+        rlPushMatrix();
+
+        rlTranslatef(position.X * PerspectiveWindow.renderScalar, position.Y * PerspectiveWindow.renderScalar, 0);
+        rlRotatef(rotation.Z, 0, 0, 1);
+        rlScalef(scale.X * PerspectiveWindow.renderScalar, scale.Y * PerspectiveWindow.renderScalar, 0);
+
+        rlBegin(RL_LINES);
+        rlColor4ub(color.r, color.g, color.b, color.a);
+
+        for (int i = 0; i < indices.Length; i += 2) {
+            rlVertex2f(vertices[indices[i]].X, vertices[indices[i]].Y);
+            rlVertex2f(vertices[indices[i + 1]].X, vertices[indices[i + 1]].Y);
+        }
+
+        rlEnd();
+
+        rlPopMatrix();   
+    }
+
     public ConvexHull copy() {
         ConvexHull res = new ConvexHull(vertices, indices);
         res.position = RayMath.Vector3AddValue(position, 0.5f);

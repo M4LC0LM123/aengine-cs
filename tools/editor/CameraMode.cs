@@ -1,7 +1,7 @@
 namespace Editor; 
 
 public enum CameraMode {
-    FPS,
+    FPS = 0,
     XY,
     ZY,
     XZ,
