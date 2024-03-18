@@ -7,23 +7,20 @@ namespace Editor;
 
 public class ConvexHull {
     public Vector3[] vertices;
-    public uint[] indices;
     public Vector3 position;
     public Vector3 rotation;
     public Vector3 scale;
 
     public ConvexHull() {
         vertices = Shapes.cubeVertices();
-        indices = Shapes.CUBE_INDICES;
 
         position = Vector3.Zero;
         rotation = Vector3.Zero;
         scale = Vector3.One;
     }
 
-    public ConvexHull(Vector3[] vertices, uint[] indices) {
+    public ConvexHull(Vector3[] vertices) {
         this.vertices = vertices;
-        this.indices = indices;
 
         position = Vector3.Zero;
         rotation = Vector3.Zero;
@@ -52,9 +49,12 @@ public class ConvexHull {
         rlBegin(RL_LINES);
         rlColor4ub(color.r, color.g, color.b, color.a);
 
-        for (int i = 0; i < indices.Length; i += 2) {
-            rlVertex3f(vertices[indices[i]].X, vertices[indices[i]].Y, vertices[indices[i]].Z);
-            rlVertex3f(vertices[indices[i + 1]].X, vertices[indices[i + 1]].Y, vertices[indices[i + 1]].Z);
+        // Draw lines between vertices
+        for (int i = 0; i < vertices.Length; i++) {
+            for (int j = i + 1; j < vertices.Length; j++) {
+                rlVertex3f(vertices[i].X, vertices[i].Y, vertices[i].Z);
+                rlVertex3f(vertices[j].X, vertices[j].Y, vertices[j].Z);
+            }
         }
 
         rlEnd();
@@ -78,9 +78,12 @@ public class ConvexHull {
         rlBegin(RL_LINES);
         rlColor4ub(color.r, color.g, color.b, color.a);
 
-        for (int i = 0; i < indices.Length; i += 2) {
-            rlVertex2f(vertices[indices[i]].X, vertices[indices[i]].Z);
-            rlVertex2f(vertices[indices[i + 1]].X, vertices[indices[i + 1]].Z);
+        // Draw lines between vertices
+        for (int i = 0; i < vertices.Length; i++) {
+            for (int j = i + 1; j < vertices.Length; j++) {
+                rlVertex2f(vertices[i].X, vertices[i].Z);
+                rlVertex2f(vertices[j].X, vertices[j].Z);
+            }
         }
 
         rlEnd();
@@ -98,18 +101,22 @@ public class ConvexHull {
         rlBegin(RL_LINES);
         rlColor4ub(color.r, color.g, color.b, color.a);
 
-        for (int i = 0; i < indices.Length; i += 2) {
-            rlVertex2f(vertices[indices[i]].X, vertices[indices[i]].Y);
-            rlVertex2f(vertices[indices[i + 1]].X, vertices[indices[i + 1]].Y);
+        // Draw lines between vertices
+        for (int i = 0; i < vertices.Length; i++) {
+            for (int j = i + 1; j < vertices.Length; j++) {
+                rlVertex2f(vertices[i].X, vertices[i].Y);
+                rlVertex2f(vertices[j].X, vertices[j].Y);
+            }
         }
 
         rlEnd();
 
-        rlPopMatrix();   
+        rlPopMatrix();
     }
 
+
     public ConvexHull copy() {
-        ConvexHull res = new ConvexHull(vertices, indices);
+        ConvexHull res = new ConvexHull(vertices);
         res.position = RayMath.Vector3AddValue(position, 0.5f);
         res.rotation = rotation;
         res.scale = scale;

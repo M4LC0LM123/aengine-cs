@@ -954,9 +954,9 @@ object light_light {
 object Entity17 {
     str tag = Entity17;
     
-    f32 x = 13.5;
+    f32 x = 15.5;
     f32 y = 1.5;
-    f32 z = -0.5;
+    f32 z = -1.5;
 
     f32 width = 1;
     f32 height = 1;
@@ -966,18 +966,37 @@ object Entity17 {
     f32 ry = 0; // rotation y (yaw)
     f32 rz = 0; // rotation z (roll)
 
-    str components = "Entity17_rb";
+    str components = "Entity17_mesh, Entity17_rb";
+}
+object Entity17_mesh {
+    str type = "MeshComponent";
+
+    i32 shape = 6;
+
+    i32 r = 255;
+    i32 g = 255;
+    i32 b = 255;
+    i32 a = 255;
+
+    bool isModel = true;
+
+    str texture = "";
+    str model = "ConvexHull";
+
+    str heightmap = "";
+
+    i32 scale = 1;    
 }
 object Entity17_rb {
     str type = "RigidBodyComponent";
     
-    f32 mass = 117.00002;
+    f32 mass = 44;
 
     i32 shape = 6;
     i32 body_type = 1;
 
     str model = "ConvexHull";
-    str vertices = "8.5, -0.5, -6.5, 8.5, 0.5, -6.5, 0.5, 0.5, -6.5, -1.5, -0.5, -6.5, 8.5, -0.5, 6.5, 8.5, 0.5, 6.5, -1.5, -0.5, 6.5, 0.5, 0.5, 6.5, ";
+    str vertices = "2.5, -0.5, -3.5, 2.5, 0.5, -3.5, -2.5, 0.5, -3.5, -3.5, -0.5, -3.5, 2.5, -0.5, 4.5, 2.5, 0.5, 4.5, -3.5, -0.5, 4.5, -2.5, 0.5, 4.5, ";
 
     str heightmap = "";
 }
