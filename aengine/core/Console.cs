@@ -29,17 +29,18 @@ public class Console
 
         registerCommand(new ConsoleCommand("help", "lists every command and their description", ConsoleCommands.listCMDS));
         registerCommand(new ConsoleCommand("print", "prints text", ConsoleCommands.print));
+        registerCommand(new ConsoleCommand("clear", "clears the console window", ConsoleCommands.clear));
         registerCommand(new ConsoleCommand("w_fps_set", "set fps of the game", ConsoleCommands.setFPS));
         registerCommand(new ConsoleCommand("w_maximize", "maximize window", ConsoleCommands.maximizeWindow));
         registerCommand(new ConsoleCommand("w_minimize", "minimize window", ConsoleCommands.minimizeWindow));
-        registerCommand(new ConsoleCommand("clear", "clears the console window", ConsoleCommands.clear));
-        registerCommand(new ConsoleCommand("f_add_body", "adds a spherical rigidbody", ConsoleCommands.newBody));
         registerCommand(new ConsoleCommand("w_width", "sets the width of window", ConsoleCommands.setWidth));
         registerCommand(new ConsoleCommand("w_height", "sets the height of window", ConsoleCommands.setHeight));
         registerCommand(new ConsoleCommand("w_render_width", "sets the width of window", ConsoleCommands.setRenderWidth));
         registerCommand(new ConsoleCommand("w_render_height", "sets the height of window", ConsoleCommands.setRenderHeight));
         registerCommand(new ConsoleCommand("w_stats", "show debug stats", ConsoleCommands.debugStats));
         registerCommand(new ConsoleCommand("w_close", "closes the window", ConsoleCommands.close));
+        registerCommand(new ConsoleCommand("f_add_body", "adds a spherical rigidbody", ConsoleCommands.newBody));
+        registerCommand(new ConsoleCommand("f_debug", "debug render physics colliders", ConsoleCommands.fDebug));
     }
 
     public void clear()
@@ -78,6 +79,10 @@ public class Console
             print($"Command {aengine.QUOTE + commandText + aengine.QUOTE} is not a valid command!");
             print($"Use {aengine.QUOTE} help {aengine.QUOTE} for more details");
         }
+        
+        // for (var i = 0; i < args.Length; i++) {
+        //     System.Console.WriteLine(args[i]);
+        // }
     }
 
     public void render()

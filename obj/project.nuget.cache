@@ -1,16 +1,17 @@
 {
   "version": 2,
-  "dgSpecHash": "rZW9il8BW986htb4/O+3cFF0fn44n1RtNGNIHRmBnB+nCY9nBMTpcFiu+W1X/4n6eCiujPD9hYX3njGaGiaTTA==",
+  "dgSpecHash": "h6gEi3iV8onaOMSzmE2PZKuJ5dA6CINck8GZLEdDcKC1EtoMJeSDgypRHFXGA9rU/Zcl+a3x0L99zu4cMrUlUA==",
   "success": true,
-  "projectFilePath": "/Users/lukamalovic/Documents/GitHub/aengine-cs/aengine-cs.csproj",
+  "projectFilePath": "C:\\Users\\lukaa\\Documents\\GitHub\\aengine-cs\\aengine-cs.csproj",
   "expectedPackageFiles": [
-    "/Users/lukamalovic/.nuget/packages/jitterphysics/0.2.0.20/jitterphysics.0.2.0.20.nupkg.sha512",
-    "/Users/lukamalovic/.nuget/packages/microsoft.toolkit.highperformance/7.1.2/microsoft.toolkit.highperformance.7.1.2.nupkg.sha512",
-    "/Users/lukamalovic/.nuget/packages/nativefiledialogsharp/0.5.0/nativefiledialogsharp.0.5.0.nupkg.sha512",
-    "/Users/lukamalovic/.nuget/packages/raylib-cslo/4.2.0.9/raylib-cslo.4.2.0.9.nupkg.sha512",
-    "/Users/lukamalovic/.nuget/packages/microsoft.netcore.app.ref/6.0.11/microsoft.netcore.app.ref.6.0.11.nupkg.sha512",
-    "/Users/lukamalovic/.nuget/packages/microsoft.aspnetcore.app.ref/6.0.11/microsoft.aspnetcore.app.ref.6.0.11.nupkg.sha512",
-    "/Users/lukamalovic/.nuget/packages/microsoft.netcore.app.host.osx-x64/6.0.11/microsoft.netcore.app.host.osx-x64.6.0.11.nupkg.sha512"
+    "C:\\Users\\lukaa\\.nuget\\packages\\jitterphysics\\0.2.0.20\\jitterphysics.0.2.0.20.nupkg.sha512",
+    "C:\\Users\\lukaa\\.nuget\\packages\\microsoft.toolkit.highperformance\\7.1.2\\microsoft.toolkit.highperformance.7.1.2.nupkg.sha512",
+    "C:\\Users\\lukaa\\.nuget\\packages\\nativefiledialogsharp\\0.5.0\\nativefiledialogsharp.0.5.0.nupkg.sha512",
+    "C:\\Users\\lukaa\\.nuget\\packages\\raylib-cslo\\4.2.0.9\\raylib-cslo.4.2.0.9.nupkg.sha512",
+    "C:\\Users\\lukaa\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.20\\microsoft.netcore.app.ref.6.0.20.nupkg.sha512",
+    "C:\\Users\\lukaa\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.20\\microsoft.windowsdesktop.app.ref.6.0.20.nupkg.sha512",
+    "C:\\Users\\lukaa\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.20\\microsoft.aspnetcore.app.ref.6.0.20.nupkg.sha512",
+    "C:\\Users\\lukaa\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.20\\microsoft.netcore.app.host.win-x64.6.0.20.nupkg.sha512"
   ],
   "logs": [
     {

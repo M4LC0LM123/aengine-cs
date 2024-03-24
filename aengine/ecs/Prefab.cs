@@ -200,7 +200,7 @@ public class Prefab {
 
         if (component.model.path == "ConvexHull") {
             for (int i = 0; i < component.model.data.meshes[0].vertexCount; i++) {
-                vertices += component.model.data.meshes[0].vertices[i] + ", ";
+                vertices += component.model.data.meshes[0].vertices[i].ToString(CultureInfo.InvariantCulture) + ", ";
             }
         }
         

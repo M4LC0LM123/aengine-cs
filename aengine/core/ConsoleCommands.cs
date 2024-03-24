@@ -114,6 +114,24 @@ public class ConsoleCommands {
             console.print($"example usage of {aengine.QUOTE}w_stats{aengine.QUOTE}: w_stats 1");
         }
     }
+    
+    // f_debug 1
+    public static void fDebug(Console console, string[] args) {
+        if (console.commandInput.text.Length < 8) return;
+        
+        if (Int32.TryParse(console.commandInput.text.Remove(0, 8), out int draw)) {
+            if (draw == 1) World.renderColliders = true;
+            else if (draw == 0) World.renderColliders = false;
+            else {
+                console.print(aengine.QUOTE + console.commandInput.text.Remove(0, 8) + aengine.QUOTE + "has to be 0 or 1");
+            }
+            
+            console.print($"set the physics debug render to {draw}");
+        } else {
+            console.print(aengine.QUOTE + console.commandInput.text.Remove(0, 8) + aengine.QUOTE + "is not a number");
+            console.print($"example usage of {aengine.QUOTE}f_debug{aengine.QUOTE}: w_debug 1");
+        }
+    }
 
     public static void close(Console console, string[] args) {
         World.dispose();
