@@ -38,7 +38,10 @@ public class GuiTextBox {
 
         Gui.GuiInverseRec(rx, ry, temp.width, temp.height);
 
-        BeginScissorMode((int)rx, (int)ry, (int)temp.width, (int)temp.height);
+        if (!OperatingSystem.IsMacOS()) {
+            BeginScissorMode((int)rx, (int)ry, (int)temp.width, (int)temp.height);    
+        }
+        
         Gui.GuiTextPro(Gui.font, text, new Vector2(textX, textY), Gui.font.baseSize * textScale, WHITE);
         
         // cursor
@@ -53,7 +56,9 @@ public class GuiTextBox {
                 Gui.font.baseSize * textScale, WHITE);
         }
         
-        EndScissorMode();
+        if (!OperatingSystem.IsMacOS()) {
+            EndScissorMode();    
+        }
 
         if (active) {
             // DrawLine((int)textX, (int)(textY + Gui.font.baseSize * textScale), (int)(textX + temp.width - 5), (int)(textY + Gui.font.baseSize * textScale), WHITE);

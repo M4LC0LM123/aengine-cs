@@ -72,10 +72,6 @@ public static class Sandbox {
         body2.addComponent(new MeshComponent(body2, ShapeType.CYLINDER, YELLOW, new aTexture("assets/albedo.png")));
         body2.addComponent(new RigidBodyComponent(body2, 1, BodyType.DYNAMIC, ShapeType.CYLINDER));
 
-        var window = new GuiWindow("SUIIIIIIIII", 10, 10, 300, 250);
-        var textBox = new GuiTextBox();
-        var slider = new GuiSlider();
-
         var ps = new ParticleSystem();
         var ps2 = new ParticleSystem();
         ps2.addComponent(new SpatialAudioComponent(ps2, new aSound("assets/at_dooms_gate.mp3")));
@@ -235,20 +231,6 @@ public static class Sandbox {
             Rendering.drawCrosshair(WHITE);
             DrawTexturePro(gun, new Rectangle(0, 0, gun.width, gun.height),
                 new Rectangle(Window.renderWidth * 0.5f + 75, Window.renderHeight - 250, 200, 250), Vector2.Zero, 0, WHITE);
-
-            window.render();
-
-            if (window.active) {
-                Gui.GuiTextPro(Gui.font, "FPS: " + GetFPS(), new Vector2(10, 10), Gui.font.baseSize, WHITE, window);
-                Gui.GuiTextPro(Gui.font, "Entities: " + World.entities.Count, new Vector2(10, 50), Gui.font.baseSize, WHITE,
-                    window);
-
-                if (Gui.GuiButton("Render Colliders", 10, 100, 240, 40, window, TextPositioning.LEFT))
-                    World.renderColliders = !World.renderColliders;
-
-                textBox.render(10, 150, 240, 40, window);
-                slider.render(10, 200, 240, 40, window);
-            }
 
             console.render();
 

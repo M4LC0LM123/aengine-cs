@@ -148,17 +148,17 @@ public class Prefab {
         string text = $@"object {name} {open}
     str tag = {entity.tag};
     
-    f32 x = {entity.transform.position.X};
-    f32 y = {entity.transform.position.Y};
-    f32 z = {entity.transform.position.Z};
+    f32 x = {entity.transform.position.X.ToString(CultureInfo.InvariantCulture)};
+    f32 y = {entity.transform.position.Y.ToString(CultureInfo.InvariantCulture)};
+    f32 z = {entity.transform.position.Z.ToString(CultureInfo.InvariantCulture)};
 
-    f32 width = {entity.transform.scale.X};
-    f32 height = {entity.transform.scale.Y};
-    f32 depth = {entity.transform.scale.Z};
+    f32 width = {entity.transform.scale.X.ToString(CultureInfo.InvariantCulture)};
+    f32 height = {entity.transform.scale.Y.ToString(CultureInfo.InvariantCulture)};
+    f32 depth = {entity.transform.scale.Z.ToString(CultureInfo.InvariantCulture)};
 
-    f32 rx = {entity.transform.rotation.X}; // rotation x (pitch)
-    f32 ry = {entity.transform.rotation.Y}; // rotation y (yaw)
-    f32 rz = {entity.transform.rotation.Z}; // rotation z (roll)
+    f32 rx = {entity.transform.rotation.X.ToString(CultureInfo.InvariantCulture)}; // rotation x (pitch)
+    f32 ry = {entity.transform.rotation.Y.ToString(CultureInfo.InvariantCulture)}; // rotation y (yaw)
+    f32 rz = {entity.transform.rotation.Z.ToString(CultureInfo.InvariantCulture)}; // rotation z (roll)
 
     str components = {core.aengine.QUOTE}{components}{core.aengine.QUOTE};
 {close}";
@@ -207,7 +207,7 @@ public class Prefab {
         string text = $@"object {name} {open}
     str type = {core.aengine.QUOTE}RigidBodyComponent{core.aengine.QUOTE};
     
-    f32 mass = {component.body.Mass};
+    f32 mass = {component.body.Mass.ToString(CultureInfo.InvariantCulture)};
 
     i32 shape = {(int)component.shapeType};
     i32 body_type = {Convert.ToInt32(component.body.IsStatic)};
@@ -227,7 +227,7 @@ public class Prefab {
 
     str sound = {core.aengine.QUOTE}{component.sound.path}{core.aengine.QUOTE};
         
-    f32 strength = {component.strength};
+    f32 strength = {component.strength.ToString(CultureInfo.InvariantCulture)};
         
     bool can_play = {component.canPlay.ToString().ToLower()};
 {close}";
@@ -239,7 +239,7 @@ public class Prefab {
         string text = $@"object {name} {open}
     string type = {core.aengine.QUOTE}LightComponent{core.aengine.QUOTE};
         
-    f32 intensity = {component.intensity};
+    f32 intensity = {component.intensity.ToString(CultureInfo.InvariantCulture)};
 
     i32 r = {component.core.color.r};
     i32 g = {component.core.color.g};
@@ -268,12 +268,12 @@ public class Prefab {
     i32 b = {component.color.b};
     i32 a = {component.color.a};
 
-    f32 freqX = {component.freqX};
-    f32 freqY = {component.freqY};
-    f32 ampX = {component.ampX};
-    f32 ampY = {component.ampY};
-    f32 speedX = {component.speedX};
-    f32 speedY = {component.speedY};
+    f32 freqX = {component.freqX.ToString(CultureInfo.InvariantCulture)};
+    f32 freqY = {component.freqY.ToString(CultureInfo.InvariantCulture)};
+    f32 ampX = {component.ampX.ToString(CultureInfo.InvariantCulture)};
+    f32 ampY = {component.ampY.ToString(CultureInfo.InvariantCulture)};
+    f32 speedX = {component.speedX.ToString(CultureInfo.InvariantCulture)};
+    f32 speedY = {component.speedY.ToString(CultureInfo.InvariantCulture)};
 {close}";
 
         return text;
