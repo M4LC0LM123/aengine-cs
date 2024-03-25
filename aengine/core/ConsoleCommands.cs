@@ -114,6 +114,11 @@ public class ConsoleCommands {
             console.print($"example usage of {aengine.QUOTE}w_stats{aengine.QUOTE}: w_stats 1");
         }
     }
+
+    public static void loadScene(Console console, string[] args) {
+        Prefab.loadScene(args[0], args[1]);
+        console.print($"Loaded scene: {args[1]}");
+    }
     
     // f_debug 1
     public static void fDebug(Console console, string[] args) {

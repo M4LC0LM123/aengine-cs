@@ -203,7 +203,7 @@ public static class Sandbox {
             ps.addParticle(p, ParticleSpawn.sphere(4), 2);
             ps2.addParticle(p2, ParticleSpawn.cube(8, 0, 0));
 
-            ps2.getComponent<SpatialAudioComponent>().play();
+            // ps2.getComponent<SpatialAudioComponent>().play();
             
             // animation
             World.getEntity("Entity8").getComponent<MeshComponent>().applyAnimation(armature, 22, 150);

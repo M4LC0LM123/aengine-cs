@@ -48,9 +48,12 @@ public class GuiTextBox {
         if (active) {
             float charLen = 0;
             float textLen = MeasureTextEx(Gui.font, text, Gui.font.baseSize * textScale, 2).X;
+            
             if (text.Length != 0) charLen = MeasureTextEx(Gui.font, text[(text.Length - pos - 1) % text.Length].ToString(),
                 Gui.font.baseSize, 2).X;
+            
             float curX = textX + (textLen - pos * charLen);
+            
             Gui.GuiTextPro(Gui.font, Gui.cursorShape.ToString(),
                 new Vector2(curX, textY),
                 Gui.font.baseSize * textScale, WHITE);
@@ -61,13 +64,26 @@ public class GuiTextBox {
         }
 
         if (active) {
-            // DrawLine((int)textX, (int)(textY + Gui.font.baseSize * textScale), (int)(textX + temp.width - 5), (int)(textY + Gui.font.baseSize * textScale), WHITE);
-            // DrawRectangle((int)(textX + text.Length * 15), (int)textY, 1, (int)temp.height, WHITE);
-
-            // DrawCircle((int)textX, (int)textY, 5, RED);
+            if (IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL)) {
+                if (IsKeyPressed(KeyboardKey.KEY_V)) text += GetClipboardText_();
+                if (IsKeyPressed(KeyboardKey.KEY_C)) SetClipboardText(text);
+            }
+            
+            if (IsKeyPressed(KeyboardKey.KEY_RIGHT)) {
+                if (pos > 0) {
+                    pos--;
+                }
+            }
+            
+            if (IsKeyPressed(KeyboardKey.KEY_LEFT)) {
+                if (pos < text.Length - 1) {
+                    pos++;
+                }
+            }
 
             if (IsKeyPressed(KeyboardKey.KEY_BACKSPACE)) {
                 if (text.Length > 0) {
+                    if (pos > 0) pos--;
                     text = text.Remove(text.Length - 1);
                 }
             }

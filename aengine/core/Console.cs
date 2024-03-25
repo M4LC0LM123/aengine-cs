@@ -30,6 +30,7 @@ public class Console
         registerCommand(new ConsoleCommand("help", "lists every command and their description", ConsoleCommands.listCMDS));
         registerCommand(new ConsoleCommand("print", "prints text", ConsoleCommands.print));
         registerCommand(new ConsoleCommand("clear", "clears the console window", ConsoleCommands.clear));
+        registerCommand(new ConsoleCommand("load", "loads od scene", ConsoleCommands.loadScene));
         registerCommand(new ConsoleCommand("w_fps_set", "set fps of the game", ConsoleCommands.setFPS));
         registerCommand(new ConsoleCommand("w_maximize", "maximize window", ConsoleCommands.maximizeWindow));
         registerCommand(new ConsoleCommand("w_minimize", "minimize window", ConsoleCommands.minimizeWindow));
