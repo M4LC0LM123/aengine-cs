@@ -1,5 +1,5 @@
 #mod scene
-object verex_test {
+object vertex_test {
     str Entity0 = "vertex_test.od";
 }
 

@@ -116,7 +116,7 @@ public class ConsoleCommands {
     }
 
     public static void loadScene(Console console, string[] args) {
-        Prefab.loadScene(args[0], args[1]);
+        Prefab.loadScene(args[0], args[1], true, true);
         console.print($"Loaded scene: {args[1]}");
     }
     

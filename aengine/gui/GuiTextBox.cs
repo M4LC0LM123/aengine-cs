@@ -64,7 +64,7 @@ public class GuiTextBox {
         }
 
         if (active) {
-            if (IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL)) {
+            if (IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) || IsKeyDown(KeyboardKey.KEY_LEFT_SUPER)) {
                 if (IsKeyPressed(KeyboardKey.KEY_V)) text += GetClipboardText_();
                 if (IsKeyPressed(KeyboardKey.KEY_C)) SetClipboardText(text);
             }
