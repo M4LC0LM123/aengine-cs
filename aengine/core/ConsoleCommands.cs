@@ -116,15 +116,17 @@ public class ConsoleCommands {
     }
 
     public static void loadScene(Console console, string[] args) {
-        Prefab.loadScene(args[0], args[1], true, true);
-        console.print($"Loaded scene: {args[1]}");
+        if (File.Exists(args[0])) {
+            Prefab.loadScene(args[0], args[1], true, true);
+            console.print($"Loaded scene: {args[1]}");
+        } else System.Console.WriteLine($"File or path {args[1]} doesn't exist");
     }
     
     // f_debug 1
     public static void fDebug(Console console, string[] args) {
-        if (console.commandInput.text.Length < 8) return;
+        if (console.commandInput.text.Length < 7) return;
         
-        if (Int32.TryParse(console.commandInput.text.Remove(0, 8), out int draw)) {
+        if (Int32.TryParse(console.commandInput.text.Remove(0, 7), out int draw)) {
             if (draw == 1) World.renderColliders = true;
             else if (draw == 0) World.renderColliders = false;
             else {

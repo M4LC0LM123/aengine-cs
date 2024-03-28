@@ -45,10 +45,14 @@ public class ConvexHull {
         rlRotatef(rotation.Y, 0, 1, 0);
         rlRotatef(rotation.Z, 0, 0, 1);
         rlScalef(scale.X, scale.Y, scale.Z);
-
+        
+        // temporary
+        rlDisableBackfaceCulling();
+        // temporary
+        
         rlBegin(RL_LINES);
         rlColor4ub(color.r, color.g, color.b, color.a);
-
+        
         // Draw lines between vertices
         for (int i = 0; i < vertices.Length; i++) {
             for (int j = i + 1; j < vertices.Length; j++) {
@@ -58,7 +62,19 @@ public class ConvexHull {
         }
 
         rlEnd();
-
+        
+        // temporary
+        rlBegin(RL_TRIANGLES);
+        for (int i = 0; i < 6; i++) {
+            rlNormal3f(0, 0, 1);
+            for (int j = 0; j < 6; j++) {
+                Vector3 vertex = vertices[Shapes.CUBE_INDICES[i][j]];
+                rlVertex3f(vertex.X, vertex.Y, vertex.Z);
+            }
+        }
+        rlEnd();
+        // temporary
+        
         foreach (Vector3 vertex in vertices) {
             DrawSphereWires(vertex, 0.1f, 16, 16, RED);
         }
