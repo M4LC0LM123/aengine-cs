@@ -4,18 +4,16 @@
     <RestoreSuccess Condition=" '$(RestoreSuccess)' == '' ">True</RestoreSuccess>
     <RestoreTool Condition=" '$(RestoreTool)' == '' ">NuGet</RestoreTool>
     <ProjectAssetsFile Condition=" '$(ProjectAssetsFile)' == '' ">$(MSBuildThisFileDirectory)project.assets.json</ProjectAssetsFile>
-    <NuGetPackageRoot Condition=" '$(NuGetPackageRoot)' == '' ">$(UserProfile)\.nuget\packages\</NuGetPackageRoot>
-    <NuGetPackageFolders Condition=" '$(NuGetPackageFolders)' == '' ">C:\Users\lukaa\.nuget\packages\;C:\Users\lukaa\AppData\Roaming\Godot\mono\GodotNuGetFallbackFolder;C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages</NuGetPackageFolders>
+    <NuGetPackageRoot Condition=" '$(NuGetPackageRoot)' == '' ">/home/lukamalovic/.nuget/packages/</NuGetPackageRoot>
+    <NuGetPackageFolders Condition=" '$(NuGetPackageFolders)' == '' ">/home/lukamalovic/.nuget/packages/</NuGetPackageFolders>
     <NuGetProjectStyle Condition=" '$(NuGetProjectStyle)' == '' ">PackageReference</NuGetProjectStyle>
-    <NuGetToolVersion Condition=" '$(NuGetToolVersion)' == '' ">6.6.0</NuGetToolVersion>
+    <NuGetToolVersion Condition=" '$(NuGetToolVersion)' == '' ">6.5.0</NuGetToolVersion>
   </PropertyGroup>
   <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
-    <SourceRoot Include="C:\Users\lukaa\.nuget\packages\" />
-    <SourceRoot Include="C:\Users\lukaa\AppData\Roaming\Godot\mono\GodotNuGetFallbackFolder\" />
-    <SourceRoot Include="C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages\" />
+    <SourceRoot Include="/home/lukamalovic/.nuget/packages/" />
   </ItemGroup>
   <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
-    <Content Include="$(NuGetPackageRoot)raylib-cslo\4.2.0.9\contentFiles\any\netstandard2.1\raylib.dll" Condition="Exists('$(NuGetPackageRoot)raylib-cslo\4.2.0.9\contentFiles\any\netstandard2.1\raylib.dll')">
+    <Content Include="$(NuGetPackageRoot)raylib-cslo/4.2.0.9/contentFiles/any/netstandard2.1/raylib.dll" Condition="Exists('$(NuGetPackageRoot)raylib-cslo/4.2.0.9/contentFiles/any/netstandard2.1/raylib.dll')">
       <NuGetPackageId>Raylib-CsLo</NuGetPackageId>
       <NuGetPackageVersion>4.2.0.9</NuGetPackageVersion>
       <NuGetItemType>Content</NuGetItemType>
@@ -23,7 +21,7 @@
       <Private>False</Private>
       <Link>raylib.dll</Link>
     </Content>
-    <Content Include="$(NuGetPackageRoot)raylib-cslo\4.2.0.9\contentFiles\any\netstandard2.1\raylib.pdb" Condition="Exists('$(NuGetPackageRoot)raylib-cslo\4.2.0.9\contentFiles\any\netstandard2.1\raylib.pdb')">
+    <Content Include="$(NuGetPackageRoot)raylib-cslo/4.2.0.9/contentFiles/any/netstandard2.1/raylib.pdb" Condition="Exists('$(NuGetPackageRoot)raylib-cslo/4.2.0.9/contentFiles/any/netstandard2.1/raylib.pdb')">
       <NuGetPackageId>Raylib-CsLo</NuGetPackageId>
       <NuGetPackageVersion>4.2.0.9</NuGetPackageVersion>
       <NuGetItemType>Content</NuGetItemType>
@@ -33,7 +31,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
-    <Content Include="$(NuGetPackageRoot)nativefiledialogsharp\0.5.0\contentFiles\any\netstandard2.0\nfd.dll" Condition="Exists('$(NuGetPackageRoot)nativefiledialogsharp\0.5.0\contentFiles\any\netstandard2.0\nfd.dll')">
+    <Content Include="$(NuGetPackageRoot)nativefiledialogsharp/0.5.0/contentFiles/any/netstandard2.0/nfd.dll" Condition="Exists('$(NuGetPackageRoot)nativefiledialogsharp/0.5.0/contentFiles/any/netstandard2.0/nfd.dll')">
       <NuGetPackageId>NativeFileDialogSharp</NuGetPackageId>
       <NuGetPackageVersion>0.5.0</NuGetPackageVersion>
       <NuGetItemType>Content</NuGetItemType>
@@ -41,7 +39,7 @@
       <Private>False</Private>
       <Link>nfd.dll</Link>
     </Content>
-    <Content Include="$(NuGetPackageRoot)nativefiledialogsharp\0.5.0\contentFiles\any\netstandard2.0\nfd_x86.dll" Condition="Exists('$(NuGetPackageRoot)nativefiledialogsharp\0.5.0\contentFiles\any\netstandard2.0\nfd_x86.dll')">
+    <Content Include="$(NuGetPackageRoot)nativefiledialogsharp/0.5.0/contentFiles/any/netstandard2.0/nfd_x86.dll" Condition="Exists('$(NuGetPackageRoot)nativefiledialogsharp/0.5.0/contentFiles/any/netstandard2.0/nfd_x86.dll')">
       <NuGetPackageId>NativeFileDialogSharp</NuGetPackageId>
       <NuGetPackageVersion>0.5.0</NuGetPackageVersion>
       <NuGetItemType>Content</NuGetItemType>

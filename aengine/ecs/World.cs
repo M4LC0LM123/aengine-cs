@@ -22,7 +22,7 @@ namespace aengine.ecs {
         public static Jitter.World world = new Jitter.World(collisionSystem);
 
         public static RLights lights = new RLights();
-        public static bool LAE = false; // lights affect everything if there is not lights everything is black
+        public static bool LAE = false; // lights affect everything if there is not lights everything is normally tinted
 
         public static Camera camera = null;
 
